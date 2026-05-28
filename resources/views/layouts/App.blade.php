@@ -29,7 +29,11 @@
 
             <!-- Page Content -->
             <main>
+<<<<<<< HEAD
                @yield('content')
+=======
+                {{ $slot }}
+>>>>>>> 3366a8b (uninstall breeze and then install it again)
             </main>
         </div>
     </body>

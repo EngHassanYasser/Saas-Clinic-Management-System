@@ -8,13 +8,21 @@
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.2",
+<<<<<<< HEAD
         "@tailwindcss/vite": "^4.0.0",
+=======
+        "@tailwindcss/vite": "^4.3.0",
+>>>>>>> 3366a8b (uninstall breeze and then install it again)
         "alpinejs": "^3.4.2",
         "autoprefixer": "^10.4.2",
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^3.1",
         "postcss": "^8.4.31",
+<<<<<<< HEAD
         "tailwindcss": "^3.1.0",
+=======
+        "tailwindcss": "^4.3.0",
+>>>>>>> 3366a8b (uninstall breeze and then install it again)
         "vite": "^8.0.0"
     }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+<<<<<<< HEAD
 Route::middleware('guest')->group(function () {
     Route::get('/', function () {
         return view('Home');
@@ -17,6 +18,17 @@ Route::middleware('guest')->group(function () {
     })->name('register');
 });
 
+=======
+Route::get('/', function () {
+    return view('Home');
+});
+Route::get('/search', function () {
+    return view('SearchResults');
+});
+Route::get('/showClinic', function () {
+    return view('clinics.Show');
+});
+>>>>>>> 3366a8b (uninstall breeze and then install it again)
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -28,4 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+<<<<<<< HEAD
 require __DIR__ . '/auth.php';
+=======
+require __DIR__.'/auth.php';
+>>>>>>> 3366a8b (uninstall breeze and then install it again)
