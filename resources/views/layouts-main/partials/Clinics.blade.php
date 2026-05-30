@@ -1,4 +1,4 @@
-    <!-- Featured Clinics -->
+ <!-- Featured Clinics -->
     <section class="pb-16">
         <div class="max-w-7xl mx-auto px-6">
 

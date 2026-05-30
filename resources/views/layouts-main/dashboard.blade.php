@@ -22,17 +22,17 @@
 
 </head>
 
-<body class="bg-gray-50 font-[Cairo]">
-
+<body>
     <x-layouts.header />
+    <div class="flex min-h-screen" dir="rtl">
+        <x-dashboard.sidebar />
 
-    <!-- Main Content -->
-    <main>
+        {{-- =====================<!-- Main Content -->===================== --}}
+        <main class="flex-1 overflow-x-hidden">
 
-        @yield('content')
-
-    </main>
-
+            @yield('content')
+        </main>
+    </div>
     <x-layouts.footer />
 </body>
 

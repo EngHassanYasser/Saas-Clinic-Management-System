@@ -1,9 +1,50 @@
 @import 'tailwindcss';
-
+@import "@fortawesome/fontawesome-free/css/all.min.css";
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+}
+@utility c-sidebar {
+    background: linear-gradient(180deg, #0f766e 0%, #0d9488 60%, #115e59 100%);
+    min-height: 100vh;
+}
+@utility c-appointment-card {
+    transition: all .25s ease;
+    animation: slideUp .4s ease both;
+}
+
+@utility c-appointment-card-hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 36px rgba(15, 118, 110, .12);
+}
+@utility c-stat-teal {
+    background: linear-gradient(135deg, #0f766e, #14b8a6);
+}
+@utility c-stat-amber {
+ background: linear-gradient(135deg, #d97706, #f59e0b);
+}
+@utility c-stat-blue {
+ background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+}
+
+@utility c-stat-rose {
+ background: linear-gradient(135deg, #be123c, #f43f5e);
+}
+@utility c-tab-active {
+ background: #0f766e !important;
+          color: #fff !important;
+          box-shadow: 0 4px 12px rgba(15, 118, 110, .3);
+}
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

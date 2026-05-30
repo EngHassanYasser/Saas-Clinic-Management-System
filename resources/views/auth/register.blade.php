@@ -27,7 +27,6 @@
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
-
         <!-- Confirm Password -->
         <div class="mt-4">
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
@@ -38,6 +37,26 @@
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
+
+      <!-- account type -->
+<div class="mt-4">
+  
+
+    <div class="flex gap-4 mt-2">
+          <x-input-label for="type" :value="__('type')" />
+        <label class="flex items-center gap-2">
+            <input type="radio" name="type" value="patient" checked>
+            <span>Patient</span>
+        </label>
+
+        <label class="flex items-center gap-2">
+            <input type="radio" name="type" value="clinic">
+            <span>Clinic</span>
+        </label>
+    </div>
+
+    <x-input-error :messages="$errors->get('type')" class="mt-2" />
+</div>
 
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
