@@ -6,12 +6,10 @@
     <div class="flex min-h-screen" dir="rtl">
         {{-- ===================== MAIN ===================== --}}
         <main class="flex-1 overflow-x-hidden">
-            <x-patient.dashboard.topbar />
 
             <div class="p-4 sm:p-8 space-y-6">
-                <x-patient.dashboard.status-row />
-
-                <x-patient.dashboard.filter-tabs />
+                <x-appointments.status-row />
+                <x-appointments.filter-tabs />
 
                 {{-- ===== APPOINTMENTS LIST ===== --}}
                 @php
@@ -72,13 +70,13 @@
                                     default => 'fa-circle',
                                 };
                             @endphp
-
-                            <x-patient.dashboard.appointment-cart :$appt :$badgeClass :$statusIcon />
+                            <x-appointments.cart-top-bar :$badgeClass :$statusIcon :$apt['status_label'] />
+                            <x-appointments.cart :$appt :$badgeClass :$statusIcon />
                         @endforeach
                     </div>
                 @endif
             </div>
         </main>
     </div>
-    <x-patient.dashboard.cancel-confirm-model />
+    <x-appointments.cancel-confirm-model />
 @endsection

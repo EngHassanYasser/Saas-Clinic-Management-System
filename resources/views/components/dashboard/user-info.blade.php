@@ -10,6 +10,7 @@
              </p>
              @if (auth()->user()->type == 'clinic')
                  <p class="text-teal-200 text-xs">{{ auth()->user()->clinic_name ?? 'العيادة' }}</p>
+                 {{-- <p class="text-xs text-red-500 font-bold">الحساب غير نشط</p> --}}
              @endif
          </div>
 

@@ -28,7 +28,7 @@
                 <!-- Navigation -->
                 <nav class="hidden lg:flex items-center gap-8">
 
-                    <a href="#" class="text-gray-700 hover:text-emerald-600 transition font-semibold">
+                    <a href="/" class="text-gray-700 hover:text-emerald-600 transition font-semibold">
                         الرئيسية
                     </a>
 
@@ -53,7 +53,7 @@
                 <!-- Actions -->
                 <div class="flex items-center gap-2">
                     @auth
-                        <a href=""
+                        <a href="{{ route('dashboard') }}"
                             class="bg-emerald-600 hover:bg-emerald-700 transition text-white px-3 py-2 rounded-2xl font-bold">
                             لوحة التحكم
                         </a>
