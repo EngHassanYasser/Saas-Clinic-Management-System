@@ -3,10 +3,23 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/dashboard/ads',function(){
+    return view('ads.index');
+})->name('dashboard.ads');
+
+Route::get('dashboard/clinics-management', function () {
+    return view('clinic.index');
+})->name('clinics.management');
+Route::get('/dashboard/subscriptions', function () {
+    return view('subscriptions.index');
+})->name('dashboard.subscriptions');
+Route::get('/complain/create', function () {
+    return view('complain.create');
+})->name('complain.create');
 Route::get('/vaction-index', function () {
     return view('vacation.index');
 })->name('vacation.index');
-Route::get('/complain-index',function(){
+Route::get('/complain-index', function () {
     return view('complain.index');
 })->name('complain.index');
 Route::get('/', function () {

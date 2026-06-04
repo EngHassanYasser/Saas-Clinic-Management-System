@@ -19,7 +19,6 @@
 
     <!-- Tailwind CSS -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
 </head>
 
 <body>
@@ -34,6 +33,7 @@
         </main>
     </div>
     <x-layouts.footer />
+
 </body>
 
 </html>

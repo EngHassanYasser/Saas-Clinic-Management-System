@@ -6,7 +6,7 @@
 
             <x-appointments.doctor-info :$appt />
             @if (auth()->user()->type == 'patient')
-                <x-appointments.clinic-info :$appt/>
+                <x-appointments.clinic-info :$appt />
             @endif
             <x-appointments.date $:appt />
 

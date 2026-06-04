@@ -12,9 +12,14 @@ return [
     'patient' => [
         ['label' => 'مواعيدي', 'route' => 'my-appointments', 'icon' => 'fa-solid fa-calendar-check'],
         ['label' => 'ابحث عن عيادة', 'route' => 'search.results', 'icon' => 'fas fa-search'],
-        ['label' => 'بياناتي', 'route' => 'search.results', 'icon' => 'fas fa-user'],
         ['label' => 'الشكاوي', 'route' => 'complain.index', 'icon' => 'fa-regular fa-comment-dots'],
+        ['label' => 'بياناتي', 'route' => 'search.results', 'icon' => 'fas fa-user'],
     ],
-    'super_admin' => [],
-
+    'super_admin' => [
+        ['label' => 'الإحصائيات', 'route' => 'dashboard', 'icon' => 'fas fa-dashboard'],
+        ['label' => 'إدارة العيادات', 'route' => 'clinics.management', 'icon' => 'fa-solid fa-calendar-check'],
+        ['label' => 'الاشتراكات', 'route' => 'dashboard.subscriptions', 'icon' => 'fa-solid fa-calendar-check'],
+        ['label' => 'الإعلانات', 'route' => 'dashboard.ads', 'icon' => 'fa-solid fa-calendar-check'],
+        
+    ],
 ];

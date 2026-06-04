@@ -9,6 +9,11 @@
             <x-dashboard.stat-cards />
             <x-dashboard.doctors-activity />
             <x-dashboard.complains />
+        @elseif(auth()->user()->type == 'super_admin')
+            <x-dashboard.header />
+            <x-dashboard.primary-stats />
+            <x-dashboard.secoundry-stats />
+            <x-dashboard.recent-activity />
         @endif
     </div>
 
