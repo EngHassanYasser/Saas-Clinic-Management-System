@@ -1,5 +1,8 @@
-@extends('layouts-main.App')
+@php
+    $layout = in_array(auth()->user()->type, ['clinic', 'patient']) ? 'layouts-main.dashboard' : 'layouts-main.App';
+@endphp
 
+@extends($layout)
 @section('content')
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-6 py-6 sm:py-10">
         @if (auth()->user()->type == 'patient')
@@ -11,8 +14,8 @@
 
             <!-- LEFT CONTENT (2 columns) -->
             <div class="lg:col-span-2 space-y-6">
-                @if(auth()->user()->type=='patient')
-                <x-clinics.about-clinic />
+                @if (auth()->user()->type == 'patient')
+                    <x-clinics.about-clinic />
                 @endif
                 <x-clinics.clinic-doctors />
                 <x-clinics.clinic-prices />

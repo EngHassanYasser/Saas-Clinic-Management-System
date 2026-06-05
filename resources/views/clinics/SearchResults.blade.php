@@ -1,4 +1,7 @@
-@extends('layouts-main.App')
+@php
+    $layout = in_array(auth()->user()->type, ['clinic', 'patient']) ? 'layouts-main.dashboard' : 'layouts-main.App';
+@endphp
+@extends($layout)
 
 @section('content')
     <div class="max-w-6xl mx-auto px-4 py-10">

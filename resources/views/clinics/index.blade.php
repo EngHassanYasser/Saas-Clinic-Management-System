@@ -3,20 +3,20 @@
 @section('content')
     <div dir="rtl" x-data="clinicsApp" class="p-6 min-h-screen bg-gray-100">
 
-        <x-clinic.header />
+        <x-clinics.header />
 
-        <x-clinic.stats-strip />
+        <x-clinics.stats-strip />
 
-        <x-clinic.filters />
+        <x-clinics.filters />
 
-        <x-clinic.table />
+        <x-clinics.table />
 
-        <x-clinic.add-edit-model />
+        <x-clinics.add-edit-model />
 
-        <x-clinic.delete-model />
+        <x-clinics.delete-model />
 
-        <x-clinic.view-model />
+        <x-clinics.view-model />
 
-        <x-clinic.toast />
+        <x-clinics.toast />
     </div>
 @endsection

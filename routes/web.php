@@ -3,16 +3,16 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/dashboard/ads',function(){
+Route::get('/ads/index',function(){
     return view('ads.index');
-})->name('dashboard.ads');
+})->name('ads.index');
 
-Route::get('dashboard/clinics-management', function () {
+Route::get('clinics/index', function () {
     return view('clinics.index');
-})->name('clinics.management');
+})->name('clinics.index');
 Route::get('/dashboard/subscriptions', function () {
     return view('subscriptions.index');
-})->name('dashboard.subscriptions');
+})->name('subscriptions.index');
 Route::get('/complain/create', function () {
     return view('complains.create');
 })->name('complains.create');
@@ -40,17 +40,9 @@ Route::get('/clinics/search', function () {
     return view('clinics.SearchResults');
 })->name('clinics.SearchResults');
 
-Route::get('/appointments/create', function () {
-    return view('appointments.create');
-})->name('appointments.create');
-
 Route::middleware('auth', 'verified')->group(function () {
-    Route::get('/my-appointments', function () {
-        return view('appointment.My-Appointments');
-    })->name('my-appointments');
-
     Route::get('/appointments/index', function () {
-        return view('appointment.index');
+        return view('appointments.index');
     })->name('appointments.index');
 
     Route::get('/clinics/edite', function () {
@@ -61,7 +53,9 @@ Route::middleware('auth', 'verified')->group(function () {
     })->name('clinics.create');
 });
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', function() {
+        return view('profile.edit');
+    })->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
