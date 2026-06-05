@@ -1,5 +1,5 @@
     <!-- Specialties -->
-    <section class="py-16">
+    <section class="py-16" id="specialities">
         <div class="max-w-7xl mx-auto px-6">
 
             <div class="flex items-center justify-between mb-10">

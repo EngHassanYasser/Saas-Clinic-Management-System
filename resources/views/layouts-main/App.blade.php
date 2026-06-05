@@ -23,16 +23,10 @@
 </head>
 
 <body class="bg-gray-50 font-[Cairo]">
-
     <x-layouts.header />
-
     <!-- Main Content -->
-    <main>
-
-        @yield('content')
-
+    <main> @yield('content')
     </main>
-
     <x-layouts.footer />
 </body>
 

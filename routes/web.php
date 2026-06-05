@@ -41,19 +41,8 @@ Route::get('/search', function () {
 })->name('search.results');
 
 Route::get('/showClinic', function () {
-    return view('clinics.Show');
+    return view('clinic.Show');
 })->name('show.clinic');
-
-Route::middleware('guest')->group(function () {
-
-    Route::get('/login', function () {
-        return view('auth.login');
-    })->name('login');
-
-    Route::get('/register', function () {
-        return view('auth.register');
-    })->name('register');
-});
 
 Route::middleware('auth', 'verified')->group(function () {
     Route::get('/my-appointments', function () {
@@ -65,7 +54,7 @@ Route::middleware('auth', 'verified')->group(function () {
     })->name('appointments.index');
 
     Route::get('/clinic-edite', function () {
-        return view('clinics.edite');
+        return view('clinic.edite');
     })->name('clinic.edite');
     Route::get('/create-appointment', function () {
         return view('appointments.create');

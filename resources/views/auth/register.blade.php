@@ -1,71 +1,123 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+@extends('layouts-main.App')
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+@section('content')
+    <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-gray-50 px-4">
+
+        <div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+
+            {{-- HEADER --}}
+            <div class="p-6 border-b bg-white">
+                <h1 class="text-2xl font-bold text-gray-900">إنشاء حساب جديد</h1>
+                <p class="text-sm text-gray-500 mt-1">
+                    سجل كـ مريض أو عيادة لإدارة خدماتك الطبية
+                </p>
+            </div>
+
+            {{-- FORM --}}
+            <div class="p-6">
+                <form method="POST" action="{{ route('register') }}" class="space-y-5">
+                    @csrf
+
+                    {{-- Name --}}
+                    <div>
+                        <label class="text-sm font-medium text-gray-700">الاسم الكامل</label>
+                        <input type="text" name="name" value="{{ old('name') }}"
+                            class="w-full mt-2 px-4 py-3 border rounded-xl
+                        focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                        transition outline-none"
+                            placeholder="مثال: Ahmed Ali" required autofocus>
+                        @error('name')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Email --}}
+                    <div>
+                        <label class="text-sm font-medium text-gray-700">البريد الإلكتروني</label>
+                        <input type="email" name="email" value="{{ old('email') }}"
+                            class="w-full mt-2 px-4 py-3 border rounded-xl
+                        focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                        transition outline-none"
+                            placeholder="name@email.com" required>
+                        @error('email')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Password --}}
+                    <div>
+                        <label class="text-sm font-medium text-gray-700">كلمة المرور</label>
+                        <input type="password" name="password"
+                            class="w-full mt-2 px-4 py-3 border rounded-xl
+                        focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                        transition outline-none"
+                            placeholder="••••••••" required>
+                        @error('password')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Confirm Password --}}
+                    <div>
+                        <label class="text-sm font-medium text-gray-700">تأكيد كلمة المرور</label>
+                        <input type="password" name="password_confirmation"
+                            class="w-full mt-2 px-4 py-3 border rounded-xl
+                        focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                        transition outline-none"
+                            placeholder="••••••••" required>
+                    </div>
+
+                    {{-- ACCOUNT TYPE (UX IMPROVED - CARD STYLE) --}}
+                    <div>
+                        <label class="text-sm font-medium text-gray-700">نوع الحساب</label>
+
+                        <div class="grid grid-cols-2 gap-3 mt-3">
+
+                            <label class="cursor-pointer">
+                                <input type="radio" name="type" value="patient" class="peer hidden" checked>
+                                <div
+                                    class="border rounded-xl p-4 text-center transition
+                                peer-checked:border-blue-500 peer-checked:bg-blue-50">
+                                    <div class="font-medium">مريض</div>
+                                    <div class="text-xs text-gray-500 mt-1">حجز ومتابعة طبية</div>
+                                </div>
+                            </label>
+
+                            <label class="cursor-pointer">
+                                <input type="radio" name="type" value="clinic" class="peer hidden">
+                                <div
+                                    class="border rounded-xl p-4 text-center transition
+                                peer-checked:border-blue-500 peer-checked:bg-blue-50">
+                                    <div class="font-medium">عيادة</div>
+                                    <div class="text-xs text-gray-500 mt-1">إدارة المرضى والمواعيد</div>
+                                </div>
+                            </label>
+
+                        </div>
+
+                        @error('type')
+                            <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- SUBMIT --}}
+                    <button type="submit"
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white
+                    py-3 rounded-xl font-medium transition shadow-sm">
+                        إنشاء الحساب
+                    </button>
+
+                    {{-- LOGIN --}}
+                    <div class="text-center text-sm text-gray-600">
+                        عندك حساب بالفعل؟
+                        <a href="{{ route('login') }}" class="text-blue-600 hover:underline font-medium">
+                            تسجيل الدخول
+                        </a>
+                    </div>
+
+                </form>
+            </div>
         </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-      <!-- account type -->
-<div class="mt-4">
-  
-
-    <div class="flex gap-4 mt-2">
-          <x-input-label for="type" :value="__('type')" />
-        <label class="flex items-center gap-2">
-            <input type="radio" name="type" value="patient" checked>
-            <span>Patient</span>
-        </label>
-
-        <label class="flex items-center gap-2">
-            <input type="radio" name="type" value="clinic">
-            <span>Clinic</span>
-        </label>
     </div>
-
-    <x-input-error :messages="$errors->get('type')" class="mt-2" />
-</div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+@endsection

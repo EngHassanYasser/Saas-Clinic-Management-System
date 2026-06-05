@@ -1,5 +1,5 @@
     <!-- Famous Doctors -->
-    <section class="pb-16">
+    <section class="pb-16" id="doctors">
         <div class="max-w-7xl mx-auto px-6">
 
             <div class="flex items-center justify-between mb-10">

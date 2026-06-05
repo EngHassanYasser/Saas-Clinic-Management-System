@@ -1,47 +1,82 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+@extends('layouts-main.App')
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+@section('content')
+    <div class="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-gray-50">
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <x-auth.info />
+
+        {{-- ================= RIGHT SIDE (LOGIN) ================= --}}
+        <div class="flex items-center justify-center p-6 sm:p-10">
+
+            <div class="w-full max-w-md bg-white rounded-2xl shadow-lg p-8" x-data="{ email: '', password: '', showPassword: false, loading: false, rememberMe: false }">
+
+                <x-auth.header />
+
+                <x-auth.errors />
+
+                <form method="POST" action="{{ route('login') }}" class="space-y-5">
+                    @csrf
+
+                    {{-- Email --}}
+                    <div>
+                        <label class="text-sm text-gray-700 mb-1 block">البريد الإلكتروني</label>
+                        <input type="email" name="email" x-model="email" value="{{ old('email') }}"
+                            class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-emerald-500 focus:bg-white outline-none text-sm"
+                            placeholder="example@clinic.com">
+                    </div>
+
+                    {{-- Password --}}
+                    <div>
+                        <label class="text-sm text-gray-700 mb-1 block">كلمة المرور</label>
+
+                        <div class="relative">
+                            <input :type="showPassword ? 'text' : 'password'" name="password" x-model="password"
+                                class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-emerald-500 focus:bg-white outline-none text-sm"
+                                placeholder="••••••••">
+
+                            <button type="button" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                                @click="showPassword = !showPassword">
+                                <i :class="showPassword ? 'fa-eye-slash' : 'fa-eye'" class="fa-regular"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    {{-- Remember --}}
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="remember" name="remember" x-model="rememberMe"
+                            class="rounded border-gray-300 text-emerald-600">
+
+                        <label for="remember" class="text-sm text-gray-600">
+                            تذكرني
+                        </label>
+                    </div>
+
+                    {{-- Submit --}}
+                    <button type="submit"
+                        class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-semibold transition">
+                        تسجيل الدخول
+                    </button>
+                    <div class="flex items-center justify-between text-sm mt-2">
+                        <a href="{{ route('password.request') }}"
+                            class="text-emerald-600 hover:text-emerald-700 font-medium transition">
+                            نسيت كلمة المرور؟
+                        </a>
+
+                        <a href="{{ route('register') }}" class="text-gray-600 hover:text-gray-900 font-medium transition">
+                            إنشاء حساب جديد
+                        </a>
+                    </div>
+
+                    {{-- Google --}}
+                    <button type="button"
+                        class="w-full border border-gray-200 py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50">
+                        <i class="fa-brands fa-google text-red-500"></i>
+                        تسجيل الدخول بواسطة Google
+                    </button>
+
+                </form>
+
+            </div>
         </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    </div>
+@endsection
