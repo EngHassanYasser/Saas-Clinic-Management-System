@@ -5,7 +5,7 @@
             <p class="text-sm text-gray-500">إدارة ومتابعة شكاوى المرضى</p>
         </div>
 
-        <a href="{{ route('complain.create') }}"
+        <a href="{{ route('complains.create') }}"
             class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg shadow-sm transition">
 
             <!-- icon -->

@@ -35,10 +35,10 @@
           </div>
 
           <button class="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition">
-              تأكيد الحجز
+             إضافه حجز
           </button>
           <span class="text-sm text-red-600 mt-1 block text-center font-medium">
-              يرجي دفع 20% من قيمة الكشف لتأكيد حجزك
+             لتأكيد حجزك يرجي دفع 20% من قيمة الكشف من خلال حسابك او من خلال الدفع بفودافون كاش وارساله الايصال لرقم الواتس الخاص بالعياده للتأكيد اليدوي
           </span>
 
       </div>

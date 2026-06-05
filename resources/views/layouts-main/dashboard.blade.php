@@ -24,7 +24,7 @@
 <body>
     <x-layouts.header />
     <div class="flex min-h-screen" dir="rtl">
-        <x-dashboard.sidebar />
+        <x-dashboards.sidebar />
 
         {{-- =====================<!-- Main Content -->===================== --}}
         <main class="flex-1 overflow-x-hidden">

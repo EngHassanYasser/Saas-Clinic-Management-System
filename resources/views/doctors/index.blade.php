@@ -4,9 +4,12 @@
 
 @section('content')
 
-    <x-doctor.stats />
+    <x-doctors.stats />
+    <div class="flex justify-between ">
+        <x-doctors.filters />
+        <x-doctors.add-doctor-button />
+    </div>
 
-    <x-doctor.filters />
     @php
         $doctors = [
             [
@@ -101,15 +104,15 @@
     @endphp
 
 
-    <x-doctor.grid-view :$doctors />
+    <x-doctors.grid-view :$doctors />
 
-    <x-doctor.list-view :$doctors />
+    <x-doctors.list-view :$doctors />
 
-    <x-doctor.empty-state />
+    <x-doctors.empty-state />
 
     </div>
 
-    <x-doctor.delete--model />
+    <x-doctors.delete--model />
     <script>
         let currentView = 'grid';
 

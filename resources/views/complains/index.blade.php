@@ -104,18 +104,20 @@
 
     <div class="p-6 min-h-screen bg-gray-50" dir="rtl">
 
+        <x-complains.add-button />
+
         {{-- ===================== STATS (clinic only) ===================== --}}
+
         @if ($isClinic)
-            <x-complain.add-button />
-            <x-complain.status />
-            <x-complain.filters />
+            <x-complains.status />
         @endif
-        <x-complain.table :$complaints :$statusMap :$priorityMap :$isClinic />
+          <x-complains.filters />
+        <x-complains.table :$complaints :$statusMap :$priorityMap :$isClinic />
     </div>
 
 
-    <x-complain.details-model :$isClinic />
-    <x-complain.delete-model />
+    <x-complains.details-model :$isClinic />
+    <x-complains.delete-model />
 
     <script>
         const IS_CLINIC = {{ $isClinic ? 'true' : 'false' }}

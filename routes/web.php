@@ -8,57 +8,57 @@ Route::get('/dashboard/ads',function(){
 })->name('dashboard.ads');
 
 Route::get('dashboard/clinics-management', function () {
-    return view('clinic.index');
+    return view('clinics.index');
 })->name('clinics.management');
 Route::get('/dashboard/subscriptions', function () {
     return view('subscriptions.index');
 })->name('dashboard.subscriptions');
 Route::get('/complain/create', function () {
-    return view('complain.create');
-})->name('complain.create');
-Route::get('/vaction-index', function () {
-    return view('vacation.index');
-})->name('vacation.index');
-Route::get('/complain-index', function () {
-    return view('complain.index');
-})->name('complain.index');
+    return view('complains.create');
+})->name('complains.create');
+Route::get('/vactions/ndex', function () {
+    return view('vacations.index');
+})->name('vacations.index');
+Route::get('/complains/index', function () {
+    return view('complains.index');
+})->name('complains.index');
 Route::get('/', function () {
     return view('Home');
 })->name('home');
-Route::get('/doctors-list', function () {
-    return view('doctor.index');
-})->name('doctor.index');
+Route::get('/doctors/index', function () {
+    return view('doctors.index');
+})->name('doctors.index');
 Route::middleware('auth', 'verified')->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard.index');
+        return view('dashboards.index');
     })->name('dashboard');
 });
-Route::get('/add-doctor', function () {
-    return view('doctor.add');
-})->name('doctor.add');
-Route::get('/search', function () {
-    return view('SearchResults');
-})->name('search.results');
+Route::get('/doctors/add', function () {
+    return view('doctors.add');
+})->name('doctors.add');
+Route::get('/clinics/search', function () {
+    return view('clinics.SearchResults');
+})->name('clinics.SearchResults');
 
-Route::get('/showClinic', function () {
-    return view('clinic.Show');
-})->name('show.clinic');
+Route::get('/appointments/create', function () {
+    return view('appointments.create');
+})->name('appointments.create');
 
 Route::middleware('auth', 'verified')->group(function () {
     Route::get('/my-appointments', function () {
-        return view('appointments.My-Appointments');
+        return view('appointment.My-Appointments');
     })->name('my-appointments');
 
-    Route::get('/appointments-index', function () {
-        return view('appointments.index');
+    Route::get('/appointments/index', function () {
+        return view('appointment.index');
     })->name('appointments.index');
 
-    Route::get('/clinic-edite', function () {
-        return view('clinic.edite');
-    })->name('clinic.edite');
-    Route::get('/create-appointment', function () {
+    Route::get('/clinics/edite', function () {
+        return view('clinics.edite');
+    })->name('clinics.edite');
+    Route::get('/appointments/create', function () {
         return view('appointments.create');
-    })->name('clinic.create');
+    })->name('clinics.create');
 });
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -6,14 +6,14 @@
 
     <div class="p-6 min-h-screen bg-gray-50" dir="rtl">
         @if (auth()->user()->type == 'clinic')
-            <x-dashboard.stat-cards />
-            <x-dashboard.doctors-activity />
-            <x-dashboard.complains />
+            <x-dashboards.stat-cards />
+            <x-dashboards.doctors-activity />
+            <x-dashboards.complains />
         @elseif(auth()->user()->type == 'super_admin')
-            <x-dashboard.header />
-            <x-dashboard.primary-stats />
-            <x-dashboard.secoundry-stats />
-            <x-dashboard.recent-activity />
+            <x-dashboards.header />
+            <x-dashboards.primary-stats />
+            <x-dashboards.secoundry-stats />
+            <x-dashboards.recent-activity />
         @endif
     </div>
 
