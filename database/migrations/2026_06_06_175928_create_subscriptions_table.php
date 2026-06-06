@@ -15,9 +15,16 @@ return new class extends Migration
             $table->id();
             $table->timestampTz('start_at');
             $table->timestampTz('end_at');
-            $table->enum('status', ['active', 'expired', 'cancelled']);
+            $table->enum('status', [
+                'active',
+                'expired',
+                'cancelled',
+                'pending'
+            ]);
+            $table->decimal('price', 10, 2);
             $table->boolean('auto_renew')->default(false);
             $table->timestamps();
+            $table->index('status');
         });
     }
 

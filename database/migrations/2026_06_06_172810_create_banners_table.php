@@ -14,12 +14,15 @@ return new class extends Migration
         Schema::create('banners', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('image_name')->nullable();
-            $table->string('redirect_url')->nullable();
+            $table->string('image')->nullable();
+            $table->text('redirect_url')->nullable();
             $table->timestampTz('start_at')->nullable();
             $table->timestampTz('end_at')->nullable();
-            $table->boolean('is_active')->default(true);
             $table->timestamps();
+            $table->boolean('is_active')->default(true);
+            $table->index('is_active');
+            $table->index(['start_at', 'end_at']);
+            // $table->index('clinic_id');
         });
     }
 

@@ -30,6 +30,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->decimal('price', 8, 2);
             $table->timestamps();
+            // $table->unique(['doctor_id', 'day_of_work']);
         });
     }
 

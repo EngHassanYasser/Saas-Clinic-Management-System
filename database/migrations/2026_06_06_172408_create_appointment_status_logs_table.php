@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('appointment_status_logs', function (Blueprint $table) {
             $table->id();
-            $table->enum('old_status',['pending','confirmed','completed','cancelled','no_show'])->nullable();
-            $table->enum('new_status',['pending','confirmed','completed','cancelled','no_show']);
-            $table->text('notes')->nullable();
+            $table->enum('old_status', ['pending', 'confirmed', 'completed', 'cancelled', 'no_show'])->nullable();
+            $table->enum('new_status', ['pending', 'confirmed', 'completed', 'cancelled', 'no_show']);
+            $table->text('reason')->nullable();
             $table->timestamps();
+            // $table->index('appointment_id');
+            $table->index('new_status');
+            $table->index('created_at');
         });
     }
 

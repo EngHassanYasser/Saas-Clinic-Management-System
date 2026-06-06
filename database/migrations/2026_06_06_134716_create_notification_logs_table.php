@@ -26,7 +26,7 @@ return new class extends Migration
                 'delivered',
                 'failed'
             ])->default('pending');
-            $table->text('response')->nullable();
+            $table->json('response')->nullable();
             $table->timestamps();
         });
     }

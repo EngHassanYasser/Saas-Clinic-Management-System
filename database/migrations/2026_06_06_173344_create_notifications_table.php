@@ -24,8 +24,11 @@ return new class extends Migration
             $table->string('title');
             $table->text('body');
             $table->timestampTz('sent_at')->nullable();
-            $table->boolean('is_read')->default(false);
+            $table->timestampTz('read_at')->nullable();
             $table->timestamps();
+            // $table->index(['user_id', 'is_read']);
+            $table->index('type');
+            $table->index('created_at');
         });
     }
 

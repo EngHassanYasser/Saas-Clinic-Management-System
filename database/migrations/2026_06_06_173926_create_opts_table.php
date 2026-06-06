@@ -15,13 +15,17 @@ return new class extends Migration
             $table->id();
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
-            $table->string('code',10);
+            $table->string('code', 10);
             $table->timestampTz('verified_at')->nullable();
             $table->timestampTz('expired_at');
             $table->boolean('is_used')->default(false);
+            $table->unsignedTinyInteger('attempts')->default(0);
+            $table->timestamp('last_sent_at')->nullable();
             $table->timestamps();
+            $table->index('phone');
+            $table->index('email');
+            $table->index('expired_at');
         });
-        
     }
 
     /**

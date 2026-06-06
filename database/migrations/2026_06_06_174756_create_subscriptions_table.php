@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->decimal('monthly_price');
+            $table->decimal('monthly_price', 10, 2);
             $table->unsignedSmallInteger('max_doctors');
-            $table->unsignedSmallInteger('max_appointments');
-            $table->string('features',500)->unique();
-
+            $table->unsignedSmallInteger('monthly_appointments_limit');
+            $table->json('features');
         });
     }
 

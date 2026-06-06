@@ -16,10 +16,10 @@ return new class extends Migration
             $table->unsignedTinyInteger('appointment_duration')->default(30);
             $table->unsignedTinyInteger('cancellation_hours_limit')->default(6);
             $table->boolean('auth_confirm')->default(false);
-            $table->string('working_days');
+            $table->json('working_days');
             $table->string('timezone');
-            $table->unsignedTinyInteger('deposit_percintage');
-            $table->unsignedTinyInteger('cancellation_percently_percent')->default(10);
+            $table->unsignedTinyInteger('deposit_percentage')->default(0);
+            $table->unsignedTinyInteger('cancellation_fee_percentage')->default(10);
         });
     }
 

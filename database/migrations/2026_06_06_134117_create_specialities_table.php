@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('specialities', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->text('icon_name')->nullable();
+            $table->string('icon_name')->nullable();
         });
     }
 

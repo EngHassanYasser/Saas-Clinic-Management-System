@@ -15,14 +15,25 @@ return new class extends Migration
             $table->id();
             $table->timestampTz('start_time');
             $table->timestampTz('end_time');
-            $table->enum('status',['pending','confirmed','completed','cancelled','no_show']);
-            $table->enum('booking_source',['mobile','website']);
+            $table->enum('status', [
+                'pending',
+                'confirmed',
+                'completed',
+                'cancelled',
+                'no_show',
+                'rescheduled',
+                'in_progress'
+            ])->default('pending');
+            $table->enum('booking_source', ['mobile', 'website']);
             $table->text('notes')->nullable();
             $table->text('cancellation_reason')->nullable();
-            $table->decimal('deposit_amount')->default(0);
+            $table->decimal('deposit_amount', 8, 2)->default(0);
             $table->timestampTz('cancellation_time')->nullable();
-            $table->boolean('is_reminder_sent')->default(false);
+            $table->timestampTz('reminder_sent_at');
             $table->timestamps();
+
+            // $table->index(['doctor_id', 'start_time']);
+            $table->index('status');
         });
     }
 

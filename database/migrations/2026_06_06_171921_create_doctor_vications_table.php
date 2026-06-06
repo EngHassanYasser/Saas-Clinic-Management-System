@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('vacations', function (Blueprint $table) {
             $table->id();
-            $table->date('start_time');
-            $table->date('end_time');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->text('reason')->nullable();
             $table->timestamps();
+            // $table->index(['doctor_id', 'start_date', 'end_date']);
         });
     }
 
