@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -19,6 +20,14 @@ return new class extends Migration
             $table->unsignedSmallInteger('monthly_appointments_limit');
             $table->json('features');
         });
+        DB::statement('ALTER TABLE plans ADD CONSTRAINT chk_plan_price_positive 
+    CHECK (monthly_price >= 0)');
+    DB::statement('ALTER TABLE plans ADD CONSTRAINT chk_max_doctors_positive 
+    CHECK (max_doctors > 0)');
+    DB::statement('ALTER TABLE plans ADD CONSTRAINT chk_appointments_limit_positive 
+    CHECK (monthly_appointments_limit > 0)');
+    DB::statement('ALTER TABLE plans ADD CONSTRAINT chk_plan_name_not_empty 
+    CHECK (TRIM(name) != "")');
     }
 
     /**

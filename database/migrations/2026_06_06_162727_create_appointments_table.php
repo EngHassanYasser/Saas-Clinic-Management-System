@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -32,9 +33,24 @@ return new class extends Migration
             $table->timestampTz('reminder_sent_at');
             $table->timestamps();
 
-            // $table->index(['doctor_id', 'start_time']);
             $table->index('status');
         });
+        DB::statement('ALTER TABLE appointments ADD CONSTRAINT chk_appointment_times 
+    CHECK (end_time > start_time)');
+        DB::statement('ALTER TABLE appointments ADD CONSTRAINT chk_deposit_positive 
+    CHECK (deposit_amount >= 0)');
+        DB::statement('ALTER TABLE appointments ADD CONSTRAINT chk_cancellation_consistency 
+    CHECK (
+        (cancellation_reason IS NULL AND cancellation_time IS NULL) OR
+        (cancellation_reason IS NOT NULL AND cancellation_time IS NOT NULL)
+    )');
+        DB::statement('ALTER TABLE appointments ADD CONSTRAINT chk_cancellation_after_start 
+    CHECK (cancellation_time IS NULL OR cancellation_time >= start_time)');
+
+    DB::statement('ALTER TABLE appointments ADD CONSTRAINT chk_cancellation_reason_status 
+    CHECK (
+        status = "cancelled" OR cancellation_reason IS NULL
+    )');
     }
 
     /**

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -24,6 +25,18 @@ return new class extends Migration
             $table->index(['start_at', 'end_at']);
             // $table->index('clinic_id');
         });
+        DB::statement('ALTER TABLE banners ADD CONSTRAINT chk_banner_dates 
+    CHECK (end_at IS NULL OR start_at IS NULL OR end_at > start_at)');
+
+    DB::statement('ALTER TABLE banners ADD CONSTRAINT chk_banner_dates_both_or_none 
+    CHECK (
+        (start_at IS NULL AND end_at IS NULL) OR
+        (start_at IS NOT NULL AND end_at IS NOT NULL)
+    )');
+
+    DB::statement('ALTER TABLE banners ADD CONSTRAINT chk_banner_title_not_empty 
+    CHECK (TRIM(title) != "")');
+
     }
 
     /**

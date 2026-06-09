@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -21,6 +22,8 @@ return new class extends Migration
             $table->index('new_status');
             $table->index('created_at');
         });
+        DB::statement('ALTER TABLE appointment_status_logs ADD CONSTRAINT chk_status_changed 
+    CHECK (old_status IS NULL OR old_status != new_status)');
     }
 
     /**

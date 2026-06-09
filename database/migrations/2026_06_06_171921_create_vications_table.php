@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -19,6 +20,8 @@ return new class extends Migration
             $table->timestamps();
             // $table->index(['doctor_id', 'start_date', 'end_date']);
         });
+        DB::statement('ALTER TABLE vications ADD CONSTRAINT chk_vacation_dates 
+    CHECK (end_date >= start_date)');
     }
 
     /**

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -29,6 +30,27 @@ return new class extends Migration
 
             $table->index('is_featured');
         });
+
+        DB::statement('ALTER TABLE clinics ADD CONSTRAINT chk_clinic_name_not_empty 
+    CHECK (TRIM(name) != "")');
+        DB::statement('ALTER TABLE clinics ADD CONSTRAINT chk_clinic_slug_not_empty 
+    CHECK (TRIM(slug) != "")');
+        DB::statement('ALTER TABLE clinics ADD CONSTRAINT chk_latitude_range 
+    CHECK (latitude IS NULL OR (latitude BETWEEN -90 AND 90))');
+        DB::statement('ALTER TABLE clinics ADD CONSTRAINT chk_longitude_range 
+    CHECK (longitude IS NULL OR (longitude BETWEEN -180 AND 180))');
+        DB::statement('ALTER TABLE clinics ADD CONSTRAINT chk_coordinates_both_or_none 
+    CHECK (
+        (latitude IS NULL AND longitude IS NULL) OR
+        (latitude IS NOT NULL AND longitude IS NOT NULL)
+    )');
+
+    DB::statement('ALTER TABLE clinics ADD CONSTRAINT chk_featured_consistency 
+    CHECK (
+        is_featured = false OR featured_until IS NOT NULL
+    )');
+
+    
     }
 
     /**

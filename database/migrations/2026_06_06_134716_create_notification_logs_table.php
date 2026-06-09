@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -29,6 +30,8 @@ return new class extends Migration
             $table->json('response')->nullable();
             $table->timestamps();
         });
+        DB::statement('ALTER TABLE notification_logs ADD CONSTRAINT chk_delivered_after_created 
+    CHECK (status = "pending" OR updated_at >= created_at)');
     }
 
     /**

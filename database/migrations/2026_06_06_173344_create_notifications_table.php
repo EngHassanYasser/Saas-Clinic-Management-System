@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -30,6 +31,10 @@ return new class extends Migration
             $table->index('type');
             $table->index('created_at');
         });
+        DB::statement('ALTER TABLE notifications ADD CONSTRAINT chk_read_after_sent 
+    CHECK (read_at IS NULL OR sent_at IS NULL OR read_at >= sent_at)');
+        DB::statement('ALTER TABLE notifications ADD CONSTRAINT chk_notification_title_not_empty 
+    CHECK (TRIM(title) != "")');
     }
 
     /**
