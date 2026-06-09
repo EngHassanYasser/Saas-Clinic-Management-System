@@ -6,5 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class schedule extends Model
 {
-    //
+    public function doctor() {
+        return $this->belongsTo(user::class);
+    }
 }

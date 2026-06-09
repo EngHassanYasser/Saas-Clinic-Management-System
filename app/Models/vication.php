@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class otp extends Model
+class vication extends Model
 {
-    public function user() {
+    public function doctors() {
         return $this->belongsTo(User::class);
     }
 }

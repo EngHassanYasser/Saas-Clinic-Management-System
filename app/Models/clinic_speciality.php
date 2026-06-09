@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class vacation extends Model
+class clinic_speciality extends Model
 {
-    //
+    public $timestamps=false;
 }
