@@ -42,6 +42,53 @@
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+                    {{-- Speciality --}}
+                    <div>
+                        <label class="text-sm font-medium text-gray-700">التخصص</label>
+
+                        <div class="relative mt-2" x-data="{ open: false, selected: '', selectedId: '{{ old('speciality_id') }}' }">
+
+                            {{-- Hidden input للـ form --}}
+                            <input type="hidden" name="speciality_id" :value="selectedId">
+
+                            {{-- Trigger Button --}}
+                            <button type="button" @click="open = !open"
+                                class="w-full px-4 py-3 border rounded-xl text-right bg-white
+                   flex items-center justify-between
+                   focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                   transition outline-none"
+                                :class="selectedId ? 'text-gray-900' : 'text-gray-400'">
+                                <svg class="w-4 h-4 text-gray-400 transition-transform" :class="open ? 'rotate-180' : ''"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                                <span x-text="selected || 'اختر التخصص'"></span>
+                            </button>
+
+                            {{-- Dropdown List --}}
+                            <div x-show="open" x-transition @click.outside="open = false"
+                                class="absolute right-0 left-0 z-50 mt-1 bg-white border rounded-xl
+                    shadow-lg max-h-48 overflow-y-auto">
+
+                                @foreach ($specialities as $speciality)
+                                    <button type="button"
+                                        @click="selected = '{{ $speciality->name }}'; selectedId = '{{ $speciality->id }}'; open = false"
+                                        class="w-full text-right px-4 py-2.5 text-sm hover:bg-blue-50
+                           hover:text-blue-700 transition"
+                                        :class="selectedId == '{{ $speciality->id }}' ? 'bg-blue-50 text-blue-700 font-medium' :
+                                            'text-gray-700'">
+                                        {{ $speciality->name }}
+                                    </button>
+                                @endforeach
+
+                            </div>
+                        </div>
+
+                        @error('speciality_id')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                     {{-- Gender --}}
                     <div class="mt-4">
                         <label class="block text-sm font-medium text-gray-700 mb-2">

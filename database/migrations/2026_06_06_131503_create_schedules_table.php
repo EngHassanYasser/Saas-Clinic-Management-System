@@ -14,15 +14,6 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->enum('day_of_work', [
-                'sunday',
-                'monday',
-                'tuesday',
-                'wednesday',
-                'thursday',
-                'friday',
-                'saturday'
-            ]);
             $table->time('start_time');
             $table->time('end_time');
             $table->enum('slot_duration', [15, 30, 45, 60, 90, 120]);
@@ -31,6 +22,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->decimal('price', 8, 2);
             $table->timestamps();
+            $table->text('notes',500);
             // $table->unique(['doctor_id', 'day_of_work']);
         });
         DB::statement('ALTER TABLE schedules ADD CONSTRAINT chk_slot_duration 

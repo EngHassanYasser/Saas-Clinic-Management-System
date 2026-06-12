@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\day;
-use App\Models\User;
+use App\Models\doctor;
+use App\Models\speciality;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('schedules', function (Blueprint $table) {
-            $table->foreignIdFor(User::class)->nullable()->constrained()->nullOnDelete();
-            $table->foreignIdFor(day::class);
+        Schema::create('doctor_speciality', function (Blueprint $table) {
+            $table->foreignIdFor(doctor::class);
+            $table->foreignIdFor(speciality::class);
+
+            $table->primary(['doctor_id','speciality_id']);
         });
     }
 
@@ -24,8 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('schedule', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('doctor_speciality');
     }
 };

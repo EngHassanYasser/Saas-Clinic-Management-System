@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\speciality;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -20,7 +21,8 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        $specialities = speciality::all();
+        return view('auth.register', compact('specialities'));
     }
 
     /**
@@ -36,16 +38,17 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'type' => ['required', 'in:patient,clinic,super_admin'],
             'user_name' => ['required', 'unique:users,user_name'],
-            'gender'=>['required','in:male,female'],
+            'gender' => ['required', 'in:male,female'],
+            'speciality_id' => ['nullable', 'exists:specialities,id'],
         ]);
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'type' => $request->type,
-            'user_name'=>$request->user_name,
-            'gender'=>$request->gender,
+            'user_name' => $request->user_name,
+            'gender' => $request->gender,
+            'speciality_id' => $request->speciality_id,
         ]);
 
         event(new Registered($user));

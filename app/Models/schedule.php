@@ -6,7 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class schedule extends Model
 {
-    public function doctor() {
+    public function doctor()
+    {
         return $this->belongsTo(user::class);
+    }
+    public function days()
+    {
+        return $this->hasMany(Day::class);
     }
 }

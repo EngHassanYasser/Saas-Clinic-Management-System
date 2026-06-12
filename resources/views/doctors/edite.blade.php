@@ -37,7 +37,7 @@
         }
     }">
 
-        <form action="" method="POST" enctype="multipart/form-data">
+        <form action="" method="PUT" enctype="multipart/form-data">
             @csrf
            @include('doctors._form');
         </form>
