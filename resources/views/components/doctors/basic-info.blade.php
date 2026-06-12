@@ -52,23 +52,6 @@
                   <p class="text-xs text-red-400 mt-1">{{ $message }}</p>
               @enderror
           </div>
-
-          <div>
-              <label class="block text-xs text-gray-500 mb-1.5">مدة الكشف <span class="text-red-400">*</span></label>
-              <select name="session_duration" @change="generateSlots()"
-                  class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-100 transition bg-white">
-                  <option value="">اختر المدة</option>
-                  <option value="15" {{ old('session_duration') == '15' ? 'selected' : '' }}>15 دقيقة</option>
-                  <option value="20" {{ old('session_duration') == '20' ? 'selected' : '' }}>20 دقيقة</option>
-                  <option value="30" {{ old('session_duration') == '30' ? 'selected' : '' }}>30 دقيقة</option>
-                  <option value="45" {{ old('session_duration') == '45' ? 'selected' : '' }}>45 دقيقة</option>
-                  <option value="60" {{ old('session_duration') == '60' ? 'selected' : '' }}>60 دقيقة</option>
-              </select>
-              @error('session_duration')
-                  <p class="text-xs text-red-400 mt-1">{{ $message }}</p>
-              @enderror
-          </div>
-
             <div>
               <label class="block text-xs text-gray-500 mb-1.5">رقم الهاتف <span class="text-red-400">*</span></label>
               <input type="text" name="phone" value="{{ old('phone') }}"

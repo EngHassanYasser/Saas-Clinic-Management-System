@@ -33,4 +33,7 @@ class clinic extends Model
             'clinic_specialities'
         );
     }
+    public function schedules() {
+        return $this->hasMany(schedule::class);
+    }
 }

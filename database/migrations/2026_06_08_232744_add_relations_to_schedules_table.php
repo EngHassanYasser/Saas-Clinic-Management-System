@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\clinic;
 use App\Models\day;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -16,6 +17,7 @@ return new class extends Migration
         Schema::table('schedules', function (Blueprint $table) {
             $table->foreignIdFor(User::class)->nullable()->constrained()->nullOnDelete();
             $table->foreignIdFor(day::class);
+            $table->foreignIdFor(clinic::class);
         });
     }
 

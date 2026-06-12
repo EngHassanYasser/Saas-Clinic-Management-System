@@ -14,4 +14,7 @@ class schedule extends Model
     {
         return $this->hasMany(Day::class);
     }
+    public function clinic() {
+        return $this->belongsTo(clinic::class);
+    }
 }
