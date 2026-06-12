@@ -2,9 +2,9 @@
 return [
     'clinic' => [
         ['label' => 'الإحصائيات', 'route' => 'dashboard', 'icon' => 'fas fa-dashboard'],
-        ['label' => 'مواعيد الدكاتره', 'route' => 'appointments.index', 'icon' => 'fas fa-calendar-check'],
+        ['label' => 'مواعيد الدكاتره', 'route' => 'schedules.index', 'icon' => 'fas fa-calendar-check'],
         ['label' => 'الحجوزات', 'route' => 'appointments.index', 'icon' => 'fas fa-calendar-check'],
-        ['label' => 'اضافة موعد', 'route' => 'clinics.create', 'icon' => 'fas fa-calendar-plus'],
+        ['label' => 'اضافة حجز', 'route' => 'clinics.create', 'icon' => 'fas fa-calendar-plus'],
         ['label' => 'الدكاتره', 'route' => 'doctors.index', 'icon' => 'fa-solid fa-user-doctor'],
         ['label' => 'الأجازات', 'route' => 'vacations.index', 'icon' => 'fa fa-umbrella-beach'],
         ['label' => 'الشكاوي', 'route' => 'complains.index', 'icon' => 'fa-regular fa-comment-dots'],
@@ -12,7 +12,7 @@ return [
 
     ],
     'patient' => [
-        ['label' => 'المواعيد', 'route' => 'appointments.index', 'icon' => 'fas fa-calendar-check'],
+        ['label' => 'حجوزاتي', 'route' => 'appointments.index', 'icon' => 'fas fa-calendar-check'],
         ['label' => 'ابحث عن عيادة', 'route' => 'clinics.SearchResults', 'icon' => 'fas fa-search'],
         ['label' => 'الشكاوي', 'route' => 'complains.index', 'icon' => 'fa-regular fa-comment-dots'],
         ['label' => 'بياناتي', 'route' => 'profile.edit', 'icon' => 'fas fa-user'],

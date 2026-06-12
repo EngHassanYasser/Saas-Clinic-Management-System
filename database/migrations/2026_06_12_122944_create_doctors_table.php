@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('phone')->unique();
             $table->string('email')->nullable()->unique();
-            $table->boolean('is_active')->default(true);
             $table->text('notes')->nullable();
             $table->timestamps();
         });

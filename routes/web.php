@@ -3,7 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/ads/index',function(){
+Route::get('/ads/index', function () {
     return view('ads.index');
 })->name('ads.index');
 
@@ -39,7 +39,9 @@ Route::get('/doctors/add', function () {
 Route::get('/clinics/search', function () {
     return view('clinics.SearchResults');
 })->name('clinics.SearchResults');
-
+Route::get('/schedule/index', function () {
+    return view('schedules.index');
+})->name('schedules.index');
 Route::middleware('auth', 'verified')->group(function () {
     Route::get('/appointments/index', function () {
         return view('appointments.index');
@@ -53,7 +55,7 @@ Route::middleware('auth', 'verified')->group(function () {
     })->name('clinics.create');
 });
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', function() {
+    Route::get('/profile', function () {
         return view('profile.edit');
     })->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

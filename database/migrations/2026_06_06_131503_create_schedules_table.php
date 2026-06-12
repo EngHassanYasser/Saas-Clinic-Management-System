@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('slot_duration', [15, 30, 45, 60, 90, 120]);
             $table->time('start_break')->nullable();
             $table->time('end_break')->nullable();
-            $table->boolean('is_active')->default(true);
+            $table->boolean('is_available')->default(true);
             $table->decimal('price', 8, 2);
             $table->timestamps();
             $table->text('notes',500);
