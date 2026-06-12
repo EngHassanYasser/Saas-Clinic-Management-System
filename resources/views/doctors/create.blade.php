@@ -37,7 +37,7 @@
         }
     }">
 
-        <form action="" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('doctors.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
            @include('doctors._form');
         </form>

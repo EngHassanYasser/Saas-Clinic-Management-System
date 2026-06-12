@@ -15,27 +15,35 @@
               @enderror
           </div>
 
-          <div>
-              <label class="block text-xs text-gray-500 mb-1.5">التخصص <span class="text-red-400">*</span></label>
-              <select name="specialty"
-                  class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-100 transition bg-white">
-                  <option value="">اختر التخصص</option>
-                  <option value="general" {{ old('specialty') == 'general' ? 'selected' : '' }}>طب عام</option>
-                  <option value="cardiology" {{ old('specialty') == 'cardiology' ? 'selected' : '' }}>قلب وأوعية دموية
-                  </option>
-                  <option value="orthopedics" {{ old('specialty') == 'orthopedics' ? 'selected' : '' }}>عظام</option>
-                  <option value="dermatology" {{ old('specialty') == 'dermatology' ? 'selected' : '' }}>جلدية</option>
-                  <option value="pediatrics" {{ old('specialty') == 'pediatrics' ? 'selected' : '' }}>أطفال</option>
-                  <option value="neurology" {{ old('specialty') == 'neurology' ? 'selected' : '' }}>مخ وأعصاب
-                  </option>
-                  <option value="gynecology" {{ old('specialty') == 'gynecology' ? 'selected' : '' }}>نساء وتوليد
-                  </option>
-                  <option value="ophthalmology"{{ old('specialty') == 'ophthalmology' ? 'selected' : '' }}>عيون</option>
-                  <option value="ent" {{ old('specialty') == 'ent' ? 'selected' : '' }}>أنف وأذن وحنجرة
-                  </option>
-                  <option value="other" {{ old('specialty') == 'other' ? 'selected' : '' }}>أخرى</option>
-              </select>
-              @error('specialty')
+          <div x-data="{ open: false, selected: null }" class="relative">
+
+              <label class="block text-xs text-gray-500 mb-1.5">
+                  التخصص <span class="text-red-400">*</span>
+              </label>
+
+              <!-- Button Trigger -->
+              <button type="button" @click="open = !open"
+                  class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm bg-white text-left flex justify-between items-center">
+
+                  <span x-text="selected ? selected.name : 'اختار التخصص'"></span>
+
+                  <span>▼</span>
+              </button>
+              <!-- Hidden input -->
+              <input type="hidden" name="speciality_id" :value="selected ? selected.id : ''">
+              <!-- Dropdown -->
+              <div x-show="open" @click.outside="open = false"
+                  class="absolute z-50 mt-2 w-full max-h-60 overflow-auto border bg-white rounded-lg shadow">
+
+                  @foreach ($specialities as $speciality)
+                      <div @click="selected = { id: {{ $speciality->id }}, name: '{{ $speciality->name }}' }; open = false"
+                          class="px-3 py-2 text-sm hover:bg-teal-50 cursor-pointer">
+                          {{ $speciality->name }}
+                      </div>
+                  @endforeach
+
+              </div>
+              @error('speciality_id')
                   <p class="text-xs text-red-400 mt-1">{{ $message }}</p>
               @enderror
           </div>
@@ -52,7 +60,7 @@
                   <p class="text-xs text-red-400 mt-1">{{ $message }}</p>
               @enderror
           </div>
-            <div>
+          <div>
               <label class="block text-xs text-gray-500 mb-1.5">رقم الهاتف <span class="text-red-400">*</span></label>
               <input type="text" name="phone" value="{{ old('phone') }}"
                   class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-100 transition"

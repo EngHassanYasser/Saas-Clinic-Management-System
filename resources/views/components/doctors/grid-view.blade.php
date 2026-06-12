@@ -16,7 +16,7 @@
                         'bg-emerald-100 text-emerald-700' :
                         'bg-gray-100 text-gray-500'">
 
-                    <span x-text="doctor.active ? 'متاح' : 'غير متاح'"></span>
+                    <span x-text="متاح'"></span>
                 </span>
             </div>
 
@@ -43,7 +43,7 @@
 
                 <div class="flex items-center gap-1.5">
                     <i class="fa fa-calendar-check text-gray-300 w-3"></i>
-                    <span x-text="doctor.appointments + ' موعد هذا الشهر'"></span>
+                    <span x-text="80 + ' موعد هذا الشهر'"></span>
                 </div>
             </div>
 

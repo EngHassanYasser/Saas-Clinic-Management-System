@@ -17,11 +17,9 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('phone')->unique();
             $table->string('email')->nullable()->unique();
-            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
