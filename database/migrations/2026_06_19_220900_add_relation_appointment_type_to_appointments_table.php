@@ -1,9 +1,6 @@
 <?php
 
 use App\Models\appointment_type;
-use App\Models\clinic;
-use App\Models\doctor;
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,9 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('appointments', function (Blueprint $table) {
-            $table->foreignIdFor(doctor::class,'doctor_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->foreignIdFor(User::class,'patient_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->foreignIdFor(clinic::class)->nullable()->constrained()->nullOnDelete();
+            $table->foreignIdFor(appointment_type::class)->constrained();
         });
     }
 

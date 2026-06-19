@@ -20,7 +20,6 @@ return new class extends Migration
             $table->time('start_break')->nullable();
             $table->time('end_break')->nullable();
             $table->boolean('is_available')->default(true);
-            $table->decimal('price', 8, 2);
             $table->timestamps();
             $table->text('notes',500);
             // $table->unique(['doctor_id', 'day_of_work']);
@@ -47,8 +46,6 @@ return new class extends Migration
         start_break IS NULL OR 
         (start_break >= start_time AND end_break <= end_time)
     )');
-        DB::statement('ALTER TABLE schedules ADD CONSTRAINT chk_price_positive 
-    CHECK (price >= 0)');
     }
 
     /**

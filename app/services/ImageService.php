@@ -1,44 +1,45 @@
 <?php
 
-namespace App\services;
+namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class ImageService
 {
-    public function upload(UploadedFile $image, string $folder = 'images'): string
+    public static function upload(UploadedFile $image, string $folder = 'images'): string
     {
         $path = $image->store($folder, 'public');
 
         return basename($path);
     }
 
-    public function delete(string $path): bool
+    public static function delete(string $path): bool
     {
         return Storage::disk('public')->delete($path);
     }
 
-    public function exists(string $path): bool
+    public static function exists(string $path): bool
     {
         return Storage::disk('public')->exists($path);
     }
 
-    public function getUrl(string $path): string
+    public static function getUrl(string $path): string
     {
         return Storage::url($path);
     }
 
-    public function update(
+    public static function update(
         UploadedFile $image,
         ?string $oldPath,
         string $folder = 'images'
     ): string {
-        if ($oldPath && $this->exists($oldPath)) {
-            $this->delete($oldPath);
+        if ($oldPath && self::exists($oldPath)) {
+            self::delete($oldPath);
         }
 
-        $path = $this->upload($image, $folder);
+        $path = self::upload($image, $folder);
+
         return basename($path);
     }
 }
