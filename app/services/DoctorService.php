@@ -10,20 +10,35 @@ class DoctorService
 {
     public function getAll()
     {
-        return Doctor::select('name', 'email', 'phone')->get();
+       return doctor::with('specialities')->get()->map(function ($doctor) {
+            return [
+                'id' => $doctor->id,
+                'name' => $doctor->name,
+                'phone' => $doctor->phone,
+                'email' => $doctor->email,
+                'Consultation Fee'=>'',
+                'specialty' => $doctor->specialities->pluck('name')->implode(', '),
+                'active' => $doctor->active ?? true,
+                'image' => $doctor->avatar_url,
+            ];
+        });
     }
-    public function addNew($data, UploadedFile $doctor_image)
+    public function addNew($data)
     {
-        $image_name = ImageService::upload($doctor_image);
-        DB::transaction(function () use ($data, $image_name) {
+      return  DB::transaction(function () use ($data) {
 
             $doctor = Doctor::create([
-                'image' => $image_name,
                 'name' => $data['name'],
                 'phone' => $data['phone'],
                 'email' => $data['email'],
             ]);
-            $doctor->speciality()->sync([$data['speciality_id']]);
+            $doctor->specialities()->sync([$data['speciality_id']]);
+            if (!empty($data['image'])) {
+                $doctor->addMedia($data['image'])
+                    ->toMediaCollection('avatar');
+            }
+
+            return $doctor;
         });
     }
 }

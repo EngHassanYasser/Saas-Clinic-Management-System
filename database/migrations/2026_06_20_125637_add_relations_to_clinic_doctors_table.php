@@ -1,6 +1,8 @@
 <?php
 
-use App\Models\appointment_type;
+use App\Models\clinic;
+use App\Models\doctor;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,8 +14,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('appointments', function (Blueprint $table) {
-            $table->foreignIdFor(appointment_type::class)->constrained();
+        Schema::table('clinic_doctors', function (Blueprint $table) {
+            $table->foreignIdFor(doctor::class)->constrained();
+            $table->foreignIdFor(clinic::class)->constrained();
+             $table->primary(['clinic_id', 'doctor_id']);
         });
     }
 
@@ -22,7 +26,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('appointments', function (Blueprint $table) {
+        Schema::table('clinic_doctor', function (Blueprint $table) {
             //
         });
     }

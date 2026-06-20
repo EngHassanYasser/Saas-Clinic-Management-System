@@ -15,7 +15,6 @@ class DoctorSeeder extends Seeder
         for ($i = 0; $i < 20; $i++) {
             Doctor::create([
                 'name'  => $faker->name(),
-                'image' => $faker->imageUrl(200, 200, 'people'), 
                 'phone' => $faker->phoneNumber(),
                 'email' => $faker->unique()->safeEmail(),
             ]);

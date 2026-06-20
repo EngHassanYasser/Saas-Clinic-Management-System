@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class speciality extends Model
 {
     public $timestapms = false;
-    public function user()
+    public function doctor()
     {
-        return $this->belongsTo(user::class);
+        return $this->belongsTo(doctor::class);
     }
     public function clinics()
     {

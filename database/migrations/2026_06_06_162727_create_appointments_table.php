@@ -25,6 +25,13 @@ return new class extends Migration
                 'rescheduled',
                 'in_progress'
             ])->default('pending');
+            $table->enum('appointment_type', [
+                'consultation',
+                'follow_up',
+                'emergency',
+                'lab_review',
+                'procedure'
+            ])->default('consultation');
             $table->enum('booking_source', ['mobile', 'website']);
             $table->text('notes')->nullable();
             $table->text('cancellation_reason')->nullable();
@@ -47,7 +54,7 @@ return new class extends Migration
         DB::statement('ALTER TABLE appointments ADD CONSTRAINT chk_cancellation_after_start 
     CHECK (cancellation_time IS NULL OR cancellation_time >= start_time)');
 
-    DB::statement('ALTER TABLE appointments ADD CONSTRAINT chk_cancellation_reason_status 
+        DB::statement('ALTER TABLE appointments ADD CONSTRAINT chk_cancellation_reason_status 
     CHECK (
         status = "cancelled" OR cancellation_reason IS NULL
     )');

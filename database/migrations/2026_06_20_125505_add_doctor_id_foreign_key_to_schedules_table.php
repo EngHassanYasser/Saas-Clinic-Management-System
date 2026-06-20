@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\clinic;
-use App\Models\User;
+use App\Models\doctor;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,10 +12,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('clinic_doctors', function (Blueprint $table) {
-            $table->foreignIdFor(User::class)->constrained();
-            $table->foreignIdFor(clinic::class)->constrained();
-             $table->primary(['clinic_id', 'user_id']);
+        Schema::table('schedules', function (Blueprint $table) {
+            $table->foreignIdFor(doctor::class)->nullable()->constrained('doctors')->nullOnDelete();
         });
     }
 
@@ -25,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('clinic_doctor', function (Blueprint $table) {
+        Schema::table('schedules', function (Blueprint $table) {
             //
         });
     }

@@ -4,7 +4,9 @@
     <template x-for="doctor in filteredDoctors" :key="doctor.name">
         <div
             class="bg-white rounded-xl border border-gray-100 p-5 flex flex-col gap-3 hover:-translate-y-1 transition duration-200">
-
+            <div>
+                <img :src="doctor.image" alt="doctor">
+            </div>
             <div class="flex items-start justify-between">
                 <div class="w-14 h-14 rounded-xl flex items-center justify-center text-lg font-medium flex-shrink-0"
                     :class="doctor.color">

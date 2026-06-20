@@ -47,19 +47,6 @@
                   <p class="text-xs text-red-400 mt-1">{{ $message }}</p>
               @enderror
           </div>
-
-          <div>
-              <label class="block text-xs text-gray-500 mb-1.5">سعر الكشف <span class="text-red-400">*</span></label>
-              <div class="relative">
-                  <input type="number" name="price" value="{{ old('price') }}" min="0"
-                      class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-100 transition"
-                      placeholder="200">
-                  <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">ج.م</span>
-              </div>
-              @error('price')
-                  <p class="text-xs text-red-400 mt-1">{{ $message }}</p>
-              @enderror
-          </div>
           <div>
               <label class="block text-xs text-gray-500 mb-1.5">رقم الهاتف <span class="text-red-400">*</span></label>
               <input type="text" name="phone" value="{{ old('phone') }}"

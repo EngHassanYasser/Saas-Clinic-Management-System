@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\appointment_type;
-use App\Models\clinic;
 use App\Models\doctor;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -15,9 +13,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('appointments', function (Blueprint $table) {
-            $table->foreignIdFor(User::class,'patient_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->foreignIdFor(clinic::class)->nullable()->constrained()->nullOnDelete();
+        Schema::table('vications', function (Blueprint $table) {
+            $table->foreignIdFor(doctor::class,'doctor_id')->constrained('doctors')->cascadeOnDelete();
         });
     }
 
@@ -26,7 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('appointments', function (Blueprint $table) {
+        Schema::table('vications', function (Blueprint $table) {
             //
         });
     }

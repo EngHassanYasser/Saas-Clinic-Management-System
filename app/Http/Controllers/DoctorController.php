@@ -12,11 +12,11 @@ class DoctorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function __construct(private DoctorService $doctorService,private SpecialityService $specialityService) {}
+    public function __construct(private DoctorService $doctorService, private SpecialityService $specialityService) {}
     public function index()
     {
-        $doctors = $this->doctorService->getall();
-       return view('doctors.index',compact('doctors'));
+        $doctors =$this->doctorService->getAll();
+        return view('doctors.index', compact('doctors'));
     }
 
     /**
@@ -25,16 +25,16 @@ class DoctorController extends Controller
     public function create()
     {
         $specialities = $this->specialityService->getAll();
-        return view('doctors.create',compact('specialities'));
+        return view('doctors.create', compact('specialities'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreDoctorRequest $request)
+    public function store(StoreDoctorRequest $request, DoctorService $doctorService)
     {
-        $request = $request->validated();
-        dd($request);
+        $newDoctor =  $doctorService->addNew($request->validated());
+        return $newDoctor;
     }
 
     /**
