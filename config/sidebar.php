@@ -4,7 +4,7 @@ return [
         ['label' => 'الإحصائيات', 'route' => 'dashboard', 'icon' => 'fas fa-dashboard'],
         ['label' => 'مواعيد الدكاتره', 'route' => 'schedules.index', 'icon' => 'fas fa-calendar-check'],
         ['label' => 'الحجوزات', 'route' => 'appointments.index', 'icon' => 'fas fa-calendar-check'],
-        ['label' => 'الخدمات', 'route' => 'clinics.edite', 'icon' => 'fas fa-stethoscope'],
+        ['label' => 'الخدمات', 'route' => 'clinicServices.index', 'icon' => 'fas fa-stethoscope'],
         ['label' => 'اضافة حجز', 'route' => 'clinics.create', 'icon' => 'fas fa-calendar-plus'],
         ['label' => 'الدكاتره', 'route' => 'doctors.index', 'icon' => 'fa-solid fa-user-doctor'],
         ['label' => 'الأجازات', 'route' => 'vacations.index', 'icon' => 'fa fa-umbrella-beach'],
