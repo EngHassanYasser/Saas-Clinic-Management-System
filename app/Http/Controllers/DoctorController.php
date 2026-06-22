@@ -15,7 +15,7 @@ class DoctorController extends Controller
     public function __construct(private DoctorService $doctorService, private SpecialityService $specialityService) {}
     public function index()
     {
-        $doctors =$this->doctorService->getAll();
+        $doctors = $this->doctorService->getAll();
         return view('doctors.index', compact('doctors'));
     }
 
@@ -66,6 +66,12 @@ class DoctorController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $isDeleted = $this->doctorService->deleteById($id);
+        return response()->json([
+            'success' => $isDeleted > 0,
+            'message' => $isDeleted > 0
+                ? 'doctor deleted successfully'
+                : 'doctor not found'
+        ]);
     }
 }

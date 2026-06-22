@@ -30,7 +30,7 @@
             <div class="flex flex-col gap-1.5 text-xs text-gray-400">
                 <div class="flex items-center gap-1.5">
                     <i class="fa fa-money-bill-wave text-gray-300 w-3"></i>
-                    <span x-text="doctor.price + ' ج.م / كشف'"></span>
+                    <span x-text="doctor.Consultation_Fee + ' ج.م / كشف'"></span>
                 </div>
 
                 <div class="flex items-center gap-1.5">
@@ -58,33 +58,32 @@
                 </button>
 
                 {{-- حذف --}}
-                <form action="" method="POST" x-data="{ confirmDelete: false }">
+                <div x-data="{ confirmDelete: false }">
 
                     @csrf
                     @method('DELETE')
-
-                    <button type="button" x-show="!confirmDelete" @click="confirmDelete = true"
-                        class="w-8 h-8 flex items-center justify-center text-red-400 border border-red-200 hover:bg-red-50 rounded-lg transition">
-                        <i class="fa fa-trash text-xs"></i>
-                    </button>
-
-                    <div x-show="confirmDelete" class="flex items-center gap-1">
-                        <button type="submit"
-                            class="text-xs text-white bg-red-500 hover:bg-red-600 px-2 py-1.5 rounded-lg transition">
-                            تأكيد
+                    <div>
+                        <button type="button" x-show="!confirmDelete" @click="confirmDelete = true"
+                            class="w-8 h-8 flex items-center justify-center text-red-400 border border-red-200 hover:bg-red-50 rounded-lg transition">
+                            <i class="fa fa-trash text-xs"></i>
                         </button>
 
-                        <button type="button" @click="confirmDelete = false"
-                            class="text-xs text-gray-500 border border-gray-200 hover:bg-gray-50 px-2 py-1.5 rounded-lg transition">
-                            لأ
-                        </button>
+                        <div x-show="confirmDelete" class="flex items-center gap-1">
+                           <button @click="deleteDoctor(doctor.id)"
+                                class="text-xs text-white bg-red-500 hover:bg-red-600 px-2 py-1.5 rounded-lg transition">
+                                تأكيد
+                            </button>
+
+                            <button type="button" @click="confirmDelete = false"
+                                class="text-xs text-gray-500 border border-gray-200 hover:bg-gray-50 px-2 py-1.5 rounded-lg transition">
+                                لأ
+                            </button>
+                        </div>
+                        <div>
+                        </div>
                     </div>
 
-                </form>
-
-            </div>
-
-        </div>
+                </div>
     </template>
 
     <x-doctors.edite-model />

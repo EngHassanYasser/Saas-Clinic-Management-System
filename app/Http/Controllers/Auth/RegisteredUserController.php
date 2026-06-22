@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\UserCreated;
 use App\Http\Controllers\Controller;
 use App\Models\speciality;
 use App\Models\User;
@@ -51,6 +52,7 @@ class RegisteredUserController extends Controller
             'speciality_id' => $request->speciality_id,
         ]);
 
+         event(new UserCreated($user));
         event(new Registered($user));
 
         Auth::login($user);

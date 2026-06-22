@@ -5,7 +5,7 @@ namespace App\Http\Requests\clinicService;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreClinicServiceRequest extends FormRequest
+class UpdateClinicServiceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,6 +23,7 @@ class StoreClinicServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id'=>['required','integer'],
             'clinic_service_id' => 'required|string|max:255',
             'doctor_id' => 'required|exists:doctors,id',
             'description' => 'nullable|string',

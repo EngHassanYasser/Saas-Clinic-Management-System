@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class clinic extends Model
 {
+    public $fillable=['slug','owner_id','name','phone','email','description','address','latitude','logitude','logo'];
+    
     public function appointments()
     {
         return $this->hasMany(appointment::class);

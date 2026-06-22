@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignIdFor(Clinic::class)->constrained();
             $table->foreignIdFor(Doctor::class)->constrained();
             $table->foreignIdFor(ClinicService::class)->constrained();
-
+            $table->string('description',500);
             $table->decimal('price', 8, 2)->check('price' > 0);
 
             $table->timestamps();
