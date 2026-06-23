@@ -1,7 +1,7 @@
 {{-- GRID VIEW --}}
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 
-    <template x-for="doctor in filteredDoctors" :key="doctor.name">
+    <template x-for="doctor in doctors" :key="doctor.name">
         <div
             class="bg-white rounded-xl border border-gray-100 p-5 flex flex-col gap-3 hover:-translate-y-1 transition duration-200">
             <div>
@@ -24,7 +24,7 @@
 
             <div>
                 <p class="text-sm font-medium text-gray-800" x-text="doctor.name"></p>
-                <p class="text-xs text-teal-600 mt-0.5" x-text="doctor.specialty"></p>
+                <p class="text-xs text-teal-600 mt-0.5" x-text="doctor.speciality.name"></p>
             </div>
 
             <div class="flex flex-col gap-1.5 text-xs text-gray-400">
@@ -52,7 +52,7 @@
             <div class="flex items-center gap-2 mt-auto pt-3 border-t border-gray-50">
 
                 {{-- تعديل --}}
-                <button type="button" @click="editDoctor = doctor; showEditModal = true"
+                <button type="button" @click="openEdite(doctor)"
                     class="flex-1 text-center text-xs text-teal-600 border border-teal-200 hover:bg-teal-50 py-1.5 rounded-lg transition">
                     <i class="fa fa-pen ml-1"></i> تعديل
                 </button>

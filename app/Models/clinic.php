@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class clinic extends Model
 {
-    public $fillable=['slug','owner_id','name','phone','email','description','address','latitude','logitude','logo'];
-    
+    public $fillable = ['slug', 'owner_id', 'name', 'phone', 'email', 'description', 'address', 'latitude', 'logitude', 'logo'];
+
     public function appointments()
     {
         return $this->hasMany(appointment::class);
@@ -35,7 +35,12 @@ class clinic extends Model
             'clinic_specialities'
         );
     }
-    public function schedules() {
+    public function schedules()
+    {
         return $this->hasMany(schedule::class);
+    }
+    public function servicePrices()
+    {
+        return $this->hasMany(doctor_service_price::class);
     }
 }

@@ -5,6 +5,7 @@ namespace App\services;
 use App\Models\ClinicService;
 use App\Models\doctor_service_price;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class  ServiceCatalogService
 {
@@ -14,6 +15,7 @@ class  ServiceCatalogService
     }
     public function getAllClinicServices()
     {
+        // DB::enableQueryLog();
         return doctor_service_price::with(['clinic', 'doctor', 'clinic_service'])
             ->get()
             ->map(function ($item) {
@@ -28,10 +30,11 @@ class  ServiceCatalogService
                     'price' => $item->price,
                 ];
             });
+        // dd(DB::getQueryLog());
     }
     public function addNew($data)
     {
-        $result =    doctor_service_price::create([
+        return doctor_service_price::create([
             'clinic_id' => Auth::user()->clinic_id,
             'doctor_id' => $data['doctor_id'],
             'clinic_service_id' => $data['clinic_service_id'],
@@ -41,7 +44,7 @@ class  ServiceCatalogService
     }
     public function Update($data)
     {
-        $result = doctor_service_price::where('id', $data['id'])->update([
+        return doctor_service_price::where('id', $data['id'])->update([
             'clinic_id' => Auth::user()->clinic_id,
             'doctor_id' => $data['doctor_id'],
             'clinic_service_id' => $data['clinic_service_id'],

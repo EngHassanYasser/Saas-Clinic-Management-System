@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\doctor\StoreDoctorRequest;
+use App\Http\Requests\doctor\updateDoctorRequest;
 use App\services\DoctorService;
 use App\services\SpecialityService;
-use Illuminate\Http\Request;
 
 class DoctorController extends Controller
 {
@@ -16,7 +16,8 @@ class DoctorController extends Controller
     public function index()
     {
         $doctors = $this->doctorService->getAll();
-        return view('doctors.index', compact('doctors'));
+        $specialities = $this->specialityService->getAll();
+        return view('doctors.index', compact('doctors', 'specialities'));
     }
 
     /**
@@ -56,9 +57,19 @@ class DoctorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(updateDoctorRequest $request, string $id)
     {
-        //
+        $isUpdated = $this->doctorService->update($request->validated(), $id);
+
+        if ($isUpdated) {
+            return redirect()
+                ->route('doctors.index')
+                ->with('success', 'تم تعديل بيانات الطبيب بنجاح');
+        }
+
+        return redirect()
+            ->back()
+            ->with('error', 'حصل خطأ أثناء التعديل');
     }
 
     /**

@@ -8,9 +8,29 @@
         specialty: '',
         status: '',
         showEditModal: false,
-        editDoctor: null,
         imagePreview: null,
         doctors: @js($doctors),
+        specialities: @js($specialities),
+        form: {
+            'id': null,
+            'image': null,
+            'name': null,
+            'phone': null,
+            'email': null,
+            speciality_id: null,
+        },
+        openEdite(item) {
+            this.form = {
+                'id': item.id,
+                'image': item.image,
+                'name': item.name,
+                'phone': item.phone,
+                'email': item.email,
+                speciality_id: item.speciality?.id ?? null,
+            };
+            console.log(this.form);
+            this.showEditModal = true;
+        },
     
         get filteredDoctors() {
             const q = this.search.toLowerCase();
@@ -18,11 +38,11 @@
             return this.doctors.filter(d => {
                 const matchSearch =
                     d.name.toLowerCase().includes(q) ||
-                    d.specialty.toLowerCase().includes(q);
+                    d.specialty.name.toLowerCase().includes(q);
     
                 const matchSpecialty =
-                    this.specialty === '' ||
-                    d.specialty === this.specialty;
+                    this.specialty.name === '' ||
+                    d.specialty.name === this.specialty.name;
     
                 const matchStatus =
                     this.status === '' ||

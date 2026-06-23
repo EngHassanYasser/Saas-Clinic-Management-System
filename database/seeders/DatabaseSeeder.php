@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
          SpecialitySeeder::class,
          daysSeeder::class,
         //  usersSeeder::class,
-         DoctorSeeder::class,
+        //  DoctorSeeder::class,
          ClinicServicesSeeder::class,
     ]);
     }

@@ -69,11 +69,10 @@
                 description: item.description,
                 price: item.price
             };
-    
             this.showModal = true;
         },
-         getToken() {
-          return document.querySelector(`input[name='_token']`).value;
+        getToken() {
+            return document.querySelector(`input[name='_token']`).value;
         },
         deleteService(id) {
             if (!confirm('متأكد؟')) return;
