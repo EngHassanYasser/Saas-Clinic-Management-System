@@ -44,7 +44,8 @@ class DoctorService
                 'phone' => $data['phone'],
                 'email' => $data['email'],
             ]);
-            $doctor->specialities()->sync([$data['speciality_id']]);
+            $doctor->specialities()->attach([$data['speciality_id']]);
+            $doctor->clinics()->attach([Auth::User()->clinic_id]);
             if (!empty($data['image'])) {
                 $doctor->addMedia($data['image'])
                     ->toMediaCollection('avatar');

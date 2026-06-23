@@ -5,12 +5,12 @@
 @section('content')
 
     <div class="p-6 min-h-screen bg-gray-50" dir="rtl">
-        @php
+        {{-- @php
             $doctors = [
                 (object) [
                     'id' => 1,
                     'name' => 'د. أحمد سامي',
-                    'specialty' => 'باطنة',
+                    'speciality_name' => 'باطنة',
                     'schedules' => collect([
                         (object) [
                             'id' => 101,
@@ -36,7 +36,7 @@
                 (object) [
                     'id' => 2,
                     'name' => 'د. منى عبد الرحمن',
-                    'specialty' => 'أطفال',
+                    'speciality_name' => 'أطفال',
                     'schedules' => collect([
                         (object) [
                             'id' => 201,
@@ -53,7 +53,7 @@
                 (object) [
                     'id' => 3,
                     'name' => 'د. كريم عبد الله',
-                    'specialty' => 'عظام',
+                    'speciality_name' => 'عظام',
                     'schedules' => collect([
                         (object) [
                             'id' => 301,
@@ -70,11 +70,11 @@
                 (object) [
                     'id' => 4,
                     'name' => 'د. سارة محمود',
-                    'specialty' => 'جلدية',
+                    'speciality_name' => 'جلدية',
                     'schedules' => collect([]),
                 ],
             ];
-        @endphp
+        @endphp --}}
         {{-- DOCTORS LIST --}}
         <div class="flex flex-col gap-4">
 

@@ -5,12 +5,12 @@
           {{-- Avatar --}}
           <div
               class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-bold text-sm flex-shrink-0">
-              {{ mb_substr($doctor->name, 0, 1) }}
+              {{ mb_substr($doctor['name'], 0, 1) }}
           </div>
           <div>
-              <p class="text-sm font-medium text-gray-800">{{ $doctor->name }}</p>
-              <p class="text-xs text-gray-400">{{ $doctor->specialty }} —
-                  {{ $doctor->schedules->count() }} جدول</p>
+              <p class="text-sm font-medium text-gray-800">{{$doctor['name'] }}</p>
+              <p class="text-xs text-gray-400">{{ $doctor['speciality_name'] }} —
+                  {{ $doctor['schedules_count'] }} جدول</p>
           </div>
       </div>
 

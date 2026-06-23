@@ -5,7 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['clinic_id', 'price', 'description', 'doctor_id', 'clinic_service_id'])]
+#[Fillable([
+    'id',
+    'clinic_id',
+    'doctor_id',
+    'clinic_service_id',
+    'description',
+    'price',
+    'created_at',
+    'updated_at'
+])]
 class doctor_service_price extends Model
 {
     public function clinic()

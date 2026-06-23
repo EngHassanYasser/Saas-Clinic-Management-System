@@ -5,7 +5,7 @@
       <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg" @click.outside="showAddModal = false">
 
           <div class="flex items-center justify-between p-5 border-b">
-              <h2 class="font-semibold text-gray-800">إضافة موعد — {{ $doctor->name }}</h2>
+              <h2 class="font-semibold text-gray-800">إضافة موعد — {{ $doctor['name'] }}</h2>
               <button @click="showAddModal = false" class="text-gray-400 hover:text-gray-600">
                   <i class="fa fa-xmark"></i>
               </button>
@@ -21,7 +21,7 @@
               }
           }">
               @csrf
-              <input type="hidden" name="doctor_id" value="{{ $doctor->id }}">
+              <input type="hidden" name="doctor_id" value="{{ $doctor['id'] }}">
 
               <div class="p-5 flex flex-col gap-4">
 

@@ -1,7 +1,7 @@
  {{-- SCHEDULES TABLE --}}
  <div x-show="open" x-transition x-cloak class="border-t border-gray-100">
 
-     @if ($doctor->schedules->isEmpty())
+     @if ($doctor['schedules_count'] == 0)
          <div class="py-8 text-center text-sm text-gray-400">
              <i class="fa fa-calendar-xmark text-2xl mb-2 block text-gray-200"></i>
              لا توجد مواعيد مضافة بعد

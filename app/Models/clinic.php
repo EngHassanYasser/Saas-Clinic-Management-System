@@ -2,12 +2,23 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
+#[Fillable([
+    'slug',
+    'owner_id',
+    'name',
+    'phone',
+    'email',
+    'description',
+    'address',
+    'latitude',
+    'logitude',
+    'logo'
+])]
 class clinic extends Model
 {
-    public $fillable = ['slug', 'owner_id', 'name', 'phone', 'email', 'description', 'address', 'latitude', 'logitude', 'logo'];
-
     public function appointments()
     {
         return $this->hasMany(appointment::class);
@@ -42,5 +53,13 @@ class clinic extends Model
     public function servicePrices()
     {
         return $this->hasMany(doctor_service_price::class);
+    }
+    public function clinic_doctor()
+    {
+        return $this->hasMany(clinic_doctor::class);
+    }
+    public function doctors()
+    {
+        return $this->belongsToMany(Doctor::class, 'clinic_doctors', 'clinic_id', 'doctor_id');
     }
 }

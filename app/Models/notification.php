@@ -2,8 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
+#[Fillable([
+    'id',
+    'type',
+    'title',
+    'body',
+    'sent_at',
+    'read_at',
+    'created_at',
+    'updated_at',
+    'user_id'
+])]
 class notification extends Model
 {
     public function user()

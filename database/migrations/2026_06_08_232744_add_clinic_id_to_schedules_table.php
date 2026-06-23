@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\clinic;
+use App\Models\day;
+use App\Models\doctor;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,8 +15,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clinic_doctors', function (Blueprint $table) {
-            $table->boolean('is_active')->default(true);
+        Schema::table('schedules', function (Blueprint $table) {
+            $table->foreignIdFor(clinic::class);
         });
     }
 
@@ -21,6 +25,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clinic_doctors');
+        Schema::table('schedule', function (Blueprint $table) {
+            //
+        });
     }
 };

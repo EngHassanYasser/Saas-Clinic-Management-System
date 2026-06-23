@@ -34,9 +34,6 @@ Route::middleware('auth', 'verified')->group(function () {
 Route::get('/clinics/search', function () {
     return view('clinics.SearchResults');
 })->name('clinics.SearchResults');
-Route::get('/schedule/index', function () {
-    return view('schedules.index');
-})->name('schedules.index');
 Route::middleware('auth', 'verified')->group(function () {
     Route::get('/appointments/index', function () {
         return view('appointments.index');
@@ -58,4 +55,5 @@ Route::middleware('auth')->group(function () {
 });
 require __DIR__ . '/web/doctor.php';
 require __DIR__ . '/web/clinic_service.php';
+require __DIR__ . '/web/schedule.php';
 require __DIR__ . '/auth.php';

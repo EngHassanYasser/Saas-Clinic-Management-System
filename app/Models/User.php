@@ -10,7 +10,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'type', 'user_name','speciality_id','clinic_id'])]
+#[Fillable([
+    'name',
+    'email',
+    'password',
+    'type',
+    'user_name',
+    'speciality_id',
+    'clinic_id'
+])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -49,13 +57,16 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Clinic::class, 'clinic_users', 'user_id', 'clinic_id');
     }
-    public function vications() {
+    public function vications()
+    {
         return $this->hasMany(vication::class);
     }
-    public function notifications(){
+    public function notifications()
+    {
         return $this->hasMany(notification::class);
     }
-    public function otps(){
+    public function otps()
+    {
         return $this->hasMany(otp::class);
     }
 }

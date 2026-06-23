@@ -2,9 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
+#[Fillable([
+    'clinic_id',
+    'speciality_id'
+])]
 class clinic_speciality extends Model
 {
-    public $timestamps=false;
+    public $timestamps = false;
 }
