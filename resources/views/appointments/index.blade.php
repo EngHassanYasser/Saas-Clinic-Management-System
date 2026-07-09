@@ -12,30 +12,6 @@
 
                 <x-appointments.filter-tabs />
 
-                {{-- ===== APPOINTMENTS LIST ===== --}}
-                @php
-                    // Demo data — replace with $appointments from controller
-                    $demoAppointments = [
-                        [
-                            'id' => 1,
-                            'doctor_name' => 'د. أحمد محمود',
-                            'specialty' => 'باطنة وقلب',
-                            'clinic_name' => 'عيادة الشفاء',
-                            'address' => 'القاهرة - العباسية - شارع رمسيس',
-                            'date' => 'الأحد، 1 يونيو 2025',
-                            'time' => '10:00 ص',
-                            'status' => 'confirmed',
-                            'status_label' => 'مؤكد',
-                            'service' => 'كشف عام',
-                            'exam_price' => 300,
-                            'deposit' => 60,
-                            'booking_src' => 'mobileApp',
-                            'can_cancel' => true,
-                        ],
-                    ];
-                    $appointments = $appointments ?? $demoAppointments;
-                @endphp
-
                 @if (count($appointments) === 0)
                     {{-- Empty state --}}
                     <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center">

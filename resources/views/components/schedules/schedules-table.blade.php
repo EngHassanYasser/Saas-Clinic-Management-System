@@ -19,28 +19,28 @@
                  </tr>
              </thead>
              <tbody class="divide-y divide-gray-50">
-                 @foreach ($doctor->schedules as $schedule)
+                 @foreach ($doctor['schedules'] as $schedule)
                      <tr class="hover:bg-gray-50 transition">
                          <td class="px-4 py-3">
                              <div class="flex flex-wrap gap-1">
                                  @foreach ($schedule->days as $day)
                                      <span
                                          class="text-xs bg-teal-50 text-teal-700 border border-teal-100 px-2 py-0.5 rounded-md">
-                                         {{ ['saturday' => 'السبت', 'sunday' => 'الأحد', 'monday' => 'الاثنين', 'tuesday' => 'الثلاثاء', 'wednesday' => 'الأربعاء', 'thursday' => 'الخميس', 'friday' => 'الجمعة'][$day] ?? $day }}
+                                         {{ $day->name }}
                                      </span>
                                  @endforeach
                              </div>
                          </td>
-                         <td class="px-4 py-3 text-gray-700">{{ $schedule->work_start }}</td>
-                         <td class="px-4 py-3 text-gray-700">{{ $schedule->work_end }}</td>
+                         <td class="px-4 py-3 text-gray-700">{{ $schedule['start_time'] }}</td>
+                         <td class="px-4 py-3 text-gray-700">{{ $schedule['end_time'] }}</td>
                          <td class="px-4 py-3 text-gray-500 text-xs">
-                             @if ($schedule->break_start && $schedule->break_end)
-                                 {{ $schedule->break_start }} — {{ $schedule->break_end }}
+                             @if ($schedule['start_break'] && $schedule['end_break'])
+                                 {{ $schedule['start_break'] }} — {{ $schedule['end_break'] }}
                              @else
                                  <span class="text-gray-300">—</span>
                              @endif
                          </td>
-                         <td class="px-4 py-3 text-gray-700">{{ $schedule->session_duration }} د</td>
+                         <td class="px-4 py-3 text-gray-700">{{ $schedule['slot_duration'] }} د</td>
                          <td class="px-4 py-3">
                              <div class="flex items-center gap-2 justify-end">
                                  <button type="button" @click.stop="openEdit(@js($schedule))"

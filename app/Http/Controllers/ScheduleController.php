@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Schedule\StoreScheduleRequest;
 use App\Services\ScheduleService;
 use Illuminate\Http\Request;
 
@@ -17,12 +18,16 @@ class ScheduleController extends Controller
     public function index()
     {
         $doctors = $this->scheduleService->getAll();
-        return view('schedules.index', compact('doctors'));
+        $weekDays = $this->scheduleService->getWeekDays();
+        return view('schedules.index', compact('doctors', 'weekDays'));
     }
 
     public function create() {}
 
-    public function store(Request $request) {}
+    public function store(StoreScheduleRequest $request)
+    {
+        return $this->scheduleService->addNew($request->validated());
+    }
 
     public function show(string $id) {}
 

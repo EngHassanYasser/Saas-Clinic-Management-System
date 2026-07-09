@@ -40,6 +40,8 @@ return [
     */
 
     'debug' => (bool) env('APP_DEBUG', false),
+    'timezone' => env('APP_TIMEZONE', 'UTC'),
+    'client_timezone' => env('CLIENT_TIMEZONE', 'UTC'),
 
     /*
     |--------------------------------------------------------------------------
@@ -64,8 +66,6 @@ return [
     | is set to "UTC" by default as it is suitable for most use cases.
     |
     */
-
-    'timezone' => 'UTC',
 
     /*
     |--------------------------------------------------------------------------

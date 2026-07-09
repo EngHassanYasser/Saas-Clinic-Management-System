@@ -12,8 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 class day extends Model
 {
     public $timestamp = false;
-    public function schedules()
+     public function schedules()
     {
-        return $this->belongsTo(Schedule::class);
+        return $this->belongsToMany(
+            Schedule::class,
+            'day_schedule',
+            'day_id',
+            'schedule_id'
+        );
     }
 }

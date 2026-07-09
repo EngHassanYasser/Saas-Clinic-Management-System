@@ -21,10 +21,7 @@ return new class extends Migration
             $table->time('end_break')->nullable();
             $table->boolean('is_available')->default(true);
             $table->timestamps();
-            $table->text('notes',500);
         });
-        DB::statement('ALTER TABLE schedules ADD CONSTRAINT chk_slot_duration 
-    CHECK (slot_duration IN (15, 30, 45, 60, 90, 120))');
 
         DB::statement('ALTER TABLE schedules ADD CONSTRAINT chk_schedule_times 
     CHECK (end_time > start_time)');

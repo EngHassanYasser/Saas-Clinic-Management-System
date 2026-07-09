@@ -35,9 +35,6 @@ Route::get('/clinics/search', function () {
     return view('clinics.SearchResults');
 })->name('clinics.SearchResults');
 Route::middleware('auth', 'verified')->group(function () {
-    Route::get('/appointments/index', function () {
-        return view('appointments.index');
-    })->name('appointments.index');
 
     Route::get('/clinics/edite', function () {
         return view('clinics.edite');
@@ -53,6 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+require __DIR__ . '/web/appointment.php';
 require __DIR__ . '/web/doctor.php';
 require __DIR__ . '/web/clinic_service.php';
 require __DIR__ . '/web/schedule.php';

@@ -15,7 +15,7 @@
       </div>
 
       <div class="flex items-center gap-2">
-          <button type="button" @click.stop="showAddModal = true"
+          <button type="button" @click.stop="openAdd();showModel = true"
               class="text-xs bg-teal-50 hover:bg-teal-100 text-teal-700 px-3 py-1.5 rounded-lg transition flex items-center gap-1">
               <i class="fa fa-plus text-[10px]"></i> إضافة موعد
           </button>

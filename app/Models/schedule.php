@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Model;
     'is_available',
     'created_at',
     'updated_at',
-    'notes',
     'clinic_id',
     'doctor_id'
 ])]
@@ -27,7 +26,12 @@ class schedule extends Model
     }
     public function days()
     {
-        return $this->hasMany(Day::class);
+        return $this->belongsToMany(
+            Day::class,
+            'day_schedule',
+            'schedule_id',
+            'day_id'
+        );
     }
     public function clinic()
     {

@@ -37,4 +37,7 @@ class doctor extends Model implements HasMedia
      {
           return $this->hasMany(schedule::class);
      }
+     public function appointments() {
+          return $this->hasMany(appointment::class);
+     }
 }

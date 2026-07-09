@@ -17,4 +17,12 @@ class ClinicService extends Model
     {
         return $this->hasMany(doctor_service_price::class);
     }
+    public function appointments()
+    {
+        return $this->hasMany(appointment::class, 'clinic_service_id');
+    }
+    public function doctorServicePrice()
+    {
+        return $this->belongsTo(doctor_service_price::class);
+    }
 }
