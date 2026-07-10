@@ -12,12 +12,13 @@ use Illuminate\Database\Eloquent\Model;
     'reason',
     'created_at',
     'updated_at',
-    'doctor_id'
+    'doctor_id',
+    'status',
 ])]
 class vication extends Model
 {
-    public function doctors()
+    public function doctor()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(doctor::class);
     }
 }

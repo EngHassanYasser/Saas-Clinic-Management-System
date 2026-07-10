@@ -51,4 +51,5 @@ require __DIR__ . '/web/appointment.php';
 require __DIR__ . '/web/doctor.php';
 require __DIR__ . '/web/clinic_service.php';
 require __DIR__ . '/web/schedule.php';
+require __DIR__ . '/web/vication.php';
 require __DIR__ . '/auth.php';

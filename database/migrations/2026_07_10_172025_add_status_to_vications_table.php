@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\doctor;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('vications', function (Blueprint $table) {
-            $table->foreignIdFor(doctor::class,'doctor_id')->constrained('doctors')->cascadeOnDelete();
+            $table->enum('status',['upcoming','active','ended']);
         });
     }
 
