@@ -39,9 +39,6 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/clinics/edite', function () {
         return view('clinics.edite');
     })->name('clinics.edite');
-    Route::get('/appointments/create', function () {
-        return view('appointments.create');
-    })->name('clinics.create');
 });
 Route::middleware('auth')->group(function () {
     Route::get('/profile', function () {

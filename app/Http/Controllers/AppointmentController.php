@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\services\AppointmentService;
+use App\services\ServiceCatalogService;
+use App\services\SpecialityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,13 +13,17 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function __construct(private AppointmentService $appointmentService){
+    public function __construct(private AppointmentService $appointmentService,
+    private SpecialityService $specialityService,
+    private ServiceCatalogService $serviceCatalogService,
+    ){
 
     }
     public function index()
     {
-        $appointments= $this->appointmentService->getClinicAppointments(Auth::User()->clinic_id);
-        return view('appointments.index',compact('appointments'));
+        $appointments= $this->appointmentService->getAppointments(Auth::User());
+        $stats = $this->appointmentService->getStats(Auth::user());
+        return view('appointments.index',compact('appointments','stats'));
     }
 
     /**
@@ -25,7 +31,10 @@ class AppointmentController extends Controller
      */
     public function create()
     {
-        //
+        
+        $specialities = $this->specialityService->getAll();
+        $services = $this->serviceCatalogService->getAllCatalogs();
+        return view('appointments.create',compact('specialities','services'));
     }
 
     /**

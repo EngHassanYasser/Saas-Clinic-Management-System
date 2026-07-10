@@ -5,7 +5,6 @@ return [
         ['label' => 'مواعيد الدكاتره', 'route' => 'schedules.index', 'icon' => 'fas fa-calendar-check'],
         ['label' => 'الحجوزات', 'route' => 'appointments.index', 'icon' => 'fas fa-calendar-check'],
         ['label' => 'الخدمات', 'route' => 'clinicServices.index', 'icon' => 'fas fa-stethoscope'],
-        ['label' => 'اضافة حجز', 'route' => 'clinics.create', 'icon' => 'fas fa-calendar-plus'],
         ['label' => 'الدكاتره', 'route' => 'doctors.index', 'icon' => 'fa-solid fa-user-doctor'],
         ['label' => 'الأجازات', 'route' => 'vacations.index', 'icon' => 'fa fa-umbrella-beach'],
         ['label' => 'الشكاوي', 'route' => 'complains.index', 'icon' => 'fa-regular fa-comment-dots'],
@@ -14,6 +13,7 @@ return [
     ],
     'patient' => [
         ['label' => 'حجوزاتي', 'route' => 'appointments.index', 'icon' => 'fas fa-calendar-check'],
+        ['label' => 'اضافة حجز', 'route' => 'appointments.create', 'icon' => 'fas fa-calendar-plus'],
         ['label' => 'ابحث عن عيادة', 'route' => 'clinics.SearchResults', 'icon' => 'fas fa-search'],
         ['label' => 'الشكاوي', 'route' => 'complains.index', 'icon' => 'fa-regular fa-comment-dots'],
         ['label' => 'بياناتي', 'route' => 'profile.edit', 'icon' => 'fas fa-user'],

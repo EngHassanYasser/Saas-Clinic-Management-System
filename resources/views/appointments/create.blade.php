@@ -4,27 +4,29 @@
 
 @extends($layout)
 @section('content')
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-6 py-6 sm:py-10">
-        @if (auth()->user()->type == 'patient')
-            <!-- Clinic Info -->
-            <x-clinics.clinic-info />
-        @endif
-        <!-- GRID -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+    <div class="max-w-3xl mx-auto px-4 py-6 sm:py-10" x-data="bookingForm({
+        specialties: @js($specialities),
+        services:@js($services),
+    })" x-cloak>
+        <x-appointments.header />
+        <x-appointments.step_progress />
 
-            <!-- LEFT CONTENT (2 columns) -->
-            <div class="lg:col-span-2 space-y-6">
-                @if (auth()->user()->type == 'patient')
-                    <x-clinics.about-clinic />
-                @endif
-                <x-clinics.clinic-doctors />
-                <x-clinics.clinic-prices />
-            </div>
+        <form @submit.prevent="submitBooking"
+            class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 space-y-6">
+            <x-appointments.specialty />
+            <x-appointments.service />
 
-            <!-- RIGHT SIDEBAR (1 column) -->
-            <div class="space-y-6 lg:sticky lg:top-6 h-fit">
-                <x-clinics.clinic-booking />
-            </div>
-        </div>
+            <x-appointments.clinic />
+            <x-appointments.doctor />
+            <x-appointments.date />
+            <x-appointments.summary />
+
+            <x-appointments.submit_button />
+        </form>
+
+        <x-appointments.toast />
+
     </div>
 @endsection
+@vite(['resources/js/app.js'])
+@stack('scripts')

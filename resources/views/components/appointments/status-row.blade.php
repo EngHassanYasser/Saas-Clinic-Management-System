@@ -4,7 +4,7 @@
              <div class="flex items-start justify-between">
                  <div>
                      <p class="text-teal-100 text-xs sm:text-sm">إجمالي المواعيد</p>
-                     <p class="text-2xl sm:text-3xl font-black mt-1">{{ $stats['total'] ?? 12 }}</p>
+                     <p class="text-2xl sm:text-3xl font-black mt-1">{{ $stats['total'] ?? 'N/A'}}</p>
                  </div>
                  <div class="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center">
                      <i class="fas fa-calendar-alt text-sm"></i>
@@ -16,7 +16,7 @@
              <div class="flex items-start justify-between">
                  <div>
                      <p class="text-amber-100 text-xs sm:text-sm">قادمة</p>
-                     <p class="text-2xl sm:text-3xl font-black mt-1">{{ $stats['upcoming'] ?? 3 }}</p>
+                     <p class="text-2xl sm:text-3xl font-black mt-1">{{ $stats['confirmed'] ?? 'N/A' }}</p>
                  </div>
                  <div class="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center">
                      <i class="fas fa-clock text-sm"></i>
@@ -28,7 +28,7 @@
              <div class="flex items-start justify-between">
                  <div>
                      <p class="text-blue-100 text-xs sm:text-sm">مكتملة</p>
-                     <p class="text-2xl sm:text-3xl font-black mt-1">{{ $stats['completed'] ?? 8 }}</p>
+                     <p class="text-2xl sm:text-3xl font-black mt-1">{{ $stats['completed'] ?? 'N/A' }}</p>
                  </div>
                  <div class="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center">
                      <i class="fas fa-check-circle text-sm"></i>
@@ -40,7 +40,7 @@
              <div class="flex items-start justify-between">
                  <div>
                      <p class="text-rose-100 text-xs sm:text-sm">ملغية</p>
-                     <p class="text-2xl sm:text-3xl font-black mt-1">{{ $stats['cancelled'] ?? 1 }}</p>
+                     <p class="text-2xl sm:text-3xl font-black mt-1">{{ $stats['cancelled'] ?? 'N/A' }}</p>
                  </div>
                  <div class="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center">
                      <i class="fas fa-times-circle text-sm"></i>

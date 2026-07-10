@@ -5,13 +5,12 @@ namespace App\services;
 use App\Models\ClinicService;
 use App\Models\doctor_service_price;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class  ServiceCatalogService
 {
     public function getAllCatalogs()
     {
-        return ClinicService::select('id', 'name')->get();
+        return ClinicService::select('id', 'name','speciality_id')->get();
     }
     public function getAllClinicServices()
     {
