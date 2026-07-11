@@ -16,7 +16,7 @@
                     </thead>
 
                     <tbody class="divide-y divide-gray-100">
-                        <template x-for="item in filtered" :key="item.id">
+                        <template x-for="item in subscriptions" :key="item.id">
                             <tr class="hover:bg-gray-50 transition">
 
                                 <td class="p-4 font-medium" x-text="item.clinic"></td>

@@ -23,10 +23,8 @@
 
             <x-appointments.submit_button />
         </form>
-
+        
         <x-appointments.toast />
 
     </div>
 @endsection
-@vite(['resources/js/app.js'])
-@stack('scripts')

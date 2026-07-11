@@ -4,104 +4,11 @@
 
 @section('content')
 
-    <div x-data="{
-        showModal: false,
-        editMode: false,
-    
-        serviceDropdownOpen: false,
-        doctorDropdownOpen: false,
-    
+    <div x-data="clinicServicesForm({
         serviceCatalogs: @js($serviceCatalogs),
         doctors: @js($doctors),
-        clinicServices: @js($clinicServices),
-    
-        filters: {
-            doctorId: '',
-            search: ''
-        },
-    
-        form: {
-            id: null,
-            clinic_service_id: null,
-            doctor_id: null,
-            description: '',
-            price: 0
-        },
-    
-        get filteredServices() {
-            return this.clinicServices.filter(s => {
-    
-                const matchDoctor = this.filters.doctorId ?
-                    s.doctor_id == this.filters.doctorId :
-                    true;
-    
-                const matchSearch = this.filters.search ?
-                    (s.description ?? '')
-                    .toLowerCase()
-                    .includes(this.filters.search.toLowerCase()) :
-                    true;
-    
-                return matchDoctor && matchSearch;
-            });
-        },
-    
-        openCreate() {
-            this.editMode = false;
-    
-            this.form = {
-                id: null,
-                clinic_service_id: null,
-                doctor_id: null,
-                description: '',
-                price: 0
-            };
-    
-            this.showModal = true;
-        },
-    
-        openEdit(item) {
-            this.editMode = true;
-    
-            this.form = {
-                id: item.id,
-                clinic_service_id: item.clinic_service_id,
-                doctor_id: item.doctor_id,
-                description: item.description,
-                price: item.price
-            };
-            this.showModal = true;
-        },
-        getToken() {
-            return document.querySelector(`input[name='_token']`).value;
-        },
-        deleteService(id) {
-            if (!confirm('متأكد؟')) return;
-            fetch(`/clinic/services/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': this.getToken(),
-                        'Accept': 'application/json',
-                    },
-                })
-                .then(async (res) => {
-                    const data = await res.json().catch(() => ({}));
-    
-                    if (!res.ok || !data.success) {
-                        throw new Error(data.message || 'Delete failed');
-                    }
-    
-                    return data;
-                })
-                .then(() => {
-                    this.clinicServices =
-                        this.clinicServices.filter(s => s.id !== id);
-                })
-                .catch(err => {
-                    console.error(err);
-                    alert('حصل خطأ أثناء الحذف');
-                });
-        }
-    }" dir="rtl" class="p-6 bg-gray-50 min-h-screen">
+        clinicServices: @js($clinicServices)
+    })" dir="rtl" class="p-6 bg-gray-50 min-h-screen">
 
         <x-clinic-services.header />
 
