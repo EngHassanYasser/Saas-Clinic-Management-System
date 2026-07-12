@@ -14,7 +14,7 @@
     </a>
 
     <!-- Cancel -->
-    <button onclick="confirmCancel({{ $appt['id'] }})"
+    <button @click="confirmCancel(appointment.id)"
         class="px-3 py-2 rounded-xl bg-red-50 border border-red-100 text-red-700 text-xs font-semibold hover:bg-red-100 transition whitespace-nowrap">
         <i class="fas fa-times"></i> إلغاء
     </button>

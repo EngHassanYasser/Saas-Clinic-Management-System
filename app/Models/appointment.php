@@ -37,7 +37,7 @@ class appointment extends Model
     }
     protected function startTime(): Attribute
     {
-      return Attribute::make(
+        return Attribute::make(
             get: fn($value) => Carbon::parse($value)
                 ->setTimezone(config('app.client_timezone'))
                 ->format('Y-m-d h:i A'),
@@ -66,5 +66,9 @@ class appointment extends Model
     public function appointment_status_logs()
     {
         return $this->hasMany(appointment_status_log::class);
+    }
+    public function complains()
+    {
+        return $this->hasMany(complain::class);
     }
 }

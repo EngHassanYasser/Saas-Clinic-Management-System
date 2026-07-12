@@ -5,7 +5,6 @@ export default function (serverData = {}) {
 
         serviceDropdownOpen: false,
         doctorDropdownOpen: false,
-
         serviceCatalogs: serverData.serviceCatalogs,
         doctors: serverData.doctors,
         clinicServices: serverData.clinicServices,

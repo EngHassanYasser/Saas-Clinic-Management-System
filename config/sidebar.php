@@ -6,7 +6,7 @@ return [
         ['label' => 'الحجوزات', 'route' => 'appointments.index', 'icon' => 'fas fa-calendar-check'],
         ['label' => 'الخدمات', 'route' => 'clinicServices.index', 'icon' => 'fas fa-stethoscope'],
         ['label' => 'الدكاتره', 'route' => 'doctors.index', 'icon' => 'fa-solid fa-user-doctor'],
-        ['label' => 'الأجازات', 'route' => 'vacations.index', 'icon' => 'fa fa-umbrella-beach'],
+        ['label' => 'الأجازات', 'route' => 'vications.index', 'icon' => 'fa fa-umbrella-beach'],
         ['label' => 'الشكاوي', 'route' => 'complains.index', 'icon' => 'fa-regular fa-comment-dots'],
         ['label' => 'اعدادات العيادة', 'route' => 'clinics.edite', 'icon' => 'fas fa-cog'],
 

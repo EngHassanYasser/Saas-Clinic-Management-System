@@ -3,21 +3,22 @@
 @section('title', 'مواعيد الأطباء')
 
 @section('content')
-    <div x-data="schedulesForm({doctors: @js($doctors),weekDays: @js($weekDays)})"
-     class="p-6 min-h-screen bg-gray-50" dir="rtl">
+    <div x-data="schedulesForm({ doctors: @js($doctors), weekDays: @js($weekDays) })" class="p-6 min-h-screen bg-gray-50" dir="rtl">
         <div class="flex flex-col gap-4">
 
-            @forelse ($doctors as $doctor)
-                <x-schedules.doctor-row :$doctor />
+            <template x-for="doctor in doctors" :key="doctor.id">
+                <div>
+                    <x-schedules.doctor-row/>
 
-                <x-schedules.schedules-table :$doctor />
-
-                <x-schedules.model :$doctor />
-
+                    <x-schedules.schedules-table  />
+                </div>
+            </template>
+            <template x-if="doctors.length === 0">
+                <div>
+                    <x-schedules.empty-doctors-cart />
+                </div>
+            </template>
+            <x-schedules.model />
         </div>
-    @empty
-        <x-schedules.empty-doctors-cart />
-        @endforelse
-    </div>
     </div>
 @endsection

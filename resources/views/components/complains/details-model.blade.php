@@ -39,7 +39,7 @@
                 </div>
 
                 {{-- Status section --}}
-                @if ($isClinic)
+                @if (auth()->user()->type === 'clinic')
                     <div>
                         <p class="text-xs text-gray-400 mb-2">تغيير الحالة</p>
                         <div class="flex gap-2">
@@ -64,7 +64,7 @@
                 @endif
 
                 {{-- Reply section --}}
-                @if ($isClinic)
+                @if (auth()->user()->type === 'clinic')
                     <div>
                         <p class="text-xs text-gray-400 mb-1.5">الرد على الشكوى</p>
                         <textarea id="replyText" rows="3"
@@ -86,7 +86,7 @@
                     class="flex-1 border border-gray-200 text-gray-600 text-sm py-2.5 rounded-lg hover:bg-gray-50 transition">
                     إغلاق
                 </button>
-                @if ($isClinic)
+                @if (auth()->user()->type === 'clinic')
                     <button onclick="sendReply()"
                         class="flex-1 bg-teal-600 hover:bg-teal-700 text-white text-sm py-2.5 rounded-lg transition flex items-center justify-center gap-2">
                         <i class="fa fa-paper-plane"></i> إرسال الرد

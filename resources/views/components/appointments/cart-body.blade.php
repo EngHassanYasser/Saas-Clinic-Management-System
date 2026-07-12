@@ -1,19 +1,19 @@
-@props(['appt'])
 <div class="c-clinic-appointment-card bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 space-y-5" dir="rtl">
     {{-- Row 1: Patient, Doctor, Clinic, Date --}}
     <div class="flex flex-col sm:flex-row sm:flex-wrap gap-y-4 gap-x-8">
-        @if(Auth()->user()->type == 'clinic')
-        {{-- Patient --}}
-        <div class="flex items-center gap-3 sm:w-[calc(50%-1rem)] lg:w-auto lg:flex-1">
-            <div
-                class="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center border border-teal-100 flex-shrink-0">
-                <i class="fas fa-user text-teal-700"></i>
+        @if (Auth()->user()->type == 'clinic')
+            {{-- Patient --}}
+            <div class="flex items-center gap-3 sm:w-[calc(50%-1rem)] lg:w-auto lg:flex-1">
+                <div
+                    class="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center border border-teal-100 flex-shrink-0">
+                    <i class="fas fa-user text-teal-700"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-xs text-gray-400">المريض</p>
+                    <p class="font-semibold text-gray-900 text-sm truncate" x-text="appointment.patient.name">
+                    </p>
+                </div>
             </div>
-            <div class="min-w-0">
-                <p class="text-xs text-gray-400">المريض</p>
-                <p class="font-semibold text-gray-900 text-sm truncate">{{ $appt['patient']['name'] }}</p>
-            </div>
-        </div>
         @endif
         {{-- Doctor --}}
         <div class="flex items-center gap-3 sm:w-[calc(50%-1rem)] lg:w-auto lg:flex-1">
@@ -23,27 +23,27 @@
             </div>
             <div class="min-w-0">
                 <p class="text-xs text-gray-400">الطبيب</p>
-                <p class="font-semibold text-gray-900 text-sm truncate">{{ $appt['doctor']['name'] }}</p>
+                <p class="font-semibold text-gray-900 text-sm truncate" x-text="appointment.doctor.name"></p>
             </div>
         </div>
-         @if(Auth()->user()->type == 'patient')
-        {{-- Clinic --}}
-        <div class="flex items-start gap-3 sm:w-[calc(50%-1rem)] lg:w-auto lg:flex-1">
-            <div
-                class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center border border-amber-100 flex-shrink-0">
-                <i class="fas fa-hospital text-amber-700"></i>
+        @if (Auth()->user()->type == 'patient')
+            {{-- Clinic --}}
+            <div class="flex items-start gap-3 sm:w-[calc(50%-1rem)] lg:w-auto lg:flex-1">
+                <div
+                    class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center border border-amber-100 flex-shrink-0">
+                    <i class="fas fa-hospital text-amber-700"></i>
+                </div>
+
+                <div class="min-w-0">
+                    <p class="text-xs text-gray-400 mb-0.5">العيادة</p>
+                    <p class="font-semibold text-gray-900 text-sm truncate" x-text="appointment.clinic.name"></p>
+                    <p class="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                        <i class="fas fa-map-marker-alt text-gray-400 flex-shrink-0"></i>
+                        <span class="truncate" x-text="appointment.clinic.address"></span>
+                    </p>
+                </div>
             </div>
-           
-            <div class="min-w-0">
-                <p class="text-xs text-gray-400 mb-0.5">العيادة</p>
-                <p class="font-semibold text-gray-900 text-sm truncate">{{ $appt['clinic']['name'] }}</p>
-                <p class="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                    <i class="fas fa-map-marker-alt text-gray-400 flex-shrink-0"></i>
-                    <span class="truncate">{{ $appt['clinic']['address'] }}</span>
-                </p>
-            </div>
-        </div>
-          @endif
+        @endif
         {{-- Date --}}
         <div class="flex items-center gap-3 sm:w-[calc(50%-1rem)] lg:w-auto lg:flex-1">
             <div
@@ -52,7 +52,7 @@
             </div>
             <div class="min-w-0">
                 <p class="text-xs text-gray-400">الموعد</p>
-                <p class="font-semibold text-gray-900 text-sm">{{ $appt['start_time'] }}</p>
+                <p class="font-semibold text-gray-900 text-sm" x-text="appointment.start_time"></p>
             </div>
         </div>
     </div>
@@ -65,11 +65,11 @@
                 <i class="fas fa-notes-medical text-gray-400 text-xs"></i>
                 <div>
                     <p class="text-[11px] text-gray-400 leading-none">الخدمة</p>
-                    <p class="text-xs font-semibold text-gray-700 mt-0.5">{{ $appt['appointment_type'] }}</p>
+                    <p class="text-xs font-semibold text-gray-700 mt-0.5" x-text="appointment.appointment_type"></p>
                 </div>
             </div>
-            <x-appointments.prices :$appt />
+            <x-appointments.prices/>
         </div>
-        <x-appointments.actions :$appt />
+        <x-appointments.actions/>
     </div>
 </div>

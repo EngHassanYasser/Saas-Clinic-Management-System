@@ -7,6 +7,7 @@ export default function (serverData = {}) {
         showModel: false,
         addMode:false,
         editeMode:false,
-        editSchedule: null, 
+        editSchedule: null,
+        currentDoctor: null, 
     };
 }

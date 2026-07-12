@@ -6,10 +6,10 @@
 
           <div class="flex items-center justify-between p-5 border-b">
               <template x-if="editeMode">
-                  <h2 class="font-semibold text-gray-800">تعديل موعد — {{ $doctor['name'] }}</h2>
+                  <h2 class="font-semibold text-gray-800">تعديل موعد — <span x-text="currentDoctor?.name"></span> </h2>
               </template>
                 <template x-if="addMode">
-                  <h2 class="font-semibold text-gray-800">إضافة موعد — {{ $doctor['name'] }}</h2>
+                  <h2 class="font-semibold text-gray-800">إضافة موعد — <span x-text="currentDoctor?.name"></span> </h2>
                 </template>
               <button @click="showModel = false;editeMode = false;addMode = false" class="text-gray-400 hover:text-gray-600">
                   <i class="fa fa-xmark"></i>
@@ -18,7 +18,7 @@
 
           <form action="{{ route('schedules.store') }}" method="POST">
               @csrf
-              <input type="hidden" name="doctor_id" value="{{ $doctor['id'] }}">
+              <input type="hidden" name="doctor_id" value="currentDoctor?.id">
 
               <div class="p-5 flex flex-col gap-4">
 

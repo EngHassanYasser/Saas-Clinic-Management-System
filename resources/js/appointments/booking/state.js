@@ -5,12 +5,15 @@ export default function (serverData = {}) {
         // ======================
         specialties: serverData.specialties ?? [],
         services:serverData.services ?? [],
+        appointments:serverData.appointments ?? [],
+        stats:serverData.stats ?? [],
         currencSection: 1,
         specialitySection: 1,
         serviceSection: 2,
         clinicSection: 3,
         doctorSection: 4,
         dateTimeSection: 5,
+        selectedStatus: "all",
 
         specialtyId: "",
         serviceId: "",

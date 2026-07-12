@@ -1,18 +1,22 @@
 import state from "./state";
+import stats from "./stats";
 import actions from "./actions";
-import helpers from "./helpers";
 import getters from "./getters";
-import api from "./api";
-export function clinicServicesForm(serverData) {
-    const clinicServices = {
+import helpers from "./helpers";
+import filters from "./filters";
+
+export function complaintsForm(serverData) {
+    const complains = {
         ...state(serverData),
         ...actions,
         ...helpers,
-        ...api,
+        ...stats,
+        ...filters,
     };
     Object.defineProperties(
-        clinicServicesForm,
+        complaintsForm,
         Object.getOwnPropertyDescriptors(getters),
     );
-    return clinicServices;
+
+    return complains;
 }

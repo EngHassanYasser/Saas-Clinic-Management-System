@@ -69,4 +69,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(otp::class);
     }
+    public function complains() {
+        return $this->hasMany(complain::class,'user_id');
+    }
 }
