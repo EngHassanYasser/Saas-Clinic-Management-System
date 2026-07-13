@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('day_schedule', function (Blueprint $table) {
             $table->foreignIdFor(day::class)->constrained();
-            $table->foreignIdFor(schedule::class)->constrained();
+            $table->foreignIdFor(schedule::class)->constrained()->cascadeOnDelete();
 
             $table->primary(['day_id', 'schedule_id']);
         });

@@ -13,7 +13,7 @@ class ScheduleService
     public function getAll()
     {
         // DB::enableQueryLog();
-        return doctor::with(['specialities','schedules.days'])
+        return doctor::with(['specialities', 'schedules.days'])
             ->withCount('schedules')
             ->get()
             ->map(function ($doctor) {
@@ -27,9 +27,29 @@ class ScheduleService
             });
         // dd(DB::getQueryLog());
     }
+    public function update($data, $id)
+    {
+        return DB::transaction(function () use ($data, $id) {
+
+            $schedule = Schedule::findOrFail($id);
+
+            $schedule->update([
+                'start_time'    => $data['start_time'],
+                'end_time'      => $data['end_time'],
+                'slot_duration' => $data['slot_duration'],
+                'start_break'   => $data['start_break'],
+                'end_break'     => $data['end_break'],
+                'is_available'  => $data['is_available'],
+            ]);
+
+            $schedule->days()->sync($data['day_ids']);
+
+            return $schedule->fresh();
+        });
+    }
     public function addNew($data)
     {
-        return  DB::transaction(function() use ($data) {
+        return  DB::transaction(function () use ($data) {
             $schedule = schedule::create([
                 'start_time' => $data['start_time'],
                 'end_time' => $data['end_time'],
@@ -45,7 +65,13 @@ class ScheduleService
             return $schedule;
         });
     }
-    public function getWeekDays(){
-        return day::select(['id','name'])->get();
+    public function getWeekDays()
+    {
+        return day::select(['id', 'name'])->get();
+    }
+    public function delete($schedule_id, $clinic_id):bool
+    {
+        $schedule = schedule::where('clinic_id', $clinic_id)->findOrFail($schedule_id);
+        return $schedule->delete();
     }
 }

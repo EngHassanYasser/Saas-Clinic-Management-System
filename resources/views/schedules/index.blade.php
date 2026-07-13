@@ -5,12 +5,13 @@
 @section('content')
     <div x-data="schedulesForm({ doctors: @js($doctors), weekDays: @js($weekDays) })" class="p-6 min-h-screen bg-gray-50" dir="rtl">
         <div class="flex flex-col gap-4">
-
+            <x-schedules.errors />
+            <x-schedules.message />
             <template x-for="doctor in doctors" :key="doctor.id">
-                <div>
-                    <x-schedules.doctor-row/>
+                <div x-data="{ open: false }">
+                    <x-schedules.doctor-row />
 
-                    <x-schedules.schedules-table  />
+                    <x-schedules.schedules-table />
                 </div>
             </template>
             <template x-if="doctors.length === 0">

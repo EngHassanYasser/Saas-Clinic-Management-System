@@ -1,70 +1,119 @@
- <div x-show="open" x-transition x-cloak class="border-t border-gray-100">
+<div x-show="open" x-transition x-cloak class="border-t border-gray-200">
 
-<template x-if="doctor.schedules.length === 0">
-    <div class="py-8 text-center text-sm text-gray-400">
-        <i class="fa fa-calendar-xmark text-2xl mb-2 block text-gray-200"></i>
-        لا توجد مواعيد مضافة بعد
-    </div>
-</template>
+    <template x-if="doctor.schedules.length === 0">
+        <div class="py-10 text-center">
+            <i class="fa-regular fa-calendar-xmark text-4xl text-gray-300 mb-3"></i>
+            <p class="text-sm text-gray-500">لا توجد مواعيد مضافة بعد</p>
+        </div>
+    </template>
 
-<template x-if="doctor.schedules.length > 0">
-    <table class="w-full text-sm">
-        <thead>
-            <tr class="bg-gray-50 text-xs text-gray-500">
-                <th class="text-right px-4 py-2.5 font-medium">الأيام</th>
-                <th class="text-right px-4 py-2.5 font-medium">من</th>
-                <th class="text-right px-4 py-2.5 font-medium">إلى</th>
-                <th class="text-right px-4 py-2.5 font-medium">بريك</th>
-                <th class="text-right px-4 py-2.5 font-medium">مدة الكشف</th>
-                <th class="px-4 py-2.5"></th>
-            </tr>
-        </thead>
+    <template x-if="doctor.schedules.length > 0">
 
-        <tbody class="divide-y divide-gray-50">
-            <template x-for="schedule in doctor.schedules" :key="schedule.id">
-                <tr class="hover:bg-gray-50 transition">
+        <div class="overflow-hidden rounded-xl border border-gray-200 m-4">
+            <table class="w-full text-sm">
 
-                    <td class="px-4 py-3">
-                        <div class="flex flex-wrap gap-1">
+                <thead class="bg-gray-50">
+                    <tr class="text-gray-600">
+                        <th class="px-5 py-3 text-right font-semibold">الأيام</th>
+                        <th class="px-5 py-3 text-right font-semibold">من</th>
+                        <th class="px-5 py-3 text-right font-semibold">إلى</th>
+                        <th class="px-5 py-3 text-right font-semibold">البريك</th>
+                        <th class="px-5 py-3 text-right font-semibold">مدة الكشف</th>
+                        <th class="px-5 py-3 text-center font-semibold">الإجراءات</th>
+                    </tr>
+                </thead>
 
-                            <template x-for="day in schedule.days" :key="day.id">
-                                <span
-                                    class="text-xs bg-teal-50 text-teal-700 border border-teal-100 px-2 py-0.5 rounded-md"
-                                    x-text="day.name">
+                <tbody class="divide-y divide-gray-100 bg-white">
+
+                    <template x-for="schedule in doctor.schedules" :key="schedule.id">
+
+                        <tr class="hover:bg-gray-50 transition-colors">
+
+                            {{-- الأيام --}}
+                            <td class="px-5 py-4">
+                                <div class="flex flex-wrap gap-2">
+
+                                    <template x-for="day in schedule.days" :key="day.id">
+                                        <span
+                                            class="inline-flex items-center rounded-md border border-gray-200 bg-white px-2.5 py-1 text-xs font-medium text-gray-700"
+                                            x-text="day.name">
+                                        </span>
+                                    </template>
+
+                                </div>
+                            </td>
+
+                            {{-- من --}}
+                            <td class="px-5 py-4 font-medium text-gray-800" x-text="schedule.start_time">
+                            </td>
+
+                            {{-- إلى --}}
+                            <td class="px-5 py-4 font-medium text-gray-800" x-text="schedule.end_time">
+                            </td>
+
+                            {{-- البريك --}}
+                            <td class="px-5 py-4">
+
+                                <template x-if="schedule.start_break && schedule.end_break">
+                                    <span class="text-gray-600"
+                                        x-text="`${schedule.start_break} - ${schedule.end_break}`">
+                                    </span>
+                                </template>
+
+                                <template x-if="!schedule.start_break || !schedule.end_break">
+                                    <span class="text-gray-300">—</span>
+                                </template>
+
+                            </td>
+
+                            {{-- مدة الكشف --}}
+                            <td class="px-5 py-4">
+                                <span class="text-gray-800 font-medium" x-text="schedule.slot_duration"></span>
+
+                                <span class="text-gray-400 text-xs">
+                                    دقيقة
                                 </span>
-                            </template>
+                            </td>
 
-                        </div>
-                    </td>
+                            {{-- الإجراءات --}}
+                            <td class="px-5 py-4">
 
-                    <td class="px-4 py-3" x-text="schedule.start_time"></td>
+                                <div class="flex items-center justify-center gap-2">
 
-                    <td class="px-4 py-3" x-text="schedule.end_time"></td>
+                                    <button @click.stop="openEdit(schedule,doctor)"
+                                        class="inline-flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-700 transition hover:bg-gray-100">
 
-                    <td class="px-4 py-3 text-xs">
-                        <template x-if="schedule.start_break && schedule.end_break">
-                            <span x-text="`${schedule.start_break} — ${schedule.end_break}`">
-                            </span>
-                        </template>
+                                        <i class="fa-regular fa-pen-to-square text-gray-500"></i>
 
-                        <template x-if="!schedule.start_break || !schedule.end_break">
-                            <span class="text-gray-300">—</span>
-                        </template>
-                    </td>
+                                        تعديل
 
-                    <td class="px-4 py-3">
-                        <span x-text="schedule.slot_duration"></span> د
-                    </td>
+                                    </button>
 
-                    <td class="px-4 py-3">
-                        <button @click.stop="openEdit(schedule)">
-                            تعديل
-                        </button>
-                    </td>
+                                    <form :action="'/schedules/' + schedule.id" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
 
-                </tr>
-            </template>
-        </tbody>
-    </table>
-</template>
+                                        <button type="submit" @click.stop
+                                            class="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-medium text-red-600 transition hover:bg-red-100">
+
+                                            <i class="fa-regular fa-trash-can"></i>
+                                            حذف
+
+                                        </button>
+                                    </form>
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    </template>
+
+                </tbody>
+
+            </table>
+        </div>
+
+    </template>
+
 </div>

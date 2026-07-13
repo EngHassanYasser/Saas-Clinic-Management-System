@@ -3,7 +3,6 @@ export default function (serverData = {}) {
         doctors: serverData.doctors,
         weekDays:serverData.weekDays,
         selectedDays: [],
-        open: false,
         showModel: false,
         addMode:false,
         editeMode:false,
