@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\ScheduleConflictException;
 use App\Http\Requests\Schedule\StoreScheduleRequest;
 use App\Http\Requests\Schedule\UpdateScheduleRequest;
 use App\Services\ScheduleService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
@@ -39,7 +39,6 @@ class ScheduleController extends Controller
 
     public function update(UpdateScheduleRequest $request, string $id)
     {
-        dd('edite');
         $this->scheduleService->update($request->validated(), $id);
 
         return redirect()

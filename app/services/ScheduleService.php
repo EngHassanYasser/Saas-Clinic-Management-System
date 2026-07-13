@@ -2,6 +2,7 @@
 
 namespace App\services;
 
+use App\Exceptions\ScheduleConflictException;
 use App\Models\day;
 use App\Models\doctor;
 use App\Models\schedule;
@@ -30,8 +31,13 @@ class ScheduleService
     public function update($data, $id)
     {
         return DB::transaction(function () use ($data, $id) {
+            if ($this->hasScheduleConflict($data, $id)) {
+                throw new ScheduleConflictException('يوجد تداخل في جدول العمل.');
+            }
 
-            $schedule = Schedule::findOrFail($id);
+            $schedule = Schedule::where('id', $id)
+                ->lockForUpdate()
+                ->firstOrFail();
 
             $schedule->update([
                 'start_time'    => $data['start_time'],
@@ -45,11 +51,14 @@ class ScheduleService
             $schedule->days()->sync($data['day_ids']);
 
             return $schedule->fresh();
-        });
+        }, 3);
     }
     public function addNew($data)
     {
         return  DB::transaction(function () use ($data) {
+            if ($this->hasScheduleConflict($data)) {
+                throw new ScheduleConflictException('يوجد تداخل مع جدول يوم الأحد.');
+            }
             $schedule = schedule::create([
                 'start_time' => $data['start_time'],
                 'end_time' => $data['end_time'],
@@ -63,15 +72,31 @@ class ScheduleService
             $schedule->days()->attach($data['day_ids']);
 
             return $schedule;
-        });
+        }, 3);
     }
     public function getWeekDays()
     {
         return day::select(['id', 'name'])->get();
     }
-    public function delete($schedule_id, $clinic_id):bool
+    public function delete($schedule_id, $clinic_id): bool
     {
         $schedule = schedule::where('clinic_id', $clinic_id)->findOrFail($schedule_id);
         return $schedule->delete();
+    }
+    public function hasScheduleConflict(array $data, ?int $ignoreId = null): bool
+    {
+        return Schedule::where('doctor_id', $data['doctor_id'])
+            ->where('clinic_id', Auth::user()->clinic_id)
+            ->when($ignoreId, function ($query) use ($ignoreId) {
+                $query->where('id', '!=', $ignoreId);
+            })
+            ->where(function ($query) use ($data) {
+                $query->where('start_time', '<', $data['end_time'])
+                    ->where('end_time', '>', $data['start_time']);
+            })
+            ->whereHas('days', function ($query) use ($data) {
+                $query->whereIn('days.id', $data['day_ids']);
+            })
+            ->exists();
     }
 }

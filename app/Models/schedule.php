@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 #[Fillable([
     'id',
@@ -20,6 +21,12 @@ use Illuminate\Database\Eloquent\Model;
 ])]
 class schedule extends Model
 {
+
+    public function formatTime12Hours($time): string
+    {
+        return Carbon::createFromFormat('H:i:s', $time)
+            ->format('h:i A');
+    }
     public function doctor()
     {
         return $this->belongsTo(user::class);

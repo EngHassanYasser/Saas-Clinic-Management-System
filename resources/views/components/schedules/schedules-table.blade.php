@@ -44,11 +44,11 @@
                             </td>
 
                             {{-- من --}}
-                            <td class="px-5 py-4 font-medium text-gray-800" x-text="schedule.start_time">
+                            <td class="px-5 py-4 font-medium text-gray-800" x-text="formatTime12Hours(schedule.start_time)">
                             </td>
 
                             {{-- إلى --}}
-                            <td class="px-5 py-4 font-medium text-gray-800" x-text="schedule.end_time">
+                            <td class="px-5 py-4 font-medium text-gray-800" x-text="formatTime12Hours(schedule.end_time)">
                             </td>
 
                             {{-- البريك --}}
@@ -56,7 +56,7 @@
 
                                 <template x-if="schedule.start_break && schedule.end_break">
                                     <span class="text-gray-600"
-                                        x-text="`${schedule.start_break} - ${schedule.end_break}`">
+                                        x-text="`${formatTime12Hours(schedule.start_break)} - ${formatTime12Hours(schedule.end_break)}`">
                                     </span>
                                 </template>
 
