@@ -76,12 +76,14 @@
                             <i class="fa fa-pen text-xs"></i>
 
                         </button>
+                        <form :action="'/vications/' + v.id" method="POST">
+                            @csrf
+                            @method('DELETE')
 
-                        <button @click="confirmDelete(v)" class="text-red-400 hover:text-red-600 transition">
-
-                            <i class="fa fa-trash text-xs"></i>
-
-                        </button>
+                            <button type="submit" class="text-red-400 hover:text-red-600 transition">
+                                <i class="fa fa-trash text-xs"></i>
+                            </button>
+                        </form>
 
                     </div>
 

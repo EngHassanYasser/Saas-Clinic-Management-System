@@ -7,7 +7,7 @@
              <span class="text-red-400">*</span>
          </label>
 
-         <input type="date" x-model="selectedVacation.start_date"
+         <input type="date" x-model="selectedVacation.start_date" name="start_date"
              class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-100 transition">
 
      </div>
@@ -19,7 +19,7 @@
              <span class="text-red-400">*</span>
          </label>
 
-         <input type="date" x-model="selectedVacation.end_date"
+         <input type="date" x-model="selectedVacation.end_date" name="end_date"
              class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-100 transition">
 
      </div>

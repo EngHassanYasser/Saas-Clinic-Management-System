@@ -7,9 +7,9 @@
 
      </button>
 
-     <button type="submit"
+     <button type="submit"   x-text="mode == 'add' ? 'حفظ' : 'تعديل'"
          class="flex-1 bg-teal-600 hover:bg-teal-700 text-white text-sm py-2.5 rounded-lg transition">
-         حفظ
+         
      </button>
 
  </div>

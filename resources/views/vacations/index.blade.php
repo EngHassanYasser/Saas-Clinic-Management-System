@@ -7,6 +7,7 @@
     <div class="p-6 min-h-screen bg-gray-50" dir="rtl" x-data="vicationForm({ vications: @js($vications->items()), doctors: @js($doctors) })">
         <x-vications.header />
         <x-vications.stats />
+        <x-shared.errors />
         <x-vications.filters />
         <x-vications.table />
         <x-vications.model />

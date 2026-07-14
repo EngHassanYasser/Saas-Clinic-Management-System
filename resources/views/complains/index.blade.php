@@ -8,7 +8,6 @@
 
         <x-complains.add-button />
 
-        {{-- ===================== STATS (clinic only) ===================== --}}
         @if (auth()->user()->type === 'clinic')
             <x-complains.status />
         @endif

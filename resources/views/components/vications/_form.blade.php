@@ -1,12 +1,23 @@
-<div class="flex flex-col gap-4">
+<form
+    :action="mode == 'add' ?
+        '{{ route('vications.store') }}' :
+        '{{ url('vications') }}/' + selectedVacation.id"
+    method="POST">
+    <template x-if="mode == 'update'">
+        <input type="hidden" name="_method" value="PUT">
+    </template>
+    @csrf
 
-    <x-vications.model.doctors />
-    <x-vications.model.status />
+    <div class="flex flex-col gap-4">
 
-    <x-vications.model.reason />
+        <x-vications.model.doctors />
+        <x-vications.model.status />
 
-    <x-vications.model.dates />
+        <x-vications.model.reason />
 
-    <x-vications.model.duration />
-</div>
-<x-vications.model.actions />
+        <x-vications.model.dates />
+
+        <x-vications.model.duration />
+    </div>
+    <x-vications.model.actions />
+</form>

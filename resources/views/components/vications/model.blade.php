@@ -5,18 +5,6 @@
 
             <x-vications.model.header />
 
-            <form
-                :action="addMode
-                    ?
-                    '{{ route('vications.store') }}' :
-                    '{{ url('vications') }}/' + editVication.id"
-                method="POST">
-                <template x-if="!addMode">
-                    <input type="hidden" name="_method" value="PUT">
-                </template>
-                @csrf
-                <x-vications._form />
-
-            </form>
+            <x-vications._form />
         </div>
     </div>

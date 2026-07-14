@@ -1,7 +1,9 @@
 export default {
     openModal() {
+        this.mode='add';
         this.selectedVacation = null;
         this.showVacationModal = true;
+        console.log(this.mode);
     },
 
     closeModal() {
@@ -9,17 +11,12 @@ export default {
     },
 
     editVacation(v) {
+        this.mode='update';
         this.selectedVacation = { ...v };
         this.showVacationModal = true;
     },
 
     saveVacation() {},
-
-    confirmDelete(v) {
-        this.selectedVacation = v;
-
-        this.showDeleteModal = true;
-    },
 
     closeDeleteModal() {
         this.selectedVacation = null;

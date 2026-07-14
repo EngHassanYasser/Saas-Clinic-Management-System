@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\vications\StoreVicationsRequest;
+use App\Http\Requests\vications\UpdateVicationsRequest;
 use App\services\DoctorService;
-use Illuminate\Http\Request;
 use App\services\vicationService;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,7 +15,7 @@ class vicationController extends Controller
     {
         $vications = $this->vicationService->getClinicVacations(Auth::user()->clinic_id);
         $doctors = $this->doctorService->getDoctorsNames(Auth::user()->clinic_id);
-        return view('vacations.index', compact('vications','doctors'));
+        return view('vacations.index', compact('vications', 'doctors'));
     }
 
     /**
@@ -28,9 +29,15 @@ class vicationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreVicationsRequest $request)
     {
-       return redirect()->route('home');
+        $isUpdated = $this->vicationService->add($request->validated());
+        $message = $isUpdated
+            ? 'Vacation added successfully.'
+            : 'Failed to add vacation. Please try again.';
+
+        return redirect()->route('vications.index')
+            ->with('message', $message);
     }
 
     /**
@@ -52,16 +59,28 @@ class vicationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateVicationsRequest $request, string $id)
     {
-             return redirect()->route('home');
+        $isUpdated = $this->vicationService->update($request->validated(), $id);
+        $message = $isUpdated
+            ? 'Vacation updated successfully.'
+            : 'Failed to update vacation. Please try again.';
+
+        return redirect()->route('vications.index')
+            ->with('message', $message);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        //
+        $isDeleted = $this->vicationService->delete($id);
+
+        $message = $isDeleted ? 'vication deleted successfully' : '
+         failed to delete vication please try again';
+
+        return redirect()->route('vications.index')
+            ->with('message', $message);
     }
 }
