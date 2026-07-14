@@ -8,16 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable([
     'clinic_id',
     'patient_id',
-    'appointment_id',
-
-    'target_type',
-    'target_id',
-
-    'subject',
     'description',
-    'category',
     'status',
-
+    'issue_type',
+    'severity',
+    'visit_date',
+    'department',
     'resolution_notes',
     'resolved_by',
     'resolved_at',
@@ -36,5 +32,8 @@ class complain extends Model
     public function appointment()
     {
         return $this->belongsTo(Appointment::class);
+    }
+    public function doctor() {
+        return $this->belongsTo(doctor::class);
     }
 }

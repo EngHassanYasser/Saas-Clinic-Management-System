@@ -1,6 +1,7 @@
 export default function (serverData = {}) {
     return {
         complaints: serverData.complaints ?? [],
+        stats:serverData.stats ?? [],
         filters: {
             search: "",
             status: "",

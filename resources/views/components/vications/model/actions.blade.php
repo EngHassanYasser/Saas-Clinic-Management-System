@@ -1,6 +1,6 @@
  <div class="flex gap-3 mt-5">
 
-     <button @click="closeModal()"
+     <button  type="button" @click="closeModal()"
          class="flex-1 border border-gray-200 text-gray-600 text-sm py-2.5 rounded-lg hover:bg-gray-50 transition">
 
          إلغاء

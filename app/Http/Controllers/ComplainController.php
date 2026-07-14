@@ -15,7 +15,8 @@ class ComplainController extends Controller
     public function index()
     {
         $complaints = $this->complainService->getClinicComplains(Auth::user()->clinic_id);
-        return view('complains.index', compact('complaints'));
+        $stats= $this->complainService->getStatistics();
+        return view('complains.index', compact('complaints','stats'));
     }
 
     /**

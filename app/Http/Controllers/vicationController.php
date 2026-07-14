@@ -15,7 +15,9 @@ class vicationController extends Controller
     {
         $vications = $this->vicationService->getClinicVacations(Auth::user()->clinic_id);
         $doctors = $this->doctorService->getDoctorsNames(Auth::user()->clinic_id);
-        return view('vacations.index', compact('vications', 'doctors'));
+        $stats = $this->vicationService->getStatistics();
+        
+        return view('vacations.index', compact('vications', 'doctors','stats'));
     }
 
     /**

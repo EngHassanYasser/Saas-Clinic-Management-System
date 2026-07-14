@@ -4,7 +4,9 @@
 
 @section('content')
     <div class="p-6 min-h-screen bg-gray-50" dir="rtl" x-data="complaintsForm({
-        complaints: @js($complaints)})">
+        complaints: @js($complaints),
+        stats: @js($stats)
+    })">
 
         <x-complains.add-button />
 
@@ -14,7 +16,4 @@
         <x-complains.filters />
         <x-complains.table />
     </div>
-
-    <x-complains.details-model />
-    <x-complains.delete-model />
 @endsection

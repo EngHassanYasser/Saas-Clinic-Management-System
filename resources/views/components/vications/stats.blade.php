@@ -13,7 +13,7 @@
                   إجمالي الإجازات
               </p>
 
-              <p class="text-xl font-medium text-gray-800" x-text="totalVacations">
+              <p class="text-xl font-medium text-gray-800" x-text="stats.total ?? 'N/A'">
               </p>
 
           </div>
@@ -32,7 +32,7 @@
                   جارية الآن
               </p>
 
-              <p class="text-xl font-medium text-gray-800" x-text="activeCount">
+              <p class="text-xl font-medium text-gray-800" x-text="stats.active ?? 'N/A'">
               </p>
 
           </div>
@@ -51,7 +51,7 @@
                   قادمة
               </p>
 
-              <p class="text-xl font-medium text-gray-800" x-text="upcomingCount">
+              <p class="text-xl font-medium text-gray-800" x-text="stats.upcoming ?? 'N/A'">
               </p>
 
           </div>
@@ -70,7 +70,7 @@
                   منتهية
               </p>
 
-              <p class="text-xl font-medium text-gray-800" x-text="endedCount">
+              <p class="text-xl font-medium text-gray-800" x-text="stats.ended ?? 'N/A'">
               </p>
 
           </div>

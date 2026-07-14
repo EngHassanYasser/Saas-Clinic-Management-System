@@ -73,4 +73,15 @@ class vicationService
             })
             ->exists();
     }
+    public function getStatistics()
+    {
+        $stats = vication::whereRelation('doctor.clinics', 'clinics.id', Auth::user()->clinic_id)
+            ->selectRaw("
+        COUNT(*) as total,
+        SUM(CASE WHEN status = 'upcoming' THEN 1 ELSE 0 END) as upcoming,
+        SUM(CASE WHEN status = 'active' THEN 1 ELSE 0 END) as active,
+        SUM(CASE WHEN status = 'ended' THEN 1 ELSE 0 END) as ended
+    ")->first();
+        return $stats;
+    }
 }

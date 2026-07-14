@@ -9,9 +9,6 @@
         doctors: @js($doctors),
         clinicServices: @js($clinicServices)
     })" dir="rtl" class="p-6 bg-gray-50 min-h-screen">
-    <button @click="console.log(clinicServices)">
-        print
-    </button>
         <x-clinic-services.header />
 
         <x-clinic-services.filters />
