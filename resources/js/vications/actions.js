@@ -1,67 +1,31 @@
 export default {
-
-    openModal(){
-
-        this.selectedVacation=null;
-
-        this.form={
-            doctor_id:"",
-            reason:"",
-            start_date:"",
-            end_date:"",
-            notes:""
-        };
-
-        this.showVacationModal=true;
-
+    openModal() {
+        this.selectedVacation = null;
+        this.showVacationModal = true;
     },
 
-    closeModal(){
-
-        this.showVacationModal=false;
-
+    closeModal() {
+        this.showVacationModal = false;
     },
 
-    editVacation(v){
-
-        this.selectedVacation=v;
-
-        this.form={
-
-            doctor_id:v.doctor_id,
-            reason:v.reason,
-            start_date:v.start_date,
-            end_date:v.end_date,
-            notes:v.notes
-
-        };
-
-        this.showVacationModal=true;
-
+    editVacation(v) {
+        this.selectedVacation = { ...v };
+        this.showVacationModal = true;
     },
 
-    saveVacation(){
+    saveVacation() {},
 
+    confirmDelete(v) {
+        this.selectedVacation = v;
+
+        this.showDeleteModal = true;
     },
 
-    confirmDelete(v){
+    closeDeleteModal() {
+        this.selectedVacation = null;
 
-        this.selectedVacation=v;
-
-        this.showDeleteModal=true;
-
+        this.showDeleteModal = false;
     },
 
-    closeDeleteModal(){
-
-        this.selectedVacation=null;
-
-        this.showDeleteModal=false;
-
-    },
-
-    deleteVacation(){
-
-    }
-
-}
+    deleteVacation() {},
+};

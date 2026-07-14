@@ -4,7 +4,7 @@ export default {
         fetch(`/clinic/services/${id}`, {
             method: "DELETE",
             headers: {
-                "X-CSRF-TOKEN": this.getToken(),
+                "X-CSRF-TOKEN": csrfToken,
                 Accept: "application/json",
             },
         })

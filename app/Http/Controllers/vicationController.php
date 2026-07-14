@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\services\DoctorService;
 use Illuminate\Http\Request;
 use App\services\vicationService;
 use Illuminate\Support\Facades\Auth;
 
 class vicationController extends Controller
 {
-    public function __construct(private vicationService $vicationService) {}
+    public function __construct(private vicationService $vicationService, private DoctorService $doctorService) {}
     public function index()
     {
         $vications = $this->vicationService->getClinicVacations(Auth::user()->clinic_id);
-        return view('vacations.index', compact('vications'));
+        $doctors = $this->doctorService->getDoctorsNames(Auth::user()->clinic_id);
+        return view('vacations.index', compact('vications','doctors'));
     }
 
     /**
@@ -28,7 +30,7 @@ class vicationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       return redirect()->route('home');
     }
 
     /**
@@ -52,7 +54,7 @@ class vicationController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+             return redirect()->route('home');
     }
 
     /**

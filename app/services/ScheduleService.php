@@ -13,7 +13,6 @@ class ScheduleService
 {
     public function getAll()
     {
-        // DB::enableQueryLog();
         return doctor::with(['specialities', 'schedules.days'])
             ->withCount('schedules')
             ->get()
@@ -26,7 +25,6 @@ class ScheduleService
                     'schedules_count' => $doctor->schedules_count,
                 ];
             });
-        // dd(DB::getQueryLog());
     }
     public function update($data, $id)
     {

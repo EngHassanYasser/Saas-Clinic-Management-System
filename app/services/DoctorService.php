@@ -9,15 +9,13 @@ use Illuminate\Support\Facades\DB;
 
 class DoctorService
 {
-    public function getDoctorsNames()
+    public function getDoctorsNames($clinic_id)
     {
-        DB::enableQueryLog();
-        return Doctor::select('id', 'name')->get();
-        dd(DB::getQueryLog());
+        return Doctor::select('id', 'name')
+            ->whereRelation('clinics', 'clinic_id', $clinic_id)->get();
     }
     public function getAll()
     {
-        // DB::enableQueryLog();
         return doctor::with(['specialities', 'doctor_service_price.clinic_service', 'media'])->get()->map(function ($doctor) {
             return [
                 'id' => $doctor->id,
@@ -33,7 +31,6 @@ class DoctorService
                 'image' => $doctor->getFirstMediaUrl('avatar') ?: asset('storage/default_profile_image.jpg'),
             ];
         });
-        // dd(DB::getQueryLog());
     }
     public function addNew($data)
     {

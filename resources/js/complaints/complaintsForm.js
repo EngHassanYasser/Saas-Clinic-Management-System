@@ -4,6 +4,7 @@ import actions from "./actions";
 import getters from "./getters";
 import helpers from "./helpers";
 import filters from "./filters";
+import globalHelpers from '../global/helpers';
 
 export function complaintsForm(serverData) {
     const complains = {
@@ -12,6 +13,7 @@ export function complaintsForm(serverData) {
         ...helpers,
         ...stats,
         ...filters,
+        ...globalHelpers,
     };
     Object.defineProperties(
         complaintsForm,

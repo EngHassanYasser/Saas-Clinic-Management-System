@@ -7,6 +7,7 @@ use App\Http\Requests\clinicService\UpdateClinicServiceRequest;
 use App\services\DoctorService;
 use App\services\ServiceCatalogService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ClinicServiceController extends Controller
 {
@@ -23,7 +24,7 @@ class ClinicServiceController extends Controller
     public function index()
     {
         $serviceCatalogs = $this->serviceCatalogService->getAllCatalogs();
-        $doctors = $this->doctorService->getDoctorsNames();
+        $doctors = $this->doctorService->getDoctorsNames(Auth::user()->clinic_id);
         $clinicServices = $this->serviceCatalogService->getAllClinicServices();
         return view('Services.index', compact('serviceCatalogs', 'doctors', 'clinicServices'));
     }

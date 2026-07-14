@@ -1,18 +1,22 @@
 import state from "./state";
 import helpers from "./helpers";
-import getters from './getters';
+import getters from "./getters";
 import actions from "./actions";
-export function vicationForm(serverData ={}) {
+import globalHelpers from "../global/helpers";
+import api from "./api";
+
+export function vicationForm(serverData = {}) {
     const vication = {
         ...state(serverData),
         ...helpers,
         ...actions,
+        ...globalHelpers,
+        ...api,
 
         ...Object.defineProperties(
             {},
-            Object.getOwnPropertyDescriptors(getters)
-        )
-
+            Object.getOwnPropertyDescriptors(getters),
+        ),
     };
 
     return vication;

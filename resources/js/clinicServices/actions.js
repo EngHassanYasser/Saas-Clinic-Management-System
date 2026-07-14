@@ -24,8 +24,5 @@ export default {
             price: item.price,
         };
         this.showModal = true;
-    },
-    getToken() {
-        return document.querySelector(`input[name='_token']`).value;
-    },
+    }
 };
