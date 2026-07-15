@@ -1,12 +1,12 @@
-import { statusMap, priorityMap } from "./constants";
+import constraint from "./constants";
 
 export default {
     status(status) {
-        return statusMap[status];
+        return constraint.statusMap[status];
     },
 
     priority(priority) {
-        return priorityMap[priority];
+        return constraint.priorityMap[priority];
     },
 
     formatDate(date) {

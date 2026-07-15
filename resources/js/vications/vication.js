@@ -12,12 +12,11 @@ export function vicationForm(serverData = {}) {
         ...actions,
         ...globalHelpers,
         ...api,
-
-        ...Object.defineProperties(
-            {},
-            Object.getOwnPropertyDescriptors(getters),
-        ),
     };
+     Object.defineProperties(
+        vication,
+        Object.getOwnPropertyDescriptors(getters),
+    );
 
     return vication;
 }

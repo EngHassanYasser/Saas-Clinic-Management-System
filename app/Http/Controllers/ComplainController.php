@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\complains\StoreComplainRequest;
 use App\services\complainService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,15 +25,15 @@ class ComplainController extends Controller
      */
     public function create()
     {
-        //
+        return view('complains.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreComplainRequest $request)
     {
-        //
+        dd($request->validated());
     }
 
     /**

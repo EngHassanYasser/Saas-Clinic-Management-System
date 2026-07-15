@@ -13,7 +13,7 @@ export function subscriptionsForm(serverData) {
         ...validation,
     };
     Object.defineProperties(
-        subscriptionsForm,
+        subscriptions,
         Object.getOwnPropertyDescriptors(getters),
     );
 

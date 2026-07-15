@@ -14,7 +14,7 @@ export function clinicServicesForm(serverData) {
         ...globalHelpers,
     };
     Object.defineProperties(
-        clinicServicesForm,
+        clinicServices,
         Object.getOwnPropertyDescriptors(getters),
     );
     return clinicServices;

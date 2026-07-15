@@ -14,6 +14,7 @@ class ComplainService
             'clinic_id',
             'user_id',
             'doctor_id',
+            'patient_name',
             'issue_type',
             'severity',
             'description',

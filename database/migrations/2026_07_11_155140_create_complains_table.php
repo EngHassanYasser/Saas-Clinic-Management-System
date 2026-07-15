@@ -14,12 +14,19 @@ return new class extends Migration
 
             $table->foreignId('clinic_id')->constrained()->cascadeOnDelete();
             $table->foreignId('doctor_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->string('patient_name', 50)->nullable();
             $table->foreignIdFor(User::class)->nullable()->constrained()->cascadeOnDelete();
             $table->enum('department', [
-                'reception',
-                'clinics',
-                'laboratory',
                 'radiology',
+                'reception',
+                'laboratory',
+                'pharmacy',
+                'accounting',
+                'customer_service',
+                'nursing',
+                'administration',
+                'clinics',
+                'technical_support',
             ]);
             $table->date('visit_date');
             $table->enum('severity', [
@@ -36,9 +43,9 @@ return new class extends Migration
                 'medical',
                 'other',
             ]);
-            $table->text('description');
+            $table->string('description', 500);
             $table->enum('status', ['pending', 'under_review', 'resolved', 'rejected'])->default('pending');
-            $table->text('resolution_notes')->nullable();
+            $table->string('resolution_notes', 500)->nullable();
             $table->timestamp('resolved_at')->nullable();
 
             $table->timestamps();

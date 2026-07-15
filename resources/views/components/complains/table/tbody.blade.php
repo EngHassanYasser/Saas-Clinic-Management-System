@@ -11,7 +11,7 @@
                          :class="complaint.color" x-text="complaint.initials">
                      </div>
 
-                     <span class="font-medium text-gray-700" x-text="complaint.patient.name">
+                     <span class="font-medium text-gray-700" x-text="complaint.patient?.name || complaint.patient_name">
                      </span>
 
                  </div>

@@ -11,7 +11,7 @@ export function schedulesForm(serverData) {
         ...constants,
     };
     Object.defineProperties(
-        schedulesForm,
+        schedules,
         Object.getOwnPropertyDescriptors(getters),
     );
 

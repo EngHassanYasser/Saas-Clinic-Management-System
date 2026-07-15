@@ -1,5 +1,4 @@
 export default {
-
     openDetails(complaint) {
         this.currentComplaint = complaint;
         this.detailsModal = true;
@@ -15,9 +14,8 @@ export default {
     },
 
     doDelete() {
-
         this.complaints = this.complaints.filter(
-            c => c.id !== this.deleteComplaint.id
+            (c) => c.id !== this.deleteComplaint.id,
         );
 
         this.deleteModal = false;
@@ -29,11 +27,20 @@ export default {
     },
 
     sendReply() {
-
         if (!this.replyText.trim()) return;
 
         this.changeStatus("resolved");
 
         this.closeDetails();
-    }
+    },
+    selectPatient(patient) {
+        this.query = patient.name;
+        this.patientId = patient.id;
+        this.open = false;
+    },
+
+    typing() {
+        this.patientId = "";
+        this.open = this.query.length > 0;
+    },
 };
