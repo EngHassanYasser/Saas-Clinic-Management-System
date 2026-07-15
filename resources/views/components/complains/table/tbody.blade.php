@@ -48,22 +48,21 @@
 
              </td>
 
-
              <td class="px-4 py-3">
 
                  <div class="flex items-center gap-3">
-
-                     <button @click.stop="openDetails(complaint)" class="text-teal-500 hover:text-teal-700">
-
-                         <i class="fa fa-eye text-xs"></i>
-
+                     <button @click.stop="editComplain(complaint)" class="text-red-400 hover:text-red-600">
+                         <i class="fa fa-edit text-xs"></i>
                      </button>
+                     <form :action="'{{ url('complains') }}/' + complaint.id" method="POST">
+                         @csrf
+                         @method('DELETE')
 
-                     <button @click.stop="confirmDelete(complaint)" class="text-red-400 hover:text-red-600">
+                         <button type="submit" class="text-red-400 hover:text-red-600">
+                             <i class="fa fa-trash text-xs"></i>
+                         </button>
+                     </form>
 
-                         <i class="fa fa-trash text-xs"></i>
-
-                     </button>
 
                  </div>
 

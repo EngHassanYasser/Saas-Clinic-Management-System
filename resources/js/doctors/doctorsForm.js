@@ -4,7 +4,7 @@ import state from "./state";
 import actions from "./actions";
 import api from "./api";
 import globalHelpers from '../global/helpers';
-
+import globalState from '../global/state';
 export function doctorsForm(serverData) {
     const doctors = {
         ...helpers,
@@ -12,6 +12,7 @@ export function doctorsForm(serverData) {
         ...actions,
         ...api,
         ...globalHelpers,
+        ...globalState,
     };
     Object.defineProperties(
         doctorsForm,

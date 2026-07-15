@@ -26,7 +26,7 @@ class ComplainService
             'updated_at',
             'created_at'
         )->where('clinic_id', $clinic_id)
-            ->with(['patient:id,name','doctor:id,name'])
+            ->with(['patient:id,name', 'doctor:id,name'])
             ->get();
     }
     public function getStatistics()
@@ -40,5 +40,38 @@ class ComplainService
         SUM(CASE WHEN status = 'rejected' THEN 1 ELSE 0 END) as rejected
     ")->first();
         return $stats;
+    }
+    public function add($data)
+    {
+        $data['user_id'] = Auth::user()->type === 'patient'
+            ? Auth::id()
+            : null;
+        $complain = Complain::create([
+            'clinic_id' => Auth::user()->clinic_id,
+            'user_id' => $data['user_id'],
+            'doctor_id' => $data['doctor_id'],
+            'department' => $data['department_name'],
+            'visit_date' => $data['visit_date'],
+            'severity' => $data['severity'],
+            'issue_type' => $data['issue_type'],
+            'description' => $data['description'],
+            'status' => $data['status'],
+            'patient_name' => $data['patient_name']
+        ]);
+        return $complain;
+    }
+    public function getById($complain_id)
+    {
+        return Complain::where('id', $complain_id)
+            ->where(function ($query) {
+                $query->where('clinic_id', Auth::user()->clinic_id)
+                    ->orWhere('user_id', Auth::id());
+            })
+            ->firstOrFail();
+    }
+    public function delete($complain_id): bool
+    {
+        $complain = $this->getById($complain_id);
+        return $complain->delete();
     }
 }

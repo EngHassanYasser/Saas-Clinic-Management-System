@@ -1,12 +1,15 @@
 export default {
-    openDetails(complaint) {
+    editComplain(complaint) {
         this.currentComplaint = complaint;
-        this.detailsModal = true;
+        this.mode='update';
+        this.showModel=true;
+    },
+     addComplain() {
+        this.currentComplaint = null;
+        this.mode='add';
+        this.showModel=true;
     },
 
-    closeDetails() {
-        this.detailsModal = false;
-    },
 
     confirmDelete(complaint) {
         this.deleteComplaint = complaint;

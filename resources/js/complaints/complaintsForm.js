@@ -6,6 +6,7 @@ import helpers from "./helpers";
 import filters from "./filters";
 import constants from "./constants";
 import globalHelpers from "../global/helpers";
+import globalState from '../global/state';
 
 export function complaintsForm(serverData) {
     const complains = {
@@ -16,6 +17,7 @@ export function complaintsForm(serverData) {
         ...filters,
         ...constants,
         ...globalHelpers,
+        ...globalState,
     };
     Object.defineProperties(
         complains,

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 #[Fillable([
     'clinic_id',
-    'patient_id',
+    'patient_name',
     'description',
     'status',
     'issue_type',
