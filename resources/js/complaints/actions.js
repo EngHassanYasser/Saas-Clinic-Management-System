@@ -9,8 +9,6 @@ export default {
         this.mode='add';
         this.showModel=true;
     },
-
-
     confirmDelete(complaint) {
         this.deleteComplaint = complaint;
         this.deleteModal = true;
@@ -27,23 +25,5 @@ export default {
 
     changeStatus(status) {
         this.currentComplaint.status = status;
-    },
-
-    sendReply() {
-        if (!this.replyText.trim()) return;
-
-        this.changeStatus("resolved");
-
-        this.closeDetails();
-    },
-    selectPatient(patient) {
-        this.query = patient.name;
-        this.patientId = patient.id;
-        this.open = false;
-    },
-
-    typing() {
-        this.patientId = "";
-        this.open = this.query.length > 0;
     },
 };

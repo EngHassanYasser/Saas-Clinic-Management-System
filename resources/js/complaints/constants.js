@@ -1,7 +1,8 @@
 const statusMap = {
     pending: { label: "في الانتظار", cls: "bg-blue-100 text-blue-700" },
-    reviewing: { label: "قيد المراجعة", cls: "bg-amber-100 text-amber-700" },
+    under_review: { label: "قيد المراجعة", cls: "bg-amber-100 text-amber-700" },
     resolved: { label: "تم الحل", cls: "bg-emerald-100 text-emerald-700" },
+    rejected: { label: "تم الرفض", cls: "bg-red-100 text-emerald-700" },
 };
 const severities = [
     { label: "منخفضة", value: "low" },
@@ -39,7 +40,7 @@ const statuses = [
         checked: "peer-checked:bg-blue-600 peer-checked:border-blue-600",
     },
     {
-        value: "reviewing",
+        value: "under_review",
         label: "قيد المراجعة",
         border: "border-amber-200",
         text: "text-amber-600",

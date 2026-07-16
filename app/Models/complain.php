@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
     'clinic_id',
     'patient_name',
     'description',
+    'department_name',
     'status',
     'issue_type',
     'severity',

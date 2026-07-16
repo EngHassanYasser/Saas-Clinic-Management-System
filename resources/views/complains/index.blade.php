@@ -6,7 +6,7 @@
     <div class="p-6 min-h-screen bg-gray-50" dir="rtl" x-data="complaintsForm({
         complaints: @js($complaints),
         stats: @js($stats),
-        doctors:@js($doctors)
+        doctors:@js($doctors),
     })">
      @if (auth()->user()->type === 'clinic')
             <x-complains.status />

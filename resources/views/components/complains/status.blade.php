@@ -1,4 +1,4 @@
- <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+ <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-6">
      <div class="bg-white rounded-xl border border-gray-100 p-4 flex items-center gap-3">
          <div class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
              <i class="fa fa-flag text-red-500"></i>
@@ -35,4 +35,13 @@
              <p class="text-xl font-medium text-gray-800" x-text="stats.resolved ?? 'N/A'"></p>
          </div>
      </div>
+       <div class="bg-white rounded-xl border border-gray-100 p-4 flex items-center gap-3">
+    <div class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
+        <i class="fa-solid fa-circle-xmark text-red-500"></i>
+    </div>
+    <div>
+        <p class="text-xs text-gray-400">المرفوضة</p>
+        <p class="text-xl font-medium text-gray-800" x-text="stats.rejected ?? 'N/A'"></p>
+    </div>
+</div>
  </div>

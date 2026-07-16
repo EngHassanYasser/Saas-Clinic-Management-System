@@ -12,8 +12,6 @@ export default function (serverData = {}) {
         query: "",
         patientId: "",
         open: false,
-        selectedComplain:null,
-        patients: [],
         currentComplaint: null,
         deleteComplaint: null,
         detailsModal: false,

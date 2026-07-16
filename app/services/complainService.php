@@ -60,6 +60,23 @@ class ComplainService
         ]);
         return $complain;
     }
+    public function update($data, $complain_id):bool
+    {
+        $complain =complain::where('id',$complain_id)
+        ->where('clinic_id',Auth::user()->clinic_id)->firstOrFail();
+        $updateData = [
+            'doctor_id' => $data['doctor_id'] ?? null,
+            'department' => $data['department_name'],
+            'visit_date' => $data['visit_date'],
+            'severity' => $data['severity'],
+            'issue_type' => $data['issue_type'],
+            'description' => $data['description'] ?? null,
+            'status' => $data['status'],
+            'patient_name' => $data['patient_name'] ?? null,
+            'resolution_notes' => $data['resolution_notes'] ?? null,
+        ];
+        return $complain->update($updateData);
+    }
     public function getById($complain_id)
     {
         return Complain::where('id', $complain_id)
