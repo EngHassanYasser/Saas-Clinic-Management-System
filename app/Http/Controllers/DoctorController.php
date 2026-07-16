@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Http\Requests\doctor\StoreDoctorRequest;
 use App\Http\Requests\doctor\updateDoctorRequest;
 use App\services\DoctorService;
@@ -34,8 +33,11 @@ class DoctorController extends Controller
      */
     public function store(StoreDoctorRequest $request, DoctorService $doctorService)
     {
-        $newDoctor =  $doctorService->addNew($request->validated());
-        return $newDoctor;
+        $doctorService->addNew($request->validated());
+
+        return redirect()
+            ->route('doctors.index')
+            ->with('message', 'Doctor added successfully.');
     }
 
     /**
@@ -64,7 +66,7 @@ class DoctorController extends Controller
         if ($isUpdated) {
             return redirect()
                 ->route('doctors.index')
-                ->with('success', 'تم تعديل بيانات الطبيب بنجاح');
+                ->with('message', 'تم تعديل بيانات الطبيب بنجاح');
         }
 
         return redirect()
@@ -77,12 +79,7 @@ class DoctorController extends Controller
      */
     public function destroy(string $id)
     {
-        $isDeleted = $this->doctorService->deleteById($id);
-        return response()->json([
-            'success' => $isDeleted > 0,
-            'message' => $isDeleted > 0
-                ? 'doctor deleted successfully'
-                : 'doctor not found'
-        ]);
+        $this->doctorService->deleteById($id);
+        return redirect()->route('doctors.index')->with('message', 'doctor deleted successfully');
     }
 }

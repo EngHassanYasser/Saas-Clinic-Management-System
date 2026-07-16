@@ -1,7 +1,7 @@
 export default function() {
     return {
-        'mode':'add',
-        'showModel':false,
+        mode:'add',
+        showModel:false,
     }
 
 }

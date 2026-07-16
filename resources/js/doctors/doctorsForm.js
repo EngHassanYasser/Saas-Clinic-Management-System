@@ -15,7 +15,7 @@ export function doctorsForm(serverData) {
         ...globalState,
     };
     Object.defineProperties(
-        doctorsForm,
+        doctors,
         Object.getOwnPropertyDescriptors(getters),
     );
 

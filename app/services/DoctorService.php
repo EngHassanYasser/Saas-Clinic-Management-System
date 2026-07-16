@@ -50,15 +50,21 @@ class DoctorService
             return $doctor;
         });
     }
-    public function deleteById($id)
+    public function deleteById($id):bool
     {
         return DB::transaction(function () use ($id) {
 
+            $doctor = Doctor::findOrFail($id);
+
+            $doctor->clinics()->detach(Auth::user()->clinic_id);
+
             doctor_service_price::where('doctor_id', $id)->delete();
 
-            $deleted = Doctor::destroy($id);
+            $doctor->specialities()->detach();
 
-            return $deleted > 0;
+            $deleted = $doctor->delete();
+
+            return $deleted;
         });
     }
     public function update($data, $id)

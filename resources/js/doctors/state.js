@@ -1,24 +1,18 @@
-export default function(serverData={}) {
+export default function (serverData = {}) {
     return {
-        workDays:[],
+        workDays: [],
         isActive: true,
         imagePreview: null,
         slots: [],
-         search: '',
-        specialty: '',
-        status: '',
+        search: "",
+        specialty: "",
+        status: "",
         showEditModal: false,
         imagePreview: null,
         doctors: serverData.doctors ?? [],
-        specialities:serverData.specialities ?? [],
-        form: {
-            'id': null,
-            'image': null,
-            'name': null,
-            'phone': null,
-            'email': null,
-            speciality_id: null,
-        },
-        
-    }
+        specialities: serverData.specialities ?? [],
+        currentDoctor: null,
+        mode: "add",
+        showModel: false,
+    };
 }

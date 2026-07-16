@@ -12,6 +12,7 @@
         </div>
         <x-doctors.grid-view />
         <x-doctors.empty-state />
+        <x-doctors.model />
     </div>
     </div>
 @endsection
