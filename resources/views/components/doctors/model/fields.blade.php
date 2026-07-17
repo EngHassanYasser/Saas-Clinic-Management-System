@@ -16,26 +16,22 @@
          <button type="button" @click="open = !open"
              class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm bg-white text-left flex justify-between items-center">
 
-             <span x-text="currentDoctor.speciality.id ? currentDoctor.speciality.name : 'اختار التخصص'"></span>
+             <span x-text="selectedSpeciality.id ? selectedSpeciality.name : 'اختار التخصص'"></span>
 
              <span>▼</span>
          </button>
          <!-- Hidden input -->
-         <input type="hidden" name="speciality_id" :value="currentDoctor.speciality?.id">
+         <input type="hidden" name="speciality_id" :value="selectedSpeciality?.id">
          <!-- Dropdown -->
          <div x-show="open" @click.outside="open = false"
              class="absolute z-50 mt-2 w-full max-h-60 overflow-auto border bg-white rounded-lg shadow">
 
              <template x-for="speciality in specialities" :key="speciality.id">
-                 <div @click="currentDoctor.speciality = speciality; open = false"
+                 <div @click="selectedSpeciality = speciality; open = false"
                      class="px-3 py-2 text-sm hover:bg-teal-50 cursor-pointer" x-text="speciality.name">
                  </div>
              </template>
-
          </div>
-         @error('speciality_id')
-             <p class="text-xs text-red-400 mt-1">{{ $message }}</p>
-         @enderror
      </div>
 
      <div>

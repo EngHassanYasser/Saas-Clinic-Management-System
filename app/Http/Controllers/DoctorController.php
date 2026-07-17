@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Http\Requests\doctor\StoreDoctorRequest;
 use App\Http\Requests\doctor\updateDoctorRequest;
 use App\services\DoctorService;
 use App\services\SpecialityService;
+use Illuminate\Support\Facades\Auth;
 
 class DoctorController extends Controller
 {
@@ -16,17 +18,14 @@ class DoctorController extends Controller
     {
         $doctors = $this->doctorService->getAll();
         $specialities = $this->specialityService->getAll();
-        return view('doctors.index', compact('doctors', 'specialities'));
+        $stats = $this->doctorService->getStats(Auth::user()->clinic_id);
+        return view('doctors.index', compact('doctors', 'specialities', 'stats'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        $specialities = $this->specialityService->getAll();
-        return view('doctors.create', compact('specialities'));
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.

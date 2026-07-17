@@ -1,7 +1,7 @@
 <div x-show="showModel" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
-    @keydown.escape.window="showEditModal = false">
+    @keydown.escape.window="showModel = false">
 
-    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden" @click.outside="showEditModal = false">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden" @click.outside="showModel = false">
 
         <x-doctors.model.header />
 

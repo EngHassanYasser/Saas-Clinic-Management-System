@@ -1,5 +1,4 @@
-<div class="flex flex-col items-center gap-3">
-
+<div class="flex flex-col items-center gap-3" x-data="imageUploader()">
     <label class="text-xs text-gray-500 self-start">
         صورة الطبيب
     </label>
@@ -30,30 +29,9 @@
             class="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-teal-600 text-white flex items-center justify-center cursor-pointer hover:bg-teal-700 transition shadow">
 
             <i class="fa fa-camera text-xs"></i>
-
             <input x-ref="imageInput" type="file" name="image" accept="image/png,image/jpeg,image/jpg,image/webp"
-                class="hidden"
-                @change="
-        const file = $event.target.files[0];
-
-        if (!file) return;
-
-        if (!file.type.startsWith('image/')) {
-            alert('اختر صورة صحيحة');
-            $event.target.value='';
-            return;
-        }
-
-        if (file.size > 2 * 1024 * 1024) {
-            alert('الحد الأقصى لحجم الصورة 2MB');
-            $event.target.value='';
-            return;
-        }
-
-        imagePreview = URL.createObjectURL(file);
-    ">
+                class="hidden" @change="previewImage($event)">
         </label>
-
     </div>
     <div class="flex gap-2">
 
@@ -76,9 +54,4 @@
     <p class="text-[11px] text-gray-400">
         JPG / PNG / WEBP — الحد الأقصى 2MB
     </p>
-
-    @error('image')
-        <p class="text-xs text-red-500">{{ $message }}</p>
-    @enderror
-
 </div>

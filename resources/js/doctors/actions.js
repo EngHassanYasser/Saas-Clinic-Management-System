@@ -1,13 +1,39 @@
 export default {
     openEdite(doctor) {
-        this.currentDoctor=doctor;
+        this.selectedSpeciality = { ...doctor.speciality };
+        this.currentDoctor = { ...doctor };
         this.mode = "update";
         this.showModel = true;
-        console.log(this.currentDoctor,this.mode,this.showModel);
     },
     openAdd() {
         this.form = {};
         this.mode = "add";
         this.showModel = true;
+        this.selectedSpecialityId = null;
+    },
+    imageUploader() {
+        return {
+            imagePreview: null,
+
+            previewImage(event) {
+                const file = event.target.files[0];
+
+                if (!file) return;
+
+                if (!file.type.startsWith("image/")) {
+                    alert("اختر صورة صحيحة");
+                    event.target.value = "";
+                    return;
+                }
+
+                if (file.size > 2 * 1024 * 1024) {
+                    alert("الحد الأقصى لحجم الصورة 2MB");
+                    event.target.value = "";
+                    return;
+                }
+
+                this.imagePreview = URL.createObjectURL(file);
+            },
+        };
     },
 };
