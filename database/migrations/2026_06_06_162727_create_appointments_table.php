@@ -38,8 +38,6 @@ return new class extends Migration
             $table->decimal('deposit_amount', 8, 2)->default(0);
             $table->timestampTz('cancellation_time')->nullable();
             $table->timestampTz('reminder_sent_at');
-            $table->timestamps();
-
             $table->index('status');
         });
         DB::statement('ALTER TABLE appointments ADD CONSTRAINT chk_appointment_times 

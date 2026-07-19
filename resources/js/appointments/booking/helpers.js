@@ -1,4 +1,13 @@
 export default {
+    convertUtcToLocalTime(visitDate, time) {
+        const date = new Date(`${visitDate}T${time}Z`);
+
+        return new Intl.DateTimeFormat([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+        }).format(date);
+    },
     formatTime(h, m) {
         const period = h >= 12 ? "م" : "ص";
 

@@ -7,13 +7,13 @@
         appointments: @js($appointments->items()),
         stats: @js($stats)
     })">
-        {{-- ===================== MAIN ===================== --}}
         <main class="flex-1 overflow-x-hidden">
 
             <div class="p-4 sm:p-8 space-y-6">
                 <x-appointments.status-row />
 
                 <x-appointments.filter-tabs />
+                <x-shared.errors/>
                 <div x-show="appointments.length == 0"
                     class="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center">
                     <div class="w-20 h-20 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -36,6 +36,7 @@
                 </div>
             </div>
         </main>
+        <x-appointments.cancel-confirm-model />
+        <x-appointments.reschedule />
     </div>
-    <x-appointments.cancel-confirm-model />
 @endsection

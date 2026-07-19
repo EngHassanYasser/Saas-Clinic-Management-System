@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 #[Fillable([
     'id',
@@ -19,30 +17,15 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
     'deposit_amount',
     'cancellation_time',
     'reminder_sent_at',
-    'created_at',
-    'updated_at',
     'patient_id',
     'clinic_id',
-    'doctor_id'
+    'doctor_id',
+    'visit_date',
 ])]
 class appointment extends Model
 {
-    protected function endTime(): Attribute
-    {
-        return Attribute::make(
-            get: fn($value) => Carbon::parse($value)
-                ->setTimezone(config('app.client_timezone'))
-                ->format('Y-m-d h:i A'),
-        );
-    }
-    protected function startTime(): Attribute
-    {
-        return Attribute::make(
-            get: fn($value) => Carbon::parse($value)
-                ->setTimezone(config('app.client_timezone'))
-                ->format('Y-m-d h:i A'),
-        );
-    }
+    public $timestamps = false;
+
     public function service()
     {
         return  $this->belongsTo(ClinicService::class, 'clinic_service_id');

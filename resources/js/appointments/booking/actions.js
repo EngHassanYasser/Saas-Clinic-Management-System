@@ -1,8 +1,17 @@
+import { getAvailableSlots } from "./api";
 export default {
+    handelAvailbleSlots(currentAppointment) {
+     this.availableSlots = getAvailableSlots(this.currentAppointment);
+    },
+
+    openReschedule(appt) {
+        this.currentAppointment = { ...appt };
+        this.handelAvailbleSlots(this.currentAppointment),
+        this.showRescheduleModal = true;
+    },
     goToStep(step) {
         this.currencSection = step;
     },
-
     onSpecialtyChange() {
         this.selected.specialty =
             this.specialties.find((s) => s.id == this.specialtyId) || null;
@@ -19,6 +28,7 @@ export default {
 
         this.slots = [];
         this.currencSection = this.serviceSection;
+        this.reschedule = null;
     },
 
     onServiceChange() {

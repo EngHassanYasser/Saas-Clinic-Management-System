@@ -6,10 +6,10 @@ export default {
         this.showModel = true;
     },
     openAdd() {
-        this.form = {};
+        this.currentDoctor = null;
+        this.selectedSpeciality = null;
         this.mode = "add";
         this.showModel = true;
-        this.selectedSpecialityId = null;
     },
     imageUploader() {
         return {

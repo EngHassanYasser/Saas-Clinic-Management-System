@@ -25,13 +25,13 @@ class doctor extends Model implements HasMedia
      {
           return $this->belongsToMany(Speciality::class);
      }
-     public function doctor_service_price()
+     public function servicePrices()
      {
           return $this->hasMany(doctor_service_price::class);
      }
      public function clinics()
      {
-          return $this->belongsToMany(Clinic::class, 'clinic_doctors', 'doctor_id', 'clinic_id');
+          return $this->belongsToMany(Clinic::class, 'clinic_doctors', 'doctor_id', 'clinic_id')->withPivot('is_active');
      }
      public function schedules()
      {
