@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -17,7 +16,8 @@ use Illuminate\Notifications\Notifiable;
     'type',
     'user_name',
     'speciality_id',
-    'clinic_id'
+    'clinic_id',
+    'city_id',
 ])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
@@ -71,5 +71,8 @@ class User extends Authenticatable
     }
     public function complains() {
         return $this->hasMany(complain::class,'user_id');
+    }
+    public function city() {
+        return $this->belongsTo(city::class);
     }
 }

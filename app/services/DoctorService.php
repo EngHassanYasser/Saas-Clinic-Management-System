@@ -122,6 +122,6 @@ class DoctorService
         COUNT(DISTINCT CASE WHEN clinic_doctors.is_active = 1 THEN doctors.id END) as active,
         COUNT(DISTINCT CASE WHEN clinic_doctors.is_active = 0 THEN doctors.id END) as inactive,
         COUNT(DISTINCT doctor_speciality.speciality_id) as specialities
-    ")->first();
+        ")->first();
     }
 }

@@ -6,14 +6,11 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable([
-    'id',
     'clinic_id',
     'doctor_id',
     'clinic_service_id',
     'description',
     'price',
-    'created_at',
-    'updated_at'
 ])]
 class doctor_service_price extends Model
 {

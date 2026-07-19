@@ -134,6 +134,9 @@ class AppointmentService
     }
     public function getAvailableAppointments($appointmentid, $visit_date)
     {
+        if (Carbon::parse($visit_date)->isBefore(today())) {
+            return   [];
+        }
         $appointment = Appointment::select([
             'clinic_id',
             'doctor_id',
@@ -145,7 +148,7 @@ class AppointmentService
         $bookedSlots = $this->getBookedSlots($appointment, $visit_date);
         $schedules = $this->getSchedules($appointment, $visit_date);
 
-        return $this->getAvailableSlots($bookedSlots, $schedules, $visit_date);
+        return $this->getAvailableSlots($bookedSlots, $schedules);
     }
     public  function getSlotDurationByVisitDate($appointment, $visit_date): int
     {
@@ -183,7 +186,7 @@ class AppointmentService
             ->map(fn($appointment) => Carbon::parse($appointment->start_time)->format('H:i'))
             ->toArray();
     }
-    public function getAvailableSlots($bookedSlots, $schedules, $visit_date)
+    public function getAvailableSlots($bookedSlots, $schedules)
     {
         $availableSlots = [];
         foreach ($schedules as $schedule) {
@@ -212,7 +215,7 @@ class AppointmentService
                     continue;
                 }
 
-                $slot =$current->format('H:i');
+                $slot = $current->format('H:i');
 
 
                 if (!in_array($slot, $bookedSlots)) {

@@ -7,15 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
 #[Fillable([
-    'id',
     'start_time',
     'end_time',
     'slot_duration',
     'start_break',
     'end_break',
     'is_available',
-    'created_at',
-    'updated_at',
     'clinic_id',
     'doctor_id'
 ])]

@@ -6,14 +6,18 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable([
-    'id',
     'name',
     'monthly_price',
     'max_doctors',
     'monthly_appointments_limit',
-    'features'
+    'features',
+    'price',
 ])]
 class plan extends Model
 {
     public $timestamps = false;
+    public function subscriptions()
+    {
+        return $this->hasMany(subscription::class);
+    }
 }

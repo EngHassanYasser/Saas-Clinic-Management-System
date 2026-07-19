@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable([
-    'id',
     'amount',
     'currency',
     'payment_method',
@@ -15,8 +14,6 @@ use Illuminate\Database\Eloquent\Model;
     'type',
     'gatway_response',
     'failture_reason',
-    'created_at',
-    'updated_at',
     'parent_payment_id',
     'appointment_id'
 ])]

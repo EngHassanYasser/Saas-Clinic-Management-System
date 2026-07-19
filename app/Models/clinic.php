@@ -15,7 +15,8 @@ use Illuminate\Database\Eloquent\Model;
     'address',
     'latitude',
     'logitude',
-    'logo'
+    'logo',
+    'city_id',
 ])]
 class clinic extends Model
 {
@@ -62,7 +63,15 @@ class clinic extends Model
     {
         return $this->belongsToMany(Doctor::class, 'clinic_doctors', 'clinic_id', 'doctor_id');
     }
-    public function complains() {
+    public function complains()
+    {
         return $this->hasMany(complain::class);
+    }
+    public function city()
+    {
+        return $this->belongsTo(city::class);
+    }
+    public function subscriptions() {
+        return $this->hasMany(subscription::class);
     }
 }

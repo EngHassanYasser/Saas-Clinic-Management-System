@@ -6,12 +6,9 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable([
-    'id',
     'channel',
     'status',
     'response',
-    'created_at',
-    'updated_at',
     'user_id',
     'notification_id'
 ])]
