@@ -71,7 +71,12 @@ class clinic extends Model
     {
         return $this->belongsTo(city::class);
     }
-    public function subscriptions() {
+    public function subscriptions()
+    {
         return $this->hasMany(subscription::class);
+    }
+    public function latestSubscription()
+    {
+        return $this->hasOne(Subscription::class)->latestOfMany();
     }
 }

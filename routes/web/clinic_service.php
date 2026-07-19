@@ -11,7 +11,6 @@ Route::middleware('auth')->group(function () {
         ->name('clinic.services.store');
     Route::put('/clinic/services/{id}', [ClinicServiceController::class, 'update'])
         ->name('clinic.services.update');
-         Route::delete('/clinic/services/{id}', [ClinicServiceController::class, 'destroy'])
+    Route::delete('/clinic/services/{id}', [ClinicServiceController::class, 'destroy'])
         ->name('clinic.services.destroy');
-        
 });

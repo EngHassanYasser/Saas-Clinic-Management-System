@@ -15,9 +15,8 @@ class ClinicController extends Controller
      */
     public function index()
     {
-        dd($this->clinicService->getAll());
-
-        return view('clinics.index');
+        $clinics=$this->clinicService->getAll();
+        return view('clinics.index',compact('clinics'));
     }
 
     /**

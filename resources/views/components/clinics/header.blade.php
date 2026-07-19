@@ -1,4 +1,3 @@
- {{-- ===== HEADER ===== --}}
  <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
      <div>
          <h1 class="text-2xl font-bold text-gray-800">إدارة العيادات</h1>

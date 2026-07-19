@@ -1,4 +1,3 @@
-{{-- ===== DELETE MODAL ===== --}}
 <div x-show="showDelete" x-cloak @click.self="showDelete = false" @keydown.escape.window="showDelete = false"
     x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
 

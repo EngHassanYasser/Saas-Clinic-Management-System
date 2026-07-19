@@ -9,9 +9,9 @@ Route::middleware('auth')->group(function () {
     })->name('clinics.SearchResults');
     Route::middleware('auth', 'verified')->group(function () {
 
-        Route::get('/clinics/edite', function () {
+        Route::get('/clinics/edit', function () {
             return view('clinics.edite');
-        })->name('clinics.edite');
+        })->name('clinics.edit');
     });
     Route::get('clinics', [ClinicController::class, 'index'])->name('clinics.index');
 });

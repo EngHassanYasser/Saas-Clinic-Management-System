@@ -58,15 +58,10 @@
                               </span>
                           </td>
 
-                          <td class="py-3.5 px-4 text-gray-400 text-xs" x-text="c.date"></td>
+                          <td class="py-3.5 px-4 text-gray-400 text-xs" x-text="c.joined_at"></td>
 
                           <td class="py-3.5 px-4">
                               <div class="flex items-center justify-center gap-2">
-
-                                  <button @click="openView(c)" title="عرض"
-                                      class="w-8 h-8 rounded-lg bg-gray-50 hover:bg-blue-50 hover:text-blue-600 text-gray-400 flex items-center justify-center transition border border-gray-100">
-                                      <i class="fas fa-eye text-xs"></i>
-                                  </button>
 
                                   <button @click="openEdit(c)" title="تعديل"
                                       class="w-8 h-8 rounded-lg bg-gray-50 hover:bg-amber-50 hover:text-amber-600 text-gray-400 flex items-center justify-center transition border border-gray-100">
