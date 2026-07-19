@@ -28,6 +28,7 @@ class updateDoctorRequest extends FormRequest
             'speciality_id' => ['required', 'integer', 'exists:specialities,id'],
             'email' => ['required', 'email', 'max:255'],
             'phone' => ['required', 'string', 'max:20'],
+            'is_active' => ['required', 'boolean'],
         ];
     }
 }

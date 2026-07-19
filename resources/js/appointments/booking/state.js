@@ -4,9 +4,10 @@ export default function (serverData = {}) {
         // State
         // ======================
         specialties: serverData.specialties ?? [],
-        services:serverData.services ?? [],
-        appointments:serverData.appointments ?? [],
-        stats:serverData.stats ?? [],
+        services: serverData.services ?? [],
+        appointments: serverData.appointments ?? [],
+        stats: serverData.stats ?? [],
+        availableSlots:[],
         currencSection: 1,
         specialitySection: 1,
         serviceSection: 2,
@@ -20,7 +21,7 @@ export default function (serverData = {}) {
         clinicId: "",
         doctorId: "",
         openSpecialties: false,
-        openServices :false,
+        openServices: false,
         selected: {
             specialty: null,
             service: null,
@@ -33,7 +34,9 @@ export default function (serverData = {}) {
         slots: [],
         slotsLoading: false,
         submitting: false,
-
+        showRescheduleModal: false,
+        selectedSlot:null,
+        currentAppointment:null,
         toast: {
             show: false,
             message: "",

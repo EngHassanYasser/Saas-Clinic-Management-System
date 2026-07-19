@@ -1,8 +1,6 @@
 <div class="c-clinic-appointment-card bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 space-y-5" dir="rtl">
-    {{-- Row 1: Patient, Doctor, Clinic, Date --}}
     <div class="flex flex-col sm:flex-row sm:flex-wrap gap-y-4 gap-x-8">
         @if (Auth()->user()->type == 'clinic')
-            {{-- Patient --}}
             <div class="flex items-center gap-3 sm:w-[calc(50%-1rem)] lg:w-auto lg:flex-1">
                 <div
                     class="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center border border-teal-100 flex-shrink-0">
@@ -15,7 +13,6 @@
                 </div>
             </div>
         @endif
-        {{-- Doctor --}}
         <div class="flex items-center gap-3 sm:w-[calc(50%-1rem)] lg:w-auto lg:flex-1">
             <div
                 class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center border border-blue-100 flex-shrink-0">
@@ -27,7 +24,6 @@
             </div>
         </div>
         @if (Auth()->user()->type == 'patient')
-            {{-- Clinic --}}
             <div class="flex items-start gap-3 sm:w-[calc(50%-1rem)] lg:w-auto lg:flex-1">
                 <div
                     class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center border border-amber-100 flex-shrink-0">
@@ -44,7 +40,6 @@
                 </div>
             </div>
         @endif
-        {{-- Date --}}
         <div class="flex items-center gap-3 sm:w-[calc(50%-1rem)] lg:w-auto lg:flex-1">
             <div
                 class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center border border-blue-100 flex-shrink-0">
@@ -52,12 +47,13 @@
             </div>
             <div class="min-w-0">
                 <p class="text-xs text-gray-400">الموعد</p>
-                <p class="font-semibold text-gray-900 text-sm" x-text="appointment.start_time"></p>
+                <p dir="ltr" class="font-semibold text-gray-900 text-sm"
+                    x-text="`${appointment.visit_date} ${convertUtcToLocalTime(appointment.visit_date, appointment.start_time)} - ${convertUtcToLocalTime(appointment.visit_date, appointment.end_time)}`">
+                </p>
             </div>
         </div>
     </div>
     <div class="border-t border-gray-100"></div>
-    {{-- Row 2: Service + prices + actions --}}
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
         <div class="flex flex-wrap gap-2">
@@ -68,8 +64,8 @@
                     <p class="text-xs font-semibold text-gray-700 mt-0.5" x-text="appointment.appointment_type"></p>
                 </div>
             </div>
-            <x-appointments.prices/>
+            <x-appointments.prices />
         </div>
-        <x-appointments.actions/>
+        <x-appointments.actions />
     </div>
 </div>

@@ -17,19 +17,32 @@ class DoctorService
     }
     public function getAll()
     {
-        return doctor::with(['specialities', 'doctor_service_price.clinic_service', 'media'])->get()->map(function ($doctor) {
+        $clinic = Clinic::with([
+            'doctors.specialities',
+            'doctors.servicePrices.clinic_service',
+            'doctors.media',
+        ])->findOrFail(Auth::user()->clinic_id);
+        return $clinic->doctors->map(function ($doctor) use ($clinic) {
             return [
                 'id' => $doctor->id,
                 'name' => $doctor->name,
                 'phone' => $doctor->phone,
                 'email' => $doctor->email,
                 'Consultation_Fee' => optional(
-                    $doctor->doctor_service_price
+                    $doctor->servicePrices
                         ->first(fn($item) => $item->clinic_service?->name === 'كشف')
                 )->price ?? 'لا توجد خدمة',
-                'speciality' => optional($doctor->specialities->first())->only(['id', 'name']),
-                'active' => $doctor->active ?? true,
-                'image' => $doctor->getFirstMediaUrl('avatar') ?: asset('storage/default_profile_image.jpg'),
+
+                'speciality' => optional($doctor->specialities->first())
+                    ->only(['id', 'name']),
+
+                'is_active' => $doctor->clinics
+                    ->firstWhere('id', $clinic->id)
+                    ?->pivot
+                    ?->is_active,
+
+                'image' => $doctor->getFirstMediaUrl('avatar')
+                    ?: asset('storage/default_profile_image.jpg'),
             ];
         });
     }
@@ -81,7 +94,12 @@ class DoctorService
             ]);
 
             $doctor->specialities()->sync([$data['speciality_id']]);
-
+            $doctor->clinics()->updateExistingPivot(
+                Auth::user()->clinic_id,
+                [
+                    'is_active' => $data['is_active'],
+                ]
+            );
             if (!empty($data['image'])) {
 
                 $doctor->clearMediaCollection('avatar');

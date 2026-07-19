@@ -7,23 +7,23 @@ use App\services\ServiceCatalogService;
 use App\services\SpecialityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\appointments\RescheduleAppointment;
 
 class AppointmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function __construct(private AppointmentService $appointmentService,
-    private SpecialityService $specialityService,
-    private ServiceCatalogService $serviceCatalogService,
-    ){
-
-    }
+    public function __construct(
+        private AppointmentService $appointmentService,
+        private SpecialityService $specialityService,
+        private ServiceCatalogService $serviceCatalogService,
+    ) {}
     public function index()
     {
-        $appointments= $this->appointmentService->getAppointments(Auth::User());
+        $appointments = $this->appointmentService->getAppointments(Auth::User());
         $stats = $this->appointmentService->getStats(Auth::user());
-        return view('appointments.index',compact('appointments','stats'));
+        return view('appointments.index', compact('appointments', 'stats'));
     }
 
     /**
@@ -31,10 +31,10 @@ class AppointmentController extends Controller
      */
     public function create()
     {
-        
+
         $specialities = $this->specialityService->getAll();
         $services = $this->serviceCatalogService->getAllCatalogs();
-        return view('appointments.create',compact('specialities','services'));
+        return view('appointments.create', compact('specialities', 'services'));
     }
 
     /**
@@ -68,6 +68,19 @@ class AppointmentController extends Controller
     {
         //
     }
+    public function updateStatus(Request $request, $id)
+    {
+        $isUpdated = $this->appointmentService->updateStatus($request->status, $id);
+        $message = $isUpdated ? 'appointment status updated successfully' : 'failed to update appointment status';
+
+        return redirect()->route('appointments.index')->with('message', $message);
+    }
+    public function getAvailableSlots(Request $request, string $appointmentid, string $date)
+    {
+        return response()->json(
+            $this->appointmentService->getAvailableAppointments($appointmentid, $date)
+        );
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -75,5 +88,11 @@ class AppointmentController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function reschdule(RescheduleAppointment $request)
+    {
+        $isRescheduled = $this->appointmentService->reschdule($request->validated());
+        $message = $isRescheduled ? 'rescheduled done successfully' : 'failed to reschedule appointment please try again';
+        return redirect()->route('appointments.index')->with('message', $message);
     }
 }

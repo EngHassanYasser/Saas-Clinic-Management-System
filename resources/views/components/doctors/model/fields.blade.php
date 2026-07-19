@@ -45,5 +45,6 @@
          <input type="email" name="email" :value="currentDoctor.email"
              class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-teal-500 focus:ring-1 focus:ring-teal-100 outline-none transition">
      </div>
+     <x-doctors.grid_view.doctor_is_active />
 
  </div>

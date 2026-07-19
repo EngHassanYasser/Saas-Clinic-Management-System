@@ -7,6 +7,7 @@ use App\Http\Requests\doctor\updateDoctorRequest;
 use App\services\DoctorService;
 use App\services\SpecialityService;
 use Illuminate\Support\Facades\Auth;
+use LDAP\Result;
 
 class DoctorController extends Controller
 {
@@ -17,8 +18,8 @@ class DoctorController extends Controller
     public function index()
     {
         $doctors = $this->doctorService->getAll();
-        $specialities = $this->specialityService->getAll();
-        $stats = $this->doctorService->getStats(Auth::user()->clinic_id);
+          $specialities = $this->specialityService->getAll();
+         $stats = $this->doctorService->getStats(Auth::user()->clinic_id);
         return view('doctors.index', compact('doctors', 'specialities', 'stats'));
     }
 
@@ -60,17 +61,11 @@ class DoctorController extends Controller
      */
     public function update(updateDoctorRequest $request, string $id)
     {
-        $isUpdated = $this->doctorService->update($request->validated(), $id);
-
-        if ($isUpdated) {
-            return redirect()
-                ->route('doctors.index')
-                ->with('message', 'تم تعديل بيانات الطبيب بنجاح');
-        }
+        $this->doctorService->update($request->validated(), $id);
 
         return redirect()
-            ->back()
-            ->with('error', 'حصل خطأ أثناء التعديل');
+            ->route('doctors.index')
+            ->with('message', 'تم تعديل بيانات الطبيب بنجاح');
     }
 
     /**
