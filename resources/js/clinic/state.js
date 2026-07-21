@@ -1,35 +1,48 @@
 export default function (serverData) {
     return {
-        // ===== DATA =====
-        clinics: serverData.clinics,
+        clinics: serverData.clinics.data,
+        cities: serverData.cities,
+        plans: serverData.plans ?? [],
+        pagination:serverData.clinics.links ?? [],
         nextId: 5,
         perPage: 10,
         currentPage: 1,
-
-        // ===== FILTERS =====
         search: "",
         filterStatus: "",
         filterPlan: "",
-
-        // ===== MODALS =====
         showModal: false,
         showDelete: false,
         showView: false,
-
-        editId: null,
         deleteTarget: null,
         viewTarget: null,
         formError: false,
-
+        mode: "add",
         form: {
             name: "",
             email: "",
-            city: "",
+            city: {
+                id:null,
+                name:"",
+            },
             status: "نشط",
             plan: "Basic",
+            address: "",
+            owner:{
+                id:null,
+                name:null,
+                user_name:null,
+                gendor:null,
+            },
+            Clinic: null,
+            gendor: null,
+            phone: null,
+            user_name: null,
+            password: null,
+            plan:{
+                id:null,
+                name:"",
+            },
         },
-
-        // ===== TOAST =====
         toast: {
             show: false,
             msg: "",

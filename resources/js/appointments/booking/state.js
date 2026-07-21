@@ -1,8 +1,5 @@
 export default function (serverData = {}) {
     return {
-        // ======================
-        // State
-        // ======================
         specialties: serverData.specialties ?? [],
         services: serverData.services ?? [],
         appointments: serverData.appointments ?? [],

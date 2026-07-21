@@ -1,15 +1,14 @@
 @extends('layouts-main.dashboard')
-
 @section('content')
-    <div dir="rtl" x-data="clinicsApp({clinics:@js($clinics->items())})" class="p-6 min-h-screen bg-gray-100">
+    <div dir="rtl" x-data="clinicsApp({
+        clinics: @js($clinics),
+        cities: @js($cities),
+        plans: @js($plans),
+    })" class="p-6 min-h-screen bg-gray-100">
         <x-clinics.header />
-
         <x-clinics.stats-strip />
-
         <x-clinics.filters />
-
         <x-clinics.table />
-
         <x-clinics.model />
         <x-clinics.toast />
     </div>

@@ -3,7 +3,6 @@ export default {
         this.mode='add';
         this.selectedVacation = null;
         this.showVacationModal = true;
-        console.log(this.mode);
     },
 
     closeModal() {
@@ -20,7 +19,6 @@ export default {
 
     closeDeleteModal() {
         this.selectedVacation = null;
-
         this.showDeleteModal = false;
     },
 

@@ -2,23 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Clinic\StoreClinicRequest;
+use App\Models\city;
+use App\Models\plan;
 use App\services\ClinicService;
 use Illuminate\Http\Request;
 
 class ClinicController extends Controller
 {
-    public function __construct(private ClinicService $clinicService) {
-
-    }
+    public function __construct(private ClinicService $clinicService) {}
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $clinics=$this->clinicService->getAll();
-        return view('clinics.index',compact('clinics'));
+        $clinics = $this->clinicService->getAll();
+        $cities = city::get(['id', 'name']);
+        $plans = plan::get(['id', 'name']);
+        return view('clinics.index', compact('clinics', 'cities', 'plans'));
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -30,18 +32,16 @@ class ClinicController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreClinicRequest $request)
     {
-        //
+        $this->clinicService->add($request->validated());
+        return redirect()->route('clinics.index')->with('message', 'clinic added successfully');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-    }
+    public function show(string $id) {}
 
     /**
      * Show the form for editing the specified resource.
@@ -56,7 +56,7 @@ class ClinicController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        dd($request->all());
     }
 
     /**

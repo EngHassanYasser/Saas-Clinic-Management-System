@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Events\UserCreated;
 use App\Http\Controllers\Controller;
-use App\Models\speciality;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -22,8 +21,7 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        $specialities = speciality::all();
-        return view('auth.register', compact('specialities'));
+        return view('auth.register');
     }
 
     /**
@@ -37,10 +35,9 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'type' => ['required', 'in:patient,clinic,super_admin'],
+            'type' => ['required', 'in:patient,clinic'],
             'user_name' => ['required', 'unique:users,user_name'],
             'gender' => ['required', 'in:male,female'],
-            'speciality_id' => ['nullable', 'exists:specialities,id'],
         ]);
         $user = User::create([
             'name' => $request->name,
@@ -49,7 +46,6 @@ class RegisteredUserController extends Controller
             'type' => $request->type,
             'user_name' => $request->user_name,
             'gender' => $request->gender,
-            'speciality_id' => $request->speciality_id,
         ]);
 
          event(new UserCreated($user));

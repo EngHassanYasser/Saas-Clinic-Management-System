@@ -42,31 +42,6 @@
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                    {{-- Speciality --}}
-                    <div>
-                        <label class="text-sm font-medium text-gray-700">التخصص</label>
-
-                        <div class="relative mt-2" x-data="{ open: false, selected: '', selectedId: '{{ old('speciality_id') }}' }">
-
-                            {{-- Hidden input للـ form --}}
-                            <input type="hidden" name="speciality_id" :value="selectedId">
-
-                            {{-- Trigger Button --}}
-                            <button type="button" @click="open = !open"
-                                class="w-full px-4 py-3 border rounded-xl text-right bg-white
-                   flex items-center justify-between
-                   focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                   transition outline-none"
-                                :class="selectedId ? 'text-gray-900' : 'text-gray-400'">
-                                <svg class="w-4 h-4 text-gray-400 transition-transform" :class="open ? 'rotate-180' : ''"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 9l-7 7-7-7" />
-                                </svg>
-                                <span x-text="selected || 'اختر التخصص'"></span>
-                            </button>
-
-                           <x-specialities :$specialities/>
                     {{-- Gender --}}
                     <div class="mt-4">
                         <label class="block text-sm font-medium text-gray-700 mb-2">

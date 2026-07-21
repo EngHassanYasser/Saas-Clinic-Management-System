@@ -7,11 +7,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/clinics/search', function () {
         return view('clinics.SearchResults');
     })->name('clinics.SearchResults');
-    Route::middleware('auth', 'verified')->group(function () {
-
-        Route::get('/clinics/edit', function () {
-            return view('clinics.edite');
-        })->name('clinics.edit');
-    });
+    Route::put('clinics/{clinic}', [clinicController::class, 'update'])->name('clinics.update');
+    Route::post('clinics', [ClinicController::class, 'store'])->name('clinics.store');
     Route::get('clinics', [ClinicController::class, 'index'])->name('clinics.index');
+    Route::get('/clinics/edit', [clinicController::class, 'edit'])->name('clinics.edit');
 });

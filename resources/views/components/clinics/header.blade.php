@@ -9,3 +9,4 @@
          إضافة عيادة
      </button>
  </div>
+<x-shared.errors/>

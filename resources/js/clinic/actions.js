@@ -57,23 +57,15 @@ export default {
         );
     },
     openAdd() {
-        this.editId = null;
         this.formError = false;
-        this.form = {
-            name: "",
-            email: "",
-            city: "",
-            status: "نشط",
-            plan: "Basic",
-        };
+        this.mode = "add";
         this.showModal = true;
     },
     openEdit(c) {
-        this.editId = c.id;
+        this.mode="update";
+        this.form = { ...c };
+        console.log(this.form);
         this.formError = false;
-        this.form = {
-            ...c,
-        };
         this.showModal = true;
     },
     save() {

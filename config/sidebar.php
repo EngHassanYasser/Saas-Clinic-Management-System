@@ -8,7 +8,7 @@ return [
         ['label' => 'الدكاتره', 'route' => 'doctors.index', 'icon' => 'fa-solid fa-user-doctor'],
         ['label' => 'الأجازات', 'route' => 'vications.index', 'icon' => 'fa fa-umbrella-beach'],
         ['label' => 'الشكاوي', 'route' => 'complains.index', 'icon' => 'fa-regular fa-comment-dots'],
-        ['label' => 'اعدادات العيادة', 'route' => 'clinics.edite', 'icon' => 'fas fa-cog'],
+        ['label' => 'اعدادات العيادة', 'route' => 'clinics.edit', 'icon' => 'fas fa-cog'],
 
     ],
     'patient' => [
