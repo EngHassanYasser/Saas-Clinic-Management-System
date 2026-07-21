@@ -22,16 +22,13 @@ class AppointmentService
     }
     public function getAppointmentsStatisticsBy($column, $id)
     {
-        $stats = Appointment::where($column, $id)
+        return Appointment::where($column, $id)
             ->selectRaw("
         COUNT(*) as total,
         SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
         SUM(CASE WHEN status = 'confirmed' THEN 1 ELSE 0 END) as confirmed,
         SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed,
-        SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled
-    ")->first();
-
-        return $stats;
+        SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled")->first();
     }
 
     public function getPatientStats($id)

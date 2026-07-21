@@ -2,34 +2,33 @@
 
 namespace App\Http\Requests\Clinic;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StoreClinicRequest extends FormRequest
+class UpdateClinicRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
+
+        $clinic = $this->route('clinic');
         return [
-            'clinic_name' => ['required', 'string', 'max:255'],
+            'clinic_name' => [
+                'required',
+                'string',
+                'max:255',
+            ],
 
             'email' => [
                 'required',
                 'email',
                 'max:255',
-                'unique:users,email',
+                Rule::unique('users', 'email')
+                    ->ignore($clinic->owner_id),
             ],
 
             'user_name' => [
@@ -38,7 +37,8 @@ class StoreClinicRequest extends FormRequest
                 'min:3',
                 'max:50',
                 'alpha_dash',
-                'unique:users,user_name',
+                Rule::unique('users', 'user_name')
+                    ->ignore($clinic->owner_id),
             ],
 
             'full_name' => [
@@ -48,7 +48,7 @@ class StoreClinicRequest extends FormRequest
             ],
 
             'password' => [
-                'required',
+                'nullable',
                 'string',
                 'min:8',
                 'confirmed',
@@ -64,7 +64,8 @@ class StoreClinicRequest extends FormRequest
                 'required',
                 'string',
                 'max:20',
-                'unique:clinics,phone',
+                Rule::unique('clinics', 'phone')
+                    ->ignore($clinic->id),
             ],
 
             'city_id' => [
@@ -74,7 +75,7 @@ class StoreClinicRequest extends FormRequest
             ],
             'gendor' => [
                 'required',
-                'in:male,female',
+                Rule::in(['male', 'female']),
             ],
         ];
     }

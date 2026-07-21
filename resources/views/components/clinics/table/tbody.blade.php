@@ -50,18 +50,14 @@
                         class="w-8 h-8 rounded-lg bg-gray-50 hover:bg-amber-50 hover:text-amber-600 text-gray-400 flex items-center justify-center transition border border-gray-100">
                         <i class="fas fa-pen text-xs"></i>
                     </button>
-
-                    <button @click="toggleStatus(c.id)" :title="c.status === 'موقوف' ? 'تفعيل' : 'إيقاف'"
-                        class="w-8 h-8 rounded-lg bg-gray-50 text-gray-400 flex items-center justify-center transition border border-gray-100"
-                        :class="c.status === 'موقوف' ? 'hover:bg-green-50 hover:text-green-600' :
-                            'hover:bg-red-50 hover:text-red-500'">
-                        <i class="fas text-xs" :class="c.status === 'موقوف' ? 'fa-circle-check' : 'fa-ban'"></i>
-                    </button>
-
-                    <button @click="openDelete(c)" title="حذف"
+                    <form :action="'{{ url('clinics') }}/' + c.id " method="POST">
+                        @csrf()
+                            <input type="hidden" name="_method" value="DELETE"/>
+                    <button type="submit" title="حذف"
                         class="w-8 h-8 rounded-lg bg-gray-50 hover:bg-red-50 hover:text-red-500 text-gray-400 flex items-center justify-center transition border border-gray-100">
                         <i class="fas fa-trash text-xs"></i>
                     </button>
+                    </form>
 
                 </div>
             </td>

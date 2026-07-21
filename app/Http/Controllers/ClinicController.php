@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Clinic\StoreClinicRequest;
+use App\Http\Requests\Clinic\UpdateClinicRequest;
 use App\Models\city;
+use App\Models\clinic;
 use App\Models\plan;
 use App\services\ClinicService;
-use Illuminate\Http\Request;
 
 class ClinicController extends Controller
 {
@@ -16,10 +17,11 @@ class ClinicController extends Controller
      */
     public function index()
     {
+        $stats=$this->clinicService->getStats();
         $clinics = $this->clinicService->getAll();
         $cities = city::get(['id', 'name']);
         $plans = plan::get(['id', 'name']);
-        return view('clinics.index', compact('clinics', 'cities', 'plans'));
+        return view('clinics.index', compact('clinics', 'cities', 'plans','stats'));
     }
     /**
      * Show the form for creating a new resource.
@@ -54,16 +56,18 @@ class ClinicController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateClinicRequest $request, clinic $clinic)
     {
-        dd($request->all());
+        $this->clinicService->update($request->validated(), $clinic);
+        return redirect()->route('clinics.index')->with('message', 'clinic updated successfully');
     }
-
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Clinic $clinic)
     {
-        //
+        $isDeleted = $this->clinicService->delete($clinic);
+        $message = $isDeleted ? 'clinic deleted duccessfully' : 'failed to delete clinic';
+        return redirect()->route('clinics.index')->with('message', $message);
     }
 }

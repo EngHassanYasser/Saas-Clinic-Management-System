@@ -6,5 +6,5 @@
         </table>
     </div>
     <x-clinics.table.empty_state />
-    <x-clinics.table.pagination />
+    <x-shared.pagination />
 </div>

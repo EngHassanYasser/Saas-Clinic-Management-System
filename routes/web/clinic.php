@@ -11,4 +11,5 @@ Route::middleware('auth')->group(function () {
     Route::post('clinics', [ClinicController::class, 'store'])->name('clinics.store');
     Route::get('clinics', [ClinicController::class, 'index'])->name('clinics.index');
     Route::get('/clinics/edit', [clinicController::class, 'edit'])->name('clinics.edit');
+    Route::delete('/clinics/{clinic}/', [clinicController::class, 'destroy'])->name('clinics.destroy');
 });

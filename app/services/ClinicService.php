@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Clinic;
+use App\Models\subscription;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -33,14 +34,14 @@ class ClinicService
                 return [
                     'id' => $clinic->id,
                     'name' => $clinic->name,
-                    'phone'=>$clinic->phone,
+                    'phone' => $clinic->phone,
                     'email' => $clinic->email,
                     'status' => $clinic->latestSubscription?->status,
                     'city' => $clinic->city,
                     'plan' => $clinic->latestSubscription?->plan,
                     'joined_at' => $clinic->created_at->toDateString(),
                     'owner' => $clinic->owner,
-                    'address'=>$clinic->address
+                    'address' => $clinic->address
                 ];
             });
     }
@@ -53,20 +54,73 @@ class ClinicService
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
                 'gendor' => $data['gendor'],
-                'city_id'=>$data['city_id'],
+                'city_id' => $data['city_id'],
                 'type' => 'clinic',
             ]);
-            $slug = Str::slug($data['clinic_name']);
             clinic::create([
                 'name' => $data['clinic_name'],
-                'slug' => $slug,
+                'slug' =>  Str::slug($data['clinic_name']),
                 'phone' => $data['phone'],
                 'email' => $data['email'],
                 'address' => $data['address'],
                 'owner_id' => $user->id,
-                'city_id'=>$data['city_id'],
+                'city_id' => $data['city_id'],
             ]);
             return $user;
         });
+    }
+
+    public function update(array $data, Clinic $clinic): void
+    {
+        DB::transaction(function () use ($data, $clinic) {
+
+            $clinic->load('owner');
+
+            $clinic->update([
+                'name' => $data['clinic_name'],
+                'slug' => Str::slug($data['clinic_name']),
+                'phone' => $data['phone'],
+                'email' => $data['email'],
+                'address' => $data['address'],
+                'city_id' => $data['city_id'],
+            ]);
+
+            $userData = [
+                'name' => $data['full_name'],
+                'user_name' => $data['user_name'],
+                'gendor' => $data['gendor'],
+            ];
+
+            if (!empty($data['password'])) {
+                $userData['password'] = Hash::make($data['password']);
+            }
+
+            $clinic->owner->update($userData);
+        });
+    }
+
+    public function delete(Clinic $clinic)
+    {
+        return DB::transaction(function () use ($clinic) {
+            $clinic->doctors()->detach();
+            $clinic->servicePrices()->delete();
+            $owner_id = $clinic->owner_id;
+            $clinic->delete();
+            return user::where('id', $owner_id)->delete();
+        });
+    }
+    public function getStats()
+    {
+        return Subscription::query()
+            ->selectRaw("
+        COUNT(*) as total,
+        COALESCE(SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END), 0) as pending,
+        COALESCE(SUM(CASE WHEN status = 'active' THEN 1 ELSE 0 END), 0) as active,
+COALESCE(SUM(CASE WHEN status = 'cancelled' OR status = 'expired' THEN 1 ELSE 0 END),0) AS inactive    ")->whereIn('id', function ($query) {
+                $query->selectRaw('MAX(id)')
+                    ->from('subscriptions')
+                    ->whereNotNull('clinic_id')
+                    ->groupBy('clinic_id');
+            })->first();
     }
 }
