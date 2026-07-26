@@ -1,12 +1,8 @@
-{{-- Service --}}
 <div x-show="currencSection === serviceSection">
-
     <label class="block text-sm font-semibold text-gray-800 mb-2">
         الخدمه
     </label>
-
     <div class="relative">
-
         <!-- Trigger -->
         <button
             type="button"
@@ -52,11 +48,7 @@
                 >
                     <span x-text="sr.name"></span>
                 </button>
-
             </template>
-
         </div>
-
     </div>
-
 </div>

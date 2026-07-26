@@ -1,13 +1,10 @@
-<!-- Modal -->
 <div x-show="showModal" class="fixed inset-0 bg-black/40 flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-md rounded-xl shadow-lg p-5">
         <div class="mb-4">
             <h2 class="text-lg font-bold text-gray-800" x-text="editMode ? 'تعديل سعر الخدمة' : 'إضافة  خدمة جديده'"></h2>
             <p class="text-sm text-gray-500">اختر الخدمة والدكتور وحدد السعر والوصف</p>
         </div>
-
         <div class="space-y-3">
-
             <!-- Custom Select: الخدمة -->
             <div class="relative" @click.outside="serviceDropdownOpen = false">
                 <button type="button" @click="serviceDropdownOpen = !serviceDropdownOpen"
@@ -20,7 +17,6 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
-
                 <div x-show="serviceDropdownOpen" x-transition.opacity x-cloak
                     class="absolute z-50 mt-1 w-full max-h-56 overflow-y-auto bg-white border border-gray-100 rounded-lg shadow-lg">
                     <template x-if="serviceCatalogs.length === 0">
@@ -34,7 +30,6 @@
                     </template>
                 </div>
             </div>
-
             <!-- Custom Select: الدكتور -->
             <div class="relative" @click.outside="doctorDropdownOpen = false">
                 <button type="button" @click="doctorDropdownOpen = !doctorDropdownOpen"
@@ -47,7 +42,6 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
-
                 <div x-show="doctorDropdownOpen" x-transition.opacity x-cloak
                     class="absolute z-50 mt-1 w-full max-h-56 overflow-y-auto bg-white border border-gray-100 rounded-lg shadow-lg">
                     <template x-if="doctors.length === 0">
@@ -61,20 +55,15 @@
                     </template>
                 </div>
             </div>
-
             <input type="number" x-model="form.price" placeholder="السعر" min="0" step="0.01"
                 class="w-full bg-gray-50 border border-gray-100 rounded-lg p-2 focus:ring-2 focus:ring-teal-500 outline-none" />
-
             <textarea x-model="form.description" placeholder="وصف الخدمة" rows="3"
                 class="w-full bg-gray-50 border border-gray-100 rounded-lg p-2 focus:ring-2 focus:ring-teal-500 outline-none resize-none"></textarea>
-
         </div>
-
         <div class="flex justify-end gap-2 mt-5">
             <button @click="showModal = false" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition">
                 إلغاء
             </button>
-
             <form method="POST"
                 :action="editMode
                     ?

@@ -2,9 +2,7 @@
     @keydown.escape.window="showModel = false">
 
     <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden" @click.outside="showModel = false">
-
         <x-doctors.model.header />
-
             <form
                 :action="mode == 'add' ?
                     '{{ route('doctors.store') }}' :
@@ -15,11 +13,8 @@
                     <input type="hidden" name="_method" value="PUT">
                 </template>
                 <x-doctors.model.image_upload />
-
                 <x-doctors.model.fields />
-
                 <x-doctors.model.actions />
-
             </form>
     </div>
 </div>

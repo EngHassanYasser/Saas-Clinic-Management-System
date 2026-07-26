@@ -1,4 +1,3 @@
-<!-- ACTIONS -->
 <div class="flex flex-wrap gap-2 lg:flex-shrink-0">
     <!-- Reschedule -->
     <button type="button" @click="openReschedule(appointment)"

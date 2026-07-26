@@ -1,9 +1,11 @@
 export default function (serverData = {}) {
     return {
         subscriptions: serverData.subscriptions ?? [],
-
+        plans:serverData.plans ??[],
+        stats:serverData.stats ?? [],
+        clinics:serverData.clinics ?? [],
         search: "",
-
+        mode:"add",
         statusFilter: "",
 
         planFilter: "",
@@ -15,15 +17,21 @@ export default function (serverData = {}) {
         formError: "",
 
         form: {
-            clinic: "",
+            id: null,
+            start_at:null,
+            end_at:null,
+            status:null,
+            price:null,
 
-            plan: "",
-
-            price: "",
-
-            start: "",
-
-            end: "",
+            plan: {
+                id:null,
+                name:null,
+                monthly_price:null,
+            },
+            clinic: {
+                id:null,
+                name:null
+            }
         },
     };
 }

@@ -1,37 +1,41 @@
 export default {
     openAdd() {
-        this.editId = null;
-
+        this.mode = "add";
         this.formError = "";
-
         this.form = {
-            clinic: "",
-            plan: "",
+            id: "",
+            start_at: "",
+            end_at: "",
+            status: "",
             price: "",
-            start: "",
-            end: "",
-        };
 
+            plan: {
+                id: "",
+                name: "",
+                monthly_price: "",
+            },
+            clinic: {
+                id: "",
+                name: "",
+            },
+        };
         this.showModal = true;
     },
 
     openEdit(item) {
-        this.editId = item.id;
-
+        this.mode = "update";
         this.formError = "";
 
         this.form = {
             ...item,
         };
-
+        console.log(this.form);
         this.showModal = true;
     },
 
     closeModal() {
         this.showModal = false;
-
-        this.editId = null;
-
+        this.mode = "add";
         this.formError = "";
     },
 

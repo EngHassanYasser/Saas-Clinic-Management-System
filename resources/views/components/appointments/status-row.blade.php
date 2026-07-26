@@ -1,5 +1,4 @@
  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-
      <div class="c-stat-teal rounded-2xl p-4 sm:p-5 text-white shadow-lg">
          <div class="flex items-start justify-between">
              <div>
@@ -12,7 +11,6 @@
              </div>
          </div>
      </div>
-
      <div class="c-stat-amber rounded-2xl p-4 sm:p-5 text-white shadow-lg">
          <div class="flex items-start justify-between">
              <div>
@@ -24,7 +22,6 @@
              </div>
          </div>
      </div>
-
      <div class="c-stat-blue rounded-2xl p-4 sm:p-5 text-white shadow-lg">
          <div class="flex items-start justify-between">
              <div>
@@ -36,7 +33,6 @@
              </div>
          </div>
      </div>
-
      <div class="c-stat-rose rounded-2xl p-4 sm:p-5 text-white shadow-lg">
          <div class="flex items-start justify-between">
              <div>
@@ -48,5 +44,4 @@
              </div>
          </div>
      </div>
-
  </div>

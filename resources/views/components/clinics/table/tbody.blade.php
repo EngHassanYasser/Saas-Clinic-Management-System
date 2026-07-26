@@ -1,7 +1,6 @@
 <tbody class="divide-y divide-gray-50">
     <template x-for="(c, i) in paginated" :key="c.id">
         <tr class="hover:bg-gray-50/70 transition-colors">
-
             <td class="py-3.5 px-4">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm flex-shrink-0"
@@ -12,7 +11,6 @@
                     </div>
                 </div>
             </td>
-
             <td class="py-3.5 px-4 text-gray-600 text-sm">
                 <span class="inline-flex items-center gap-1">
                     <i class="fas fa-location-dot text-gray-300 text-xs"></i>
@@ -20,11 +18,8 @@
                 </span>
             </td>
             <td class="px-4 py-3.5">
-                <span class="text-sm font-small text-gray-600" x-text="c.address">
-                   
-                </span>
+                <span class="text-sm font-small text-gray-600" x-text="c.address"></span>
             </td>
-
             <td class="py-3.5 px-4">
                 <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full"
                     :class="statusBadgeClass(c.status)">
@@ -32,7 +27,6 @@
                     <span x-text="c.status"></span>
                 </span>
             </td>
-
             <td class="py-3.5 px-4">
                 <span class="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full"
                     :class="planBadgeClass(c.plan.name)">
@@ -40,9 +34,7 @@
                     <span x-text="c.plan.name"></span>
                 </span>
             </td>
-
             <td class="py-3.5 px-4 text-gray-400 text-xs" x-text="c.joined_at"></td>
-
             <td class="py-3.5 px-4">
                 <div class="flex items-center justify-center gap-2">
 
@@ -58,10 +50,8 @@
                         <i class="fas fa-trash text-xs"></i>
                     </button>
                     </form>
-
                 </div>
             </td>
-
         </tr>
     </template>
 </tbody>

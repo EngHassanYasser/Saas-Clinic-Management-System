@@ -1,6 +1,4 @@
- {{-- ===================== MIDDLE ROW ===================== --}}
  <div class="grid grid-cols-1 lg:grid-cols-1 gap-4 mb-6">
-
      {{-- الشكاوى الأخيرة --}}
      <div class="bg-white rounded-xl border border-gray-100 p-5">
          <div class="flex items-center justify-between mb-4">
@@ -8,7 +6,6 @@
              <a href="#" class="text-xs text-teal-600 hover:underline">عرض الكل</a>
          </div>
          <div class="flex flex-col gap-3">
-
              @php
                  $complaints = [
                      [
@@ -45,7 +42,6 @@
                      ],
                  ];
              @endphp
-
              @foreach ($complaints as $complaint)
                  <div class="flex items-start gap-3 p-3 rounded-lg border border-gray-100">
                      <div class="w-2 h-2 rounded-full {{ $complaint['dot'] }} mt-1.5 flex-shrink-0"></div>
@@ -59,8 +55,6 @@
                      </div>
                  </div>
              @endforeach
-
          </div>
      </div>
-
  </div>

@@ -13,7 +13,6 @@
         @endif
         <x-complains.add-button />
         <x-shared.errors/>
-       
         <x-complains.filters />
         <x-complains.table />
         <x-complains.model/>

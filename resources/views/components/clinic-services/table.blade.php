@@ -1,6 +1,4 @@
-<!-- Table -->
 <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-
     <table class="w-full text-sm">
         <thead class="bg-gray-50 text-gray-500">
             <tr>
@@ -11,7 +9,6 @@
                 <th class="p-4 text-center font-medium">الإجراءات</th>
             </tr>
         </thead>
-
         <tbody>
             <template x-for="item in filteredServices" :key="item.id">
                 <tr class="hover:bg-gray-50/60 transition">

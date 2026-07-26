@@ -14,8 +14,8 @@ return new class extends Migration
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->timestampTz('start_at');
-            $table->timestampTz('end_at');
+            $table->date('start_at');
+            $table->date('end_at');
             $table->enum('status', [
                 'active',
                 'expired',

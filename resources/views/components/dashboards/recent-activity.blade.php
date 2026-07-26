@@ -1,6 +1,4 @@
-{{-- Recent Activity --}}
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-2 text-gray-700 font-semibold text-sm">
             <i class="fas fa-bolt text-amber-400"></i>
@@ -11,9 +9,7 @@
             <i class="fas fa-arrow-left text-[10px]"></i>
         </a>
     </div>
-
     <div class="divide-y divide-gray-50">
-
         <div class="flex items-center justify-between py-3 gap-3">
             <div class="flex items-center gap-3">
                 <div
@@ -27,7 +23,6 @@
                 <span class="text-xs text-gray-400">منذ 5 دقائق</span>
             </div>
         </div>
-
         <div class="flex items-center justify-between py-3 gap-3">
             <div class="flex items-center gap-3">
                 <div
@@ -41,7 +36,6 @@
                 <span class="text-xs text-gray-400">منذ 23 دقيقة</span>
             </div>
         </div>
-
         <div class="flex items-center justify-between py-3 gap-3">
             <div class="flex items-center gap-3">
                 <div
@@ -55,7 +49,6 @@
                 <span class="text-xs text-gray-400">منذ ساعة</span>
             </div>
         </div>
-
         <div class="flex items-center justify-between py-3 gap-3">
             <div class="flex items-center gap-3">
                 <div
@@ -69,7 +62,5 @@
                 <span class="text-xs text-gray-400">منذ 3 ساعات</span>
             </div>
         </div>
-
     </div>
-
 </div>

@@ -10,7 +10,6 @@ class="fixed inset-0 z-50 flex items-start justify-center bg-black/40 pt-22 px-2
         class="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-xl bg-white shadow-xl"
     >
         <x-clinics.model.header />
-
         <form
             :action="mode == 'update'
                 ? '{{ url('clinics') }}/' + form.id
@@ -22,5 +21,4 @@ class="fixed inset-0 z-50 flex items-start justify-center bg-black/40 pt-22 px-2
         </form>
     </div>
 </div>
-
 <x-clinics.confirm-delete />

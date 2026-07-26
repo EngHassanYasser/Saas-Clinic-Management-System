@@ -1,7 +1,5 @@
 @extends('layouts-main.dashboard')
-
 @section('title', 'الأطباء')
-
 @section('content')
     <div x-data="doctorsForm({ doctors: @js($doctors), specialities: @js($specialities),stats:@js($stats) })">
         <x-doctors.stats />

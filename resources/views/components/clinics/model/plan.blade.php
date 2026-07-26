@@ -2,7 +2,6 @@
     <label class="block text-xs font-semibold text-gray-500 mb-1.5">
         نوع الاشتراك <span class="text-red-400"></span>
     </label>
-
     <input
         :value="form.plan?.name ?? 'لا يوجد اشتراك'"
         readonly

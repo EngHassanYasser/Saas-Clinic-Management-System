@@ -1,9 +1,6 @@
 @extends('layouts-main.dashboard')
-
 @section('title', 'لوحة التحكم - العيادة')
-
 @section('content')
-
     <div class="p-6 min-h-screen bg-gray-50" dir="rtl">
         @if (auth()->user()->type == 'clinic')
             <x-dashboards.stat-cards />
@@ -16,5 +13,4 @@
             <x-dashboards.recent-activity />
         @endif
     </div>
-
 @endsection
