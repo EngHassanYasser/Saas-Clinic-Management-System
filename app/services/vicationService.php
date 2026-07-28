@@ -5,6 +5,7 @@ namespace App\services;
 use App\Exceptions\hasVicationException;
 use App\Models\vication;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class vicationService
 {
@@ -26,19 +27,22 @@ class vicationService
     }
     public function update(array $data, int $vicationId): bool
     {
-        $hasVication = $this->hasVacation($data['doctor_id'], $vicationId);
-        if ($hasVication) {
-            throw new HasVicationException('thre are alread vication for this doctor');
-        }
-        return vication::where('id', $vicationId)
-            ->whereRelation('doctor.clinics', 'clinics.id', Auth::user()->clinic_id)
-            ->where('doctor_id', $data['doctor_id'])
-            ->update([
+        return DB::transaction(function () use ($data, $vicationId) {
+            $vacation = Vication::lockForUpdate()
+                ->whereRelation('doctor.clinics', 'clinics.id', Auth::user()->clinic_id)
+                ->findOrFail($vicationId);
+
+            if ($this->hasVacation($data['doctor_id'], $vicationId)) {
+                throw new HasVicationException('thre are alread vication for this doctor');
+            }
+
+            return $vacation->update([
                 'start_date' => $data['start_date'],
                 'end_date'   => $data['end_date'],
                 'reason'     => $data['reason'],
                 'status'     => $data['status'],
             ]) > 0;
+        });
     }
     public function add($data)
     {

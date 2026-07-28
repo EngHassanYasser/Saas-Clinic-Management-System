@@ -4,10 +4,11 @@ export default function (serverData = {}) {
         plans:serverData.plans ??[],
         stats:serverData.stats ?? [],
         clinics:serverData.clinics ?? [],
+        statuses:serverData.statuses ?? [],
         search: "",
+
         mode:"add",
         statusFilter: "",
-
         planFilter: "",
 
         showModal: false,

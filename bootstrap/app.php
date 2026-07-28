@@ -1,5 +1,7 @@
 <?php
 
+use App\Exceptions\ActiveSubscriptionAlreadyExistsException;
+use App\Exceptions\ActiveSubscriptionNotFoundException;
 use App\Exceptions\ScheduleConflictException;
 use App\Exceptions\HasVicationException;
 use Illuminate\Foundation\Application;
@@ -19,10 +21,14 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
 
         $exceptions->shouldRenderJsonWhen(
-            fn(Request $request) => $request->is('api/*'),
+            fn(Request $request) => $request->is('api/*')
         );
+
         $exceptions->dontReport([
             ScheduleConflictException::class,
+            ActiveSubscriptionAlreadyExistsException::class,
+            ActiveSubscriptionNotFoundException::class,
+            HasVicationException::class,
         ]);
 
         $exceptions->render(function (
@@ -33,14 +39,24 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->route('schedules.index')
                 ->with('message', $e->getMessage());
         });
-    })->withExceptions(function (Exceptions $exceptions): void {
 
-        $exceptions->shouldRenderJsonWhen(
-            fn(Request $request) => $request->is('api/*'),
-        );
-        $exceptions->dontReport([
-            HasVicationException::class,
-        ]);
+        $exceptions->render(function (
+            ActiveSubscriptionAlreadyExistsException $e,
+            Request $request
+        ) {
+            return redirect()
+                ->route('subscriptions.index')
+                ->with('message', $e->getMessage());
+        });
+
+        $exceptions->render(function (
+            ActiveSubscriptionNotFoundException $e,
+            Request $request
+        ) {
+            return redirect()
+                ->route('subscriptions.index')
+                ->with('message', $e->getMessage());
+        });
 
         $exceptions->render(function (
             HasVicationException $e,

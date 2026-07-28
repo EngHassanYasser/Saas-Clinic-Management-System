@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\vications;
 
+use App\Enums\VicationStatus;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class UpdateVicationsRequest extends FormRequest
 {
@@ -41,7 +43,7 @@ class UpdateVicationsRequest extends FormRequest
 
             'status' => [
                 'required',
-                'in:upcoming,active,ended',
+                new Enum(VicationStatus::class),
             ],
         ];
     }

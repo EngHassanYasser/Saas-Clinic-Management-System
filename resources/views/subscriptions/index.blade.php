@@ -6,6 +6,7 @@
         plans:@js($plans),
         stats:@js($stats),
         clinics:@js($clinics->items()),
+        statuses:@js($statuses),
     })">
         <x-subscriptions.header />
         <x-subscriptions.kpi-cards />

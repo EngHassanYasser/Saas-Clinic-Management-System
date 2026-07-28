@@ -2,6 +2,9 @@
 
 namespace App\services;
 
+use App\Enums\SubscriptionStatus;
+use App\Exceptions\ActiveSubscriptionAlreadyExistsException;
+use App\Models\clinic;
 use App\Models\plan;
 use App\Models\subscription;
 use Illuminate\Support\Facades\DB;
@@ -25,8 +28,7 @@ class SubscriptionService
     public function getStats()
     {
         $today = now();
-        $after7Days = now()->addDays(7);
-
+        $after7Days = $today->copy()->addDays(7);
         return Subscription::query()
             ->selectRaw("
         COUNT(*) as total,
@@ -41,42 +43,72 @@ class SubscriptionService
             THEN 1
             ELSE 0
         END) as expiring
-    ", [$today, $after7Days])
-            ->whereIn('id', function ($query) {
-                $query->selectRaw('MAX(id)')
-                    ->from('subscriptions')
-                    ->groupBy('clinic_id');
-            })->first();
+    ", [$today->toDateString(), $after7Days->toDateString()])->first();
     }
-    public function changeStatus($subscriptionID, $newStatus): bool
-    {
-        return Subscription::whereKey($subscriptionID)
+    public function changeStatus(
+        int $subscriptionId,
+        SubscriptionStatus $newStatus
+    ): bool {
+        return Subscription::whereKey($subscriptionId)
             ->update([
                 'status' => $newStatus,
-            ]);
+            ]) > 0;
     }
-    public function renew(int $subscriptionID): bool
+    public function renew(int $subscriptionId): bool
     {
-        return Subscription::whereKey($subscriptionID)
-            ->update([
-                'start_at' => now(),
-                'end_at'   => now()->addDays(30),
-                'status'   => 'active',
+        return DB::transaction(function () use ($subscriptionId) {
+
+            $subscription = Subscription::lockForUpdate()
+                ->select('id', 'clinic_id')
+                ->findOrFail($subscriptionId);
+
+            if ($this->hasActiveSubscription($subscription->clinic_id, $subscription->id)) {
+                throw new ActiveSubscriptionAlreadyExistsException();
+            }
+
+            $startAt = now();
+
+            return $subscription->update([
+                'start_at' => $startAt->toDateString(),
+                'end_at'   => $startAt->copy()->addMonth()->toDateString(),
+                'status'   => SubscriptionStatus::ACTIVE->value,
             ]);
+        });
     }
-    public function add($data)
+    public function add(array $data): subscription
     {
         return DB::transaction(function () use ($data) {
-            $plan = plan::get(['id', 'monthly_price'])
+            clinic::where('id', $data['clinic_id'])
+                ->lockForUpdate()
+                ->firstOrFail();
+                
+            $plan = plan::select(['id', 'monthly_price'])
                 ->findOrFail($data['plan_id']);
 
+            if ($this->hasActiveSubscription($data['clinic_id'])) {
+                throw new ActiveSubscriptionAlreadyExistsException();
+            }
+
+            $startAt = now();
             return subscription::create([
-                'start_at' => now()->toDateString(),
-                'end_at' => now()->addMonth(),
+                'start_at' => $startAt->toDateString(),
+                'end_at'   => $startAt->copy()->addMonth()->toDateString(),
                 'price' => $plan->monthly_price,
                 'clinic_id' => $data['clinic_id'],
                 'plan_id' => $plan->id,
             ]);
         });
+    }
+    public function hasActiveSubscription(
+        int $clinicId,
+        ?int $ignoreSubscriptionId = null
+    ): bool {
+        return Subscription::where('clinic_id', $clinicId)
+            ->where('status', SubscriptionStatus::ACTIVE)
+            ->when(
+                $ignoreSubscriptionId,
+                fn($query) => $query->whereKeyNot($ignoreSubscriptionId)
+            )
+            ->exists();
     }
 }

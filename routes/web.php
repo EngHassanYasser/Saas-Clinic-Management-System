@@ -16,5 +16,6 @@ require __DIR__ . '/web/complain.php';
 require __DIR__ . '/web/clinic.php';
 require __DIR__ . '/web/add.php';
 require __DIR__ . '/web/dashboard.php';
+require __DIR__ . '/web/plan.php';
 require __DIR__ . '/web/profile.php';
 require __DIR__ . '/auth.php';

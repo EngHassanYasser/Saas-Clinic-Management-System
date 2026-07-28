@@ -31,11 +31,6 @@ class ScheduleController extends Controller
         return redirect()->route('schedules.index')
             ->with('message', 'تم اضافة الموعد بنجاح.');
     }
-
-    public function show(string $id) {dd('show');}
-
-    public function edit(string $id) {dd('edite');}
-
     public function update(UpdateScheduleRequest $request, string $id)
     {
         $this->scheduleService->update($request->validated(), $id);

@@ -27,13 +27,13 @@ export default {
 
     badgeClass(status) {
         switch (status) {
-            case "active":
+            case this.statuses.ACTIVE:
                 return "text-green-600 bg-green-50";
 
-            case "expiring":
+            case this.statuses.CANCELLED:
                 return "text-amber-600 bg-amber-50";
 
-            case "expired":
+            case this.statuses.EXPIRED:
                 return "text-red-600 bg-red-50";
 
             default:

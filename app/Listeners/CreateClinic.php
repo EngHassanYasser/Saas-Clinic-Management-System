@@ -3,11 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\UserCreated;
-use App\Events\UserCreatedlistener;
 use App\Models\clinic;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-
 class CreateClinic
 {
     /**

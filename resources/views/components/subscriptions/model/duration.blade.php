@@ -6,7 +6,7 @@
     </div>
     <div>
         <label class="text-xs text-gray-500 mb-1 block">تاريخ الانتهاء</label>
-        <input x-model="form.end_at" type="date"
+        <input x-model="form.end_at" type="date" readonly
             class="w-full border rounded-xl p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none">
     </div>
 </div>
