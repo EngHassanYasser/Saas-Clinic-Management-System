@@ -5,17 +5,18 @@ namespace App\services;
 use App\Models\clinic;
 use App\Models\doctor;
 use App\Models\doctor_service_price;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DoctorService
 {
-    public function getDoctorsNames($clinic_id)
+    public function getDoctorsNames(int $clinic_id):Collection
     {
         return Doctor::select('id', 'name')
             ->whereRelation('clinics', 'clinic_id', $clinic_id)->get();
     }
-    public function getAll()
+    public function getAll():Collection
     {
         $clinic = Clinic::with([
             'doctors.specialities',
@@ -46,7 +47,7 @@ class DoctorService
             ];
         });
     }
-    public function addNew($data)
+    public function addNew(array $data):doctor
     {
         return  DB::transaction(function () use ($data) {
 
@@ -64,7 +65,7 @@ class DoctorService
             return $doctor;
         });
     }
-    public function deleteById($id): bool
+    public function deleteById(int $id): bool
     {
         return DB::transaction(function () use ($id) {
 
@@ -81,7 +82,7 @@ class DoctorService
             return $deleted;
         });
     }
-    public function update($data, $id)
+    public function update(array $data,int $id):bool
     {
         return DB::transaction(function () use ($data, $id) {
 
@@ -111,7 +112,7 @@ class DoctorService
             return $updated;
         });
     }
-    public function getStats($clinic_id)
+    public function getStats(int $clinic_id):array
     {
         return Doctor::query()
             ->join('clinic_doctors', 'doctors.id', '=', 'clinic_doctors.doctor_id')

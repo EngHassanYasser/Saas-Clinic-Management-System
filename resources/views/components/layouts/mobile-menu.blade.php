@@ -7,7 +7,7 @@
         <a  @click="open = false" href="#doctors" class="py-2 font-semibold text-gray-700">الأطباء</a>
         <div class="border-t pt-3 mt-2 flex flex-col gap-2">
             @auth
-                <a href="{{ route('dashboard') }}" class="bg-emerald-600 text-white text-center py-2 rounded-xl font-bold">
+                <a href="{{ route('dashboard.index') }}" class="bg-emerald-600 text-white text-center py-2 rounded-xl font-bold">
                     لوحة التحكم
                 </a>
                 <form method="POST" action="{{ route('logout') }}">

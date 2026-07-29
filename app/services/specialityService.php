@@ -1,13 +1,17 @@
 <?php
+
 namespace App\services;
 
 use App\Models\speciality;
+use Illuminate\Database\Eloquent\Collection;
 
-class SpecialityService {
-    public function getAll() {
-        return speciality::select(['id','name'])->get();
+class SpecialityService
+{
+    public function getAll(): Collection
+    {
+        return speciality::select(['id', 'name'])->get();
     }
-    public function getAvailableSpecailities() {
-       
+    public function getAvailableSpecailities(): Collection {
+        return collect([]);
     }
 }

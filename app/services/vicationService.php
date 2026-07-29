@@ -4,12 +4,13 @@ namespace App\services;
 
 use App\Exceptions\hasVicationException;
 use App\Models\vication;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class vicationService
 {
-    public function getClinicVacations($clinicId)
+    public function getClinicVacations(int $clinicId):LengthAwarePaginator 
     {
         return vication::select(
             'id',
@@ -44,7 +45,7 @@ class vicationService
             ]) > 0;
         });
     }
-    public function add($data)
+    public function add(array $data): vication
     {
         $hasVication = $this->hasVacation($data['doctor_id']);
         if ($hasVication) {
@@ -67,7 +68,7 @@ class vicationService
             ->firstOrFail()
             ->delete();
     }
-    public function hasVacation($doctor_id, $ignore_id = null): bool
+    public function hasVacation(int $doctor_id,int $ignore_id = 0): bool
     {
         return Vication::where('doctor_id', $doctor_id)
             ->whereIn('status', ['active', 'upcoming'])
@@ -77,7 +78,7 @@ class vicationService
             })
             ->exists();
     }
-    public function getStatistics()
+    public function getStatistics() :array
     {
         $stats = vication::whereRelation('doctor.clinics', 'clinics.id', Auth::user()->clinic_id)
             ->selectRaw("

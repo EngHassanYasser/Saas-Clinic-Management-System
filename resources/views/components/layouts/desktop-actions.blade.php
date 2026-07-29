@@ -1,7 +1,7 @@
 <!-- Desktop Actions -->
 <div class="hidden lg:flex items-center gap-2">
     @auth
-        <a href="{{ route('dashboard') }}"
+        <a href="{{ route('dashboard.index') }}"
             class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-2xl font-bold transition">
             لوحة التحكم
         </a>

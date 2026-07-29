@@ -2,12 +2,14 @@
 
 namespace App\Services;
 
+use App\Enums\RoleType;
 use App\Models\Complain;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class ComplainService
 {
-    public function getClinicComplains($clinic_id)
+    public function getClinicComplains(int $clinic_id):Collection
     {
         return Complain::select(
             'id',
@@ -29,7 +31,7 @@ class ComplainService
             ->with(['patient:id,name', 'doctor:id,name'])
             ->get();
     }
-    public function getStatistics()
+    public function getStatistics():array
     {
         $stats = Complain::where('clinic_id', Auth::user()->clinic_id)
             ->selectRaw("
@@ -41,9 +43,9 @@ class ComplainService
     ")->first();
         return $stats;
     }
-    public function add($data)
+    public function add(array $data):Complain
     {
-        $data['user_id'] = Auth::user()->type === 'patient'
+        $data['user_id'] = Auth::user()->type === RoleType::PATIENT->value
             ? Auth::id()
             : null;
         $complain = Complain::create([
@@ -60,7 +62,7 @@ class ComplainService
         ]);
         return $complain;
     }
-    public function update($data, $complain_id):bool
+    public function update(array $data,int $complain_id):bool
     {
         $complain =complain::where('id',$complain_id)
         ->where('clinic_id',Auth::user()->clinic_id)->firstOrFail();
@@ -77,7 +79,7 @@ class ComplainService
         ];
         return $complain->update($updateData);
     }
-    public function getById($complain_id)
+    public function getById(int $complain_id):Complain
     {
         return Complain::where('id', $complain_id)
             ->where(function ($query) {
@@ -86,7 +88,7 @@ class ComplainService
             })
             ->firstOrFail();
     }
-    public function delete($complain_id): bool
+    public function delete(int $complain_id): bool
     {
         $complain = $this->getById($complain_id);
         return $complain->delete();

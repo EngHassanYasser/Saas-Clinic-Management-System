@@ -2,16 +2,18 @@
 
 namespace App\services;
 
+use App\Enums\PlanStatus;
 use App\Enums\SubscriptionStatus;
 use App\Exceptions\ActiveSubscriptionAlreadyExistsException;
 use App\Models\clinic;
 use App\Models\plan;
 use App\Models\subscription;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class SubscriptionService
 {
-    public function getAll()
+    public function getAll():Collection
     {
         return subscription::select([
             'id',
@@ -25,7 +27,7 @@ class SubscriptionService
         ])->with(['plan:id,name,monthly_price', 'clinic:id,name'])
             ->get()->makeHidden(['clinic_id', 'plan_id']);
     }
-    public function getStats()
+    public function getStats():subscription 
     {
         $today = now();
         $after7Days = $today->copy()->addDays(7);
@@ -81,8 +83,9 @@ class SubscriptionService
             clinic::where('id', $data['clinic_id'])
                 ->lockForUpdate()
                 ->firstOrFail();
-                
+
             $plan = plan::select(['id', 'monthly_price'])
+                ->whereStatus(PlanStatus::ACTIVE->value)
                 ->findOrFail($data['plan_id']);
 
             if ($this->hasActiveSubscription($data['clinic_id'])) {

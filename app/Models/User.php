@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\RoleType;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -37,6 +38,13 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function usesDashboardLayout(): bool
+    {
+        return in_array($this->type, [
+            RoleType::CLINIC,
+            RoleType::PATIENT,
+        ], true);
+    }
     public function notification_logs()
     {
         return $this->hasMany(notification_log::class);
@@ -69,10 +77,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(otp::class);
     }
-    public function complains() {
-        return $this->hasMany(complain::class,'user_id');
+    public function complains()
+    {
+        return $this->hasMany(complain::class, 'user_id');
     }
-    public function city() {
+    public function city()
+    {
         return $this->belongsTo(city::class);
     }
 }

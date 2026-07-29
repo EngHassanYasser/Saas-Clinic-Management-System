@@ -30,11 +30,4 @@ class PlanController extends Controller
 
         return redirect()->route('plans.index')->with('message', $message);
     }
-    public function changeStatus(PlanStatus $newStatus, int $id)
-    {
-        $isChanged = $this->planService->changeStatus($newStatus, $id);
-        $message = $isChanged ? 'status changed successfully' : 'failed to change status';
-        
-        return redirect()->route('plans.index')->with('message', $message);
-    }
 }

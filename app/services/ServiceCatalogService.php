@@ -4,17 +4,17 @@ namespace App\services;
 
 use App\Models\ClinicService;
 use App\Models\doctor_service_price;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class  ServiceCatalogService
 {
-    public function getAllCatalogs()
+    public function getAllCatalogs():Collection
     {
-        return ClinicService::select('id', 'name','speciality_id')->get();
+        return ClinicService::select('id', 'name', 'speciality_id')->get();
     }
-    public function getAllClinicServices()
+    public function getAllClinicServices():Collection
     {
-        // DB::enableQueryLog();
         return doctor_service_price::with(['clinic', 'doctor', 'clinic_service'])
             ->get()
             ->map(function ($item) {
@@ -29,9 +29,8 @@ class  ServiceCatalogService
                     'price' => $item->price,
                 ];
             });
-        // dd(DB::getQueryLog());
     }
-    public function addNew($data)
+    public function addNew(array $data): doctor_service_price
     {
         return doctor_service_price::create([
             'clinic_id' => Auth::user()->clinic_id,
@@ -41,7 +40,7 @@ class  ServiceCatalogService
             'description' => $data['description'],
         ]);
     }
-    public function Update($data)
+    public function Update(array $data): bool
     {
         return doctor_service_price::where('id', $data['id'])->update([
             'clinic_id' => Auth::user()->clinic_id,
@@ -51,7 +50,7 @@ class  ServiceCatalogService
             'description' => $data['description'],
         ]);
     }
-    public function deleteById($id)
+    public function deleteById(int $id): bool
     {
         return doctor_service_price::destroy($id);
     }

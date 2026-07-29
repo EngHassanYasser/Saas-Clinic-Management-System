@@ -11,8 +11,6 @@
         <form :action="{{ url('/subscriptions/') }}" method="POST">
             @csrf
             <div class="space-y-3">
-                {{-- <button type="button" @click="console.log(form)">click</button> --}}
-
                 <x-subscriptions.model.clinic_name />
                 <x-subscriptions.model.plans />
                 <x-subscriptions.model.duration />

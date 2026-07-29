@@ -1,6 +1,6 @@
 <div class="c-clinic-appointment-card bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 space-y-5" dir="rtl">
     <div class="flex flex-col sm:flex-row sm:flex-wrap gap-y-4 gap-x-8">
-        @if (Auth()->user()->type == 'clinic')
+        @if (Auth()->user()->type == \App\Enums\RoleType::CLINIC->value)
             <div class="flex items-center gap-3 sm:w-[calc(50%-1rem)] lg:w-auto lg:flex-1">
                 <div
                     class="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center border border-teal-100 flex-shrink-0">
@@ -23,7 +23,7 @@
                 <p class="font-semibold text-gray-900 text-sm truncate" x-text="appointment.doctor.name"></p>
             </div>
         </div>
-        @if (Auth()->user()->type == 'patient')
+        @if (Auth()->user()->type == \App\Enums\RoleType::PATIENT->value)
             <div class="flex items-start gap-3 sm:w-[calc(50%-1rem)] lg:w-auto lg:flex-1">
                 <div
                     class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center border border-amber-100 flex-shrink-0">

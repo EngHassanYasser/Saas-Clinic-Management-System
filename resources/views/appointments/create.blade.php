@@ -1,12 +1,12 @@
 @php
-    $layout = in_array(auth()->user()->type, ['clinic', 'patient']) ? 'layouts-main.dashboard' : 'layouts-main.App';
+    $layout = auth()->user()->usesDashboardLayout() ? 'layouts-main.dashboard' : 'layouts-main.app';
 @endphp
 
 @extends($layout)
 @section('content')
     <div class="max-w-3xl mx-auto px-4 py-6 sm:py-10" x-data="bookingForm({
         specialties: @js($specialities),
-        services:@js($services),
+        services: @js($services),
     })" x-cloak>
         <x-appointments.header />
         <x-appointments.step_progress />

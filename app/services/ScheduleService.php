@@ -6,6 +6,7 @@ use App\Exceptions\ScheduleConflictException;
 use App\Models\day;
 use App\Models\doctor;
 use App\Models\schedule;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -51,7 +52,7 @@ class ScheduleService
             return $schedule->fresh();
         }, 3);
     }
-    public function addNew($data)
+    public function addNew(array $data):schedule
     {
         return  DB::transaction(function () use ($data) {
             if ($this->hasScheduleConflict($data)) {
@@ -72,11 +73,11 @@ class ScheduleService
             return $schedule;
         }, 3);
     }
-    public function getWeekDays()
+    public function getWeekDays():Collection
     {
         return day::select(['id', 'name'])->get();
     }
-    public function delete($schedule_id, $clinic_id): bool
+    public function delete(int $schedule_id,int $clinic_id): bool
     {
         $schedule = schedule::where('clinic_id', $clinic_id)->findOrFail($schedule_id);
         return $schedule->delete();

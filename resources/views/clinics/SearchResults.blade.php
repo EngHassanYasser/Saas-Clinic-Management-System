@@ -1,5 +1,5 @@
 @php
-    $layout = in_array(auth()->user()->type, ['clinic', 'patient']) ? 'layouts-main.dashboard' : 'layouts-main.App';
+    $layout = auth()->user()->usesDashboardLayout() ? 'layouts-main.dashboard' : 'layouts-main.app';
 @endphp
 @extends($layout)
 

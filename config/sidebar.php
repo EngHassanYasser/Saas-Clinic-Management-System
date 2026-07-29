@@ -19,7 +19,7 @@ return [
         ['label' => 'بياناتي', 'route' => 'profile.edit', 'icon' => 'fas fa-user'],
     ],
     'super_admin' => [
-        ['label' => 'الإحصائيات', 'route' => 'dashboard', 'icon' => 'fas fa-dashboard'],
+        ['label' => 'الإحصائيات', 'route' => 'dashboard.index', 'icon' => 'fas fa-dashboard'],
         ['label' => 'إدارة العيادات', 'route' => 'clinics.index', 'icon' => 'fa-solid fa-calendar-check'],
         ['label' => 'الاشتراكات', 'route' => 'subscriptions.index', 'icon' => 'fa-solid fa-calendar-check'],
         ['label' => 'الباقات','route' => 'plans.index','icon' => 'fa-solid fa-layer-group',],
