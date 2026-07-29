@@ -3,9 +3,9 @@
 namespace App\services;
 
 use App\Exceptions\ScheduleConflictException;
-use App\Models\day;
-use App\Models\doctor;
-use App\Models\schedule;
+use App\Models\Day;
+use App\Models\Doctor;
+use App\Models\Schedule;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +14,7 @@ class ScheduleService
 {
     public function getAll()
     {
-        return doctor::with(['specialities', 'schedules.days'])
+        return Doctor::with(['specialities', 'schedules.days'])
             ->withCount('schedules')
             ->get()
             ->map(function ($doctor) {
@@ -27,7 +27,7 @@ class ScheduleService
                 ];
             });
     }
-    public function update($data, $id)
+    public function update(array $data,int $id)
     {
         return DB::transaction(function () use ($data, $id) {
             if ($this->hasScheduleConflict($data, $id)) {
@@ -77,12 +77,12 @@ class ScheduleService
     {
         return day::select(['id', 'name'])->get();
     }
-    public function delete(int $schedule_id,int $clinic_id): bool
+    public function delete(int $scheduleId,int $clinicId): bool
     {
-        $schedule = schedule::where('clinic_id', $clinic_id)->findOrFail($schedule_id);
+        $schedule = Schedule::where('clinic_id', $clinicId)->findOrFail($scheduleId);
         return $schedule->delete();
     }
-    public function hasScheduleConflict(array $data, ?int $ignoreId = null): bool
+    public function hasScheduleConflict(array $data, ?int $ignoreId = 0): bool
     {
         return Schedule::where('doctor_id', $data['doctor_id'])
             ->where('clinic_id', Auth::user()->clinic_id)

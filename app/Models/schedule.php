@@ -16,7 +16,7 @@ use Carbon\Carbon;
     'clinic_id',
     'doctor_id'
 ])]
-class schedule extends Model
+class Schedule extends Model
 {
 
     public function formatTime12Hours($time): string

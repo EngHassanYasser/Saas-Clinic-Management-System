@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
     'description',
     'price',
 ])]
-class doctor_service_price extends Model
+class Doctor_service_price extends Model
 {
     public function clinic()
     {

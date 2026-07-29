@@ -23,7 +23,7 @@ class PlanController extends Controller
         $message = $newPlan ? 'plan added successfully' : 'failed to add plan';
         return redirect()->route('plans.index')->with('message', $message);
     }
-    public function update(UpdatePlanRequest $request, string $id)
+    public function update(UpdatePlanRequest $request, int $id)
     {
         $isUpdated = $this->planService->update($request->validated(), $id);
         $message = $isUpdated ? 'plan updated successfully' : 'failed to update plan';

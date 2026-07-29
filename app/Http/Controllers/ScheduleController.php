@@ -31,7 +31,7 @@ class ScheduleController extends Controller
         return redirect()->route('schedules.index')
             ->with('message', 'تم اضافة الموعد بنجاح.');
     }
-    public function update(UpdateScheduleRequest $request, string $id)
+    public function update(UpdateScheduleRequest $request, int $id)
     {
         $this->scheduleService->update($request->validated(), $id);
 
@@ -40,7 +40,7 @@ class ScheduleController extends Controller
             ->with('message', 'تم تحديث الموعد بنجاح.');
     }
 
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
         $isDeleted = $this->scheduleService->delete($id, Auth::user()->clinic_id);
         if ($isDeleted == false) {

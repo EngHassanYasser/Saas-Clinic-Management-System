@@ -29,17 +29,17 @@ class AppointmentController extends Controller
         $services = $this->serviceCatalogService->getAllCatalogs();
         return view('appointments.create', compact('specialities', 'services'));
     }
-    public function updateStatus(Request $request, $id)
+    public function updateStatus(Request $request,int $id)
     {
         $isUpdated = $this->appointmentService->updateStatus($request->status, $id);
         $message = $isUpdated ? 'appointment status updated successfully' : 'failed to update appointment status';
 
         return redirect()->route('appointments.index')->with('message', $message);
     }
-    public function getAvailableSlots(Request $request, string $appointmentid, string $date)
+    public function getAvailableSlots(Request $request, int $appointmentId, string $date)
     {
         return response()->json(
-            $this->appointmentService->getAvailableAppointments($appointmentid, $date)
+            $this->appointmentService->getAvailableAppointments($appointmentId, $date)
         );
     }
     public function reschdule(RescheduleAppointment $request)

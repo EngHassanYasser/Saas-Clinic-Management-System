@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
     'clinic_id',
     'speciality_id'
 ])]
-class clinic_speciality extends Model
+class Clinic_speciality extends Model
 {
     public $timestamps = false;
 }

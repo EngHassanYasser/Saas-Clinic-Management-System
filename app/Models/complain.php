@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
     'resolved_by',
     'resolved_at',
 ])]
-class complain extends Model
+class Complain extends Model
 {
 
     public function patient()

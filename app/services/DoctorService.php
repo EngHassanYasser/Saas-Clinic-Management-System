@@ -2,19 +2,19 @@
 
 namespace App\services;
 
-use App\Models\clinic;
-use App\Models\doctor;
-use App\Models\doctor_service_price;
+use App\Models\Clinic;
+use App\Models\Doctor;
+use App\Models\Doctor_service_price;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DoctorService
 {
-    public function getDoctorsNames(int $clinic_id):Collection
+    public function getDoctorsNames(int $clinicId):Collection
     {
         return Doctor::select('id', 'name')
-            ->whereRelation('clinics', 'clinic_id', $clinic_id)->get();
+            ->whereRelation('clinics', 'clinic_id', $clinicId)->get();
     }
     public function getAll():Collection
     {
@@ -47,7 +47,7 @@ class DoctorService
             ];
         });
     }
-    public function addNew(array $data):doctor
+    public function addNew(array $data):Doctor
     {
         return  DB::transaction(function () use ($data) {
 
@@ -73,7 +73,7 @@ class DoctorService
 
             $doctor->clinics()->detach(Auth::user()->clinic_id);
 
-            doctor_service_price::where('doctor_id', $id)->delete();
+            Doctor_service_price::where('doctor_id', $id)->delete();
 
             $doctor->specialities()->detach();
 
@@ -112,12 +112,12 @@ class DoctorService
             return $updated;
         });
     }
-    public function getStats(int $clinic_id):array
+    public function getStats(int $clinicId):array
     {
         return Doctor::query()
             ->join('clinic_doctors', 'doctors.id', '=', 'clinic_doctors.doctor_id')
             ->leftJoin('doctor_speciality', 'doctors.id', '=', 'doctor_speciality.doctor_id')
-            ->where('clinic_doctors.clinic_id', $clinic_id)
+            ->where('clinic_doctors.clinic_id', $clinicId)
             ->selectRaw("
         COUNT(DISTINCT doctors.id) as total,
         COUNT(DISTINCT CASE WHEN clinic_doctors.is_active = 1 THEN doctors.id END) as active,

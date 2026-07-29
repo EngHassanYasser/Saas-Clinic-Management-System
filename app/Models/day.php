@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable([
     'name'
 ])]
-class day extends Model
+class Day extends Model
 {
     public $timestamp = false;
      public function schedules()

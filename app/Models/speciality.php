@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
     'name',
     'icon_name'
 ])]
-class speciality extends Model
+class Speciality extends Model
 {
     public $timestapms = false;
     public function doctor()

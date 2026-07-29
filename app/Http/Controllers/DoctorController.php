@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\doctor\StoreDoctorRequest;
-use App\Http\Requests\doctor\updateDoctorRequest;
+use App\Http\Requests\doctor\UpdateDoctorRequest;
 use App\services\DoctorService;
 use App\services\SpecialityService;
 use Illuminate\Support\Facades\Auth;
@@ -29,7 +29,7 @@ class DoctorController extends Controller
             ->route('doctors.index')
             ->with('message', 'Doctor added successfully.');
     }
-    public function update(updateDoctorRequest $request, string $id)
+    public function update(UpdateDoctorRequest $request, int $id)
     {
         $this->doctorService->update($request->validated(), $id);
 
@@ -37,7 +37,7 @@ class DoctorController extends Controller
             ->route('doctors.index')
             ->with('message', 'تم تعديل بيانات الطبيب بنجاح');
     }
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
         $this->doctorService->deleteById($id);
         return redirect()->route('doctors.index')->with('message', 'doctor deleted successfully');

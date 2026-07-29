@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
     'doctor_id',
     'status',
 ])]
-class vication extends Model
+class Vication extends Model
 {
     public function doctor()
     {

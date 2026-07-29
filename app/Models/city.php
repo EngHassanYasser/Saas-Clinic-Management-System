@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 #[Fillable(['name','timezone','country_id'])]
-class city extends Model
+class City extends Model
 {
     public function country() {
         return $this->belongsTo(country::class);

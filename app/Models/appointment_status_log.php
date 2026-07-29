@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
     'reason',
     'appointment_id',
 ])]
-class appointment_status_log extends Model
+class Appointment_status_log extends Model
 {
     public function appointment()
     {

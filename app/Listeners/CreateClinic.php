@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\UserCreated;
-use App\Models\clinic;
+use App\Models\Clinic;
 class CreateClinic
 {
     /**

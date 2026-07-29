@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
     'clinic_id',
     'plan_id'
 ])]
-class subscription extends Model
+class Subscription extends Model
 {
     public function clinic()
     {

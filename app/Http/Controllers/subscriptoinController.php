@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\subscriptions\StoreSubscriptionRequest;
-use App\Models\plan;
+use App\Models\Plan;
 use App\Enums\SubscriptionStatus;
 use App\Services\ClinicService;
 use App\services\SubscriptionService;
-use Illuminate\Http\Request;
 
-class subscriptoinController extends Controller
+class SubscriptoinController extends Controller
 {
     public function __construct(
         private SubscriptionService $subscriptionService,
@@ -18,7 +17,7 @@ class subscriptoinController extends Controller
     public function index()
     {
         $subscriptions =  $this->subscriptionService->getAll();
-        $plans = plan::get(['id', 'name', 'monthly_price']);
+        $plans = Plan::get(['id', 'name', 'monthly_price']);
         $stats = $this->subscriptionService->getStats();
         $clinics  = $this->clinicService->getAll();
         $statuses = enumToArray(SubscriptionStatus::class);
@@ -33,13 +32,13 @@ class subscriptoinController extends Controller
             )
         );
     }
-    public function changeStatus($subscriptionID, $newStatus)
+    public function changeStatus(int $subscriptionID,SubscriptionStatus $newStatus)
     {
         $isUpdated = $this->subscriptionService->changeStatus($subscriptionID, $newStatus);
         $message = $isUpdated ? 'status updated successfully' : 'failed to update status';
         return redirect()->route('subscriptions.index')->with('message', $message);
     }
-    public function renew($subscriptionID)
+    public function renew(int $subscriptionID)
     {
         $isRenewed = $this->subscriptionService->renew($subscriptionID);
         $message = $isRenewed ? 'subscription renewed successfully' : 'failed to isRenewed subscription';
@@ -49,9 +48,5 @@ class subscriptoinController extends Controller
     {
         $this->subscriptionService->add($request->validated());
         return redirect()->route('subscriptions.index')->with('message', 'subscription added successfully');
-    }
-    public function update(Request $request, string $id)
-    {
-        dd($request->all());
     }
 }

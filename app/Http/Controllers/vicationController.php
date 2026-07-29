@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\vications\StoreVicationsRequest;
 use App\Http\Requests\vications\UpdateVicationsRequest;
 use App\services\DoctorService;
-use App\services\vicationService;
+use App\services\VicationService;
 use Illuminate\Support\Facades\Auth;
 
-class vicationController extends Controller
+class VicationController extends Controller
 {
     public function __construct(
-        private vicationService $vicationService,
+        private VicationService $vicationService,
         private DoctorService $doctorService
     ) {}
     public function index()
@@ -32,7 +32,7 @@ class vicationController extends Controller
         return redirect()->route('vications.index')
             ->with('message', $message);
     }
-    public function update(UpdateVicationsRequest $request, string $id)
+    public function update(UpdateVicationsRequest $request, int $id)
     {
         $isUpdated = $this->vicationService->update($request->validated(), $id);
         $message = $isUpdated

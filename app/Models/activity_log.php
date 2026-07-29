@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
     'subject_id',
     'created_by',
 ])]
-class activity_log extends Model
+class Activity_log extends Model
 {
     //
 }

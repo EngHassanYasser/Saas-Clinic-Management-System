@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Clinic;
-use App\Models\subscription;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -110,7 +110,7 @@ class ClinicService
             return user::where('id', $owner_id)->delete();
         });
     }
-    public function getStats():subscription 
+    public function getStats():Subscription 
     {
         return Subscription::query()
             ->selectRaw("

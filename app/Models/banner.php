@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
     'is_active',
     'clinic_id'
 ])]
-class banner extends Model
+class Banner extends Model
 {
     public function clinic()
     {

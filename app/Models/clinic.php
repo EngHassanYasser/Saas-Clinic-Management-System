@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
     'logo',
     'city_id',
 ])]
-class clinic extends Model
+class Clinic extends Model
 {
     public function appointments()
     {

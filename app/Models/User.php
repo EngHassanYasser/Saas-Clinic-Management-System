@@ -41,8 +41,8 @@ class User extends Authenticatable
     public function usesDashboardLayout(): bool
     {
         return in_array($this->type, [
-            RoleType::CLINIC,
-            RoleType::PATIENT,
+            RoleType::CLINIC->value,
+            RoleType::PATIENT->value,
         ], true);
     }
     public function notification_logs()

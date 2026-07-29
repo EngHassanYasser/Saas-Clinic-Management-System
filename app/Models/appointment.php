@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
     'doctor_id',
     'visit_date',
 ])]
-class appointment extends Model
+class Appointment extends Model
 {
     public $timestamps = false;
 

@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
     'features',
     'price',
 ])]
-class plan extends Model
+class Plan extends Model
 {
     public $timestamps = false;
     public function subscriptions()

@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
     'parent_payment_id',
     'appointment_id'
 ])]
-class payment extends Model
+class Payment extends Model
 {
     public function parent()
     {

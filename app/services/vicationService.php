@@ -3,16 +3,16 @@
 namespace App\services;
 
 use App\Exceptions\hasVicationException;
-use App\Models\vication;
+use App\Models\Vication;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class vicationService
+class VicationService
 {
     public function getClinicVacations(int $clinicId):LengthAwarePaginator 
     {
-        return vication::select(
+        return Vication::select(
             'id',
             'start_date',
             'end_date',
@@ -45,13 +45,13 @@ class vicationService
             ]) > 0;
         });
     }
-    public function add(array $data): vication
+    public function add(array $data): Vication
     {
         $hasVication = $this->hasVacation($data['doctor_id']);
         if ($hasVication) {
             throw new HasVicationException('thre are alread vication for this doctor');
         }
-        return vication::create([
+        return Vication::create([
             'clinic_id',
             Auth::user()->clinic_id,
             'doctor_id' => $data['doctor_id'],
@@ -68,19 +68,19 @@ class vicationService
             ->firstOrFail()
             ->delete();
     }
-    public function hasVacation(int $doctor_id,int $ignore_id = 0): bool
+    public function hasVacation(int $doctorId,int $ignoreId = 0): bool
     {
-        return Vication::where('doctor_id', $doctor_id)
+        return Vication::where('doctor_id', $doctorId)
             ->whereIn('status', ['active', 'upcoming'])
             ->whereRelation('doctor.clinics', 'clinics.id', Auth::user()->clinic_id)
-            ->when($ignore_id, function ($query) use ($ignore_id) {
-                $query->where('id', '!=', $ignore_id);
+            ->when($ignoreId, function ($query) use ($ignoreId) {
+                $query->where('id', '!=', $ignoreId);
             })
             ->exists();
     }
     public function getStatistics() :array
     {
-        $stats = vication::whereRelation('doctor.clinics', 'clinics.id', Auth::user()->clinic_id)
+        $stats = Vication::whereRelation('doctor.clinics', 'clinics.id', Auth::user()->clinic_id)
             ->selectRaw("
         COUNT(*) as total,
         SUM(CASE WHEN status = 'upcoming' THEN 1 ELSE 0 END) as upcoming,

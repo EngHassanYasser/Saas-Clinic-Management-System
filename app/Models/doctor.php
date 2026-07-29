@@ -13,7 +13,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
      'phone',
      'image'
 ])]
-class doctor extends Model implements HasMedia
+class Doctor extends Model implements HasMedia
 {
      use InteractsWithMedia;
      public function getAvatarUrlAttribute()

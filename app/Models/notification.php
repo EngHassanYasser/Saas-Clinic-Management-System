@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
     'read_at',
     'user_id'
 ])]
-class notification extends Model
+class Notification extends Model
 {
     public function user()
     {

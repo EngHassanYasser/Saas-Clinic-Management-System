@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Clinic\StoreClinicRequest;
 use App\Http\Requests\Clinic\UpdateClinicRequest;
-use App\Models\city;
-use App\Models\clinic;
-use App\Models\plan;
+use App\Models\City;
+use App\Models\Clinic;
+use App\Models\Plan;
 use App\services\ClinicService;
 
 class ClinicController extends Controller
@@ -16,8 +16,8 @@ class ClinicController extends Controller
     {
         $stats=$this->clinicService->getStats();
         $clinics = $this->clinicService->getAll();
-        $cities = city::get(['id', 'name']);
-        $plans = plan::get(['id', 'name']);
+        $cities = City::get(['id', 'name']);
+        $plans = Plan::get(['id', 'name']);
         return view('clinics.index', compact('clinics', 'cities', 'plans','stats'));
     }
     public function store(StoreClinicRequest $request)

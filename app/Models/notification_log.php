@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
     'user_id',
     'notification_id'
 ])]
-class notification_log extends Model
+class Notification_log extends Model
 {
     public function user()
     {

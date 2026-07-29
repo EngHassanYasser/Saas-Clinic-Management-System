@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
     'cancellation_fee_percentage',
     'clinic_id'
 ])]
-class clinic_setting extends Model
+class Clinic_setting extends Model
 {
     public function clinic()
     {

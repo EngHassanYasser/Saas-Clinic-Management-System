@@ -5,8 +5,8 @@ namespace App\services;
 use App\Enums\PlanStatus;
 use App\Enums\SubscriptionStatus;
 use App\Exceptions\ActiveSubscriptionAlreadyExistsException;
-use App\Models\clinic;
-use App\Models\plan;
+use App\Models\Clinic;
+use App\Models\Plan;
 use App\Models\subscription;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +15,7 @@ class SubscriptionService
 {
     public function getAll():Collection
     {
-        return subscription::select([
+        return Subscription::select([
             'id',
             'start_at',
             'end_at',
@@ -27,7 +27,7 @@ class SubscriptionService
         ])->with(['plan:id,name,monthly_price', 'clinic:id,name'])
             ->get()->makeHidden(['clinic_id', 'plan_id']);
     }
-    public function getStats():subscription 
+    public function getStats():Subscription 
     {
         $today = now();
         $after7Days = $today->copy()->addDays(7);
@@ -77,10 +77,10 @@ class SubscriptionService
             ]);
         });
     }
-    public function add(array $data): subscription
+    public function add(array $data): Subscription
     {
         return DB::transaction(function () use ($data) {
-            clinic::where('id', $data['clinic_id'])
+            Clinic::where('id', $data['clinic_id'])
                 ->lockForUpdate()
                 ->firstOrFail();
 
@@ -93,7 +93,7 @@ class SubscriptionService
             }
 
             $startAt = now();
-            return subscription::create([
+            return Subscription::create([
                 'start_at' => $startAt->toDateString(),
                 'end_at'   => $startAt->copy()->addMonth()->toDateString(),
                 'price' => $plan->monthly_price,
@@ -104,7 +104,7 @@ class SubscriptionService
     }
     public function hasActiveSubscription(
         int $clinicId,
-        ?int $ignoreSubscriptionId = null
+        ?int $ignoreSubscriptionId = 0
     ): bool {
         return Subscription::where('clinic_id', $clinicId)
             ->where('status', SubscriptionStatus::ACTIVE)

@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
     'attemps',
     'last_sent_at',
 ])]
-class otp extends Model
+class Otp extends Model
 {
     public function user()
     {

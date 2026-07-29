@@ -4,9 +4,9 @@ namespace App\services;
 
 use App\Enums\AppointmentStatus;
 use App\Enums\RoleType;
-use App\Models\appointment;
-use App\Models\doctor_service_price;
-use App\Models\schedule;
+use App\Models\Appointment;
+use App\Models\Doctor_service_price;
+use App\Models\Schedule;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -15,17 +15,17 @@ use Illuminate\Support\Facades\Auth;
 
 class AppointmentService
 {
-    public function getStats(User $user): array
+    public function getStats(User $user): Appointment
     {
         if ($user->type == RoleType::PATIENT->value) {
             return $this->getPatientStats($user->id);
         } else if ($user->type == RoleType::CLINIC->value) {
             return $this->getClinicStats($user->clinic_id);
         } else {
-            return [];
+            return new Appointment();
         }
     }
-    public function getAppointmentsStatisticsBy(string $column, int $id): array
+    public function getAppointmentsStatisticsBy(string $column, int $id): Appointment
     {
         return Appointment::where($column, $id)
             ->selectRaw("
@@ -36,19 +36,19 @@ class AppointmentService
         SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled")->first();
     }
 
-    public function getPatientStats(int $id): array
+    public function getPatientStats(int $id): Appointment
     {
         return $this->getAppointmentsStatisticsBy('patient_id', $id);
     }
-    public function getClinicStats(int $clinic_id): array
+    public function getClinicStats(int $clinicId): Appointment
     {
-        return $this->getAppointmentsStatisticsBy('clinic_id', $clinic_id);
+        return $this->getAppointmentsStatisticsBy('clinic_id', $clinicId);
     }
     public function getAppointments(User $user): LengthAwarePaginator
     {
-        if ($user->type == 'patient') {
+        if ($user->type == RoleType::PATIENT->value) {
             return $this->getAppointmentsBy('patient_id', $user->id);
-        } else if ($user->type == 'clinic') {
+        } else if ($user->type == RoleType::CLINIC->value) {
             return $this->getAppointmentsBy('clinic_id', $user->clinic_id);
         }
         return new LengthAwarePaginator(
@@ -59,7 +59,7 @@ class AppointmentService
         );
     }
 
-    public function getAppointmentsBy(string $column, $id): LengthAwarePaginator
+    public function getAppointmentsBy(string $column,int $id): LengthAwarePaginator
     {
         return Appointment::select(
             'id',
@@ -79,7 +79,7 @@ class AppointmentService
             ->with(['patient:id,name', 'doctor:id,name', 'clinic:id,name,address', 'service:id,name'])
             ->paginate(20)
             ->through(function ($appt) {
-                $price = doctor_service_price::where('doctor_id', $appt->doctor_id)
+                $price = Doctor_service_price::where('doctor_id', $appt->doctor_id)
                     ->where('clinic_id', $appt->clinic_id)
                     ->where('clinic_service_id', $appt->clinic_service_id)   // مباشرة من العمود
                     ->value('price');
@@ -119,7 +119,7 @@ class AppointmentService
     }
     public function reschdule(array $data): bool
     {
-        $appointment = appointment::where('clinic_id', Auth::user()->clinic_id)
+        $appointment = Appointment::where('clinic_id', Auth::user()->clinic_id)
             ->findOrFail($data['appointmentId']);
         $slot_duration = $this->getSlotDurationByVisitDate($appointment, $data['visit_date']);
 
@@ -132,16 +132,16 @@ class AppointmentService
             'end_time' => Carbon::parse($data['start_time'])->addMinutes($slot_duration),
         ]);
     }
-    public function updateStatus(AppointmentStatus $status,int $appointment_id): bool
+    public function updateStatus(AppointmentStatus $status, int $appointmentId): bool
     {
-        $appointment = appointment::where('clinic_id', Auth::user()->clinic_id)->findOrFail($appointment_id);
+        $appointment = Appointment::where('clinic_id', Auth::user()->clinic_id)->findOrFail($appointmentId);
         return $appointment->update([
             'status' => $status
         ]);
     }
-    public function getAvailableAppointments(int $appointmentid,int $visit_date):array
+    public function getAvailableAppointments(int $appointmentId,string $visitDate): array
     {
-        if (Carbon::parse($visit_date)->isBefore(today())) {
+        if (Carbon::parse($visitDate)->isBefore(today())) {
             return   [];
         }
         $appointment = Appointment::select([
@@ -150,16 +150,16 @@ class AppointmentService
             'start_time',
             'end_time',
             'visit_date',
-        ])->findOrFail($appointmentid);
+        ])->findOrFail($appointmentId);
 
-        $bookedSlots = $this->getBookedSlots($appointment, $visit_date);
-        $schedules = $this->getSchedules($appointment, $visit_date);
+        $bookedSlots = $this->getBookedSlots($appointment, $visitDate);
+        $schedules = $this->getSchedules($appointment, $visitDate);
 
         return $this->getAvailableSlots($bookedSlots, $schedules);
     }
-    public  function getSlotDurationByVisitDate(appointment $appointment,string $visit_date): int
+    public  function getSlotDurationByVisitDate(Appointment $appointment, string $visitDate): int
     {
-        $dayName = Carbon::parse($visit_date)->dayName;
+        $dayName = Carbon::parse($visitDate)->dayName;
         return (int) Schedule::where('clinic_id', $appointment->clinic_id)
             ->where('doctor_id', $appointment->doctor_id)
             ->where('is_available', 1)
@@ -167,9 +167,9 @@ class AppointmentService
                 $query->where('name', $dayName);
             })->value('slot_duration');
     }
-    public function getSchedules(appointment $appointment,string $visit_date):Collection
+    public function getSchedules(Appointment $appointment, string $visitDate): Collection
     {
-        $dayName = Carbon::parse($visit_date)->dayName;
+        $dayName = Carbon::parse($visitDate)->dayName;
         return  Schedule::where('clinic_id', $appointment->clinic_id)
             ->where('doctor_id', $appointment->doctor_id)
             ->where('is_available', 1)
@@ -184,16 +184,16 @@ class AppointmentService
                 'slot_duration'
             ]);
     }
-    public function getBookedSlots(appointment $appointment,string $visit_date):array
+    public function getBookedSlots(Appointment $appointment, string $visitDate): array
     {
         return   Appointment::where('clinic_id', $appointment->clinic_id)
             ->where('doctor_id', $appointment->doctor_id)
-            ->whereDate('visit_date', $visit_date)
+            ->whereDate('visit_date', $visitDate)
             ->get(['start_time', 'visit_date'])
             ->map(fn($appointment) => Carbon::parse($appointment->start_time)->format('H:i'))
             ->toArray();
     }
-    public function getAvailableSlots(array $bookedSlots,Collection $schedules): array
+    public function getAvailableSlots(array $bookedSlots, Collection $schedules): array
     {
         $availableSlots = [];
         foreach ($schedules as $schedule) {

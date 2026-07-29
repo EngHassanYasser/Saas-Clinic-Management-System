@@ -4,19 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\complains\StoreComplainRequest;
 use App\Http\Requests\complains\UpdateComplainRequest;
-use App\services\complainService;
+use App\services\ComplainService;
 use App\services\DoctorService;
 use Illuminate\Support\Facades\Auth;
 
 class ComplainController extends Controller
 {
     public function __construct(
-        private complainService $complainService,
+        private ComplainService $complainService,
         private DoctorService $doctorService
     ) {}
     public function index()
     {
-        $complaints = $this->complainService->getClinicComplains(Auth::user()->clinic_id);
+        $complaints = $this->complainService->getClinicComplains(Auth::user());
         $stats = $this->complainService->getStatistics();
         $doctors = $this->doctorService->getDoctorsNames(Auth::user()->clinic_id);
         return view('complains.index', compact('complaints', 'stats', 'doctors'));
@@ -30,7 +30,7 @@ class ComplainController extends Controller
 
         return redirect()->route('complains.index')->with('message', $message);
     }
-    public function update(UpdateComplainRequest $request, string $id)
+    public function update(UpdateComplainRequest $request, int $id)
     {
         $isUpdated = $this->complainService->update($request->validated(), $id);
         $message = $isUpdated
@@ -39,7 +39,7 @@ class ComplainController extends Controller
 
         return redirect()->route('complains.index')->with('message', $message);
     }
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
         $isDeleted = $this->complainService->delete($id);
         $message = $isDeleted
