@@ -14,11 +14,11 @@ class ClinicController extends Controller
     public function __construct(private ClinicService $clinicService) {}
     public function index()
     {
-        $stats=$this->clinicService->getStats();
+        $stats = $this->clinicService->getStats();
         $clinics = $this->clinicService->getAll();
         $cities = City::get(['id', 'name']);
         $plans = Plan::get(['id', 'name']);
-        return view('clinics.index', compact('clinics', 'cities', 'plans','stats'));
+        return view('clinics.index', compact('clinics', 'cities', 'plans', 'stats'));
     }
     public function store(StoreClinicRequest $request)
     {
@@ -35,5 +35,23 @@ class ClinicController extends Controller
         $isDeleted = $this->clinicService->delete($clinic);
         $message = $isDeleted ? 'clinic deleted duccessfully' : 'failed to delete clinic';
         return redirect()->route('clinics.index')->with('message', $message);
+    }
+    public function getStats()
+    {
+        return view('clinics.stats');
+    }
+    public function getClinicServicesBySpecialityId(int $specialityId)
+    {
+        return response()->json([
+            'success' => true,
+            'data' => $this->clinicService->getClinicServicesBySpecialityId($specialityId),
+        ]);
+    }
+    public function getAvailableClinics(int $specialityId,int $serviceId )
+    {
+        return response()->json([
+            'success' => true,
+            'data' => $this->clinicService->getAvailableClinics($specialityId,$serviceId),
+        ]);
     }
 }

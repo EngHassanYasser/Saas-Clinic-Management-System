@@ -1,12 +1,31 @@
-import { getAvailableSlots } from "./api";
+import {
+    getAvailableSlots,
+    getClinicServices,
+    getAvailableClinics,
+    getAvailableDoctors,
+} from "./api";
 export default {
-    handelAvailbleSlots(currentAppointment) {
-     this.availableSlots = getAvailableSlots(this.currentAppointment);
+    async handelAvailbleSlots(currentAppointment) {
+        const response = await getAvailableSlots(currentAppointment);
+        this.availableSlots = response;
     },
-
+    async handelAvailableServices(specialityId) {
+        const response = await getClinicServices(specialityId);
+        this.services = response.data;
+    },
+    async handleAvailableClinics(specialityId, serviceId) {
+        this.clinics = await getAvailableClinics(specialityId, serviceId);
+    },
+    async handleAvailableDoctors(clinicId, specialityId, serviceId) {
+        this.doctors = await getAvailableDoctors(
+            clinicId,
+            specialityId,
+            serviceId,
+        );
+    },
     openReschedule(appt) {
         this.currentAppointment = { ...appt };
-        this.handelAvailbleSlots(this.currentAppointment),
+        this.handelAvailbleSlots(this.currentAppointment);
         this.showRescheduleModal = true;
     },
     goToStep(step) {
@@ -15,7 +34,6 @@ export default {
     onSpecialtyChange() {
         this.selected.specialty =
             this.specialties.find((s) => s.id == this.specialtyId) || null;
-
         this.clinicId = "";
         this.doctorId = "";
         this.serviceId = "";
@@ -29,6 +47,9 @@ export default {
         this.slots = [];
         this.currencSection = this.serviceSection;
         this.reschedule = null;
+        console.log("speciality id", this.selected.specialty.id);
+
+        this.handelAvailableServices(this.selected.specialty.id);
     },
 
     onServiceChange() {
@@ -46,6 +67,11 @@ export default {
         this.slots = [];
 
         this.currencSection = this.clinicSection;
+        console.log("service id", this.selected.service.id);
+        this.handleAvailableClinics(
+            this.selected.specialty.id,
+            this.selected.service.id,
+        );
     },
 
     onClinicChange() {
@@ -61,6 +87,13 @@ export default {
         this.slots = [];
 
         this.currencSection = this.doctorSection;
+        console.log("clinic id", this.selected.clinic.id);
+
+        this.handleAvailableDoctors(
+            this.selected.clinic.id,
+            this.selected.specialty.id,
+            this.selected.service.id,
+        );
     },
 
     onDoctorChange() {
@@ -70,6 +103,7 @@ export default {
         this.selected.date = null;
         this.selected.slot = null;
         this.slots = [];
+        console.log("doctor id", this.selected.doctor.id);
 
         this.currencSection = this.dateTimeSection;
     },

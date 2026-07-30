@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\complains\StoreComplainRequest;
 use App\Http\Requests\complains\UpdateComplainRequest;
+use App\Models\Clinic;
 use App\services\ComplainService;
 use App\services\DoctorService;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,7 @@ class ComplainController extends Controller
     {
         $complaints = $this->complainService->getClinicComplains(Auth::user());
         $stats = $this->complainService->getStatistics();
-        $doctors = $this->doctorService->getDoctorsNames(Auth::user()->clinic_id);
+        $doctors = $this->doctorService->getDoctorsNames(Clinic::where('owner_id',Auth::id())->value('id'));
         return view('complains.index', compact('complaints', 'stats', 'doctors'));
     }
     public function store(StoreComplainRequest $request)

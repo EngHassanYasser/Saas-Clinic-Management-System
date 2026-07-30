@@ -12,6 +12,6 @@ class SpecialityService
         return speciality::select(['id', 'name'])->get();
     }
     public function getAvailableSpecailities(): Collection {
-        return collect([]);
+        return new Collection();
     }
 }

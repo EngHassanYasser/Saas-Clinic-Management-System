@@ -11,12 +11,15 @@ use Illuminate\Support\Facades\DB;
 
 class DoctorService
 {
-    public function getDoctorsNames(int $clinicId):Collection
+    public function getDoctorsNames(?int $clinicId): Collection
     {
+        if ($clinicId === null) {
+            return new Collection();
+        }
         return Doctor::select('id', 'name')
             ->whereRelation('clinics', 'clinic_id', $clinicId)->get();
     }
-    public function getAll():Collection
+    public function getAll(): Collection
     {
         $clinic = Clinic::with([
             'doctors.specialities',
@@ -47,7 +50,7 @@ class DoctorService
             ];
         });
     }
-    public function addNew(array $data):Doctor
+    public function addNew(array $data): Doctor
     {
         return  DB::transaction(function () use ($data) {
 
@@ -82,7 +85,7 @@ class DoctorService
             return $deleted;
         });
     }
-    public function update(array $data,int $id):bool
+    public function update(array $data, int $id): bool
     {
         return DB::transaction(function () use ($data, $id) {
 
@@ -112,7 +115,7 @@ class DoctorService
             return $updated;
         });
     }
-    public function getStats(int $clinicId):array
+    public function getStats(?int $clinicId): Doctor
     {
         return Doctor::query()
             ->join('clinic_doctors', 'doctors.id', '=', 'clinic_doctors.doctor_id')
@@ -124,5 +127,16 @@ class DoctorService
         COUNT(DISTINCT CASE WHEN clinic_doctors.is_active = 0 THEN doctors.id END) as inactive,
         COUNT(DISTINCT doctor_speciality.speciality_id) as specialities
         ")->first();
+    }
+    public function getAvailableDoctors(int $clinicId, int $specialityId, int $serviceId): Collection
+    {
+        return Doctor::select('doctors.id', 'doctors.name')
+            ->join('doctor_speciality', 'doctor_speciality.doctor_id', '=', 'doctors.id')
+            ->join('doctor_service_prices', 'doctor_service_prices.doctor_id', '=', 'doctors.id')
+            ->where('doctor_speciality.speciality_id', $specialityId)
+            ->where('doctor_service_prices.clinic_service_id', $serviceId)
+            ->where('doctor_service_prices.clinic_id', $clinicId)
+            ->distinct()
+            ->get();
     }
 }

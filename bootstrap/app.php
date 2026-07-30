@@ -4,6 +4,7 @@ use App\Exceptions\ActiveSubscriptionAlreadyExistsException;
 use App\Exceptions\ActiveSubscriptionNotFoundException;
 use App\Exceptions\ScheduleConflictException;
 use App\Exceptions\HasVicationException;
+use App\Exceptions\UnauthorizedException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -65,5 +66,11 @@ return Application::configure(basePath: dirname(__DIR__))
             return redirect()
                 ->route('vications.index')
                 ->with('message', $e->getMessage());
+        });
+        $exceptions->render(function (
+            UnauthorizedException $e,
+            Request $request
+        ) {
+            return redirect()->back()->with('message','you are unauthorized for this action');
         });
     })->create();

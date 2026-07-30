@@ -8,8 +8,8 @@
     <select x-model="doctorId" @change="onDoctorChange()"
         class="w-full p-3 rounded-xl border-2 border-gray-100 bg-gray-50 text-sm font-medium text-gray-700 focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none">
         <option value="" disabled>اختر الدكتور</option>
-        <template x-for="doc in filteredDoctors" :key="doc.id">
-            <option :value="doc.id" x-text="doc.name + ' — ' + doc.duration + ' دقيقة · ⭐ ' + doc.rating">
+        <template x-for="doc in doctors" :key="doc.id">
+            <option :value="doc.id" x-text="doc.name">
             </option>
         </template>
     </select>

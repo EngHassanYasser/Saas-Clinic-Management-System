@@ -30,7 +30,7 @@
                         <label class="text-sm text-gray-700 mb-1 block">كلمة المرور</label>
 
                         <div class="relative">
-                            <input :type="showPassword ? 'text' : 'password'" name="password" x-model="password"
+                            <input type="password" name="password" x-model="password"
                                 class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-emerald-500 focus:bg-white outline-none text-sm"
                                 placeholder="••••••••">
 

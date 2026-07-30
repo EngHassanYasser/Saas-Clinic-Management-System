@@ -104,7 +104,7 @@ class SubscriptionService
     }
     public function hasActiveSubscription(
         int $clinicId,
-        ?int $ignoreSubscriptionId = 0
+        ?int $ignoreSubscriptionId = null
     ): bool {
         return Subscription::where('clinic_id', $clinicId)
             ->where('status', SubscriptionStatus::ACTIVE)

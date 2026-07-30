@@ -8,3 +8,4 @@ Route::get('/doctors/create', [DoctorController::class, 'create'])->name('doctor
 Route::post('/doctors/store', [DoctorController::class, 'store'])->name('doctors.store');
 Route::put('/doctors/{id}', [DoctorController::class, 'update'])->name('doctors.update');
 Route::delete('/doctors/{id}', [DoctorController::class, 'destroy'])->name('doctors.destroy');
+Route::get('/doctors/clinic/{clinic}/speciality/{speciality}/service/{service}/', [DoctorController::class, 'getAvailableDoctors'])->name('doctors.getAvailableDoctors');

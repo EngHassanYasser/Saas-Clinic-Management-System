@@ -4,7 +4,9 @@ namespace App\services;
 
 use App\Enums\AppointmentStatus;
 use App\Enums\RoleType;
+use App\Exceptions\UnauthorizedException;
 use App\Models\Appointment;
+use App\Models\Clinic;
 use App\Models\Doctor_service_price;
 use App\Models\Schedule;
 use App\Models\User;
@@ -12,18 +14,17 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AppointmentService
 {
     public function getStats(User $user): Appointment
     {
-        if ($user->type == RoleType::PATIENT->value) {
-            return $this->getPatientStats($user->id);
-        } else if ($user->type == RoleType::CLINIC->value) {
-            return $this->getClinicStats($user->clinic_id);
-        } else {
-            return new Appointment();
-        }
+        return match ($user->type) {
+            RoleType::PATIENT->value => $this->getPatientStats($user->id),
+            RoleType::CLINIC->value => $this->getClinicStats(Clinic::where('owner_id', $user->id)->value('id')),
+            default => new Appointment(),
+        };
     }
     public function getAppointmentsStatisticsBy(string $column, int $id): Appointment
     {
@@ -49,7 +50,8 @@ class AppointmentService
         if ($user->type == RoleType::PATIENT->value) {
             return $this->getAppointmentsBy('patient_id', $user->id);
         } else if ($user->type == RoleType::CLINIC->value) {
-            return $this->getAppointmentsBy('clinic_id', $user->clinic_id);
+            $clinicId = Clinic::where('owner_id', $user->id)->value('id');
+            return $this->getAppointmentsBy('clinic_id', $clinicId);
         }
         return new LengthAwarePaginator(
             new Collection(),
@@ -59,7 +61,7 @@ class AppointmentService
         );
     }
 
-    public function getAppointmentsBy(string $column,int $id): LengthAwarePaginator
+    public function getAppointmentsBy(string $column, int $id): LengthAwarePaginator
     {
         return Appointment::select(
             'id',
@@ -132,28 +134,25 @@ class AppointmentService
             'end_time' => Carbon::parse($data['start_time'])->addMinutes($slot_duration),
         ]);
     }
-    public function updateStatus(AppointmentStatus $status, int $appointmentId): bool
+    public function changeStatus(AppointmentStatus $status, int $appointmentId): bool
     {
-        $appointment = Appointment::where('clinic_id', Auth::user()->clinic_id)->findOrFail($appointmentId);
+        $user = Auth::user();
+
+        $appointment = $this->findAppointment($appointmentId, $user);
+
+        $this->authorizeStatusChange($appointment, $status, $user);
+
         return $appointment->update([
-            'status' => $status
+            'status' => $status,
         ]);
     }
-    public function getAvailableAppointments(int $appointmentId,string $visitDate): array
+    public function getAvailableAppointments(int $clinicId, int $doctorId, string $visitDate): array
     {
         if (Carbon::parse($visitDate)->isBefore(today())) {
             return   [];
         }
-        $appointment = Appointment::select([
-            'clinic_id',
-            'doctor_id',
-            'start_time',
-            'end_time',
-            'visit_date',
-        ])->findOrFail($appointmentId);
-
-        $bookedSlots = $this->getBookedSlots($appointment, $visitDate);
-        $schedules = $this->getSchedules($appointment, $visitDate);
+        $bookedSlots = $this->getBookedSlots($clinicId, $doctorId, $visitDate);
+        $schedules = $this->getSchedules($visitDate, $doctorId, $clinicId);
 
         return $this->getAvailableSlots($bookedSlots, $schedules);
     }
@@ -167,16 +166,15 @@ class AppointmentService
                 $query->where('name', $dayName);
             })->value('slot_duration');
     }
-    public function getSchedules(Appointment $appointment, string $visitDate): Collection
+    public function getSchedules(string $visitDate, int $doctorId, int $clinicId)
     {
         $dayName = Carbon::parse($visitDate)->dayName;
-        return  Schedule::where('clinic_id', $appointment->clinic_id)
-            ->where('doctor_id', $appointment->doctor_id)
+        return  Schedule::where('clinic_id', $clinicId)
+            ->where('doctor_id', $doctorId)
             ->where('is_available', 1)
             ->whereHas('days', function ($query) use ($dayName) {
                 $query->where('name', $dayName);
-            })
-            ->get([
+            })->get([
                 'start_time',
                 'end_time',
                 'start_break',
@@ -184,10 +182,10 @@ class AppointmentService
                 'slot_duration'
             ]);
     }
-    public function getBookedSlots(Appointment $appointment, string $visitDate): array
+    public function getBookedSlots(int $clinicId, int $doctorId, string $visitDate): array
     {
-        return   Appointment::where('clinic_id', $appointment->clinic_id)
-            ->where('doctor_id', $appointment->doctor_id)
+        return   Appointment::where('clinic_id', $clinicId)
+            ->where('doctor_id', $doctorId)
             ->whereDate('visit_date', $visitDate)
             ->get(['start_time', 'visit_date'])
             ->map(fn($appointment) => Carbon::parse($appointment->start_time)->format('H:i'))
@@ -233,5 +231,85 @@ class AppointmentService
             }
         }
         return $availableSlots;
+    }
+    private function canPatientChangeStatus(
+        AppointmentStatus $currentStatus,
+        AppointmentStatus $newStatus
+    ): bool {
+        return match ($currentStatus) {
+            AppointmentStatus::PENDING =>
+            $newStatus === AppointmentStatus::CANCELLED,
+
+            AppointmentStatus::CONFIRMED =>
+            $newStatus === AppointmentStatus::CANCELLED,
+
+            default => false,
+        };
+    }
+    private function canClinicChangeStatus(
+        AppointmentStatus $currentStatus,
+        AppointmentStatus $newStatus
+    ): bool {
+        return match ($currentStatus) {
+            AppointmentStatus::PENDING =>
+            in_array($newStatus, [
+                AppointmentStatus::CONFIRMED,
+                AppointmentStatus::CANCELLED,
+            ]),
+
+            AppointmentStatus::CONFIRMED =>
+            in_array($newStatus, [
+                AppointmentStatus::IN_PROGRESS,
+                AppointmentStatus::CANCELLED,
+                AppointmentStatus::NO_SHOW,
+                AppointmentStatus::RESCHEDULED,
+            ]),
+
+            AppointmentStatus::IN_PROGRESS =>
+            $newStatus === AppointmentStatus::COMPLETED,
+
+            default => false,
+        };
+    }
+    private function findAppointment(int $appointmentId, User $user): Appointment
+    {
+        $query = Appointment::whereKey($appointmentId);
+
+        if ($user->type === RoleType::CLINIC->value) {
+            $clinicId = Clinic::where('owner_id', $user->id)->value('id');
+
+            $query->where('clinic_id', $clinicId);
+        }
+
+        if ($user->type === RoleType::PATIENT->value) {
+            $query->where('patient_id', $user->id);
+        }
+
+        return $query->firstOrFail();
+    }
+    private function authorizeStatusChange(
+        Appointment $appointment,
+        AppointmentStatus $status,
+        User $user
+    ): void {
+        if (
+            $user->type === RoleType::PATIENT->value &&
+            ! $this->canPatientChangeStatus($appointment->status, $status)
+        ) {
+            throw new UnauthorizedException();
+        }
+
+        if (
+            $user->type === RoleType::CLINIC->value &&
+            ! $this->canClinicChangeStatus($appointment->status, $status)
+        ) {
+            throw new UnauthorizedException();
+        }
+    }
+    public function confirmAfterPayment(Appointment $appointment): void
+    {
+        $appointment->update([
+            'status' => AppointmentStatus::CONFIRMED,
+        ]);
     }
 }

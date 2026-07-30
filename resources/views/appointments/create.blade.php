@@ -5,9 +5,7 @@
 @extends($layout)
 @section('content')
     <div class="max-w-3xl mx-auto px-4 py-6 sm:py-10" x-data="bookingForm({
-        specialties: @js($specialities),
-        services: @js($services),
-    })" x-cloak>
+        specialties: @js($specialities)})" x-cloak>
         <x-appointments.header />
         <x-appointments.step_progress />
         <form @submit.prevent="submitBooking"

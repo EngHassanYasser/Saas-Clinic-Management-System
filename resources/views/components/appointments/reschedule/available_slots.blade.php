@@ -1,4 +1,5 @@
 <div>
+    <button type="button" @click="console.log(availableSlots)"></button>
     <label class="text-xs text-gray-500 block mb-3">
         المواعيد المتاحة
     </label>

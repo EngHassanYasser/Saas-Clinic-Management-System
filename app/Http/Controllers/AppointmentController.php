@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AppointmentStatus;
 use App\services\AppointmentService;
 use App\services\ServiceCatalogService;
 use App\services\SpecialityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\appointments\RescheduleAppointment;
+use App\Models\Appointment;
+use Illuminate\Validation\Rules\Enum;
 
 class AppointmentController extends Controller
 {
@@ -29,17 +32,22 @@ class AppointmentController extends Controller
         $services = $this->serviceCatalogService->getAllCatalogs();
         return view('appointments.create', compact('specialities', 'services'));
     }
-    public function updateStatus(Request $request,int $id)
+    public function changeStatus(Request $request, int $id)
     {
-        $isUpdated = $this->appointmentService->updateStatus($request->status, $id);
+        $request->validate([
+            'status' => ['required', new Enum(AppointmentStatus::class)],
+        ]);
+
+        $status = AppointmentStatus::from($request->status);
+        $isUpdated = $this->appointmentService->changeStatus($status, $id);
         $message = $isUpdated ? 'appointment status updated successfully' : 'failed to update appointment status';
 
         return redirect()->route('appointments.index')->with('message', $message);
     }
-    public function getAvailableSlots(Request $request, int $appointmentId, string $date)
+    public function getAvailableAppointments(Request $request,int $clinicId,int $doctorId, string $date)
     {
         return response()->json(
-            $this->appointmentService->getAvailableAppointments($appointmentId, $date)
+            $this->appointmentService->getAvailableAppointments($clinicId, $doctorId, $date)
         );
     }
     public function reschdule(RescheduleAppointment $request)

@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Models\Clinic;
+use App\Models\ClinicService as ModelClinicService;
 use App\Models\Subscription;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -12,7 +14,7 @@ use Illuminate\Support\Str;
 
 class ClinicService
 {
-    public function getAll():LengthAwarePaginator 
+    public function getAll(): LengthAwarePaginator
     {
         return Clinic::select([
             'id',
@@ -46,7 +48,7 @@ class ClinicService
                 ];
             });
     }
-    public function add(array $data):Clinic
+    public function add(array $data): Clinic
     {
         return DB::transaction(function () use ($data) {
             $user = User::create([
@@ -58,7 +60,7 @@ class ClinicService
                 'city_id' => $data['city_id'],
                 'type' => 'clinic',
             ]);
-           $clinic= clinic::create([
+            $clinic = clinic::create([
                 'name' => $data['clinic_name'],
                 'slug' =>  Str::slug($data['clinic_name']),
                 'phone' => $data['phone'],
@@ -73,7 +75,7 @@ class ClinicService
 
     public function update(array $data, Clinic $clinic): bool
     {
-       return DB::transaction(function () use ($data, $clinic) {
+        return DB::transaction(function () use ($data, $clinic) {
 
             $clinic->load('owner');
 
@@ -96,11 +98,11 @@ class ClinicService
                 $userData['password'] = Hash::make($data['password']);
             }
 
-           return $clinic->owner->update($userData);
+            return $clinic->owner->update($userData);
         });
     }
 
-    public function delete(Clinic $clinic):bool
+    public function delete(Clinic $clinic): bool
     {
         return DB::transaction(function () use ($clinic) {
             $clinic->doctors()->detach();
@@ -110,7 +112,7 @@ class ClinicService
             return user::where('id', $owner_id)->delete();
         });
     }
-    public function getStats():Subscription 
+    public function getStats(): Subscription
     {
         return Subscription::query()
             ->selectRaw("
@@ -123,5 +125,22 @@ COALESCE(SUM(CASE WHEN status = 'cancelled' OR status = 'expired' THEN 1 ELSE 0 
                     ->whereNotNull('clinic_id')
                     ->groupBy('clinic_id');
             })->first();
+    }
+    public function getClinicServicesBySpecialityId(int $specialityId): Collection
+    {
+        return ModelClinicService::where('speciality_id', $specialityId)->select(['id', 'name'])->get();
+    }
+    public function getAvailableClinics(int $specialityId, int $serviceId):Collection
+    {
+        return Clinic::select('clinics.id', 'clinics.name','cities.name as city_name')
+            ->join('cities','cities.id','=','clinics.city_id')
+            ->join('clinic_doctors', 'clinic_doctors.clinic_id', '=', 'clinics.id')
+            ->join('doctor_speciality', 'doctor_speciality.doctor_id', '=', 'clinic_doctors.doctor_id')
+            ->join('clinic_services', 'clinic_services.speciality_id', '=', 'doctor_speciality.speciality_id')
+            ->where('clinic_doctors.is_active', true)
+            ->where('clinic_services.speciality_id', $specialityId)
+            ->where('clinic_services.id', $serviceId)
+            ->distinct()
+            ->get();
     }
 }

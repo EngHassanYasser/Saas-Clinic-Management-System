@@ -1,7 +1,7 @@
 <?php
 return [
     'clinic' => [
-        ['label' => 'الإحصائيات', 'route' => 'dashboard', 'icon' => 'fas fa-dashboard'],
+        ['label' => 'الإحصائيات', 'route' => 'dashboard.index', 'icon' => 'fas fa-dashboard'],
         ['label' => 'مواعيد الدكاتره', 'route' => 'schedules.index', 'icon' => 'fas fa-calendar-check'],
         ['label' => 'الحجوزات', 'route' => 'appointments.index', 'icon' => 'fas fa-calendar-check'],
         ['label' => 'الخدمات', 'route' => 'clinicServices.index', 'icon' => 'fas fa-stethoscope'],

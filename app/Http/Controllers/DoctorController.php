@@ -42,4 +42,11 @@ class DoctorController extends Controller
         $this->doctorService->deleteById($id);
         return redirect()->route('doctors.index')->with('message', 'doctor deleted successfully');
     }
+    public function getAvailableDoctors(int $clinicId, int $specialityId, int $serviceId)
+    {
+        return response()->json([
+            'success' => true,
+            'data' => $this->doctorService->getAvailableDoctors($clinicId, $specialityId, $serviceId),
+        ]);
+    }
 }

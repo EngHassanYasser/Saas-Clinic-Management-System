@@ -1,9 +1,11 @@
 export default function (serverData = {}) {
     return {
         specialties: serverData.specialties ?? [],
-        services: serverData.services ?? [],
-        appointments: serverData.appointments ?? [],
-        stats: serverData.stats ?? [],
+        services: [],
+        clinics:[],
+        appointments:serverData.appointments ?? [],
+        doctors:[],
+        stats:serverData.stats ?? [],
         availableSlots:[],
         currencSection: 1,
         specialitySection: 1,

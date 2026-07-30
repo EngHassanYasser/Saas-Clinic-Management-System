@@ -3,6 +3,7 @@
 namespace App\services;
 
 use App\Exceptions\ScheduleConflictException;
+use App\Models\Clinic;
 use App\Models\Day;
 use App\Models\Doctor;
 use App\Models\Schedule;
@@ -14,20 +15,14 @@ class ScheduleService
 {
     public function getAll()
     {
-        return Doctor::with(['specialities', 'schedules.days'])
-            ->withCount('schedules')
-            ->get()
-            ->map(function ($doctor) {
-                return [
-                    'id' => $doctor->id,
-                    'name' => $doctor->name,
-                    'speciality_name' => $doctor->specialities->first()->name,
-                    'schedules' => $doctor->schedules,
-                    'schedules_count' => $doctor->schedules_count,
-                ];
-            });
+        return Doctor::select('id', 'name')
+            ->with([
+                'specialities:id,name',
+                'schedules.days:id,name'
+            ])->withCount('schedules')
+            ->get();
     }
-    public function update(array $data,int $id)
+    public function update(array $data, int $id)
     {
         return DB::transaction(function () use ($data, $id) {
             if ($this->hasScheduleConflict($data, $id)) {
@@ -52,13 +47,14 @@ class ScheduleService
             return $schedule->fresh();
         }, 3);
     }
-    public function addNew(array $data):schedule
+    public function addNew(array $data): Schedule
     {
         return  DB::transaction(function () use ($data) {
             if ($this->hasScheduleConflict($data)) {
                 throw new ScheduleConflictException('يوجد تداخل مع جدول يوم الأحد.');
             }
-            $schedule = schedule::create([
+            $clinicId=Clinic::where('owner_id',Auth::id())->value('id');
+            $schedule = Schedule::create([
                 'start_time' => $data['start_time'],
                 'end_time' => $data['end_time'],
                 'slot_duration' => $data['slot_duration'],
@@ -66,23 +62,23 @@ class ScheduleService
                 'end_break' => $data['end_break'],
                 'is_available' => $data['is_available'],
                 'doctor_id' => $data['doctor_id'],
-                'clinic_id' => Auth::User()->clinic_id
+                'clinic_id' => $clinicId
             ]);
             $schedule->days()->attach($data['day_ids']);
 
             return $schedule;
         }, 3);
     }
-    public function getWeekDays():Collection
+    public function getWeekDays(): Collection
     {
-        return day::select(['id', 'name'])->get();
+        return Day::select(['id', 'name'])->get();
     }
-    public function delete(int $scheduleId,int $clinicId): bool
+    public function delete(int $scheduleId, int $clinicId): bool
     {
         $schedule = Schedule::where('clinic_id', $clinicId)->findOrFail($scheduleId);
         return $schedule->delete();
     }
-    public function hasScheduleConflict(array $data, ?int $ignoreId = 0): bool
+    public function hasScheduleConflict(array $data, ?int $ignoreId = null): bool
     {
         return Schedule::where('doctor_id', $data['doctor_id'])
             ->where('clinic_id', Auth::user()->clinic_id)

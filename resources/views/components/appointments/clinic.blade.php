@@ -8,8 +8,8 @@
     <select x-model="clinicId" @change="onClinicChange()"
         class="w-full p-3 rounded-xl border-2 border-gray-100 bg-gray-50 text-sm font-medium text-gray-700 focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none">
         <option value="" disabled>اختر العيادة</option>
-        <template x-for="cl in filteredClinics" :key="cl.id">
-            <option :value="cl.id" x-text="cl.name + ' — ' + cl.area"></option>
+        <template x-for="cl in clinics" :key="cl.id">
+            <option :value="cl.id" x-text="cl.name + ' — ' + cl.city_name"></option>
         </template>
     </select>
 </div>

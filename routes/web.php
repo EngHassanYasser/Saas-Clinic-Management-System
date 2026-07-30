@@ -5,7 +5,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('Home');
 })->name('home');
-
+Route::get('/test-controller', function () {
+    return (new ReflectionClass(\App\Http\Controllers\Auth\AuthenticatedSessionController::class))
+        ->getFileName();
+});
 require __DIR__ . '/web/appointment.php';
 require __DIR__ . '/web/doctor.php';
 require __DIR__ . '/web/clinic_service.php';

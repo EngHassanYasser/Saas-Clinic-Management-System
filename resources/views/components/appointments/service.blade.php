@@ -34,7 +34,7 @@
             class="absolute z-50 mt-2 w-full max-h-64 overflow-y-auto rounded-xl border-2 border-gray-100 bg-white shadow-lg"
         >
 
-            <template x-for="sr in filterdServices" :key="sr.id">
+            <template x-for="sr in services" :key="sr.id">
 
                 <button
                     type="button"
