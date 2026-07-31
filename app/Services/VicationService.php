@@ -1,6 +1,6 @@
 <?php
 
-namespace App\services;
+namespace App\Services;
 
 use App\Exceptions\hasVicationException;
 use App\Models\Vication;
