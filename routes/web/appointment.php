@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
     Route::get('appointments', [AppointmentController::class, 'index'])->name('appointments.index');
+    Route::post('appointments', [AppointmentController::class, 'store'])->name('appointments.store');
     Route::get('appointments/create', [AppointmentController::class, 'create'])->name('appointments.create');
     Route::patch('/appointments/{appointment}/status', [AppointmentController::class, 'changeStatus'])
         ->name('appointments.changeStatus-status');

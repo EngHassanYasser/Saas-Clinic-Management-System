@@ -6,6 +6,7 @@
 @section('content')
     <div class="max-w-3xl mx-auto px-4 py-6 sm:py-10" x-data="bookingForm({
         specialties: @js($specialities)})" x-cloak>
+        <x-shared.errors/>
         <x-appointments.header />
         <x-appointments.step_progress />
         <form @submit.prevent="submitBooking"
@@ -16,8 +17,8 @@
             <x-appointments.doctor />
             <x-appointments.date />
             <x-appointments.summary />
-            <x-appointments.submit_button />
         </form>
+       <x-appointments.submit_button />
         <x-appointments.toast />
     </div>
 @endsection

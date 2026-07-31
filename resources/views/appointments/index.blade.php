@@ -7,7 +7,6 @@
         appointments: @js($appointments->items()),
         stats: @js($stats)
     })">
-    <button type="button" @click="console.log(appointments)">click</button>
         <main class="flex-1 overflow-x-hidden">
             <div class="p-4 sm:p-8 space-y-6">
                 <x-appointments.status-row />

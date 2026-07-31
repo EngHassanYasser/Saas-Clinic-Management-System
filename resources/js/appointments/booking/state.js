@@ -7,6 +7,7 @@ export default function (serverData = {}) {
         doctors:[],
         stats:serverData.stats ?? [],
         availableSlots:[],
+        visit_date:null,
         currencSection: 1,
         specialitySection: 1,
         serviceSection: 2,
@@ -14,7 +15,6 @@ export default function (serverData = {}) {
         doctorSection: 4,
         dateTimeSection: 5,
         selectedStatus: "all",
-
         specialtyId: "",
         serviceId: "",
         clinicId: "",

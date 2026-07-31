@@ -17,7 +17,7 @@ return new class extends Migration
     {
         Schema::table('appointments', function (Blueprint $table) {
             $table->foreignIdFor(User::class,'patient_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->foreignIdFor(clinic::class)->nullable()->constrained()->nullOnDelete();
+            $table->foreignIdFor(clinic::class)->constrained()->cascadeOnDelete();
         });
     }
 

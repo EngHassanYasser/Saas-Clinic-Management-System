@@ -5,8 +5,12 @@ import {
     getAvailableDoctors,
 } from "./api";
 export default {
-    async handelAvailbleSlots(currentAppointment) {
-        const response = await getAvailableSlots(currentAppointment);
+    async handelAvailbleSlots(clinidId, doctorId, visiteDate) {
+        const response = await getAvailableSlots(
+            clinidId,
+            doctorId,
+            visiteDate,
+        );
         this.availableSlots = response;
     },
     async handelAvailableServices(specialityId) {
@@ -23,9 +27,19 @@ export default {
             serviceId,
         );
     },
+    handleDateClick(d) {
+        if (d.isFriday) return;
+        
+        this.selectDate(d);
+        this.handelAvailbleSlots(this.clinicId, this.doctorId, d.dateStr);
+    },
     openReschedule(appt) {
         this.currentAppointment = { ...appt };
-        this.handelAvailbleSlots(this.currentAppointment);
+        this.handelAvailbleSlots(
+            this.currentAppointment.clinic.id,
+            this.currentAppointment.doctor.id,
+            this.currentAppointment.visit_date,
+        );
         this.showRescheduleModal = true;
     },
     goToStep(step) {
@@ -47,7 +61,6 @@ export default {
         this.slots = [];
         this.currencSection = this.serviceSection;
         this.reschedule = null;
-        console.log("speciality id", this.selected.specialty.id);
 
         this.handelAvailableServices(this.selected.specialty.id);
     },
@@ -67,7 +80,6 @@ export default {
         this.slots = [];
 
         this.currencSection = this.clinicSection;
-        console.log("service id", this.selected.service.id);
         this.handleAvailableClinics(
             this.selected.specialty.id,
             this.selected.service.id,
@@ -87,7 +99,6 @@ export default {
         this.slots = [];
 
         this.currencSection = this.doctorSection;
-        console.log("clinic id", this.selected.clinic.id);
 
         this.handleAvailableDoctors(
             this.selected.clinic.id,
@@ -103,16 +114,14 @@ export default {
         this.selected.date = null;
         this.selected.slot = null;
         this.slots = [];
-        console.log("doctor id", this.selected.doctor.id);
 
         this.currencSection = this.dateTimeSection;
     },
 
     selectDate(date) {
         this.selected.date = date;
-
+        this.visit_date=this.selected.date.dateStr;
         this.selected.slot = null;
-
         this.loadSlots(date.dateStr);
     },
 

@@ -9,7 +9,7 @@ use App\services\SpecialityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\appointments\RescheduleAppointment;
-use App\Models\Appointment;
+use App\Http\Requests\appointments\StoreAppointmentRequest;
 use Illuminate\Validation\Rules\Enum;
 
 class AppointmentController extends Controller
@@ -40,11 +40,11 @@ class AppointmentController extends Controller
 
         $status = AppointmentStatus::from($request->status);
         $isUpdated = $this->appointmentService->changeStatus($status, $id);
-        $message = $isUpdated ? 'appointment status updated successfully' : 'failed to update appointment status';
+        $message = $isUpdated ? 'appointment '. $request->status .' successfully' : 'failed to update appointment status';
 
         return redirect()->route('appointments.index')->with('message', $message);
     }
-    public function getAvailableAppointments(Request $request,int $clinicId,int $doctorId, string $date)
+    public function getAvailableAppointments(Request $request, int $clinicId, int $doctorId, string $date)
     {
         return response()->json(
             $this->appointmentService->getAvailableAppointments($clinicId, $doctorId, $date)
@@ -55,5 +55,11 @@ class AppointmentController extends Controller
         $isRescheduled = $this->appointmentService->reschdule($request->validated());
         $message = $isRescheduled ? 'rescheduled done successfully' : 'failed to reschedule appointment please try again';
         return redirect()->route('appointments.index')->with('message', $message);
+    }
+    public function store(StoreAppointmentRequest $request)
+    {
+        $this->appointmentService->add($request->validated());
+        return redirect()->route('appointments.index')
+            ->with('message', 'appointment booked successfully please confirm appointment');
     }
 }

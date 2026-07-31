@@ -1,10 +1,8 @@
 import axios from "axios";
 
-export async function getAvailableSlots(currentAppointment) {
-    console.log(currentAppointment.doctor.id);
+export async function getAvailableSlots(clinidId,doctorId,visiteDate) {
     const { data } = await axios.get(
-        //16,
-        `appointments/AvailableAppointments/clinic/${currentAppointment.clinic.id}/doctor/${currentAppointment.doctor.id}/visitDate/${currentAppointment.visit_date}`,
+        `/appointments/AvailableAppointments/clinic/${clinidId}/doctor/${doctorId}/visitDate/${visiteDate}`,
     );
     return data;
 }

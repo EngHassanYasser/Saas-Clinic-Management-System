@@ -4,6 +4,7 @@ namespace App\services;
 
 use App\Enums\AppointmentStatus;
 use App\Enums\RoleType;
+use App\Exceptions\SlotDoesNotAvailable;
 use App\Exceptions\UnauthorizedException;
 use App\Models\Appointment;
 use App\Models\Clinic;
@@ -14,7 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class AppointmentService
 {
@@ -70,7 +71,6 @@ class AppointmentService
             'start_time',
             'end_time',
             'status',
-            'appointment_type',
             'cancellation_reason',
             'deposit_amount',
             'cancellation_time',
@@ -123,7 +123,7 @@ class AppointmentService
     {
         $appointment = Appointment::where('clinic_id', Auth::user()->clinic_id)
             ->findOrFail($data['appointmentId']);
-        $slot_duration = $this->getSlotDurationByVisitDate($appointment, $data['visit_date']);
+        $slot_duration = $this->getSlotDurationByVisitDate($appointment->clinic_id, $appointment->doctor_id, $data['visit_date']);
 
         if (is_null($slot_duration)) {
             throw new \Exception('No schedule found.');
@@ -156,11 +156,11 @@ class AppointmentService
 
         return $this->getAvailableSlots($bookedSlots, $schedules);
     }
-    public  function getSlotDurationByVisitDate(Appointment $appointment, string $visitDate): int
+    public  function getSlotDurationByVisitDate(int $clinicId, int $doctorId, string $visitDate): int
     {
         $dayName = Carbon::parse($visitDate)->dayName;
-        return (int) Schedule::where('clinic_id', $appointment->clinic_id)
-            ->where('doctor_id', $appointment->doctor_id)
+        return (int) Schedule::where('clinic_id', $clinicId)
+            ->where('doctor_id', $doctorId)
             ->where('is_available', 1)
             ->whereHas('days', function ($query) use ($dayName) {
                 $query->where('name', $dayName);
@@ -311,5 +311,37 @@ class AppointmentService
         $appointment->update([
             'status' => AppointmentStatus::CONFIRMED,
         ]);
+    }
+    public function add(array $data): appointment
+    {
+        return DB::transaction(function () use ($data) {
+
+            $isSlotAvailable = $this->isSlotAvailable($data['clinic_id'], $data['doctor_id'], $data['visit_date'], $data['slot']);
+            if (!$isSlotAvailable) {
+                throw new SlotDoesNotAvailable();
+            }
+            $slot_duration = $this->getSlotDurationByVisitDate($data['clinic_id'], $data['doctor_id'], $data['visit_date']);
+            return  appointment::create([
+                'patient_id'=>Auth::id(),
+                'clinic_id'=>$data['clinic_id'],
+                'doctor_id'=>$data['doctor_id'],
+                'clinic_service_id'=>$data['clinicService_id'],
+                'visit_date' => $data['visit_date'],
+                'start_time' => $data['slot'],
+                'end_time' => Carbon::parse($data['slot'])->addMinutes($slot_duration),
+            ]);
+        });
+    }
+    public function isSlotAvailable(
+        int $clinicId,
+        int $doctorId,
+        string $visitDate,
+        string $slot,
+    ): bool {
+        return Appointment::where('clinic_id', $clinicId)
+            ->where('doctor_id', $doctorId)
+            ->where('visit_date', $visitDate)
+            ->where('start_time', $slot)
+            ->doesntExist();
     }
 }

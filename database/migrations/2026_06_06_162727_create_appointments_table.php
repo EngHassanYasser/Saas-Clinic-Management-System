@@ -25,19 +25,11 @@ return new class extends Migration
                 'rescheduled',
                 'in_progress'
             ])->default('pending');
-            $table->enum('appointment_type', [
-                'consultation',
-                'follow_up',
-                'emergency',
-                'lab_review',
-                'procedure'
-            ])->default('consultation');
-            $table->enum('booking_source', ['mobile', 'website']);
             $table->text('notes')->nullable();
             $table->text('cancellation_reason')->nullable();
             $table->decimal('deposit_amount', 8, 2)->default(0);
             $table->timestampTz('cancellation_time')->nullable();
-            $table->timestampTz('reminder_sent_at');
+            $table->timestampTz('reminder_sent_at')->nullable();
             $table->index('status');
         });
         DB::statement('ALTER TABLE appointments ADD CONSTRAINT chk_appointment_times 
