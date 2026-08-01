@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Vacation;
 
 use App\Models\Vication;
 
 class VacationStatisticsService
 {
-    public function getStatistics(int $clinicId): array
+    public function getStatistics(int $clinicId): Vication
     {
         $stats = Vication::whereRelation('doctor.clinics', 'clinics.id', $clinicId)
             ->selectRaw("

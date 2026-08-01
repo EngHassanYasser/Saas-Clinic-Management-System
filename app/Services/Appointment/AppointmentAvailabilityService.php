@@ -1,6 +1,6 @@
 <?php
 
-namespace App\services;
+namespace App\Services\Appointment;
 
 use App\Models\Appointment;
 use App\Models\Schedule;

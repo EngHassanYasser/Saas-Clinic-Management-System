@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Appointment;
 
+use App\Http\Controllers\Controller;
 use App\Enums\AppointmentStatus;
 use App\Models\User;
-use App\Services\AppointmentStatusService;
+use App\Services\Appointment\AppointmentStatusService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Enum;
 

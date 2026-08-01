@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Doctor;
 
 use App\Models\Clinic;
 use App\Models\Doctor;
@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Collection;
 
 class DoctorQueryService
 {
-    public function getAll(int $clinicId): Collection
+    public function getAll(int $clinicId)
     {
         $clinic = Clinic::with([
             'doctors.specialities',
             'doctors.servicePrices.clinic_service',
+            'schedules',
             'doctors.media',
         ])->findOrFail($clinicId);
         return $clinic->doctors->map(function ($doctor) use ($clinic) {
@@ -33,7 +34,7 @@ class DoctorQueryService
                     ->firstWhere('id', $clinic->id)
                     ?->pivot
                     ?->is_active,
-
+                'schedules'=>$doctor->schedules,
                 'image' => $doctor->getFirstMediaUrl('avatar')
                     ?: asset('storage/default_profile_image.jpg'),
             ];

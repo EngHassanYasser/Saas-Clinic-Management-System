@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Appointment;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\appointments\RescheduleAppointment;
-use App\services\AppointmentService;
-use App\Services\ClinicQueryService;
+use App\services\Appointment\AppointmentService;
+use App\Services\Clinic\ClinicQueryService;
 use Illuminate\Support\Facades\Auth;
 
 class AppointmentRescheduleController extends Controller

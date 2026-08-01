@@ -1,6 +1,8 @@
 <?php
 
-namespace App\http\Controllers;
+namespace App\http\Controllers\Clinic;
+
+use App\Http\Controllers\Controller;
 
 class ClinicStatisticsController extends Controller
 {

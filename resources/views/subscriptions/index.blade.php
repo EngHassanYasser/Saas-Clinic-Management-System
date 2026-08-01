@@ -5,7 +5,7 @@
         subscriptions: @js($subscriptions),
         plans:@js($plans),
         stats:@js($stats),
-        clinics:@js($clinics->items()),
+        clinics:@js($clinics),
         statuses:@js($statuses),
     })">
         <x-subscriptions.header />

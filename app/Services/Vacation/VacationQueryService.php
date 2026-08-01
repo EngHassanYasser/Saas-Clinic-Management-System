@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Vacation;
 
 use App\Models\Vication;
 use Illuminate\Pagination\LengthAwarePaginator;

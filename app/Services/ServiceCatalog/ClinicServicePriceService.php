@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\ServiceCatalog;
 
 use App\Models\Doctor_service_price;
 use Illuminate\Database\Eloquent\Collection;
@@ -9,23 +9,14 @@ class ClinicServicePriceService
 {
     public function getAllClinicServices(): Collection
     {
-        return Doctor_service_price::with(['clinic', 'doctor', 'clinic_service'])
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'clinic_name' => $item->clinic->name,
-                    'doctor_id' => $item->doctor->id,
-                    'doctor_name' => $item->doctor->name,
-                    'clinic_service_id' => $item->clinic_service->id,
-                    'service_name' => $item->clinic_service->name,
-                    'description' => $item->description,
-                    'price' => $item->price,
-                ];
-            });
+        return Doctor_service_price::with([
+            'clinic',
+            'doctor',
+            'clinic_service',
+        ])->get();
     }
 
-    public function add(array $data,int $clinicId): Doctor_service_price
+    public function add(array $data, int $clinicId): Doctor_service_price
     {
         return Doctor_service_price::create([
             'clinic_id' => $clinicId,
@@ -36,7 +27,7 @@ class ClinicServicePriceService
         ]);
     }
 
-    public function update(array $data,int $clinicId): bool
+    public function update(array $data, int $clinicId): bool
     {
         return Doctor_service_price::where('id', $data['id'])->update([
             'clinic_id' => $clinicId,

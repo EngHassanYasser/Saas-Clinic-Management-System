@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Subscription;
 
 use App\Enums\PlanStatus;
 use App\Enums\SubscriptionStatus;
@@ -59,14 +59,4 @@ class SubscriptionService
             ]);
         });
     }
-    public function changeStatus(
-        int $subscriptionId,
-        SubscriptionStatus $newStatus
-    ): bool {
-        return Subscription::whereKey($subscriptionId)
-            ->update([
-                'status' => $newStatus,
-            ]) > 0;
-    }
-    public function cancel() {}
-}
+ }

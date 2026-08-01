@@ -1,11 +1,11 @@
 <?php
 
-namespace App\services;
+namespace App\Services\Appointment;
 
 use App\Enums\AppointmentStatus;
 use App\Exceptions\SlotDoesNotAvailable;
 use App\Models\Appointment;
-use App\Services\AppointmentAvailabilityService;
+use App\Services\Appointment\AppointmentAvailabilityService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 

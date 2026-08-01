@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Plan;
 
+use App\Http\Controllers\Controller;
 use App\Enums\PlanStatus;
 use App\Http\Requests\plans\StorePlanRequest;
 use App\Http\Requests\plans\UpdatePlanRequest;
-use App\Services\PlanQueryService;
-use App\services\PlanService;
+use App\Services\Plan\PlanQueryService;
+use App\services\Plan\PlanService;
 
 class PlanController extends Controller
 {

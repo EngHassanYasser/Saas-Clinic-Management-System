@@ -1,6 +1,6 @@
 <?php
 
-namespace App\services;
+namespace App\Services\Clinic;
 
 use App\Models\Clinic;
 use App\Models\User;

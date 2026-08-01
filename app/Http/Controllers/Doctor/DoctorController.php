@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Doctor;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\doctor\StoreDoctorRequest;
 use App\Http\Requests\doctor\UpdateDoctorRequest;
-use App\Services\ClinicQueryService;
-use App\Services\DoctorQueryService;
-use App\services\DoctorService;
-use App\Services\DoctorStatisticsService;
-use App\Services\specialityQueryService;
+use App\Services\Clinic\ClinicQueryService;
+use App\Services\Doctor\DoctorQueryService;
+use App\services\Doctor\DoctorService;
+use App\Services\Doctor\DoctorStatisticsService;
+use App\Services\Speciality\SpecialityQueryService;
 use Illuminate\Support\Facades\Auth;
 
 class DoctorController extends Controller
@@ -25,7 +26,7 @@ class DoctorController extends Controller
         $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
         $doctors = $this->doctorQueryService->getAll($clinic->id);
         $specialities = $this->specialityQueryService->getAll();
-        $stats = $this->doctorStatisticsService->getStats(Auth::user()->clinic_id);
+        $stats = $this->doctorStatisticsService->getStats($clinic->id);
         return view('doctors.index', compact('doctors', 'specialities', 'stats'));
     }
     public function store(StoreDoctorRequest $request, DoctorService $doctorService)

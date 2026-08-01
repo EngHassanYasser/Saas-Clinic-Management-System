@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Schedule;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Schedule\StoreScheduleRequest;
 use App\Http\Requests\Schedule\UpdateScheduleRequest;
-use App\Services\ClinicQueryService;
-use App\Services\DoctorQueryService;
-use App\Services\ScheduleQueryService;
-use App\Services\ScheduleService;
+use App\Services\Clinic\ClinicQueryService;
+use App\Services\Doctor\DoctorQueryService;
+use App\Services\Schedule\ScheduleQueryService;
+use App\Services\Schedule\ScheduleService;
 use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller

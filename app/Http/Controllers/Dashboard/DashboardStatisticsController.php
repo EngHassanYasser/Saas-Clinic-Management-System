@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
-use App\Services\DashboardStatisticsService;
+use App\Http\Controllers\Controller;
+use App\Services\Dashboard\DashboardStatisticsService;
 
 class DashboardStatisticsController extends Controller
 {

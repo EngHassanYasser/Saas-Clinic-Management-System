@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Vacation;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\vications\StoreVicationsRequest;
 use App\Http\Requests\vications\UpdateVicationsRequest;
-use App\Services\ClinicQueryService;
-use App\Services\DoctorQueryService;
-use App\Services\VacationQueryService;
-use App\Services\VacationService;
-use App\Services\VacationStatisticsService;
+use App\Services\Clinic\ClinicQueryService;
+use App\Services\Doctor\DoctorQueryService;
+use App\Services\Vacation\VacationQueryService;
+use App\Services\Vacation\VacationService;
+use App\Services\Vacation\VacationStatisticsService;
 use Illuminate\Support\Facades\Auth;
 
 class VacationController extends Controller
@@ -23,8 +24,9 @@ class VacationController extends Controller
 
     public function index()
     {
-        $vications = $this->vactionQueryService->getClinicVacations(Auth::user()->clinic_id);
-        $doctors = $this->doctorQueryService->getDoctorsNames(Auth::user()->clinic_id);
+        $clinicId=$this->clinicQueryService->getClinicByOwnereId(Auth::id());
+        $vications = $this->vactionQueryService->getClinicVacations($clinicId->id);
+        $doctors = $this->doctorQueryService->getDoctorsNames($clinicId->id);
         $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
         $stats = $this->vacationStatisticsService->getStatistics($clinic->id);
 

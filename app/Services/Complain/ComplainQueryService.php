@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Complain;
 
 use App\Enums\RoleType;
 use App\Models\Complain;

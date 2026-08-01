@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ClinicService;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\clinicService\StoreClinicServiceRequest;
 use App\Http\Requests\clinicService\UpdateClinicServiceRequest;
-use App\Services\ClinicQueryService;
-use App\Services\ClinicServicePriceService;
-use App\Services\DoctorQueryService;
-use App\services\DoctorService;
-use App\services\ServiceCatalogService;
+use App\Services\Clinic\ClinicQueryService;
+use App\Services\Doctor\DoctorQueryService;
+use App\services\Doctor\DoctorService;
+use App\Services\ServiceCatalog\ClinicServicePriceService;
+use App\services\ServiceCatalog\ServiceCatalogService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,8 +28,9 @@ class ClinicServiceController extends Controller
     }
     public function index()
     {
+        $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
         $serviceCatalogs = $this->serviceCatalogService->getAllCatalogs();
-        $doctors = $this->doctorQueryService->getDoctorsNames(Auth::user()->clinic_id);
+        $doctors = $this->doctorQueryService->getDoctorsNames($clinic->id);
         $clinicServices = $this->clinicServicePriceService->getAllClinicServices();
         return view('Services.index', compact('serviceCatalogs', 'doctors', 'clinicServices'));
     }

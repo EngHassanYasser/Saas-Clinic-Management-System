@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Speciality;
 
 use App\Models\speciality;
 use Illuminate\Database\Eloquent\Collection;

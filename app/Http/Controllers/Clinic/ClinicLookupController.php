@@ -1,8 +1,9 @@
 <?php
 
-namespace App\http\Controllers;
+namespace App\http\Controllers\Clinic;
 
-use App\Services\ClinicQueryService;
+use App\Http\Controllers\Controller;
+use App\Services\Clinic\ClinicQueryService;
 
 class ClinicLookupController extends Controller
 {

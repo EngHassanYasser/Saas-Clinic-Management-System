@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Appointment;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\appointments\StoreAppointmentRequest;
-use App\Services\AppointmentQueryService;
-use App\services\AppointmentService;
-use App\Services\SpecialityQueryService;
-use App\services\AppointmentStatisticsService;
-use App\Services\ServiceCatalogService;
+use App\Services\Appointment\AppointmentQueryService;
+use App\services\Appointment\AppointmentService;
+use App\Services\Speciality\SpecialityQueryService;
+use App\services\Appointment\AppointmentStatisticsService;
+use App\Services\ServiceCatalog\ServiceCatalogService;
 use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller

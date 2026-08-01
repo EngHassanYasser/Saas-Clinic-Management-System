@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Appointment;
 
-use App\services\AppointmentAvailabilityService;
+use App\Http\Controllers\Controller;
+use App\services\Appointment\AppointmentAvailabilityService;
 use Illuminate\Http\Request;
 
 class AppointmentAvailabilityController extends Controller
@@ -10,10 +11,10 @@ class AppointmentAvailabilityController extends Controller
     public function __construct(
         private AppointmentAvailabilityService $appointmentAvailabilityService
     ) {}
-    public function getAvailableAppointments(Request $request, int $clinicId, int $doctorId, string $date)
+    public function getAvailableAppointments(Request $request, int $clinicId, int $doctorId, string $vistDate)
     {
         return response()->json(
-            $this->appointmentAvailabilityService->getAvailableAppointments($clinicId, $doctorId, $date)
+            $this->appointmentAvailabilityService->getAvailableAppointments($clinicId, $doctorId, $vistDate)
         );
     }
 }
