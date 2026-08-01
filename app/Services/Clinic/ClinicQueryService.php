@@ -60,4 +60,7 @@ class ClinicQueryService
     {
         return ModelClinicService::where('speciality_id', $specialityId)->select(['id', 'name'])->get();
     }
+    public function getClinicByOwnereId($ownerId):Clinic {
+        return Clinic::where('owner_id',$ownerId)->firstOrFail();
+    }
 }

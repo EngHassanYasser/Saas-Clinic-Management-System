@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\speciality;
 use Illuminate\Database\Eloquent\Collection;
 
-class SpecialityService
+class specialityQueryService
 {
     public function getAll(): Collection
     {

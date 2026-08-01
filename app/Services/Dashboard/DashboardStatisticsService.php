@@ -11,7 +11,7 @@ use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class DashboardService
+class DashboardStatisticsService
 {
     public function getClinicDashboardStats(): array
     {

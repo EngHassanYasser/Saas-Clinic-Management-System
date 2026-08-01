@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\clinicService\StoreClinicServiceRequest;
 use App\Http\Requests\clinicService\UpdateClinicServiceRequest;
+use App\Services\ClinicQueryService;
+use App\Services\ClinicServicePriceService;
+use App\Services\DoctorQueryService;
 use App\services\DoctorService;
 use App\services\ServiceCatalogService;
 use Illuminate\Http\Request;
@@ -11,12 +14,13 @@ use Illuminate\Support\Facades\Auth;
 
 class ClinicServiceController extends Controller
 {
-    private ServiceCatalogService $serviceCatalogService;
-    private DoctorService $doctorService;
 
     public function __construct(
-        ServiceCatalogService $serviceCatalogService,
-        DoctorService $doctorService
+        private ServiceCatalogService $serviceCatalogService,
+        private DoctorService $doctorService,
+        private DoctorQueryService $doctorQueryService,
+        private ClinicServicePriceService $clinicServicePriceService,
+        private ClinicQueryService $clinicQueryService,
     ) {
         $this->serviceCatalogService = $serviceCatalogService;
         $this->doctorService = $doctorService;
@@ -24,25 +28,28 @@ class ClinicServiceController extends Controller
     public function index()
     {
         $serviceCatalogs = $this->serviceCatalogService->getAllCatalogs();
-        $doctors = $this->doctorService->getDoctorsNames(Auth::user()->clinic_id);
-        $clinicServices = $this->serviceCatalogService->getAllClinicServices();
+        $doctors = $this->doctorQueryService->getDoctorsNames(Auth::user()->clinic_id);
+        $clinicServices = $this->clinicServicePriceService->getAllClinicServices();
         return view('Services.index', compact('serviceCatalogs', 'doctors', 'clinicServices'));
     }
     public function store(StoreClinicServiceRequest $request)
     {
-        $this->serviceCatalogService->addNew($request->validated());
+        $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
+
+        $this->clinicServicePriceService->add($request->validated(), $clinic->id);
 
         return back()->with('success', 'تم إضافة الخدمة بنجاح');
     }
     public function update(UpdateClinicServiceRequest $request)
     {
-        $this->serviceCatalogService->update($request->validated());
+        $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
+        $this->clinicServicePriceService->update($request->validated(), $clinic->id);
 
         return back()->with('success', 'تم تحديث الخدمة بنجاح');
     }
     public function destroy(Request $request)
     {
-        $isDeleted = $this->serviceCatalogService->deleteById($request->id);
+        $isDeleted = $this->clinicServicePriceService->deleteById($request->id);
 
         return response()->json([
             'success' => $isDeleted > 0,

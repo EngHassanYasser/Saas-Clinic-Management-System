@@ -4,22 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Schedule\StoreScheduleRequest;
 use App\Http\Requests\Schedule\UpdateScheduleRequest;
+use App\Services\ClinicQueryService;
+use App\Services\DoctorQueryService;
+use App\Services\ScheduleQueryService;
 use App\Services\ScheduleService;
 use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
 {
-    private ScheduleService $scheduleService;
 
-    public function __construct(ScheduleService $scheduleService)
-    {
-        $this->scheduleService = $scheduleService;
-    }
+    public function __construct(
+        private ScheduleService $scheduleService,
+        private ScheduleQueryService $scheduleQueryService,
+        private DoctorQueryService $doctorQueryService,
+        private ClinicQueryService $clinicQueryService,
+    ) {}
 
     public function index()
     {
-        $doctors = $this->scheduleService->getAll();
-        $weekDays = $this->scheduleService->getWeekDays();
+        $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
+        $doctors = $this->doctorQueryService->getAll($clinic->id);
+        $weekDays = $this->scheduleQueryService->getWeekDays();
         return view('schedules.index', compact('doctors', 'weekDays'));
     }
 
@@ -27,7 +32,8 @@ class ScheduleController extends Controller
 
     public function store(StoreScheduleRequest $request)
     {
-        $this->scheduleService->addNew($request->validated());
+        $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
+        $this->scheduleService->add($request->validated(), $clinic->id);
         return redirect()->route('schedules.index')
             ->with('message', 'تم اضافة الموعد بنجاح.');
     }
@@ -48,9 +54,8 @@ class ScheduleController extends Controller
                 ->route('schedules.index')
                 ->with('message', 'فشل الحذف الرجاء المحاوله لاحقا');
         }
-         return redirect()
-                ->route('schedules.index')
-                ->with('message', 'تم الحذف بنجاح');
+        return redirect()
+            ->route('schedules.index')
+            ->with('message', 'تم الحذف بنجاح');
     }
-
 }

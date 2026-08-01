@@ -5,21 +5,23 @@ namespace App\Http\Controllers;
 use App\Http\Requests\subscriptions\StoreSubscriptionRequest;
 use App\Models\Plan;
 use App\Enums\SubscriptionStatus;
-use App\Services\ClinicService;
+use App\Services\SubscriptionQueryService;
 use App\services\SubscriptionService;
+use App\Services\SubscriptionStatisticsService;
 
 class SubscriptoinController extends Controller
 {
     public function __construct(
         private SubscriptionService $subscriptionService,
-        private ClinicService $clinicService
+        private SubscriptionQueryService $subscriptionQueryService,
+        private SubscriptionStatisticsService $subscriptionStatusticsService,
     ) {}
     public function index()
     {
-        $subscriptions =  $this->subscriptionService->getAll();
+        $subscriptions =  $this->subscriptionQueryService->getAll();
         $plans = Plan::get(['id', 'name', 'monthly_price']);
-        $stats = $this->subscriptionService->getStats();
-        $clinics  = $this->clinicService->getAll();
+        $stats = $this->subscriptionStatusticsService->getStats();
+        $clinics  = $this->subscriptionQueryService->getAll();
         $statuses = enumToArray(SubscriptionStatus::class);
         return view(
             'subscriptions.index',
@@ -32,12 +34,7 @@ class SubscriptoinController extends Controller
             )
         );
     }
-    public function changeStatus(int $subscriptionID,SubscriptionStatus $newStatus)
-    {
-        $isUpdated = $this->subscriptionService->changeStatus($subscriptionID, $newStatus);
-        $message = $isUpdated ? 'status updated successfully' : 'failed to update status';
-        return redirect()->route('subscriptions.index')->with('message', $message);
-    }
+ 
     public function renew(int $subscriptionID)
     {
         $isRenewed = $this->subscriptionService->renew($subscriptionID);
