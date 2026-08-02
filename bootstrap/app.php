@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\RoleType;
 use App\Exceptions\ActiveSubscriptionAlreadyExistsException;
 use App\Exceptions\ActiveSubscriptionNotFoundException;
 use App\Exceptions\ScheduleConflictException;
@@ -71,6 +72,11 @@ return Application::configure(basePath: dirname(__DIR__))
             UnauthorizedException $e,
             Request $request
         ) {
-            return redirect()->back()->with('message','you are unauthorized for this action');
+            return redirect()->back()->with('message', 'you are unauthorized for this action');
         });
-    })->create();
+    })->withMiddleware(function ($middleware) {
+        $middleware->alias([
+            'role' => RoleType::class,
+        ]);
+    })
+    ->create();

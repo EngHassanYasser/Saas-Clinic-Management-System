@@ -12,6 +12,7 @@
                     سجل كـ مريض أو عيادة لإدارة خدماتك الطبية
                 </p>
             </div>
+            <x-shared.errors/>
 
             {{-- FORM --}}
             <div class="p-6">
@@ -30,45 +31,6 @@
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                    {{-- user name --}}
-                    <div>
-                        <label class="text-sm font-medium text-gray-700">أسم المستخدم </label>
-                        <input type="text" name="user_name" value="{{ old('user_name') }}"
-                            class="w-full mt-2 px-4 py-3 border rounded-xl
-                        focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                        transition outline-none"
-                            placeholder="مثال: Ahmed-Ali12" required autofocus>
-                        @error('user_name')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    {{-- Gender --}}
-                    <div class="mt-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            النوع
-                        </label>
-
-                        <div class="flex items-center gap-6">
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="gender" value="male"
-                                    {{ old('gender') == 'male' ? 'checked' : '' }}
-                                    class="text-blue-600 focus:ring-blue-500">
-                                <span>ذكر</span>
-                            </label>
-
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="gender" value="female"
-                                    {{ old('gender') == 'female' ? 'checked' : '' }}
-                                    class="text-blue-600 focus:ring-blue-500">
-                                <span>أنثى</span>
-                            </label>
-                        </div>
-
-                        @error('gender')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
                     {{-- Email --}}
                     <div>
                         <label class="text-sm font-medium text-gray-700">البريد الإلكتروني</label>

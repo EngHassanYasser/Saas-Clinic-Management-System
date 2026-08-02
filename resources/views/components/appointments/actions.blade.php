@@ -27,7 +27,7 @@
         </button>
     </form>
 
-    <button x-show="appointment.status == '{{ app\Enums\AppointmentStatus::PENDING->value }}'" type="submit"
+    <button x-show="appointment.status == '{{ \App\Enums\AppointmentStatus::PENDING->value }}'" type="submit"
         class="px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold hover:bg-emerald-100 transition whitespace-nowrap">
         <i class="fas fa-check"></i> تأكيد
     </button>

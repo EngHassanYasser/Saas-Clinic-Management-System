@@ -12,11 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('user_name')->unique();
-            $table->enum('status',['active','inactive'])->default('active');
-            $table->text('bio')->nullable();
-            $table->text('image_name')->nullable();
-            $table->enum('gendor',['male','female'])->nullable();
+            $table->string('google_id')->nullable()->unique();
         });
     }
 

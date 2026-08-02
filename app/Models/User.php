@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 #[Fillable([
     'name',
@@ -31,11 +32,13 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
+
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => RoleType::class,
         ];
     }
     public function usesDashboardLayout(): bool
@@ -44,6 +47,21 @@ class User extends Authenticatable
             RoleType::CLINIC->value,
             RoleType::PATIENT->value,
         ], true);
+    }
+
+    public static function generateUniqueUsername(string $name): string
+    {
+        $baseUsername = Str::slug($name, '');
+
+        if ($baseUsername === '') {
+            $baseUsername = 'user';
+        }
+
+        do {
+            $username = $baseUsername . random_int(1000, 9999);
+        } while (self::where('user_name', $username)->exists());
+
+        return $username;
     }
     public function notification_logs()
     {

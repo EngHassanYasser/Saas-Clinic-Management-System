@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\RoleType;
 use App\Events\UserCreated;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -33,26 +35,23 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'type' => ['required', 'in:patient,clinic'],
-            'user_name' => ['required', 'unique:users,user_name'],
-            'gender' => ['required', 'in:male,female'],
+            'type' => ['required',  new Enum(RoleType::class)],
         ]);
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name' => strtolower(trim($request->name)),
+            'email' =>strtolower(trim($request->email)),
             'password' => Hash::make($request->password),
             'type' => $request->type,
-            'user_name' => $request->user_name,
-            'gender' => $request->gender,
+            'user_name' => User::generateUniqueUsername($request->name),
         ]);
 
-         event(new UserCreated($user));
+        event(new UserCreated($user));
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('dashboard.index', absolute: false));
     }
 }
