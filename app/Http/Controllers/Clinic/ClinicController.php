@@ -7,10 +7,13 @@ use App\Http\Requests\Clinic\StoreClinicRequest;
 use App\Http\Requests\Clinic\UpdateClinicRequest;
 use App\Models\City;
 use App\Models\Clinic;
+use App\Models\Day;
 use App\Models\Plan;
 use App\Services\Clinic\ClinicQueryService;
 use App\services\Clinic\ClinicService;
 use App\Services\Clinic\ClinicStatisticsService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class ClinicController extends Controller
 {
@@ -36,13 +39,17 @@ class ClinicController extends Controller
         $this->clinicService->add($request->validated());
         return redirect()->route('clinics.index')->with('message', 'clinic added successfully');
     }
-    public function edit() {
-        return view('clinics.edit');
+    public function edit(Request $request)
+    {
+        $currentClinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
+        $cities = City::get(['id','name']);
+        $days = Day::get(['id','name']);
+        return view('clinics.edit', compact('currentClinic','cities','days'));
     }
     public function update(UpdateClinicRequest $request, clinic $clinic)
     {
         $this->clinicService->update($request->validated(), $clinic);
-        return redirect()->route('clinics.index')->with('message', 'clinic updated successfully');
+        return redirect()->route('clinics.edit')->with('message', 'clinic updated successfully');
     }
     public function destroy(Clinic $clinic)
     {

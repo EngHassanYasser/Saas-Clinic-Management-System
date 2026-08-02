@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 #[Fillable([
     'slug',
@@ -17,9 +19,18 @@ use Illuminate\Database\Eloquent\Model;
     'logitude',
     'logo',
     'city_id',
+    'open_time',
+    'close_time',
 ])]
-class Clinic extends Model
+class Clinic extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection('logo')
+            ->singleFile();
+    }
     public function appointments()
     {
         return $this->hasMany(appointment::class);
@@ -78,5 +89,9 @@ class Clinic extends Model
     public function latestSubscription()
     {
         return $this->hasOne(Subscription::class)->latestOfMany();
+    }
+    public function days()
+    {
+        return $this->belongsToMany(Day::class);
     }
 }

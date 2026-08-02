@@ -1,11 +1,15 @@
 export default function (serverData) {
     return {
-        clinics: serverData.clinics.data,
-        cities: serverData.cities,
-        plans: serverData.plans ?? [],
-        pagination: serverData.clinics.links ?? [],
-        stats: serverData.stats ?? [],
-
+        clinics: serverData?.clinics?.data ?? [],
+        cities: serverData?.cities ?? [],
+        currentClinic: serverData?.currentClinic ?? null,
+        plans: serverData?.plans ?? [],
+        pagination: serverData?.clinics?.links ?? [],
+        stats: serverData?.stats ?? [],
+        days:serverData.days ?? [],
+        selected:serverData.currentClinic.city.id,
+        selectedName:serverData.currentClinic.city.name,
+        open: false,
         nextId: 5,
         perPage: 10,
         currentPage: 1,

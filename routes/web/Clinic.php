@@ -26,6 +26,10 @@ Route::middleware('auth')->group(function () {
         '/clinics/edit',
         [ClinicController::class, 'edit']
     )->name('clinics.edit');
+    Route::put(
+        '/clinics/{clinic}',
+        [ClinicController::class, 'update']
+    )->name('clinics.update');
     Route::delete(
         '/clinics/{clinic}/',
         [ClinicController::class, 'destroy']

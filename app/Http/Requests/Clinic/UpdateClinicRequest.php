@@ -16,8 +16,9 @@ class UpdateClinicRequest extends FormRequest
     {
 
         $clinic = $this->route('clinic');
+
         return [
-            'clinic_name' => [
+            'name' => [
                 'required',
                 'string',
                 'max:255',
@@ -30,23 +31,6 @@ class UpdateClinicRequest extends FormRequest
                 Rule::unique('users', 'email')
                     ->ignore($clinic->owner_id),
             ],
-
-            'user_name' => [
-                'required',
-                'string',
-                'min:3',
-                'max:50',
-                'alpha_dash',
-                Rule::unique('users', 'user_name')
-                    ->ignore($clinic->owner_id),
-            ],
-
-            'full_name' => [
-                'required',
-                'string',
-                'max:255',
-            ],
-
             'password' => [
                 'nullable',
                 'string',
@@ -73,10 +57,16 @@ class UpdateClinicRequest extends FormRequest
                 'integer',
                 'exists:cities,id',
             ],
-            'gendor' => [
-                'required',
-                Rule::in(['male', 'female']),
+            'logo' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:5120',
             ],
+            'work_days' => ['required', 'array', 'min:1'],
+            'work_days.*' => ['integer', 'exists:days,id'],
+            'open_time' => ['required', 'date_format:H:i:s'],
+            'close_time' => ['required', 'date_format:H:i:s'],
         ];
     }
 }

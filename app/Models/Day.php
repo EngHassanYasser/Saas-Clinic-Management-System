@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class Day extends Model
 {
     public $timestamp = false;
-     public function schedules()
+    public function schedules()
     {
         return $this->belongsToMany(
             Schedule::class,
@@ -19,5 +19,9 @@ class Day extends Model
             'day_id',
             'schedule_id'
         );
+    }
+    public function clinics()
+    {
+        return $this->belongsToMany(Clinic::class);
     }
 }

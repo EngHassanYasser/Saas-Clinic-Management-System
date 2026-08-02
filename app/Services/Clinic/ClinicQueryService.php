@@ -17,6 +17,8 @@ class ClinicQueryService
             'email',
             'phone',
             'address',
+            'open_time',
+            'close_time',
             'created_at',
             'city_id',
             'owner_id',
@@ -60,7 +62,13 @@ class ClinicQueryService
     {
         return ModelClinicService::where('speciality_id', $specialityId)->select(['id', 'name'])->get();
     }
-    public function getClinicByOwnereId($ownerId):Clinic {
-        return Clinic::where('owner_id',$ownerId)->firstOrFail();
+    public function getClinicByOwnereId($ownerId): Clinic
+    {
+        $clinic = Clinic::where('owner_id', $ownerId)
+            ->with(['city','days'])
+            ->firstOrFail();
+        $clinic->logo = $clinic->getFirstMediaUrl('logo');
+
+        return $clinic;
     }
 }

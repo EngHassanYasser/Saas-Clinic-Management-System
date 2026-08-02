@@ -40,26 +40,25 @@ class ClinicService
 
             $clinic->load('owner');
 
-            $clinic->update([
-                'name' => $data['clinic_name'],
-                'slug' => Str::slug($data['clinic_name']),
+            if (!empty($data['password'])) {
+                $clinic->owner->update(['password' => Hash::make($data['password'])]);
+            }
+            if (isset($data['logo'])) {
+                $clinic
+                    ->addMedia($data['logo'])
+                    ->toMediaCollection('logo');
+            }
+            $clinic->days()->sync($data['work_days']);
+            return  $clinic->update([
+                'name' => $data['name'],
+                'slug' => Str::slug($data['name']),
                 'phone' => $data['phone'],
                 'email' => $data['email'],
                 'address' => $data['address'],
                 'city_id' => $data['city_id'],
+                'open_time'=>$data['open_time'],
+                'close_time'=>$data['close_time'],
             ]);
-
-            $userData = [
-                'name' => $data['full_name'],
-                'user_name' => $data['user_name'],
-                'gendor' => $data['gendor'],
-            ];
-
-            if (!empty($data['password'])) {
-                $userData['password'] = Hash::make($data['password']);
-            }
-
-            return $clinic->owner->update($userData);
         });
     }
     public function delete(Clinic $clinic): bool
