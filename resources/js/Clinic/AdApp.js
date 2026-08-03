@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-    Alpine.data("adsApp", () => ({
+    Alpine.data("AdApp", () => ({
         // ===== DATA =====
         ads: [
             {

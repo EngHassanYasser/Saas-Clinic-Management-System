@@ -12,6 +12,7 @@ use App\services\Complain\ComplainService;
 use App\Services\Complain\ComplainStatisticsService;
 use App\Services\Doctor\DoctorQueryService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Concurrency;
 
 class ComplainController extends Controller
 {
@@ -22,21 +23,25 @@ class ComplainController extends Controller
         private DoctorQueryService $doctorQueryService,
         private ClinicQueryService $clinicQueryService,
     ) {}
+
     public function index()
     {
         if (Auth::user()->type == RoleType::CLINIC->value) {
             $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
-            $complaints = $this->complainQueryService->getClinicComplains(Auth::user());
-            $stats = $this->comaplainStatisticsService->getStatistics(1);
-            $doctors = $this->doctorQueryService->getDoctorsNames(1);
+            [$complaints,$stats,$doctors] = Concurrency::run([
+                fn () => $this->complainQueryService->getClinicComplains(Auth::user()),
+                fn () => $this->comaplainStatisticsService->getStatistics($clinic->id),
+                fn () => $this->doctorQueryService->getDoctorsNames($clinic->id),
+            ]);
         } else {
             $complaints = $this->complainQueryService->getClinicComplains(Auth::user());
             $stats = [];
-            $doctors =[];
+            $doctors = [];
         }
 
         return view('complains.index', compact('complaints', 'stats', 'doctors'));
     }
+
     public function store(StoreComplainRequest $request)
     {
         $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
@@ -48,6 +53,7 @@ class ComplainController extends Controller
 
         return redirect()->route('complains.index')->with('message', $message);
     }
+
     public function update(UpdateComplainRequest $request, int $complainId)
     {
         $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
@@ -58,6 +64,7 @@ class ComplainController extends Controller
 
         return redirect()->route('complains.index')->with('message', $message);
     }
+
     public function destroy(int $complainId)
     {
         $isDeleted = $this->complainService->delete($complainId);

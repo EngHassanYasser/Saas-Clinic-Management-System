@@ -11,6 +11,7 @@ use App\Services\Vacation\VacationQueryService;
 use App\Services\Vacation\VacationService;
 use App\Services\Vacation\VacationStatisticsService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Concurrency;
 
 class VacationController extends Controller
 {
@@ -24,11 +25,13 @@ class VacationController extends Controller
 
     public function index()
     {
-        $clinicId=$this->clinicQueryService->getClinicByOwnereId(Auth::id());
-        $vications = $this->vactionQueryService->getClinicVacations($clinicId->id);
-        $doctors = $this->doctorQueryService->getDoctorsNames($clinicId->id);
         $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
-        $stats = $this->vacationStatisticsService->getStatistics($clinic->id);
+        [$vications,$doctors,$clinic,$stats] = Concurrency::run([
+            fn () => $this->vactionQueryService->getClinicVacations($clinic->id),
+            fn () => $this->doctorQueryService->getDoctorsNames($clinic->id),
+            fn () => $this->clinicQueryService->getClinicByOwnereId(Auth::id()),
+            fn () => $this->vacationStatisticsService->getStatistics($clinic->id),
+        ]);
 
         return view('vacations.index', compact('vications', 'doctors', 'stats'));
     }

@@ -12,8 +12,9 @@ use App\Models\Plan;
 use App\Services\Clinic\ClinicQueryService;
 use App\services\Clinic\ClinicService;
 use App\Services\Clinic\ClinicStatisticsService;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Concurrency;
 
 class ClinicController extends Controller
 {
@@ -22,39 +23,54 @@ class ClinicController extends Controller
         private ClinicQueryService $clinicQueryService,
         private ClinicStatisticsService $clinicStatisticsService,
     ) {}
+
     public function index()
     {
-        $stats = $this->clinicStatisticsService->getStats();
-        $clinics = $this->clinicQueryService->getAll();
-        $cities = City::get(['id', 'name']);
-        $plans = Plan::get(['id', 'name']);
+        [$stats,$clinics,$citites,$plans] = Concurrency::run([
+            fn () => $this->clinicStatisticsService->getStats(),
+            fn () => $this->clinicQueryService->getAll(),
+            fn () => City::get(['id', 'name']),
+            fn () => Plan::get(['id', 'name']),
+        ]);
+
         return view('clinics.index', compact('clinics', 'cities', 'plans', 'stats'));
     }
+
     public function searchResults()
     {
         return view('clinics.SearchResults');
     }
+
     public function store(StoreClinicRequest $request)
     {
         $this->clinicService->add($request->validated());
+
         return redirect()->route('clinics.index')->with('message', 'clinic added successfully');
     }
+
     public function edit(Request $request)
     {
-        $currentClinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
-        $cities = City::get(['id','name']);
-        $days = Day::get(['id','name']);
-        return view('clinics.edit', compact('currentClinic','cities','days'));
+        [$currentClinic,$cities,$days] = Concurrency::run([
+            fn () => $this->clinicQueryService->getClinicByOwnereId(Auth::id()),
+            fn () => City::get(['id', 'name']),
+            fn () => Day::get(['id', 'name']),
+        ]);
+
+        return view('clinics.edit', compact('currentClinic', 'cities', 'days'));
     }
-    public function update(UpdateClinicRequest $request, clinic $clinic)
+
+    public function update(UpdateClinicRequest $request, Clinic $clinic)
     {
         $this->clinicService->update($request->validated(), $clinic);
+
         return redirect()->route('clinics.edit')->with('message', 'clinic updated successfully');
     }
+
     public function destroy(Clinic $clinic)
     {
         $isDeleted = $this->clinicService->delete($clinic);
         $message = $isDeleted ? 'clinic deleted duccessfully' : 'failed to delete clinic';
+
         return redirect()->route('clinics.index')->with('message', $message);
     }
 }

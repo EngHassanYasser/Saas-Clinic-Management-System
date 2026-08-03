@@ -1,6 +1,7 @@
 @extends('layouts-main.dashboard')
 @section('content')
-    <div class="min-h-screen bg-slate-50 py-8" x-data="profileImage()">
+    <div  x-data="ProfileApp({cities:@js($cities),user:@js($user)})"  x-data="profileImage()" class="min-h-screen bg-slate-50 py-8">
+        <button type="button" @click="console.log(user)">cli</button>
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             @if (session('success'))
                 <div x-data="{ show: true }" x-show="show" x-transition
@@ -16,8 +17,7 @@
             <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
-                    <!-- Cover -->
+                <div class="bg-slate-100 rounded-3xl shadow-sm border border-slate-200 overflow-hidden"> <!-- Cover -->
                     <div class="h-40 bg-gradient-to-r from-cyan-600 via-teal-600 to-cyan-700">
                     </div>
                     <div class="px-6 md:px-10 pb-10">
@@ -26,8 +26,10 @@
                         <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
                             <x-profile.name />
                             <x-profile.email />
-                            <x-profile.phone />
-                            <x-profile.address />
+                                <x-profile.phone />
+                                {{-- <x-profile.address /> --}}
+                                <x-profile.city/>
+                                <x-profile.password />
                         </div>
                         <x-profile.actions />
                     </div>

@@ -10,6 +10,7 @@ use App\Services\Doctor\DoctorQueryService;
 use App\Services\Schedule\ScheduleQueryService;
 use App\Services\Schedule\ScheduleService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Concurrency;
 
 class ScheduleController extends Controller
 {
@@ -24,8 +25,10 @@ class ScheduleController extends Controller
     public function index()
     {
         $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
-        $doctors = $this->doctorQueryService->getAll($clinic->id);
-        $weekDays = $this->scheduleQueryService->getWeekDays();
+        [$doctors,$weekDays]= Concurrency::run([
+            fn()=>$this->doctorQueryService->getAll($clinic->id),
+            fn()=> $this->scheduleQueryService->getWeekDays(),
+        ]);
         return view('schedules.index', compact('doctors', 'weekDays'));
     }
 

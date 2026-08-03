@@ -3,7 +3,7 @@
 @section('title', 'الشكاوى')
 
 @section('content')
-    <div class="p-6 min-h-screen bg-gray-50" dir="rtl" x-data="complaintsForm({
+    <div class="p-6 min-h-screen bg-gray-50" dir="rtl" x-data="ComplaintApp({
         complaints: @js($complaints),
         stats: @js($stats),
         doctors:@js($doctors),

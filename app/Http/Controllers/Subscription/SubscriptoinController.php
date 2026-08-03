@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Subscription;
 
+use App\Enums\SubscriptionStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\subscriptions\StoreSubscriptionRequest;
 use App\Models\Plan;
-use App\Enums\SubscriptionStatus;
 use App\Services\Subscription\SubscriptionQueryService;
 use App\services\Subscription\SubscriptionService;
 use App\Services\Subscription\SubscriptionStatisticsService;
+use Illuminate\Support\Facades\Concurrency;
 
 class SubscriptoinController extends Controller
 {
@@ -17,13 +18,17 @@ class SubscriptoinController extends Controller
         private SubscriptionQueryService $subscriptionQueryService,
         private SubscriptionStatisticsService $subscriptionStatusticsService,
     ) {}
+
     public function index()
     {
-        $subscriptions =  $this->subscriptionQueryService->getAll();
-        $plans = Plan::get(['id', 'name', 'monthly_price']);
-        $stats = $this->subscriptionStatusticsService->getStats();
-        $clinics  =$this->subscriptionQueryService->getAll();
+        [$subscriptions,$plans,$stats,$clinics] = Concurrency::run([
+            fn () => $this->subscriptionQueryService->getAll(),
+            fn () => Plan::get(['id', 'name', 'monthly_price']),
+            fn () => $this->subscriptionStatusticsService->getStats(),
+            fn () => $this->subscriptionQueryService->getAll(),
+        ]);
         $statuses = enumToArray(SubscriptionStatus::class);
+
         return view(
             'subscriptions.index',
             compact(
@@ -40,11 +45,14 @@ class SubscriptoinController extends Controller
     {
         $isRenewed = $this->subscriptionService->renew($subscriptionID);
         $message = $isRenewed ? 'subscription renewed successfully' : 'failed to isRenewed subscription';
+
         return redirect()->route('subscriptions.index')->with('message', $message);
     }
+
     public function store(StoreSubscriptionRequest $request)
     {
         $this->subscriptionService->add($request->validated());
+
         return redirect()->route('subscriptions.index')->with('message', 'subscription added successfully');
     }
 }

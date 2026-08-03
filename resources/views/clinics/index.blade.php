@@ -1,6 +1,6 @@
 @extends('layouts-main.dashboard')
 @section('content')
-    <div dir="rtl" x-data="clinicsApp({
+    <div dir="rtl" x-data="ClinicsApp({
         clinics: @js($clinics),
         cities: @js($cities),
         plans: @js($plans),

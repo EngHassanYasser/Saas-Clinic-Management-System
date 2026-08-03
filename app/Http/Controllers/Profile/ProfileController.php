@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\City;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,13 +15,16 @@ class ProfileController extends Controller
 {
     public function edit(Request $request): View
     {
+        $cities = City::get(['id', 'name']);
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $request->user()->with('city')->firstOrFail(),
+            'cities' => $cities,
         ]);
     }
 
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {

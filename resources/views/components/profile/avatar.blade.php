@@ -1,4 +1,4 @@
-<div class="-mt-20 flex flex-col items-center">
+<div x-data="profileImage()" class="-mt-20 flex flex-col items-center">
     <div class="relative">
         <img :src="preview"
             class="w-40 h-40 rounded-full border-4 border-white object-cover shadow-xl bg-slate-100">

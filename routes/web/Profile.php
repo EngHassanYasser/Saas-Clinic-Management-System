@@ -8,7 +8,7 @@ Route::middleware('auth')->group(function () {
         '/profile',
         [ProfileController::class, 'edit']
     )->name('profile.edit');
-    Route::patch(
+    Route::put(
         '/profile',
         [ProfileController::class, 'update']
     )->name('profile.update');

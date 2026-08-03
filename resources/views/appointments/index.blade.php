@@ -3,7 +3,7 @@
 @section('title', 'موعدي')
 
 @section('content')
-    <div class="flex min-h-screen" dir="rtl" x-data="bookingForm({
+    <div class="flex min-h-screen" dir="rtl" x-data="BookingApp({
         appointments: @js($appointments->items()),
         stats: @js($stats)
     })">

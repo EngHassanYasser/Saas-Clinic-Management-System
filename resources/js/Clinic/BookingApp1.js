@@ -1,5 +1,5 @@
 document.addEventListener("alpine:init", () => {
-    Alpine.data("bookingApp", () => ({
+    Alpine.data("BookingApp1", () => ({
         service: "",
         doctor: "",
         date: "",

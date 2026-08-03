@@ -1,4 +1,4 @@
-<div class="mt-10 flex justify-end gap-3">
+<div class="mt-10 flex justify-center gap-3">
     <a href="{{ url()->previous() }}"
         class="px-6 py-3 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 transition">
         Cancel

@@ -4,7 +4,7 @@
 
 @extends($layout)
 @section('content')
-    <div class="max-w-3xl mx-auto px-4 py-6 sm:py-10" x-data="bookingForm({
+    <div class="max-w-3xl mx-auto px-4 py-6 sm:py-10" x-data="BookingApp({
         specialties: @js($specialities)})" x-cloak>
         <x-shared.errors/>
         <x-appointments.header />

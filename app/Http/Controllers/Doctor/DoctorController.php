@@ -11,6 +11,7 @@ use App\services\Doctor\DoctorService;
 use App\Services\Doctor\DoctorStatisticsService;
 use App\Services\Speciality\SpecialityQueryService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Concurrency;
 
 class DoctorController extends Controller
 {
@@ -18,17 +19,22 @@ class DoctorController extends Controller
         private DoctorService $doctorService,
         private DoctorQueryService $doctorQueryService,
         private DoctorStatisticsService $doctorStatisticsService,
-        private specialityQueryService $specialityQueryService,
+        private SpecialityQueryService $specialityQueryService,
         private ClinicQueryService $clinicQueryService,
     ) {}
+
     public function index()
     {
         $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
-        $doctors = $this->doctorQueryService->getAll($clinic->id);
-        $specialities = $this->specialityQueryService->getAll();
-        $stats = $this->doctorStatisticsService->getStats($clinic->id);
+        [$doctors,$specialities,$stats] = Concurrency::run([
+            fn () => $this->doctorQueryService->getAll($clinic->id),
+            fn () => $this->specialityQueryService->getAll(),
+            fn () => $this->doctorStatisticsService->getStats($clinic->id),
+        ]);
+
         return view('doctors.index', compact('doctors', 'specialities', 'stats'));
     }
+
     public function store(StoreDoctorRequest $request, DoctorService $doctorService)
     {
         $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
@@ -38,6 +44,7 @@ class DoctorController extends Controller
             ->route('doctors.index')
             ->with('message', 'Doctor added successfully.');
     }
+
     public function update(UpdateDoctorRequest $request, int $doctorId)
     {
         $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
@@ -47,10 +54,12 @@ class DoctorController extends Controller
             ->route('doctors.index')
             ->with('message', 'تم تعديل بيانات الطبيب بنجاح');
     }
+
     public function destroy(int $doctorId)
     {
         $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
         $this->doctorService->deleteById($doctorId, $clinic->id);
+
         return redirect()->route('doctors.index')->with('message', 'doctor deleted successfully');
     }
 }

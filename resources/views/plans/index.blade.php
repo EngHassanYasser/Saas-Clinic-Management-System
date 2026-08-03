@@ -3,7 +3,7 @@
 @section('title', 'إدارة الباقات')
 
 @section('content')
-    <div x-data="PlansApp({
+    <div x-data="PlanApp({
         plans: @js($plans),
         statuses: @js($statuses),
     })" class="space-y-8">
