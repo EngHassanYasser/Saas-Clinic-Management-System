@@ -35,13 +35,15 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        return DB::transaction(function () use ($request) {
+        $user = DB::transaction(function () use ($request) {
+
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
-                'type' => ['required',  new Enum(RoleType::class)],
+                'type' => ['required', new Enum(RoleType::class)],
             ]);
+
             $user = User::create([
                 'name' => strtolower(trim($request->name)),
                 'email' => strtolower(trim($request->email)),
@@ -49,25 +51,19 @@ class RegisteredUserController extends Controller
                 'type' => $request->type,
                 'user_name' => User::generateUniqueUsername($request->name),
             ]);
-            if ($user->type === RoleType::CLINIC) {
+
+            if ($user->type === RoleType::CLINIC->value) {
                 Clinic::create([
                     'owner_id' => $user->id,
                     'name' => $user->name,
                     'phone' => '+012456574',
                     'email' => $user->email,
-                    // optional fields من الجدول
-                    'description' => null,
                     'slug' => 'testclinic',
                     'address' => 'jdlsfks',
-                    'latitude' => null,
-                    'longitude' => null,
-                    'logo' => null,
-                    'image_cover_name' => null,
-
-                    'is_featured' => 0,
-                    'featured_until' => null,
                 ]);
             }
+
+            return $user;
         });
 
         event(new UserCreated($user));

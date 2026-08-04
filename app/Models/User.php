@@ -17,7 +17,6 @@ use Illuminate\Support\Str;
     'password',
     'type',
     'user_name',
-    'speciality_id',
     'clinic_id',
     'city_id',
 ])]
