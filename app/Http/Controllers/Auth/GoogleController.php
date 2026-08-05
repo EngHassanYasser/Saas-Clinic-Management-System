@@ -28,7 +28,6 @@ class GoogleController extends Controller
         DB::transaction(function () {
             $googleUser = Socialite::driver('google')->user();
             $user = User::where('email', $googleUser->email)->first();
-
             if (! $user) {
                 $user = User::create([
                     'name' => $googleUser->name,
@@ -38,15 +37,15 @@ class GoogleController extends Controller
                     'google_id' => $googleUser->id,
                     'user_name' => User::generateUniqueUsername($googleUser->name),
                 ]);
-                if ($user->type === RoleType::CLINIC->value) {
+                if ($user->type === RoleType::CLINIC) {
                     Clinic::create([
                         'owner_id' => $user->id,
                         'name' => $user->name,
-                        'phone' => '+012456574',
+                        'phone' => $user->phone,
                         'email' => $user->email,
                         'description' => null,
                         'slug' => 'testclinic',
-                        'address' => 'jdlsfks',
+                        'address' => null,
                         'latitude' => null,
                         'longitude' => null,
                         'logo' => null,

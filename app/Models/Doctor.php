@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 #[Fillable([
      'name',
@@ -15,7 +16,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 ])]
 class Doctor extends Model implements HasMedia
 {
-     use InteractsWithMedia;
+     use InteractsWithMedia,HasFactory;
      public function getAvatarUrlAttribute()
      {
           return $this->getFirstMediaUrl('avatar')

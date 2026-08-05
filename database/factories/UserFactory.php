@@ -22,8 +22,16 @@ class UserFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    public function doctor(): static
+    {
+        return $this->state(fn () => [
+            'type' => 'doctor',
+        ]);
+    }
+
     public function definition(): array
     {
+
         return [
             'name' => fake()->name(),
             'user_name' => fake()->unique()->userName(),
@@ -31,6 +39,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+
         ];
     }
 

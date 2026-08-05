@@ -14,8 +14,8 @@ return new class extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->timestampTz('start_time');
-            $table->timestampTz('end_time');
+            $table->time('start_time');
+            $table->time('end_time');
             $table->enum('status', [
                 'pending',
                 'confirmed',

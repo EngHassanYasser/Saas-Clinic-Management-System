@@ -17,6 +17,7 @@ use Illuminate\Validation\Rules;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 
 class RegisteredUserController extends Controller
 {
@@ -52,14 +53,14 @@ class RegisteredUserController extends Controller
                 'user_name' => User::generateUniqueUsername($request->name),
             ]);
 
-            if ($user->type === RoleType::CLINIC->value) {
+            if ($user->type === RoleType::CLINIC) {
                 Clinic::create([
                     'owner_id' => $user->id,
                     'name' => $user->name,
-                    'phone' => '+012456574',
+                    'phone' => null,
                     'email' => $user->email,
-                    'slug' => 'testclinic',
-                    'address' => 'jdlsfks',
+                    'slug' => Str::slug($user->name),
+                    'address' => null,
                 ]);
             }
 

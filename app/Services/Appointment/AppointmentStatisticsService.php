@@ -12,8 +12,8 @@ class AppointmentStatisticsService
     public function getStats(User $user): Appointment
     {
         return match ($user->type) {
-            RoleType::PATIENT->value => $this->getPatientStats($user->id),
-            RoleType::CLINIC->value => $this->getClinicStats(Clinic::where('owner_id', $user->id)->value('id')),
+            RoleType::PATIENT => $this->getPatientStats($user->id),
+            RoleType::CLINIC => $this->getClinicStats(Clinic::where('owner_id', $user->id)->value('id')),
             default => new Appointment(),
         };
     }

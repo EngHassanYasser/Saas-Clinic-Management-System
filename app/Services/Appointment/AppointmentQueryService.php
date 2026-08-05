@@ -14,9 +14,9 @@ class AppointmentQueryService
 {
     public function getAppointments(User $user): LengthAwarePaginator
     {
-        if ($user->type == RoleType::PATIENT->value) {
+        if ($user->type == RoleType::PATIENT) {
             return $this->getAppointmentsBy('patient_id', $user->id);
-        } else if ($user->type == RoleType::CLINIC->value) {
+        } else if ($user->type == RoleType::CLINIC) {
             $clinicId = Clinic::where('owner_id', $user->id)->value('id');
             return $this->getAppointmentsBy('clinic_id', $clinicId);
         }
@@ -84,13 +84,13 @@ class AppointmentQueryService
     {
         $query = Appointment::whereKey($appointmentId);
 
-        if ($user->type === RoleType::CLINIC->value) {
+        if ($user->type === RoleType::CLINIC) {
             $clinicId = Clinic::where('owner_id', $user->id)->value('id');
 
             $query->where('clinic_id', $clinicId);
         }
 
-        if ($user->type === RoleType::PATIENT->value) {
+        if ($user->type === RoleType::PATIENT) {
             $query->where('patient_id', $user->id);
         }
 

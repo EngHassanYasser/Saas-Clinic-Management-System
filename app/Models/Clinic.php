@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -24,33 +25,40 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 ])]
 class Clinic extends Model implements HasMedia
 {
-    use InteractsWithMedia;
+    use HasFactory, InteractsWithMedia;
+
     public function registerMediaCollections(): void
     {
         $this
             ->addMediaCollection('logo')
             ->singleFile();
     }
+
     public function appointments()
     {
         return $this->hasMany(appointment::class);
     }
+
     public function owner()
     {
         return $this->belongsTo(user::class);
     }
+
     public function users()
     {
         return $this->belongsToMany(User::class, 'clinic_users', 'clinic_id', 'user_id');
     }
+
     public function settings()
     {
         return $this->hasOne(clinic_setting::class);
     }
+
     public function banners()
     {
         return $this->hasMany(banner::class);
     }
+
     public function specialities()
     {
         return $this->belongsToMany(
@@ -58,38 +66,47 @@ class Clinic extends Model implements HasMedia
             'clinic_specialities'
         );
     }
+
     public function schedules()
     {
         return $this->hasMany(schedule::class);
     }
+
     public function servicePrices()
     {
         return $this->hasMany(doctor_service_price::class);
     }
+
     public function clinic_doctor()
     {
         return $this->hasMany(clinic_doctor::class);
     }
+
     public function doctors()
     {
         return $this->belongsToMany(Doctor::class, 'clinic_doctors', 'clinic_id', 'doctor_id');
     }
+
     public function complains()
     {
         return $this->hasMany(complain::class);
     }
+
     public function city()
     {
         return $this->belongsTo(city::class);
     }
+
     public function subscriptions()
     {
         return $this->hasMany(subscription::class);
     }
+
     public function latestSubscription()
     {
         return $this->hasOne(Subscription::class)->latestOfMany();
     }
+
     public function days()
     {
         return $this->belongsToMany(Day::class);

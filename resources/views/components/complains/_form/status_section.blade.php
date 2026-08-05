@@ -1,4 +1,4 @@
-@if (Auth::user()->type == \App\Enums\RoleType::CLINIC->value)
+@if (Auth::user()->type == \App\Enums\RoleType::CLINIC)
     <template x-if=" mode == 'update'">
         <div class="flex gap-2">
             <template x-for="status in statuses" :key="status.value">

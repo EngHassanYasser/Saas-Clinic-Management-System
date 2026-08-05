@@ -3,17 +3,26 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-#[Fillable(['name','timezone','country_id'])]
+
+#[Fillable(['name', 'timezone', 'country_id'])]
 class City extends Model
 {
-    public function country() {
+    use HasFactory;
+public $timestamps=false;
+    public function country()
+    {
         return $this->belongsTo(country::class);
     }
-    public function clinics(){
+
+    public function clinics()
+    {
         return $this->hasMany(clinic::class);
     }
-    public function users() {
+
+    public function users()
+    {
         return $this->hasMany(user::class);
     }
 }

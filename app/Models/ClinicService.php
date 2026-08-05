@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 #[Fillable([
     'name',
@@ -11,7 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 ])]
 class ClinicService extends Model
 {
-    public $timestamp = false;
+    use HasFactory;
+    public $timestamps = false;
     public function servicePrices()
     {
         return $this->hasMany(doctor_service_price::class);

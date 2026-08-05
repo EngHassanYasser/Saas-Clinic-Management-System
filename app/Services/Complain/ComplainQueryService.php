@@ -27,11 +27,11 @@ class ComplainQueryService
             'resolved_at',
             'updated_at',
             'created_at'
-        )->when($user->type === RoleType::CLINIC->value, function ($query) use ($user) {
+        )->when($user->type === RoleType::CLINIC, function ($query) use ($user) {
             $query->whereHas('clinic', function ($q) use ($user) {
                 $q->where('owner_id', $user->id);
             });
-        })->when($user->type === RoleType::PATIENT->value, function ($query) use ($user) {
+        })->when($user->type === RoleType::PATIENT, function ($query) use ($user) {
             $query->where('user_id', $user->id);
         })->with(['patient:id,name', 'doctor:id,name'])
             ->get();

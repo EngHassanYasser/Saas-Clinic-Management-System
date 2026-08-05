@@ -4,13 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 #[Fillable([
     'name'
 ])]
 class Day extends Model
 {
-    public $timestamp = false;
+    use HasFactory;
+    public $timestamps = false;
     public function schedules()
     {
         return $this->belongsToMany(

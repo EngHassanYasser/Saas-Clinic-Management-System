@@ -7,13 +7,13 @@
     <div class="flex items-center gap-6 mb-4">
 
         <label class="flex items-center gap-2 cursor-pointer">
-            <input type="radio" name="type" value="{{ \App\Enums\RoleType::PATIENT->value }}" class="text-blue-600"
+            <input type="radio" name="type" value="{{ \App\Enums\RoleType::PATIENT }}" class="text-blue-600"
                 checked>
             <span>مريض</span>
         </label>
 
         <label class="flex items-center gap-2 cursor-pointer">
-            <input type="radio" name="type" value="{{ \App\Enums\RoleType::CLINIC->value }}" class="text-blue-600">
+            <input type="radio" name="type" value="{{ \App\Enums\RoleType::CLINIC }}" class="text-blue-600">
             <span>عيادة</span>
         </label>
 

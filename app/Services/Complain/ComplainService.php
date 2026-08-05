@@ -11,7 +11,7 @@ class ComplainService
     public function __construct(private ComplainQueryService $complainQueryService) {}
     public function add(array $data,User $user,int $clinicId): Complain
     {
-        $data['user_id'] = $user->type === RoleType::PATIENT->value
+        $data['user_id'] = $user->type === RoleType::PATIENT
             ? $user->id
             : null;
         $complain = Complain::create([

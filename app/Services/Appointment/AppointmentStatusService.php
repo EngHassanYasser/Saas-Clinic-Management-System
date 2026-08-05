@@ -27,14 +27,14 @@ class AppointmentStatusService
         User $user
     ): void {
         if (
-            $user->type === RoleType::PATIENT->value &&
+            $user->type === RoleType::PATIENT &&
             ! $this->canPatientChangeStatus($appointment->status, $status)
         ) {
             throw new UnauthorizedException();
         }
 
         if (
-            $user->type === RoleType::CLINIC->value &&
+            $user->type === RoleType::CLINIC &&
             ! $this->canClinicChangeStatus($appointment->status, $status)
         ) {
             throw new UnauthorizedException();

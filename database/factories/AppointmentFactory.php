@@ -1,0 +1,82 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Enums\AppointmentStatus;
+use App\Models\Clinic;
+use App\Models\ClinicService;
+use App\Models\Doctor;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class AppointmentFactory extends Factory
+{
+    public function definition(): array
+    {
+        $hour = fake()->numberBetween(8, 16);
+
+        $start = sprintf('%02d:00:00', $hour);
+        $end = sprintf('%02d:30:00', $hour);
+
+        return [
+            'start_time' => $start,
+            'end_time' => $end,
+
+            'status' => AppointmentStatus::PENDING,
+
+            'notes' => fake()->optional()->sentence(),
+
+            'cancellation_reason' => null,
+            'cancellation_time' => null,
+
+            'deposit_amount' => fake()->randomFloat(2, 0, 500),
+
+            'reminder_sent_at' => null,
+
+            'patient_id' => User::factory(),
+
+            'clinic_id' => Clinic::factory(),
+
+            'doctor_id' => Doctor::factory(),
+
+            'clinic_service_id' => ClinicService::factory(),
+
+            'visit_date' => fake()->date('Y-m-d'),
+        ];
+    }
+
+    public function cancelled(): static
+    {
+        return $this->state(function (array $attributes) {
+
+            $cancellationTime = (clone $attributes['start_time'])->modify('+10 minutes');
+
+            return [
+                'status' => AppointmentStatus::CANCELLED,
+                'cancellation_reason' => fake()->sentence(),
+                'cancellation_time' => $cancellationTime,
+            ];
+        });
+    }
+
+    public function confirmed(): static
+    {
+        return $this->state([
+            'status' => AppointmentStatus::CONFIRMED,
+        ]);
+    }
+
+    public function completed(): static
+    {
+        return $this->state([
+            'status' => AppointmentStatus::COMPLETED,
+        ]);
+    }
+
+    public function pending(): static
+    {
+        return $this->state([
+            'status' => AppointmentStatus::PENDING,
+        ]);
+    }
+}

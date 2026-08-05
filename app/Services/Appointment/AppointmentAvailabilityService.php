@@ -12,13 +12,14 @@ class AppointmentAvailabilityService
     public function getAvailableAppointments(int $clinicId, int $doctorId, string $visitDate): array
     {
         if (Carbon::parse($visitDate)->isBefore(today())) {
-            return   [];
+            return [];
         }
         $bookedSlots = $this->getBookedSlots($clinicId, $doctorId, $visitDate);
         $schedules = $this->getSchedules($visitDate, $doctorId, $clinicId);
 
         return $this->getAvailableSlots($bookedSlots, $schedules);
     }
+
     public function getAvailableSlots(array $bookedSlots, Collection $schedules): array
     {
         $availableSlots = [];
@@ -26,7 +27,7 @@ class AppointmentAvailabilityService
 
             $current = Carbon::parse($schedule->start_time);
             $end = Carbon::parse($schedule->end_time);
-            $duration = (int) $schedule->slot_duration;
+            $duration = (int) $schedule->slot_duration->value;
 
             while ($current->lt($end)) {
 
@@ -43,34 +44,38 @@ class AppointmentAvailabilityService
                     $slotEnd->gt(Carbon::parse($schedule->start_break))
                 ) {
                     $current->addMinutes($duration);
+
                     continue;
                 }
 
                 $slot = $current->format('H:i');
 
-
-                if (!in_array($slot, $bookedSlots)) {
+                if (! in_array($slot, $bookedSlots)) {
                     $availableSlots[] = $slot;
                 }
 
                 $current->addMinutes($duration);
             }
         }
+
         return $availableSlots;
     }
+
     public function getBookedSlots(int $clinicId, int $doctorId, string $visitDate): array
     {
-        return   Appointment::where('clinic_id', $clinicId)
+        return Appointment::where('clinic_id', $clinicId)
             ->where('doctor_id', $doctorId)
             ->whereDate('visit_date', $visitDate)
             ->get(['start_time', 'visit_date'])
-            ->map(fn($appointment) => Carbon::parse($appointment->start_time)->format('H:i'))
+            ->map(fn ($appointment) => Carbon::parse($appointment->start_time)->format('H:i'))
             ->toArray();
     }
+
     public function getSchedules(string $visitDate, int $doctorId, int $clinicId)
     {
         $dayName = Carbon::parse($visitDate)->dayName;
-        return  Schedule::where('clinic_id', $clinicId)
+
+        return Schedule::where('clinic_id', $clinicId)
             ->where('doctor_id', $doctorId)
             ->where('is_available', 1)
             ->whereHas('days', function ($query) use ($dayName) {
@@ -80,19 +85,23 @@ class AppointmentAvailabilityService
                 'end_time',
                 'start_break',
                 'end_break',
-                'slot_duration'
+                'slot_duration',
             ]);
     }
-    public  function getSlotDurationByVisitDate(int $clinicId, int $doctorId, string $visitDate): int
+
+    public function getSlotDurationByVisitDate(int $clinicId, int $doctorId, string $visitDate): int
     {
         $dayName = Carbon::parse($visitDate)->dayName;
-        return (int) Schedule::where('clinic_id', $clinicId)
+        $slot_duration =  Schedule::where('clinic_id', $clinicId)
             ->where('doctor_id', $doctorId)
             ->where('is_available', 1)
             ->whereHas('days', function ($query) use ($dayName) {
                 $query->where('name', $dayName);
             })->value('slot_duration');
+
+        return (int) ($slot_duration?->value ?? 0);
     }
+
     public function isSlotAvailable(
         int $clinicId,
         int $doctorId,

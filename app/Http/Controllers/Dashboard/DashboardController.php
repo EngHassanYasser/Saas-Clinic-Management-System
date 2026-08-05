@@ -11,9 +11,9 @@ class DashboardController extends Controller
     public function index()
     {
         return redirect()->route(match (Auth::user()->type) {
-            RoleType::PATIENT->value => 'appointments.index',
-            RoleType::CLINIC->value => 'clinic.stats',
-            RoleType::SUPER_ADMIN->value => 'dashboard.getstats',
+            RoleType::PATIENT => 'appointments.index',
+            RoleType::CLINIC => 'clinic.stats',
+            RoleType::SUPER_ADMIN => 'dashboard.getstats',
             default => abort(403),
         });
     }

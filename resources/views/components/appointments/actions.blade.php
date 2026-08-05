@@ -1,6 +1,6 @@
 <div class="flex flex-wrap gap-2 lg:flex-shrink-0">
 
-    @if (Auth()->user()->type == \App\Enums\RoleType::CLINIC->value)
+    @if (Auth()->user()->type == \App\Enums\RoleType::CLINIC)
         <!-- Reschedule -->
         <button type="button" @click="openReschedule(appointment)"
             class="px-3 py-2 rounded-xl bg-blue-50 border border-blue-100 text-blue-700 text-xs font-semibold hover:bg-blue-100 transition whitespace-nowrap">

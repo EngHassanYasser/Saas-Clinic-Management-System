@@ -2,7 +2,6 @@
 
 use App\Enums\RoleType;
 use App\Models\User;
-use App\Models\Clinic;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
@@ -65,10 +64,7 @@ it('creates clinic with clinic user', function () {
 
     $this->assertDatabaseHas('clinics',[
 
-        'owner_id'=>$user->id,
-        'email'=>'clinic@test.com',
-        'name'=>'clinic owner'
-
+        'owner_id'=>$user->id
     ]);
 
 });

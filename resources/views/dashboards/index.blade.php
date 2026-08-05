@@ -5,11 +5,11 @@
         stats: @js($stats),
         lastActivities: @js($lastActivities)
     })" class="p-6 min-h-screen bg-gray-50" dir="rtl">
-        @if (auth()->user()->type == \App\Enums\RoleType::CLINIC->value)
+        @if (auth()->user()->type == \App\Enums\RoleType::CLINIC)
             <x-dashboards.stat-cards />
             <x-dashboards.doctors-activity />
             <x-dashboards.complains />
-        @elseif(auth()->user()->type === \App\Enums\RoleType::SUPER_ADMIN->value)
+        @elseif(auth()->user()->type === \App\Enums\RoleType::SUPER_ADMIN)
             <x-dashboards.primary-stats />
             <x-dashboards.recent-activity />
         @else

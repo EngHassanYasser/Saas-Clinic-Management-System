@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\AppointmentStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 #[Fillable([
     'start_time',
@@ -24,6 +25,8 @@ use Illuminate\Database\Eloquent\Model;
 ])]
 class Appointment extends Model
 {
+    use HasFactory;
+
     public $timestamps = false;
     protected function casts(): array
     {
