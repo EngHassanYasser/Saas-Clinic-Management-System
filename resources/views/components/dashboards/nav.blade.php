@@ -1,7 +1,7 @@
 <nav class="flex-1 p-4 space-y-1">
     @php
         $role = auth()->user()->type;
-        $items = config("sidebar.$role", []);
+        $items = config("sidebar.$role->value", []);
     @endphp
     @foreach ($items as $item)
         @php

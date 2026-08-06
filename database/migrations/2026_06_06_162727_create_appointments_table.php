@@ -41,9 +41,6 @@ return new class extends Migration
         (cancellation_reason IS NULL AND cancellation_time IS NULL) OR
         (cancellation_reason IS NOT NULL AND cancellation_time IS NOT NULL)
     )');
-        DB::statement('ALTER TABLE appointments ADD CONSTRAINT chk_cancellation_after_start 
-    CHECK (cancellation_time IS NULL OR cancellation_time >= start_time)');
-
         DB::statement('ALTER TABLE appointments ADD CONSTRAINT chk_cancellation_reason_status 
     CHECK (
         status = "cancelled" OR cancellation_reason IS NULL

@@ -24,9 +24,9 @@ class ScheduleController extends Controller
 
     public function index()
     {
-        $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
+        $clinicId = $this->clinicQueryService->getClinicByOwnereId(Auth::id())->id;
         [$doctors,$weekDays]= Concurrency::run([
-            fn()=>$this->doctorQueryService->getAll($clinic->id),
+            fn()=>$this->doctorQueryService->getAll($clinicId),
             fn()=> $this->scheduleQueryService->getWeekDays(),
         ]);
         return view('schedules.index', compact('doctors', 'weekDays'));
@@ -36,8 +36,8 @@ class ScheduleController extends Controller
 
     public function store(StoreScheduleRequest $request)
     {
-        $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
-        $this->scheduleService->add($request->validated(), $clinic->id);
+        $clinicId = $this->clinicQueryService->getClinicByOwnereId(Auth::id())->id;
+        $this->scheduleService->add($request->validated(), $clinicId);
         return redirect()->route('schedules.index')
             ->with('message', 'تم اضافة الموعد بنجاح.');
     }

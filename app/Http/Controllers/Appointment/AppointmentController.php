@@ -24,11 +24,9 @@ class AppointmentController extends Controller
 
     public function index()
     {
-        [$appointments,$stats] = Concurrency::run([
-            fn () => $this->appointmentQueryServie->getAppointments(Auth::User()),
-            fn () => $this->appointmentStatisticsService->getStats(Auth::user()),
-        ]);
-
+        $appointments = $this->appointmentQueryServie->getAppointments(Auth::User());
+        $stats = $this->appointmentStatisticsService->getStats(Auth::user());
+        
         return view('appointments.index', compact('appointments', 'stats'));
     }
 

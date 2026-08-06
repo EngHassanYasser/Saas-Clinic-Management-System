@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 ])]
 class Doctor_service_price extends Model
 {
+
     public function clinic()
     {
         return $this->belongsTo(Clinic::class, 'clinic_id');

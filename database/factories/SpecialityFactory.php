@@ -13,20 +13,7 @@ class SpecialityFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->unique()->randomElement([
-                'Cardiology',
-                'Dermatology',
-                'Dentistry',
-                'Neurology',
-                'Orthopedics',
-                'Pediatrics',
-                'Psychiatry',
-                'Radiology',
-                'Ophthalmology',
-                'ENT',
-                'Urology',
-                'General Surgery',
-            ]),
+            'name' => 'Speciality '.fake()->unique()->numberBetween(1, 100000),
 
             'icon_name' => fake()->optional()->randomElement([
                 'fa-heart',

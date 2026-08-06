@@ -25,11 +25,11 @@ class DoctorController extends Controller
 
     public function index()
     {
-        $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
+        $clinicId = $this->clinicQueryService->getClinicByOwnereId(Auth::id())->id;
         [$doctors,$specialities,$stats] = Concurrency::run([
-            fn () => $this->doctorQueryService->getAll($clinic->id),
+            fn () => $this->doctorQueryService->getAll($clinicId),
             fn () => $this->specialityQueryService->getAll(),
-            fn () => $this->doctorStatisticsService->getStats($clinic->id),
+            fn () => $this->doctorStatisticsService->getStats($clinicId),
         ]);
 
         return view('doctors.index', compact('doctors', 'specialities', 'stats'));

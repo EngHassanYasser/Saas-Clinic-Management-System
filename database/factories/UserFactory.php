@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\RoleType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -22,6 +23,27 @@ class UserFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    public function clinic(): static
+    {
+        return $this->state(fn () => [
+            'type' => RoleType::CLINIC,
+        ]);
+    }
+
+    public function patient(): static
+    {
+        return $this->state(fn () => [
+            'type' => RoleType::PATIENT,
+        ]);
+    }
+
+    public function superAdmin(): static
+    {
+        return $this->state(fn () => [
+            'type' => RoleType::SUPER_ADMIN,
+        ]);
+    }
+
     public function doctor(): static
     {
         return $this->state(fn () => [

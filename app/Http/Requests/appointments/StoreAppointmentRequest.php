@@ -25,7 +25,7 @@ class StoreAppointmentRequest extends FormRequest
         return [
             'clinic_id' => ['required', 'integer', 'exists:clinics,id'],
             'doctor_id' => ['required', 'integer', 'exists:doctors,id'],
-            'clinicService_id' => ['required', 'integer', 'exists:clinic_services,id'],
+            'clinic_service_id' => ['required', 'integer', 'exists:clinic_services,id'],
             'visit_date' => ['required', 'date', 'after_or_equal:today'],
             'slot' => ['required', 'date_format:H:i'],
         ];

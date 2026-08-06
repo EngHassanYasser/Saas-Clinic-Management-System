@@ -65,7 +65,7 @@ class AppointmentStatusService
             default => false,
         };
     }
-    private function canPatientChangeStatus(
+     private function canPatientChangeStatus(
         AppointmentStatus $currentStatus,
         AppointmentStatus $newStatus
     ): bool {

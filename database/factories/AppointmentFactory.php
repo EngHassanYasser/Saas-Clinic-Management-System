@@ -8,6 +8,7 @@ use App\Models\ClinicService;
 use App\Models\Doctor;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
 
 class AppointmentFactory extends Factory
 {
@@ -49,12 +50,12 @@ class AppointmentFactory extends Factory
     {
         return $this->state(function (array $attributes) {
 
-            $cancellationTime = (clone $attributes['start_time'])->modify('+10 minutes');
-
             return [
                 'status' => AppointmentStatus::CANCELLED,
                 'cancellation_reason' => fake()->sentence(),
-                'cancellation_time' => $cancellationTime,
+                'cancellation_time' => Carbon::parse(
+                    $attributes['visit_date'].' '.$attributes['start_time']
+                )->addMinutes(10),
             ];
         });
     }

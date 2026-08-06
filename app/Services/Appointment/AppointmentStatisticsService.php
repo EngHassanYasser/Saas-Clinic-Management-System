@@ -14,13 +14,15 @@ class AppointmentStatisticsService
         return match ($user->type) {
             RoleType::PATIENT => $this->getPatientStats($user->id),
             RoleType::CLINIC => $this->getClinicStats(Clinic::where('owner_id', $user->id)->value('id')),
-            default => new Appointment(),
+            default => new Appointment,
         };
     }
+
     public function getPatientStats(int $patientId): Appointment
     {
         return $this->getAppointmentsStatisticsBy('patient_id', $patientId);
     }
+
     public function getClinicStats(int $clinicId): Appointment
     {
         return $this->getAppointmentsStatisticsBy('clinic_id', $clinicId);
@@ -28,12 +30,19 @@ class AppointmentStatisticsService
 
     public function getAppointmentsStatisticsBy(string $column, int $id): Appointment
     {
-        return Appointment::where($column, $id)
+        $statistics = Appointment::where($column, $id)
             ->selectRaw("
         COUNT(*) as total,
-        SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
-        SUM(CASE WHEN status = 'confirmed' THEN 1 ELSE 0 END) as confirmed,
-        SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed,
-        SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) as cancelled")->first();
+        COALESCE(SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END),0) as pending,
+        COALESCE(SUM(CASE WHEN status = 'confirmed' THEN 1 ELSE 0 END),0) as confirmed,
+        COALESCE(SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END),0) as completed,
+        COALESCE(SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END),0) as cancelled
+    ")->first();
+
+        foreach (['total', 'pending', 'confirmed', 'completed', 'cancelled'] as $field) {
+            $statistics->{$field} = (int) $statistics->{$field};
+        }
+
+        return $statistics;
     }
 }

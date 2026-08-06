@@ -4,9 +4,8 @@ namespace App\Models;
 
 use App\Enums\AppointmentStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+use Illuminate\Database\Eloquent\Model;
 #[Fillable([
     'start_time',
     'end_time',
@@ -22,42 +21,57 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
     'clinic_id',
     'doctor_id',
     'visit_date',
+    'clinic_service_id',
 ])]
 class Appointment extends Model
 {
     use HasFactory;
 
     public $timestamps = false;
+
     protected function casts(): array
     {
         return [
             'status' => AppointmentStatus::class,
+            'visit_date' => 'date',
         ];
     }
+
+    public function doctorServicePrice()
+    {
+        return $this->hasOne(Doctor_service_price::class);
+    }
+
     public function service()
     {
-        return  $this->belongsTo(ClinicService::class, 'clinic_service_id');
+        return $this->belongsTo(ClinicService::class, 'clinic_service_id');
     }
+
     public function patient()
     {
         return $this->belongsTo(user::class);
     }
+
     public function doctor()
     {
         return $this->belongsTo(doctor::class);
     }
+
     public function clinic()
     {
         return $this->belongsTo(clinic::class);
     }
+
     public function payments()
     {
         return $this->hasMany(payment::class);
     }
+
     public function appointment_status_logs()
     {
         return $this->hasMany(appointment_status_log::class);
     }
+
     public function complains()
     {
         return $this->hasMany(complain::class);

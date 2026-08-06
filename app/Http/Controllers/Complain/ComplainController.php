@@ -27,11 +27,11 @@ class ComplainController extends Controller
     public function index()
     {
         if (Auth::user()->type == RoleType::CLINIC->value) {
-            $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
+            $clinicId = $this->clinicQueryService->getClinicByOwnereId(Auth::id())->id;
             [$complaints,$stats,$doctors] = Concurrency::run([
                 fn () => $this->complainQueryService->getClinicComplains(Auth::user()),
-                fn () => $this->comaplainStatisticsService->getStatistics($clinic->id),
-                fn () => $this->doctorQueryService->getDoctorsNames($clinic->id),
+                fn () => $this->comaplainStatisticsService->getStatistics($clinicId),
+                fn () => $this->doctorQueryService->getDoctorsNames($clinicId),
             ]);
         } else {
             $complaints = $this->complainQueryService->getClinicComplains(Auth::user());

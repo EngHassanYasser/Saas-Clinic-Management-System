@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\RoleType;
 use App\Models\City;
 use App\Models\Clinic;
 use App\Models\User;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ClinicFactory extends Factory
 {
+
     /**
      * Define the model's default state.
      *
