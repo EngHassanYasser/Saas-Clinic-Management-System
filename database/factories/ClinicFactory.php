@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Enums\RoleType;
 use App\Models\City;
 use App\Models\Clinic;
 use App\Models\User;
@@ -13,7 +12,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ClinicFactory extends Factory
 {
-
     /**
      * Define the model's default state.
      *
@@ -22,7 +20,7 @@ class ClinicFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->company(),
+            'name' => fake()->unique()->company(),
             'slug' => fake()->unique()->slug(),
             'description' => fake()->paragraph(),
             'phone' => fake()->phoneNumber(),

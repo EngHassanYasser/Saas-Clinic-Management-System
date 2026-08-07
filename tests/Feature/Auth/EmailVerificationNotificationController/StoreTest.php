@@ -1,9 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Password;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-uses(RefreshDatabase::class);
 
 it('requires token', function () {
 

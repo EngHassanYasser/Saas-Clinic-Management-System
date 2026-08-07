@@ -16,17 +16,21 @@ class DoctorQueryService
             'schedules',
             'doctors.media',
         ])->findOrFail($clinicId);
+
         return $clinic->doctors->map(function ($doctor) use ($clinic) {
             return [
                 'id' => $doctor->id,
                 'name' => $doctor->name,
                 'phone' => $doctor->phone,
                 'email' => $doctor->email,
-                'Consultation_Fee' => optional(
+                $consultationFee = optional(
                     $doctor->servicePrices
-                        ->first(fn($item) => $item->clinic_service?->name === 'كشف')
-                )->price ?? 'لا توجد خدمة',
+                        ->first(fn ($item) => $item->clinic_service?->name === 'كشف')
+                )->price,
 
+                'Consultation_Fee' => $consultationFee !== null
+                    ? $consultationFee
+                    : 'لا توجد خدمة',
                 'speciality' => optional($doctor->specialities->first())
                     ->only(['id', 'name']),
 
@@ -34,17 +38,19 @@ class DoctorQueryService
                     ->firstWhere('id', $clinic->id)
                     ?->pivot
                     ?->is_active,
-                'schedules'=>$doctor->schedules,
+                'schedules' => $doctor->schedules,
                 'image' => $doctor->getFirstMediaUrl('avatar')
                     ?: asset('storage/default_profile_image.jpg'),
             ];
         });
     }
+
     public function getDoctorsNames(int $clinicId): Collection
     {
         return Doctor::select('id', 'name')
             ->whereRelation('clinics', 'clinic_id', $clinicId)->get();
     }
+
     public function getAvailableDoctors(int $clinicId, int $specialityId, int $serviceId): Collection
     {
         return Doctor::select('doctors.id', 'doctors.name')

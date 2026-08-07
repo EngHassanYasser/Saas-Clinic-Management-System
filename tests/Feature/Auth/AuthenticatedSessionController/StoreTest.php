@@ -2,10 +2,7 @@
 
 use App\Enums\RoleType;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
-
-uses(RefreshDatabase::class);
 
 it('allows user to login with valid credentials', function () {
 

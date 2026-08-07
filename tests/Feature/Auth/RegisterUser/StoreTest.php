@@ -2,13 +2,9 @@
 
 use App\Enums\RoleType;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use App\Events\UserCreated;
-
-uses(RefreshDatabase::class);
-
 
 it('creates normal user successfully', function () {
 

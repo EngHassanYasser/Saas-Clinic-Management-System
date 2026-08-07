@@ -8,7 +8,7 @@ class ComplainStatisticsService
 {
     public function getStatistics(int $clinicId): Complain
     {
-        $stats = Complain::where('clinic_id', $clinicId)
+        $statistics = Complain::where('clinic_id', $clinicId)
             ->selectRaw("
         COUNT(*) as total,
         SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
@@ -16,6 +16,11 @@ class ComplainStatisticsService
         SUM(CASE WHEN status = 'resolved' THEN 1 ELSE 0 END) as resolved,
         SUM(CASE WHEN status = 'rejected' THEN 1 ELSE 0 END) as rejected
     ")->first();
-        return $stats;
+
+        foreach (['total', 'pending', 'under_review', 'resolved', 'rejected'] as $field) {
+            $statistics->{$field} = (int) $statistics->{$field};
+        }
+
+        return $statistics;
     }
 }

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->date('end_date');
             $table->text('reason')->nullable();
             $table->timestamps();
-            // $table->index(['doctor_id', 'start_date', 'end_date']);
         });
         DB::statement('ALTER TABLE vications ADD CONSTRAINT chk_vacation_dates 
     CHECK (end_date >= start_date)');

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('monthly_price', 10, 2);
             $table->unsignedSmallInteger('max_doctors');
             $table->unsignedSmallInteger('monthly_appointments_limit');
-            $table->json('features')->nullable();
+            $table->text('features')->nullable();
         });
         DB::statement('ALTER TABLE plans ADD CONSTRAINT chk_plan_price_positive 
     CHECK (monthly_price >= 0)');

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('end_at');
             $table->enum('status', [
                 'active',
+                'inactive',
                 'expired',
                 'cancelled',
                 'pending'

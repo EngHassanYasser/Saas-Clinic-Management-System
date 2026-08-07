@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 #[Fillable([
     'start_date',
@@ -11,9 +12,11 @@ use Illuminate\Database\Eloquent\Model;
     'reason',
     'doctor_id',
     'status',
+    'clinic_id',
 ])]
 class Vication extends Model
 {
+    use HasFactory;
     public function doctor()
     {
         return $this->belongsTo(doctor::class);

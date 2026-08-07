@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class DoctorService
 {
-    public function add(array $data,int $clinicId): Doctor
+    public function add(array $data, int $clinicId): Doctor
     {
-        return  DB::transaction(function () use ($data,$clinicId) {
+        return DB::transaction(function () use ($data, $clinicId) {
 
             $doctor = Doctor::create([
                 'name' => $data['name'],
@@ -19,21 +19,23 @@ class DoctorService
             ]);
             $doctor->specialities()->attach([$data['speciality_id']]);
             $doctor->clinics()->attach($clinicId);
-            if (!empty($data['image'])) {
+            if (! empty($data['image'])) {
                 $doctor->addMedia($data['image'])
                     ->toMediaCollection('avatar');
             }
+
             return $doctor;
         });
     }
-    public function update(array $data, int $doctorId,$clinicId): bool
+
+    public function update(array $data, int $doctorId, $clinicId): bool
     {
-        return DB::transaction(function () use ($data,$doctorId,$clinicId) {
+        return DB::transaction(function () use ($data, $doctorId, $clinicId) {
 
             $doctor = Doctor::findOrFail($doctorId);
 
             $updated = $doctor->update([
-                'name'  => $data['name'],
+                'name' => $data['name'],
                 'phone' => $data['phone'],
                 'email' => $data['email'],
             ]);
@@ -45,7 +47,7 @@ class DoctorService
                     'is_active' => $data['is_active'],
                 ]
             );
-            if (!empty($data['image'])) {
+            if (! empty($data['image'])) {
 
                 $doctor->clearMediaCollection('avatar');
 
@@ -56,21 +58,20 @@ class DoctorService
             return $updated;
         });
     }
-    public function deleteById(int $doctorId,int $clinicId): bool
+
+    public function deleteById(int $doctorId, int $clinicId): bool
     {
-        return DB::transaction(function () use ($doctorId,$clinicId) {
+        return DB::transaction(function () use ($doctorId, $clinicId) {
 
             $doctor = Doctor::findOrFail($doctorId);
 
             $doctor->clinics()->detach($clinicId);
 
-            Doctor_service_price::where('doctor_id', $doctorId)->delete();
+            Doctor_service_price::where('doctor_id', $doctorId)
+                ->where('clinic_id', $clinicId)
+                ->delete();
 
-            $doctor->specialities()->detach();
-
-            $deleted = $doctor->delete();
-
-            return $deleted;
+            return true;
         });
     }
 }

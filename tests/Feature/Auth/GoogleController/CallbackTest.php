@@ -3,11 +3,8 @@ use App\Enums\RoleType;
 use App\Events\UserCreated;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Laravel\Socialite\Facades\Socialite;
-use Mockery;
-uses(RefreshDatabase::class);
 it('creates a new user from google account', function () {
 
     Event::fake();

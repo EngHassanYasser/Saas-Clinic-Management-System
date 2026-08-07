@@ -14,10 +14,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('doctor_speciality', function (Blueprint $table) {
-            $table->foreignIdFor(doctor::class);
-            $table->foreignIdFor(speciality::class);
+            $table->foreignIdFor(doctor::class)->constrained();
+            $table->foreignIdFor(speciality::class)->constrained();
 
-            $table->primary(['doctor_id','speciality_id']);
+            $table->primary(['doctor_id', 'speciality_id']);
         });
     }
 

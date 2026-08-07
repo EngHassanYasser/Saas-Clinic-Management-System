@@ -8,11 +8,12 @@ use Illuminate\Support\Facades\DB;
 
 class ScheduleService
 {
-    public function __construct(private ScheduleConflictService $scheduleConfilctService){}
-    public function add(array $data,int $clinicId): Schedule
+    public function __construct(private ScheduleConflictService $scheduleConfilctService) {}
+
+    public function add(array $data, int $clinicId): Schedule
     {
-        return  DB::transaction(function () use ($data,$clinicId) {
-            if ($this->scheduleConfilctService->hasScheduleConflict($data,$clinicId)) {
+        return DB::transaction(function () use ($data, $clinicId) {
+            if ($this->scheduleConfilctService->hasScheduleConflict($data, $clinicId)) {
                 throw new ScheduleConflictException('يوجد تداخل مع جدول يوم الأحد.');
             }
             $schedule = Schedule::create([
@@ -23,7 +24,7 @@ class ScheduleService
                 'end_break' => $data['end_break'],
                 'is_available' => $data['is_available'],
                 'doctor_id' => $data['doctor_id'],
-                'clinic_id' => $clinicId
+                'clinic_id' => $clinicId,
             ]);
             $schedule->days()->attach($data['day_ids']);
 
@@ -31,24 +32,35 @@ class ScheduleService
         }, 3);
     }
 
-    public function update(array $data, int $scheduleId)
+    public function update(array $data, int $scheduleId): Schedule
     {
         return DB::transaction(function () use ($data, $scheduleId) {
-            if ($this->scheduleConfilctService->hasScheduleConflict($data, $scheduleId)) {
-                throw new ScheduleConflictException('يوجد تداخل في جدول العمل.');
-            }
 
             $schedule = Schedule::where('id', $scheduleId)
                 ->lockForUpdate()
                 ->firstOrFail();
 
+            $conflictData = array_merge($data, [
+                'doctor_id' => $schedule->doctor_id,
+            ]);
+
+            if ($this->scheduleConfilctService->hasScheduleConflict(
+                $conflictData,
+                $schedule->clinic_id,
+                $schedule->id
+            )) {
+                throw new ScheduleConflictException(
+                    'يوجد تداخل في جدول العمل.'
+                );
+            }
+
             $schedule->update([
-                'start_time'    => $data['start_time'],
-                'end_time'      => $data['end_time'],
+                'start_time' => $data['start_time'],
+                'end_time' => $data['end_time'],
                 'slot_duration' => $data['slot_duration'],
-                'start_break'   => $data['start_break'],
-                'end_break'     => $data['end_break'],
-                'is_available'  => $data['is_available'],
+                'start_break' => $data['start_break'],
+                'end_break' => $data['end_break'],
+                'is_available' => $data['is_available'],
             ]);
 
             $schedule->days()->sync($data['day_ids']);
@@ -56,9 +68,11 @@ class ScheduleService
             return $schedule->fresh();
         }, 3);
     }
+
     public function delete(int $scheduleId, int $clinicId): bool
     {
         $schedule = Schedule::where('clinic_id', $clinicId)->findOrFail($scheduleId);
+
         return $schedule->delete();
     }
 }
