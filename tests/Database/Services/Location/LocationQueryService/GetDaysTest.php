@@ -1,11 +1,11 @@
 <?php
 
 use App\Models\Day;
-use App\Services\Schedule\ScheduleQueryService;
+use App\Services\Location\LocationQueryService;
 use Illuminate\Database\Eloquent\Collection;
 
 beforeEach(function () {
-    $this->service = app(ScheduleQueryService::class);
+    $this->service = app(LocationQueryService::class);
 });
 
 
@@ -16,11 +16,10 @@ it('returns all week days', function () {
         ->create();
 
 
-    $result = $this->service->getWeekDays();
+    $result = $this->service->getDays();
 
 
-    expect($result)
-        ->toHaveCount(7);
+    expect($result)->toHaveCount(7);
 });
 
 
@@ -30,7 +29,7 @@ it('returns day as eloquent collection', function () {
     Day::factory()->create();
 
 
-    $result = $this->service->getWeekDays();
+    $result = $this->service->getDays();
 
 
     expect($result)
@@ -46,7 +45,7 @@ it('returns only id and name columns', function () {
     ]);
 
 
-    $result = $this->service->getWeekDays()
+    $result = $this->service->getDays()
         ->firstWhere('id', $day->id);
 
 
@@ -75,7 +74,7 @@ it('returns correct day names', function () {
 
 
 
-    $result = $this->service->getWeekDays();
+    $result = $this->service->getDays();
 
 
 
@@ -87,7 +86,7 @@ it('returns correct day names', function () {
 
 it('returns empty collection when there are no days', function () {
 
-    $result = $this->service->getWeekDays();
+    $result = $this->service->getDays();
 
 
     expect($result)
@@ -101,7 +100,7 @@ it('does not return unrelated columns from days table', function () {
     $day = Day::factory()->create();
 
 
-    $result = $this->service->getWeekDays()
+    $result = $this->service->getDays()
         ->firstWhere('id', $day->id);
 
 
@@ -122,7 +121,7 @@ it('returns all created days without missing records', function () {
         ->create();
 
 
-    $result = $this->service->getWeekDays();
+    $result = $this->service->getDays();
 
 
 
@@ -140,10 +139,7 @@ it('does not duplicate days', function () {
         'name' => 'Monday',
     ]);
 
-
-    $result = $this->service->getWeekDays();
-
-
+    $result = $this->service->getDays();
 
     expect($result)
         ->toHaveCount(1);

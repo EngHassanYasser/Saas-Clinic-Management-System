@@ -2,6 +2,8 @@
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Illuminate\Support\Facades\Cache;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -31,6 +33,9 @@ expect()->extend('toBeOne', function () {
     return $this->toBe(1);
 });
 
+beforeEach(function () {
+    Cache::flush();
+});
 /*
 |--------------------------------------------------------------------------
 | Functions

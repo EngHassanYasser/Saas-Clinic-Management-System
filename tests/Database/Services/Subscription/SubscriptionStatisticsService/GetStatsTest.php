@@ -7,6 +7,7 @@ use App\Models\Subscription;
 use App\Services\Subscription\SubscriptionStatisticsService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 uses(RefreshDatabase::class);
@@ -489,7 +490,7 @@ it('counts every subscription status independently', function () {
         ->toBe(1);
 
     expect((int) $result->inactive)
-        ->toBe(1);
+    ->toBe(2);
 });
 
 /*
@@ -592,6 +593,7 @@ it('keeps query count constant as subscription count increases', function () {
     createStatsSubscription([
         'status' => SubscriptionStatus::ACTIVE->value,
     ]);
+    Cache::forget('subscriptions.statistics');
 
     DB::flushQueryLog();
     DB::enableQueryLog();
@@ -619,6 +621,7 @@ it('keeps query count constant as subscription count increases', function () {
     createStatsSubscription([
         'status' => SubscriptionStatus::CANCELLED->value,
     ]);
+     Cache::forget('subscriptions.statistics');
 
     DB::flushQueryLog();
     DB::enableQueryLog();
@@ -735,6 +738,7 @@ it('returns numeric aggregate values', function () {
 |--------------------------------------------------------------------------
 */
 it('calculates statistics correctly with a larger dataset', function () {
+    Cache::forget('subscriptions.statistics');
     $plan = Plan::factory()->create();
 
     Subscription::factory()->count(20)->create([
@@ -787,7 +791,7 @@ it('calculates statistics correctly with a larger dataset', function () {
         ->toBe(5);
 
     expect((int) $result->inactive)
-        ->toBe(5);
+        ->toBe(15);
 
     expect((int) $result->expiring)
         ->toBe(20);

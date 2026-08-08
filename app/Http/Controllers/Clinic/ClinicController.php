@@ -12,6 +12,7 @@ use App\Models\Plan;
 use App\Services\Clinic\ClinicQueryService;
 use App\services\Clinic\ClinicService;
 use App\Services\Clinic\ClinicStatisticsService;
+use App\Services\Location\LocationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Concurrency;
@@ -22,6 +23,7 @@ class ClinicController extends Controller
         private ClinicService $clinicService,
         private ClinicQueryService $clinicQueryService,
         private ClinicStatisticsService $clinicStatisticsService,
+        private LocationService $locationService,
     ) {}
 
     public function index()
@@ -29,7 +31,7 @@ class ClinicController extends Controller
         [$stats,$clinics,$citites,$plans] = Concurrency::run([
             fn () => $this->clinicStatisticsService->getStats(),
             fn () => $this->clinicQueryService->getAll(),
-            fn () => City::get(['id', 'name']),
+            fn () => $this->locationService->getCities(),
             fn () => Plan::get(['id', 'name']),
         ]);
 
@@ -52,8 +54,8 @@ class ClinicController extends Controller
     {
         [$currentClinic,$cities,$days] = Concurrency::run([
             fn () => $this->clinicQueryService->getClinicByOwnereId(Auth::id()),
-            fn () => City::get(['id', 'name']),
-            fn () => Day::get(['id', 'name']),
+            fn () => $this->locationService->getCities(),
+            fn () => $this->locationService->getDays(),
         ]);
 
         return view('clinics.edit', compact('currentClinic', 'cities', 'days'));
