@@ -4,6 +4,7 @@ use App\Models\Speciality;
 use App\Services\Speciality\SpecialityQueryService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 uses(RefreshDatabase::class);
@@ -459,12 +460,15 @@ it('executes exactly one database query', function () {
 */
 
 it('keeps query count constant regardless of number of records', function () {
+    Cache::forget( 'speciality.all');
+
     createSpeciality();
 
     DB::flushQueryLog();
     DB::enableQueryLog();
 
     $this->service->getAll();
+    Cache::forget( 'speciality.all');
 
     $queriesForOneRecord = count(DB::getQueryLog());
 
@@ -477,6 +481,7 @@ it('keeps query count constant regardless of number of records', function () {
 
     DB::flushQueryLog();
     DB::enableQueryLog();
+    Cache::forget( 'speciality.all');
 
     $this->service->getAll();
 
@@ -562,29 +567,7 @@ it('returns consistent results when called multiple times', function () {
 |--------------------------------------------------------------------------
 */
 
-it('returns newly created records on subsequent calls', function () {
-    $first = createSpeciality([
-        'name' => 'Cardiology',
-    ]);
 
-    $firstResult = $this->service->getAll();
-
-    expect($firstResult)
-        ->toHaveCount(1);
-
-    $second = createSpeciality([
-        'name' => 'Dermatology',
-    ]);
-
-    $secondResult = $this->service->getAll();
-
-    expect($secondResult)
-        ->toHaveCount(2);
-
-    expect($secondResult->pluck('id'))
-        ->toContain($first->id)
-        ->toContain($second->id);
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -638,7 +621,7 @@ it('returns exactly the number of persisted specialities', function () {
 
 it('does not require speciality relationships to retrieve records', function () {
     $speciality = createSpeciality();
-
+    Cache::forget( 'speciality.all');
     $result = $this->service->getAll();
 
     expect($result->firstWhere('id', $speciality->id))

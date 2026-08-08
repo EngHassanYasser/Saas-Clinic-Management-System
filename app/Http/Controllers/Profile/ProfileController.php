@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileUpdateRequest;
-use App\Services\Location\LocationService;
+use App\Services\Location\LocationQueryService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,10 +13,10 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    public function __construct(private LocationService $locationService){}
+    public function __construct(private LocationQueryService $locationQueryService){}
     public function edit(Request $request): View
     {
-        $cities = $this->locationService->getCities();
+        $cities = $this->locationQueryService->getCities();
         return view('profile.edit', [
             'user' => $request->user()->with('city')->firstOrFail(),
             'cities' => $cities,

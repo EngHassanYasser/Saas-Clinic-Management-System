@@ -3,7 +3,7 @@
 use App\Http\Controllers\Plan\PlanController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth','role:clinic,patient,super_admin')->group(function () {
+Route::middleware('auth','role:clinic,patient,super_admin','verified')->group(function () {
     Route::get(
         '/plans',
         [PlanController::class, 'index']

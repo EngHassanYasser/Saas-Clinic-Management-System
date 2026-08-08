@@ -10,6 +10,7 @@ use App\Services\Doctor\DoctorQueryService;
 use App\services\Doctor\DoctorService;
 use App\Services\ServiceCatalog\ClinicServicePriceService;
 use App\services\ServiceCatalog\ServiceCatalogService;
+use App\Support\TenantContext;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Concurrency;
@@ -22,6 +23,7 @@ class ClinicServiceController extends Controller
         private DoctorQueryService $doctorQueryService,
         private ClinicServicePriceService $clinicServicePriceService,
         private ClinicQueryService $clinicQueryService,
+        private TenantContext $tenantContext
     ) {
         $this->serviceCatalogService = $serviceCatalogService;
         $this->doctorService = $doctorService;
@@ -41,17 +43,16 @@ class ClinicServiceController extends Controller
 
     public function store(StoreClinicServiceRequest $request)
     {
-        $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
-
-        $this->clinicServicePriceService->add($request->validated(), $clinic->id);
+        $clinicId = $this->tenantContext->id();
+        $this->clinicServicePriceService->add($request->validated(), $clinicId);
 
         return back()->with('success', 'تم إضافة الخدمة بنجاح');
     }
 
     public function update(UpdateClinicServiceRequest $request)
     {
-        $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
-        $this->clinicServicePriceService->update($request->validated(), $clinic->id);
+        $clinicId = $this->tenantContext->id();
+        $this->clinicServicePriceService->update($request->validated(), $clinicId);
 
         return back()->with('success', 'تم تحديث الخدمة بنجاح');
     }

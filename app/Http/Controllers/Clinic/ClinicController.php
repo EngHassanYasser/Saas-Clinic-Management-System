@@ -11,8 +11,8 @@ use App\Services\Clinic\ClinicQueryService;
 use App\services\Clinic\ClinicService;
 use App\Services\Clinic\ClinicStatisticsService;
 use App\Services\Location\LocationQueryService;
+use App\Support\TenantContext;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Concurrency;
 
 class ClinicController extends Controller
@@ -22,6 +22,7 @@ class ClinicController extends Controller
         private ClinicQueryService $clinicQueryService,
         private ClinicStatisticsService $clinicStatisticsService,
         private LocationQueryService $locationQueryService,
+        private TenantContext $tenantContext,
     ) {}
 
     public function index()
@@ -50,8 +51,8 @@ class ClinicController extends Controller
 
     public function edit(Request $request)
     {
-        $currentClinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
-
+        $currentClinic = $this->tenantContext->id();
+        
         [$cities,$days] = Concurrency::run([
             fn () => $this->locationQueryService->getCities(),
             fn () => $this->locationQueryService->getDays(),

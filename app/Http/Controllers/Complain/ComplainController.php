@@ -6,11 +6,11 @@ use App\Enums\RoleType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\complains\StoreComplainRequest;
 use App\Http\Requests\complains\UpdateComplainRequest;
-use App\Services\Clinic\ClinicQueryService;
 use App\Services\Complain\ComplainQueryService;
 use App\services\Complain\ComplainService;
 use App\Services\Complain\ComplainStatisticsService;
 use App\Services\Doctor\DoctorQueryService;
+use App\Support\TenantContext;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Concurrency;
 
@@ -21,15 +21,16 @@ class ComplainController extends Controller
         private ComplainQueryService $complainQueryService,
         private ComplainStatisticsService $comaplainStatisticsService,
         private DoctorQueryService $doctorQueryService,
-        private ClinicQueryService $clinicQueryService,
+        private TenantContext $tenantContext,
     ) {}
 
     public function index()
     {
         if (Auth::user()->type == RoleType::CLINIC->value) {
-            $clinicId = $this->clinicQueryService->getClinicByOwnereId(Auth::id())->id;
-            [$complaints,$stats,$doctors] = Concurrency::run([
-                fn () => $this->complainQueryService->getClinicComplains(Auth::user()),
+            $clinicId = $this->tenantContext->id();
+            $complaints = $this->complainQueryService->getClinicComplains(Auth::user());
+
+            [$stats,$doctors] = Concurrency::run([
                 fn () => $this->comaplainStatisticsService->getStatistics($clinicId),
                 fn () => $this->doctorQueryService->getDoctorsNames($clinicId),
             ]);
@@ -44,9 +45,9 @@ class ComplainController extends Controller
 
     public function store(StoreComplainRequest $request)
     {
-        $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
+        $clinicId = $this->tenantContext->id();
 
-        $complain = $this->complainService->add($request->validated(), Auth::user(), $clinic->id);
+        $complain = $this->complainService->add($request->validated(), Auth::user(), $clinicId);
         $message = $complain
             ? 'complain added successfully.'
             : 'Failed to add complain. Please try again.';
@@ -56,8 +57,8 @@ class ComplainController extends Controller
 
     public function update(UpdateComplainRequest $request, int $complainId)
     {
-        $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
-        $isUpdated = $this->complainService->update($request->validated(), $complainId, $clinic->id);
+        $clinicId = $this->tenantContext->id();
+        $isUpdated = $this->complainService->update($request->validated(), $complainId, $clinicId);
         $message = $isUpdated
             ? 'complain updated successfully.'
             : 'Failed to update complain. Please try again.';

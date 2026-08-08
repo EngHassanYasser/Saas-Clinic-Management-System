@@ -5,12 +5,11 @@ namespace App\Http\Controllers\Doctor;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\doctor\StoreDoctorRequest;
 use App\Http\Requests\doctor\UpdateDoctorRequest;
-use App\Services\Clinic\ClinicQueryService;
 use App\Services\Doctor\DoctorQueryService;
 use App\services\Doctor\DoctorService;
 use App\Services\Doctor\DoctorStatisticsService;
 use App\Services\Speciality\SpecialityQueryService;
-use Illuminate\Support\Facades\Auth;
+use App\Support\TenantContext;
 use Illuminate\Support\Facades\Concurrency;
 
 class DoctorController extends Controller
@@ -20,12 +19,13 @@ class DoctorController extends Controller
         private DoctorQueryService $doctorQueryService,
         private DoctorStatisticsService $doctorStatisticsService,
         private SpecialityQueryService $specialityQueryService,
-        private ClinicQueryService $clinicQueryService,
+        private TenantContext $tenantContext,
     ) {}
 
     public function index()
     {
-        $clinicId = $this->clinicQueryService->getClinicByOwnereId(Auth::id())->id;
+        $clinicId = $this->tenantContext->id();
+
         [$doctors,$specialities,$stats] = Concurrency::run([
             fn () => $this->doctorQueryService->getAll($clinicId),
             fn () => $this->specialityQueryService->getAll(),
@@ -37,8 +37,9 @@ class DoctorController extends Controller
 
     public function store(StoreDoctorRequest $request, DoctorService $doctorService)
     {
-        $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
-        $doctorService->add($request->validated(), $clinic->id);
+        $clinicId = $this->tenantContext->id();
+
+        $doctorService->add($request->validated(), $clinicId);
 
         return redirect()
             ->route('doctors.index')
@@ -47,8 +48,8 @@ class DoctorController extends Controller
 
     public function update(UpdateDoctorRequest $request, int $doctorId)
     {
-        $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
-        $this->doctorService->update($request->validated(), $doctorId, $clinic->id);
+        $clinicId = $this->tenantContext->id();
+        $this->doctorService->update($request->validated(), $doctorId, $clinicId);
 
         return redirect()
             ->route('doctors.index')
@@ -57,8 +58,8 @@ class DoctorController extends Controller
 
     public function destroy(int $doctorId)
     {
-        $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
-        $this->doctorService->deleteById($doctorId, $clinic->id);
+        $clinicId = $this->tenantContext->id();
+        $this->doctorService->deleteById($doctorId, $clinicId);
 
         return redirect()->route('doctors.index')->with('message', 'doctor deleted successfully');
     }

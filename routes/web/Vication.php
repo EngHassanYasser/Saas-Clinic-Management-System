@@ -3,7 +3,7 @@
 use App\Http\Controllers\Vacation\VacationController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth', 'role:clinic')->group(function () {
+Route::middleware('auth', 'role:clinic', 'tenant.context','verified')->group(function () {
 
     Route::middleware('auth')->group(function () {
         Route::get('/vications', [VacationController::class, 'index'])->name('vications.index');

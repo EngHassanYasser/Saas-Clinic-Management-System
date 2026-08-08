@@ -5,7 +5,7 @@ use App\http\Controllers\Clinic\ClinicLookupController;
 use App\http\Controllers\Clinic\ClinicStatisticsController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth','role:clinic')->group(function () {
+Route::middleware('auth', 'role:clinic','verified')->group(function () {
     Route::get(
         '/clinics/search',
         [ClinicController::class, 'SearchResults']
@@ -22,7 +22,7 @@ Route::middleware('auth','role:clinic')->group(function () {
         'clinics',
         [ClinicController::class, 'index']
     )->name('clinics.index');
-    Route::get(
+    Route::middleware('tenant.context')->get(
         '/clinics/edit',
         [ClinicController::class, 'edit']
     )->name('clinics.edit');

@@ -10,7 +10,6 @@ use App\services\Appointment\AppointmentStatisticsService;
 use App\Services\ServiceCatalog\ServiceCatalogService;
 use App\Services\Speciality\SpecialityQueryService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Concurrency;
 
 class AppointmentController extends Controller
 {
@@ -26,16 +25,14 @@ class AppointmentController extends Controller
     {
         $appointments = $this->appointmentQueryServie->getAppointments(Auth::User());
         $stats = $this->appointmentStatisticsService->getStats(Auth::user());
-        
+
         return view('appointments.index', compact('appointments', 'stats'));
     }
 
     public function create()
     {
-        [$specialities,$services] = Concurrency::run([
-            fn () => $this->specialityQueryService->getAll(),
-            fn () => $this->serviceCatalogService->getAllCatalogs(),
-        ]);
+          $specialities = $this->specialityQueryService->getAll();
+            $services = $this->serviceCatalogService->getAllCatalogs();
 
         return view('appointments.create', compact('specialities', 'services'));
     }

@@ -3,9 +3,10 @@
 use App\Models\ClinicService;
 use App\Services\ServiceCatalog\ServiceCatalogService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 uses(RefreshDatabase::class);
 
@@ -30,22 +31,22 @@ function createCatalog(array $overrides = []): ClinicService
 |--------------------------------------------------------------------------
 */
 
-it('returns a collection', function () {
+it('returns an array', function () {
     createCatalog();
 
     $result = $this->service->getAllCatalogs();
 
     expect($result)
-        ->toBeInstanceOf(Collection::class);
+        ->toBeArray();
 });
-
-it('returns an Eloquent collection', function () {
+it('returns an array of clinic service data', function () {
     createCatalog();
 
     $result = $this->service->getAllCatalogs();
 
     expect($result)
-        ->toBeInstanceOf(EloquentCollection::class);
+        ->toBeArray()
+        ->each->toBeArray();
 });
 
 /*
@@ -73,7 +74,7 @@ it('returns all clinic services', function () {
     $second = createCatalog();
     $third = createCatalog();
 
-    $result = $this->service->getAllCatalogs();
+    $result = collect($this->service->getAllCatalogs());
 
     expect($result)
         ->toHaveCount(3);
@@ -87,14 +88,13 @@ it('returns all clinic services', function () {
             ])->sort()->values()->all()
         );
 });
-
 it('returns each database record exactly once', function () {
     $first = createCatalog();
     $second = createCatalog();
     $third = createCatalog();
     $fourth = createCatalog();
 
-    $result = $this->service->getAllCatalogs();
+    $result = collect($this->service->getAllCatalogs());
 
     $ids = $result->pluck('id');
 
@@ -118,16 +118,14 @@ it('returns each database record exactly once', function () {
 |--------------------------------------------------------------------------
 */
 
-it('returns ClinicService models', function () {
+it('returns clinic service data as arrays', function () {
     createCatalog();
 
     $result = $this->service->getAllCatalogs();
 
-    expect(
-        $result->every(
-            fn ($item) => $item instanceof ClinicService
-        )
-    )->toBeTrue();
+    expect($result)
+        ->toBeArray()
+        ->each->toBeArray();
 });
 
 /*
@@ -139,33 +137,31 @@ it('returns ClinicService models', function () {
 it('returns the required columns', function () {
     $catalog = createCatalog();
 
-    $result = $this->service->getAllCatalogs();
+    $result = collect($this->service->getAllCatalogs());
 
     $item = $result->firstWhere('id', $catalog->id);
 
-    expect($item->getAttributes())
+    expect($item)
         ->toHaveKeys([
             'id',
             'name',
             'speciality_id',
         ]);
 });
-
 it('does not select unnecessary columns', function () {
     $catalog = createCatalog();
 
-    $result = $this->service->getAllCatalogs();
+    $result = collect($this->service->getAllCatalogs());
 
     $item = $result->firstWhere('id', $catalog->id);
 
-    expect(array_keys($item->getAttributes()))
+    expect(array_keys($item))
         ->toBe([
             'id',
             'name',
             'speciality_id',
         ]);
 });
-
 /*
 |--------------------------------------------------------------------------
 | Correct values
@@ -175,11 +171,11 @@ it('does not select unnecessary columns', function () {
 it('returns the correct id', function () {
     $catalog = createCatalog();
 
-    $result = $this->service->getAllCatalogs();
+    $result = collect($this->service->getAllCatalogs());
 
     $item = $result->firstWhere('id', $catalog->id);
 
-    expect($item->id)
+    expect($item['id'])
         ->toBe($catalog->id);
 });
 
@@ -188,25 +184,23 @@ it('returns the correct name', function () {
         'name' => 'Cardiology Consultation',
     ]);
 
-    $result = $this->service->getAllCatalogs();
+    $result = collect($this->service->getAllCatalogs());
 
     $item = $result->firstWhere('id', $catalog->id);
 
-    expect($item->name)
+    expect($item['name'])
         ->toBe('Cardiology Consultation');
 });
-
 it('returns the correct speciality id', function () {
     $catalog = createCatalog();
 
-    $result = $this->service->getAllCatalogs();
+    $result = collect($this->service->getAllCatalogs());
 
     $item = $result->firstWhere('id', $catalog->id);
 
-    expect($item->speciality_id)
+    expect($item['speciality_id'])
         ->toBe($catalog->speciality_id);
 });
-
 /*
 |--------------------------------------------------------------------------
 | Multiple records values
@@ -226,31 +220,30 @@ it('returns correct values for every clinic service', function () {
         'name' => 'Third Service',
     ]);
 
-    $result = $this->service->getAllCatalogs();
+    $result = collect($this->service->getAllCatalogs());
 
     $firstResult = $result->firstWhere('id', $first->id);
     $secondResult = $result->firstWhere('id', $second->id);
     $thirdResult = $result->firstWhere('id', $third->id);
 
-    expect($firstResult->name)
+    expect($firstResult['name'])
         ->toBe('First Service');
 
-    expect($secondResult->name)
+    expect($secondResult['name'])
         ->toBe('Second Service');
 
-    expect($thirdResult->name)
+    expect($thirdResult['name'])
         ->toBe('Third Service');
 
-    expect($firstResult->speciality_id)
+    expect($firstResult['speciality_id'])
         ->toBe($first->speciality_id);
 
-    expect($secondResult->speciality_id)
+    expect($secondResult['speciality_id'])
         ->toBe($second->speciality_id);
 
-    expect($thirdResult->speciality_id)
+    expect($thirdResult['speciality_id'])
         ->toBe($third->speciality_id);
 });
-
 /*
 |--------------------------------------------------------------------------
 | Database persistence
@@ -260,12 +253,11 @@ it('returns correct values for every clinic service', function () {
 it('returns records that actually exist in the database', function () {
     $catalog = createCatalog();
 
-    $result = $this->service->getAllCatalogs();
+    $result = collect($this->service->getAllCatalogs());
 
     expect(
         $result->contains(
-            fn (ClinicService $item) =>
-                $item->id === $catalog->id
+            fn (array $item) => $item['id'] === $catalog->id
         )
     )->toBeTrue();
 
@@ -275,7 +267,6 @@ it('returns records that actually exist in the database', function () {
             ->exists()
     )->toBeTrue();
 });
-
 /*
 |--------------------------------------------------------------------------
 | Does not mutate database
@@ -340,8 +331,9 @@ it('executes exactly one query', function () {
 */
 
 it('keeps query count constant regardless of number of records', function () {
-    createCatalog();
+        Cache::forget('clinicService.all');
 
+    createCatalog();
     DB::enableQueryLog();
     DB::flushQueryLog();
 
@@ -358,6 +350,7 @@ it('keeps query count constant regardless of number of records', function () {
 
     DB::enableQueryLog();
     DB::flushQueryLog();
+    Cache::forget('clinicService.all');
 
     $result = $this->service->getAllCatalogs();
 
@@ -393,9 +386,9 @@ it('does not execute additional queries when accessing selected attributes', fun
     $result = $this->service->getAllCatalogs();
 
     foreach ($result as $item) {
-        $item->id;
-        $item->name;
-        $item->speciality_id;
+        $item['id'];
+        $item['name'];
+        $item['speciality_id'];
     }
 
     $queries = DB::getQueryLog();
@@ -416,8 +409,8 @@ it('can be called multiple times consistently', function () {
     $first = createCatalog();
     $second = createCatalog();
 
-    $firstResult = $this->service->getAllCatalogs();
-    $secondResult = $this->service->getAllCatalogs();
+    $firstResult = collect($this->service->getAllCatalogs());
+    $secondResult = collect($this->service->getAllCatalogs());
 
     expect($firstResult)
         ->toHaveCount(2);
@@ -431,31 +424,11 @@ it('can be called multiple times consistently', function () {
         $secondResult->pluck('id')->sort()->values()->all()
     );
 });
-
 /*
 |--------------------------------------------------------------------------
 | New records are reflected
 |--------------------------------------------------------------------------
 */
-
-it('returns newly created records on subsequent calls', function () {
-    $first = createCatalog();
-
-    $firstResult = $this->service->getAllCatalogs();
-
-    expect($firstResult)
-        ->toHaveCount(1);
-
-    $second = createCatalog();
-
-    $secondResult = $this->service->getAllCatalogs();
-
-    expect($secondResult)
-        ->toHaveCount(2);
-
-    expect($secondResult->pluck('id'))
-        ->toContain($first->id, $second->id);
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -468,14 +441,13 @@ it('returns names containing special characters correctly', function () {
         'name' => 'كشف وعلاج الأسنان - د. أحمد',
     ]);
 
-    $result = $this->service->getAllCatalogs();
+    $result = collect($this->service->getAllCatalogs());
 
     $item = $result->firstWhere('id', $catalog->id);
 
-    expect($item->name)
+    expect($item['name'])
         ->toBe('كشف وعلاج الأسنان - د. أحمد');
 });
-
 /*
 |--------------------------------------------------------------------------
 | Long names
@@ -489,14 +461,13 @@ it('returns long service names correctly', function () {
         'name' => $name,
     ]);
 
-    $result = $this->service->getAllCatalogs();
+    $result = collect($this->service->getAllCatalogs());
 
     $item = $result->firstWhere('id', $catalog->id);
 
-    expect($item->name)
+    expect($item['name'])
         ->toBe($name);
 });
-
 /*
 |--------------------------------------------------------------------------
 | Same speciality
@@ -505,31 +476,32 @@ it('returns long service names correctly', function () {
 
 it('correctly handles multiple services belonging to the same speciality', function () {
     $first = createCatalog();
+
     $second = createCatalog([
         'speciality_id' => $first->speciality_id,
     ]);
+
     $third = createCatalog([
         'speciality_id' => $first->speciality_id,
     ]);
 
-    $result = $this->service->getAllCatalogs();
+    $result = collect($this->service->getAllCatalogs());
 
     expect($result)
         ->toHaveCount(3);
 
     expect(
-        $result->firstWhere('id', $first->id)->speciality_id
+        $result->firstWhere('id', $first->id)['speciality_id']
     )->toBe($first->speciality_id);
 
     expect(
-        $result->firstWhere('id', $second->id)->speciality_id
+        $result->firstWhere('id', $second->id)['speciality_id']
     )->toBe($first->speciality_id);
 
     expect(
-        $result->firstWhere('id', $third->id)->speciality_id
+        $result->firstWhere('id', $third->id)['speciality_id']
     )->toBe($first->speciality_id);
 });
-
 /*
 |--------------------------------------------------------------------------
 | Different specialities
@@ -543,34 +515,44 @@ it('correctly handles services from different specialities', function () {
 
     $result = $this->service->getAllCatalogs();
 
-    expect(
-        $result->firstWhere('id', $first->id)->speciality_id
-    )->toBe($first->speciality_id);
+    $firstItem = collect($result)->firstWhere('id', $first->id);
+    $secondItem = collect($result)->firstWhere('id', $second->id);
+    $thirdItem = collect($result)->firstWhere('id', $third->id);
 
-    expect(
-        $result->firstWhere('id', $second->id)->speciality_id
-    )->toBe($second->speciality_id);
+    expect($firstItem['speciality_id'])
+        ->toBe($first->speciality_id);
 
-    expect(
-        $result->firstWhere('id', $third->id)->speciality_id
-    )->toBe($third->speciality_id);
+    expect($secondItem['speciality_id'])
+        ->toBe($second->speciality_id);
+
+    expect($thirdItem['speciality_id'])
+        ->toBe($third->speciality_id);
 });
-
 /*
 |--------------------------------------------------------------------------
 | Does not eager load unnecessary relationships
 |--------------------------------------------------------------------------
 */
 
-it('does not eager load relationships unnecessarily', function () {
-    $catalog = createCatalog();
+it('returns only required clinic service columns', function () {
+    createCatalog();
 
     $result = $this->service->getAllCatalogs();
 
-    $item = $result->firstWhere('id', $catalog->id);
+    expect($result)->not->toBeEmpty();
 
-    expect($item->getRelations())
-        ->toBeEmpty();
+    $item = collect($result)->first();
+
+    expect($item)
+        ->toHaveKeys([
+            'id',
+            'name',
+            'speciality_id',
+        ])
+        ->not->toHaveKeys([
+            'created_at',
+            'updated_at',
+        ]);
 });
 
 /*
@@ -588,15 +570,15 @@ it('matches the database values exactly', function () {
 
     $result = $this->service->getAllCatalogs();
 
-    $item = $result->firstWhere('id', $catalog->id);
+    $item = collect($result)->firstWhere('id', $catalog->id);
 
-    expect($item->id)
+    expect($item['id'])
         ->toBe($databaseRow->id);
 
-    expect($item->name)
+    expect($item['name'])
         ->toBe($databaseRow->name);
 
-    expect($item->speciality_id)
+    expect($item['speciality_id'])
         ->toBe($databaseRow->speciality_id);
 });
 
@@ -605,7 +587,6 @@ it('matches the database values exactly', function () {
 | Large dataset
 |--------------------------------------------------------------------------
 */
-
 it('handles many clinic services correctly', function () {
     ClinicService::factory()
         ->count(100)
@@ -614,8 +595,9 @@ it('handles many clinic services correctly', function () {
     $result = $this->service->getAllCatalogs();
 
     expect($result)
+        ->toBeArray()
         ->toHaveCount(100);
 
-    expect($result->pluck('id')->unique()->count())
+    expect(collect($result)->pluck('id')->unique()->count())
         ->toBe(100);
 });

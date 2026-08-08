@@ -6,7 +6,7 @@ use App\Http\Controllers\Appointment\AppointmentRescheduleController;
 use App\Http\Controllers\Appointment\AppointmentStatusController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth','role:clinic,patient,super_admin')->group(function () {
+Route::middleware('auth', 'role:clinic,patient','verified')->group(function () {
     Route::get(
         'appointments',
         [AppointmentController::class, 'index']
@@ -27,7 +27,8 @@ Route::middleware('auth','role:clinic,patient,super_admin')->group(function () {
         'appointments/AvailableAppointments/clinic/{clinic}/doctor/{doctor}/visitDate/{visit_date}/',
         [AppointmentAvailabilityController::class, 'getAvailableAppointments']
     )->name('appointments.getAvailableAppointments');
-    Route::patch(
+    
+    Route::middleware('tenant.context')->patch(
         'appointments/{appointmentId}/{visit_date}/{slot}/availableSlots',
         [AppointmentRescheduleController::class, 'reschdule']
     )->name('appointments.reschdule');

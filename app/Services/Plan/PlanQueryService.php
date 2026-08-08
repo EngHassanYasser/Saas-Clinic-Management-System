@@ -5,6 +5,7 @@ namespace App\Services\Plan;
 use App\Enums\PlanStatus;
 use App\Models\Plan;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class PlanQueryService
 {
@@ -16,18 +17,23 @@ class PlanQueryService
             'monthly_price',
             'max_doctors',
             'monthly_appointments_limit',
-            'status'
+            'status',
         ])->whereStatus(PlanStatus::ACTIVE->value)->get();
     }
+
     public function getAll(): Collection
     {
-        return Plan::select([
-            'id',
-            'name',
-            'monthly_price',
-            'max_doctors',
-            'monthly_appointments_limit',
-            'status'
-        ])->get();
+        return Cache::remember(
+            'plans.all',
+            now()->addMinutes(5),
+            fn () => Plan::select([
+                'id',
+                'name',
+                'monthly_price',
+                'max_doctors',
+                'monthly_appointments_limit',
+                'status',
+            ])->get()
+        );
     }
 }

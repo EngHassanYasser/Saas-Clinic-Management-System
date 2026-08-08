@@ -9,7 +9,7 @@ class specialityQueryService
 {
     public function getAll(): Collection
     {
+
         return speciality::select(['id', 'name'])->get();
     }
-   
 }
