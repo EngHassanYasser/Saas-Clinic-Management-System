@@ -26,9 +26,9 @@ it('returns clinic appointment statistics', function () {
 
     $statistics = $this->service->getClinicStats($clinic->id);
 
-    expect($statistics->total)->toBe(3)
-        ->and($statistics->pending)->toBe(2)
-        ->and($statistics->confirmed)->toBe(1)
-        ->and($statistics->completed)->toBe(0)
-        ->and($statistics->cancelled)->toBe(0);
+    expect($statistics['total'])->toBe(3)
+        ->and($statistics['pending'])->toBe(2)
+        ->and($statistics['confirmed'])->toBe(1)
+        ->and($statistics['completed'])->toBe(0)
+        ->and($statistics['cancelled'])->toBe(0);
 });

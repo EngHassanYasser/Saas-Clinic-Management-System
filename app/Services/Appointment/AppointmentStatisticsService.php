@@ -10,26 +10,32 @@ use Illuminate\Support\Facades\Cache;
 
 class AppointmentStatisticsService
 {
-    public function getStats(User $user): Appointment
+    public function getStats(User $user): array
     {
         return match ($user->type) {
             RoleType::PATIENT => $this->getPatientStats($user->id),
             RoleType::CLINIC => $this->getClinicStats(Clinic::where('owner_id', $user->id)->value('id')),
-            default => new Appointment,
+            default => [
+                'total' => 0,
+                'pending' => 0,
+                'confirmed' => 0,
+                'completed' => 0,
+                'cancelled' => 0,
+            ],
         };
     }
 
-    public function getPatientStats(int $patientId): Appointment
+    public function getPatientStats(int $patientId): array
     {
         return $this->getAppointmentsStatisticsBy('patient_id', $patientId);
     }
 
-    public function getClinicStats(int $clinicId): Appointment
+    public function getClinicStats(int $clinicId): array
     {
         return $this->getAppointmentsStatisticsBy('clinic_id', $clinicId);
     }
 
-    public function getAppointmentsStatisticsBy(string $column, int $id): object
+    public function getAppointmentsStatisticsBy(string $column, int $id): array
     {
         $cacheKey = "appointments.statistics.{$column}.{$id}";
 
@@ -47,17 +53,13 @@ class AppointmentStatisticsService
                 ")
                     ->first();
 
-                foreach ([
-                    'total',
-                    'pending',
-                    'confirmed',
-                    'completed',
-                    'cancelled',
-                ] as $field) {
-                    $statistics->{$field} = (int) $statistics->{$field};
-                }
-
-                return $statistics;
+                return [
+                    'total' => (int) $statistics->total,
+                    'pending' => (int) $statistics->pending,
+                    'confirmed' => (int) $statistics->confirmed,
+                    'completed' => (int) $statistics->completed,
+                    'cancelled' => (int) $statistics->cancelled,
+                ];
             }
         );
     }

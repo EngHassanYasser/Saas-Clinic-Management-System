@@ -4,7 +4,7 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\DashboardStatisticsController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth','role:clinic,patient,super_admin')->group(function () {
     Route::get(
         '/dashboard',
         [DashboardController::class, 'index']

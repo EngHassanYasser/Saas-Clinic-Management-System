@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 
 class SubscriptionStatisticsService
 {
-    public function getStats(): object
+    public function getStats(): array
     {
         return Cache::remember(
             'subscriptions.statistics',
@@ -40,19 +40,15 @@ class SubscriptionStatisticsService
                     ])
                     ->first();
 
-                foreach ([
-                    'total',
-                    'pending',
-                    'active',
-                    'expired',
-                    'cancelled',
-                    'inactive',
-                    'expiring',
-                ] as $field) {
-                    $statistics->{$field} = (int) $statistics->{$field};
-                }
-
-                return $statistics;
+                return [
+                    'total' => (int) $statistics->total,
+                    'pending' => (int) $statistics->pending,
+                    'active' => (int) $statistics->active,
+                    'expired' => (int) $statistics->expired,
+                    'cancelled' => (int) $statistics->cancelled,
+                    'inactive' => (int) $statistics->inactive,
+                    'expiring' => (int) $statistics->expiring,
+                ];
             }
         );
     }

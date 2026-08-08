@@ -30,7 +30,7 @@ class ClinicServiceController extends Controller
     public function index()
     {
         $clinicId = $this->clinicQueryService->getClinicByOwnereId(Auth::id())->id;
-        [$serviceCatalogs,$doctors,$clinicsServices] = Concurrency::run([
+        [$serviceCatalogs,$doctors,$clinicServices] = Concurrency::run([
             fn () => $this->serviceCatalogService->getAllCatalogs(),
             fn () => $this->doctorQueryService->getDoctorsNames($clinicId),
             fn () => $this->clinicServicePriceService->getAllClinicServices(),

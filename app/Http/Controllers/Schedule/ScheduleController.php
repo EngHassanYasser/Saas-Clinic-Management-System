@@ -7,6 +7,7 @@ use App\Http\Requests\Schedule\StoreScheduleRequest;
 use App\Http\Requests\Schedule\UpdateScheduleRequest;
 use App\Services\Clinic\ClinicQueryService;
 use App\Services\Doctor\DoctorQueryService;
+use App\Services\Location\LocationQueryService;
 use App\Services\Schedule\ScheduleQueryService;
 use App\Services\Schedule\ScheduleService;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,7 @@ class ScheduleController extends Controller
         private ScheduleQueryService $scheduleQueryService,
         private DoctorQueryService $doctorQueryService,
         private ClinicQueryService $clinicQueryService,
+        private LocationQueryService $locationService,
     ) {}
 
     public function index()
@@ -27,7 +29,7 @@ class ScheduleController extends Controller
         $clinicId = $this->clinicQueryService->getClinicByOwnereId(Auth::id())->id;
         [$doctors,$weekDays]= Concurrency::run([
             fn()=>$this->doctorQueryService->getAll($clinicId),
-            fn()=> $this->scheduleQueryService->getWeekDays(),
+            fn()=> $this->locationService->getDays(),
         ]);
         return view('schedules.index', compact('doctors', 'weekDays'));
     }

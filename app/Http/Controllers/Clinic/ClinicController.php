@@ -5,14 +5,12 @@ namespace App\http\Controllers\Clinic;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Clinic\StoreClinicRequest;
 use App\Http\Requests\Clinic\UpdateClinicRequest;
-use App\Models\City;
 use App\Models\Clinic;
-use App\Models\Day;
 use App\Models\Plan;
 use App\Services\Clinic\ClinicQueryService;
 use App\services\Clinic\ClinicService;
 use App\Services\Clinic\ClinicStatisticsService;
-use App\Services\Location\LocationService;
+use App\Services\Location\LocationQueryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Concurrency;
@@ -23,7 +21,7 @@ class ClinicController extends Controller
         private ClinicService $clinicService,
         private ClinicQueryService $clinicQueryService,
         private ClinicStatisticsService $clinicStatisticsService,
-        private LocationService $locationService,
+        private LocationQueryService $locationQueryService,
     ) {}
 
     public function index()
@@ -31,7 +29,7 @@ class ClinicController extends Controller
         [$stats,$clinics,$citites,$plans] = Concurrency::run([
             fn () => $this->clinicStatisticsService->getStats(),
             fn () => $this->clinicQueryService->getAll(),
-            fn () => $this->locationService->getCities(),
+            fn () => $this->locationQueryService->getCities(),
             fn () => Plan::get(['id', 'name']),
         ]);
 
@@ -52,10 +50,11 @@ class ClinicController extends Controller
 
     public function edit(Request $request)
     {
-        [$currentClinic,$cities,$days] = Concurrency::run([
-            fn () => $this->clinicQueryService->getClinicByOwnereId(Auth::id()),
-            fn () => $this->locationService->getCities(),
-            fn () => $this->locationService->getDays(),
+        $currentClinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
+
+        [$cities,$days] = Concurrency::run([
+            fn () => $this->locationQueryService->getCities(),
+            fn () => $this->locationQueryService->getDays(),
         ]);
 
         return view('clinics.edit', compact('currentClinic', 'cities', 'days'));

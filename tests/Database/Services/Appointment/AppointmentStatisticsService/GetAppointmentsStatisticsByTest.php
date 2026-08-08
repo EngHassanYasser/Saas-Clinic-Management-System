@@ -37,11 +37,11 @@ it('returns correct statistics for clinic', function () {
     $statistics = $this->service
         ->getAppointmentsStatisticsBy('clinic_id', $clinic->id);
 
-    expect($statistics->total)->toBe(7)
-        ->and($statistics->pending)->toBe(2)
-        ->and($statistics->confirmed)->toBe(3)
-        ->and($statistics->completed)->toBe(1)
-        ->and($statistics->cancelled)->toBe(1);
+    expect($statistics['total'])->toBe(7)
+        ->and($statistics['pending'])->toBe(2)
+        ->and($statistics['confirmed'])->toBe(3)
+        ->and($statistics['completed'])->toBe(1)
+        ->and($statistics['cancelled'])->toBe(1);
 });
 it('returns zero statistics when clinic has no appointments', function () {
 
@@ -50,11 +50,11 @@ it('returns zero statistics when clinic has no appointments', function () {
     $statistics = $this->service
         ->getAppointmentsStatisticsBy('clinic_id', $clinic->id);
 
-    expect($statistics->total)->toBe(0)
-        ->and($statistics->pending)->toBe(0)
-        ->and($statistics->confirmed)->toBe(0)
-        ->and($statistics->completed)->toBe(0)
-        ->and($statistics->cancelled)->toBe(0);
+    expect($statistics['total'])->toBe(0)
+        ->and($statistics['pending'])->toBe(0)
+        ->and($statistics['confirmed'])->toBe(0)
+        ->and($statistics['completed'])->toBe(0)
+        ->and($statistics['cancelled'])->toBe(0);
 });
 it('filters statistics by doctor', function () {
 
@@ -76,11 +76,11 @@ it('filters statistics by doctor', function () {
     $statistics = $this->service
         ->getAppointmentsStatisticsBy('doctor_id', $doctor->id);
 
-    expect($statistics->total)->toBe(3)
-        ->and($statistics->pending)->toBe(1)
-        ->and($statistics->confirmed)->toBe(2)
-        ->and($statistics->completed)->toBe(0)
-        ->and($statistics->cancelled)->toBe(0);
+    expect($statistics['total'])->toBe(3)
+        ->and($statistics['pending'])->toBe(1)
+        ->and($statistics['confirmed'])->toBe(2)
+        ->and($statistics['completed'])->toBe(0)
+        ->and($statistics['cancelled'])->toBe(0);
 });
 it('returns correct statistics when all appointments have same status', function () {
 
@@ -93,9 +93,9 @@ it('returns correct statistics when all appointments have same status', function
     $statistics = $this->service
         ->getAppointmentsStatisticsBy('clinic_id', $clinic->id);
 
-    expect($statistics->total)->toBe(5)
-        ->and($statistics->pending)->toBe(0)
-        ->and($statistics->confirmed)->toBe(0)
-        ->and($statistics->completed)->toBe(5)
-        ->and($statistics->cancelled)->toBe(0);
+    expect($statistics['total'])->toBe(5)
+        ->and($statistics['pending'])->toBe(0)
+        ->and($statistics['confirmed'])->toBe(0)
+        ->and($statistics['completed'])->toBe(5)
+        ->and($statistics['cancelled'])->toBe(0);
 });

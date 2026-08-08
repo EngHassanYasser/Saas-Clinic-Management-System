@@ -1,4 +1,5 @@
 <?php
+
 use App\Enums\RoleType;
 use App\Models\Appointment;
 use App\Models\Clinic;
@@ -28,11 +29,11 @@ it('returns patient statistics when user type is patient', function () {
 
     $stats = $this->service->getStats($patient);
 
-    expect($stats->total)->toBe(4)
-        ->and($stats->pending)->toBe(2)
-        ->and($stats->confirmed)->toBe(1)
-        ->and($stats->completed)->toBe(1)
-        ->and($stats->cancelled)->toBe(0);
+    expect($stats['total'])->toBe(4)
+        ->and($stats['pending'])->toBe(2)
+        ->and($stats['confirmed'])->toBe(1)
+        ->and($stats['completed'])->toBe(1)
+        ->and($stats['cancelled'])->toBe(0);
 });
 it('returns clinic statistics when user type is clinic', function () {
 
@@ -54,11 +55,11 @@ it('returns clinic statistics when user type is clinic', function () {
 
     $stats = $this->service->getStats($owner);
 
-    expect($stats->total)->toBe(4)
-        ->and($stats->pending)->toBe(0)
-        ->and($stats->confirmed)->toBe(3)
-        ->and($stats->completed)->toBe(1)
-        ->and($stats->cancelled)->toBe(0);
+    expect($stats['total'])->toBe(4)
+        ->and($stats['pending'])->toBe(0)
+        ->and($stats['confirmed'])->toBe(3)
+        ->and($stats['completed'])->toBe(1)
+        ->and($stats['cancelled'])->toBe(0);
 });
 it('does not include other clinics appointments', function () {
 
@@ -82,8 +83,8 @@ it('does not include other clinics appointments', function () {
 
     $stats = $this->service->getStats($owner);
 
-    expect($stats->total)->toBe(1)
-        ->and($stats->completed)->toBe(0);
+    expect($stats['total'])->toBe(1)
+        ->and($stats['completed'])->toBe(0);
 });
 it('returns empty appointment when role is not supported', function () {
 
@@ -93,6 +94,13 @@ it('returns empty appointment when role is not supported', function () {
 
     $result = $this->service->getStats($user);
 
-    expect($result)->toBeInstanceOf(Appointment::class)
-        ->and($result->exists)->toBeFalse();
+    expect($result)
+        ->toBeArray()
+        ->toMatchArray([
+            'total' => 0,
+            'pending' => 0,
+            'confirmed' => 0,
+            'completed' => 0,
+            'cancelled' => 0,
+        ]);
 });

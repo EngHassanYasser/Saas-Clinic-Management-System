@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Complain\ComplainController;
 use Illuminate\Support\Facades\Route;
+Route::middleware('auth')->group(function () {
 
 Route::get(
     '/complains',
@@ -27,3 +28,4 @@ Route::delete(
     '/complains/{complain}/',
     [ComplainController::class, 'destroy']
 )->name('complains.destroy');
+});

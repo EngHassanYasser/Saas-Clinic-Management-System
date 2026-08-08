@@ -41,13 +41,13 @@ it('returns correct doctor statistics for a clinic', function () {
     $stats = app(DoctorStatisticsService::class)
         ->getStats($clinic->id);
 
-    expect($stats->total)
+    expect($stats['total'])
         ->toBe(3)
-        ->and($stats->active)
+        ->and($stats['active'])
         ->toBe(2)
-        ->and($stats->inactive)
+        ->and($stats['inactive'])
         ->toBe(1)
-        ->and($stats->specialities)
+        ->and($stats['specialities'])
         ->toBe(2);
 });
 
@@ -76,11 +76,11 @@ it('counts only doctors belonging to the requested clinic', function () {
     $stats = app(DoctorStatisticsService::class)
         ->getStats($clinic1->id);
 
-    expect($stats->total)
+    expect($stats['total'])
         ->toBe(2)
-        ->and($stats->active)
+        ->and($stats['active'])
         ->toBe(1)
-        ->and($stats->inactive)
+        ->and($stats['inactive'])
         ->toBe(1);
 });
 
@@ -110,13 +110,13 @@ it('does not count doctors from another clinic in speciality statistics', functi
     $stats = app(DoctorStatisticsService::class)
         ->getStats($clinic1->id);
 
-    expect($stats->total)
+    expect($stats['total'])
         ->toBe(1)
-        ->and($stats->active)
+        ->and($stats['active'])
         ->toBe(1)
-        ->and($stats->inactive)
+        ->and($stats['inactive'])
         ->toBe(0)
-        ->and($stats->specialities)
+        ->and($stats['specialities'])
         ->toBe(1);
 });
 
@@ -157,13 +157,13 @@ it('counts distinct specialities only once', function () {
     $stats = app(DoctorStatisticsService::class)
         ->getStats($clinic->id);
 
-    expect($stats->total)
+    expect($stats['total'])
         ->toBe(3)
-        ->and($stats->active)
+        ->and($stats['active'])
         ->toBe(2)
-        ->and($stats->inactive)
+        ->and($stats['inactive'])
         ->toBe(1)
-        ->and($stats->specialities)
+        ->and($stats['specialities'])
         ->toBe(2);
 });
 
@@ -191,13 +191,13 @@ it('does not multiply doctor counts when a doctor has multiple specialities', fu
     $stats = app(DoctorStatisticsService::class)
         ->getStats($clinic->id);
 
-    expect($stats->total)
+    expect($stats['total'])
         ->toBe(1)
-        ->and($stats->active)
+        ->and($stats['active'])
         ->toBe(1)
-        ->and($stats->inactive)
+        ->and($stats['inactive'])
         ->toBe(0)
-        ->and($stats->specialities)
+        ->and($stats['specialities'])
         ->toBe(3);
 });
 
@@ -223,13 +223,13 @@ it('does not multiply inactive doctors because of multiple specialities', functi
     $stats = app(DoctorStatisticsService::class)
         ->getStats($clinic->id);
 
-    expect($stats->total)
+    expect($stats['total'])
         ->toBe(1)
-        ->and($stats->active)
+        ->and($stats['active'])
         ->toBe(0)
-        ->and($stats->inactive)
+        ->and($stats['inactive'])
         ->toBe(1)
-        ->and($stats->specialities)
+        ->and($stats['specialities'])
         ->toBe(2);
 });
 
@@ -256,11 +256,11 @@ it('counts active and inactive doctors independently', function () {
     $stats = app(DoctorStatisticsService::class)
         ->getStats($clinic->id);
 
-    expect($stats->total)
+    expect($stats['total'])
         ->toBe(8)
-        ->and($stats->active)
+        ->and($stats['active'])
         ->toBe(5)
-        ->and($stats->inactive)
+        ->and($stats['inactive'])
         ->toBe(3);
 });
 
@@ -272,13 +272,13 @@ it('returns zero statistics when clinic has no doctors', function () {
     $stats = app(DoctorStatisticsService::class)
         ->getStats($clinic->id);
 
-    expect($stats->total)
+    expect($stats['total'])
         ->toBe(0)
-        ->and($stats->active)
+        ->and($stats['active'])
         ->toBe(0)
-        ->and($stats->inactive)
+        ->and($stats['inactive'])
         ->toBe(0)
-        ->and($stats->specialities)
+        ->and($stats['specialities'])
         ->toBe(0);
 });
 
@@ -288,13 +288,13 @@ it('returns zero statistics when clinic does not exist', function () {
     $stats = app(DoctorStatisticsService::class)
         ->getStats(999999999);
 
-    expect($stats->total)
+    expect($stats['total'])
         ->toBe(0)
-        ->and($stats->active)
+        ->and($stats['active'])
         ->toBe(0)
-        ->and($stats->inactive)
+        ->and($stats['inactive'])
         ->toBe(0)
-        ->and($stats->specialities)
+        ->and($stats['specialities'])
         ->toBe(0);
 });
 
@@ -314,13 +314,13 @@ it('returns zero specialities when clinic has doctors without specialities', fun
     $stats = app(DoctorStatisticsService::class)
         ->getStats($clinic->id);
 
-    expect($stats->total)
+    expect($stats['total'])
         ->toBe(4)
-        ->and($stats->active)
+        ->and($stats['active'])
         ->toBe(4)
-        ->and($stats->inactive)
+        ->and($stats['inactive'])
         ->toBe(0)
-        ->and($stats->specialities)
+        ->and($stats['specialities'])
         ->toBe(0);
 });
 
@@ -340,11 +340,11 @@ it('returns zero active doctors when all doctors are inactive', function () {
     $stats = app(DoctorStatisticsService::class)
         ->getStats($clinic->id);
 
-    expect($stats->total)
+    expect($stats['total'])
         ->toBe(4)
-        ->and($stats->active)
+        ->and($stats['active'])
         ->toBe(0)
-        ->and($stats->inactive)
+        ->and($stats['inactive'])
         ->toBe(4);
 });
 
@@ -364,11 +364,11 @@ it('returns zero inactive doctors when all doctors are active', function () {
     $stats = app(DoctorStatisticsService::class)
         ->getStats($clinic->id);
 
-    expect($stats->total)
+    expect($stats['total'])
         ->toBe(4)
-        ->and($stats->active)
+        ->and($stats['active'])
         ->toBe(4)
-        ->and($stats->inactive)
+        ->and($stats['inactive'])
         ->toBe(0);
 });
 
@@ -407,22 +407,22 @@ it('keeps statistics isolated between clinics', function () {
     $clinic2Stats = app(DoctorStatisticsService::class)
         ->getStats($clinic2->id);
 
-    expect($clinic1Stats->total)
+    expect($clinic1Stats['total'])
         ->toBe(2)
-        ->and($clinic1Stats->active)
+        ->and($clinic1Stats['active'])
         ->toBe(1)
-        ->and($clinic1Stats->inactive)
+        ->and($clinic1Stats['inactive'])
         ->toBe(1)
-        ->and($clinic1Stats->specialities)
+        ->and($clinic1Stats['specialities'])
         ->toBe(2);
 
-    expect($clinic2Stats->total)
+    expect($clinic2Stats['total'])
         ->toBe(1)
-        ->and($clinic2Stats->active)
+        ->and($clinic2Stats['active'])
         ->toBe(1)
-        ->and($clinic2Stats->inactive)
+        ->and($clinic2Stats['inactive'])
         ->toBe(0)
-        ->and($clinic2Stats->specialities)
+        ->and($clinic2Stats['specialities'])
         ->toBe(1);
 });
 
@@ -447,13 +447,13 @@ it('counts speciality only once even when shared by many doctors in the same cli
     $stats = app(DoctorStatisticsService::class)
         ->getStats($clinic->id);
 
-    expect($stats->total)
+    expect($stats['total'])
         ->toBe(5)
-        ->and($stats->active)
+        ->and($stats['active'])
         ->toBe(5)
-        ->and($stats->inactive)
+        ->and($stats['inactive'])
         ->toBe(0)
-        ->and($stats->specialities)
+        ->and($stats['specialities'])
         ->toBe(1);
 });
 
@@ -475,10 +475,10 @@ it('returns integer values for all statistics', function () {
     $stats = app(DoctorStatisticsService::class)
         ->getStats($clinic->id);
 
-    expect($stats->total)->toBeInt()
-        ->and($stats->active)->toBeInt()
-        ->and($stats->inactive)->toBeInt()
-        ->and($stats->specialities)->toBeInt();
+    expect($stats['total'])->toBeInt()
+        ->and($stats['active'])->toBeInt()
+        ->and($stats['inactive'])->toBeInt()
+        ->and($stats['specialities'])->toBeInt();
 });
 
 
@@ -508,13 +508,13 @@ it('does not count speciality belonging to a doctor outside the clinic', functio
     $stats = app(DoctorStatisticsService::class)
         ->getStats($clinic->id);
 
-    expect($stats->total)
+    expect($stats['total'])
         ->toBe(1)
-        ->and($stats->active)
+        ->and($stats['active'])
         ->toBe(1)
-        ->and($stats->inactive)
+        ->and($stats['inactive'])
         ->toBe(0)
-        ->and($stats->specialities)
+        ->and($stats['specialities'])
         ->toBe(1);
 });
 
@@ -545,13 +545,13 @@ it('handles doctors with no speciality alongside doctors with specialities', fun
     $stats = app(DoctorStatisticsService::class)
         ->getStats($clinic->id);
 
-    expect($stats->total)
+    expect($stats['total'])
         ->toBe(2)
-        ->and($stats->active)
+        ->and($stats['active'])
         ->toBe(1)
-        ->and($stats->inactive)
+        ->and($stats['inactive'])
         ->toBe(1)
-        ->and($stats->specialities)
+        ->and($stats['specialities'])
         ->toBe(2);
 });
 
@@ -585,12 +585,12 @@ it('handles a doctor having many specialities while other doctors have none', fu
     $stats = app(DoctorStatisticsService::class)
         ->getStats($clinic->id);
 
-    expect($stats->total)
+    expect($stats['total'])
         ->toBe(3)
-        ->and($stats->active)
+        ->and($stats['active'])
         ->toBe(2)
-        ->and($stats->inactive)
+        ->and($stats['inactive'])
         ->toBe(1)
-        ->and($stats->specialities)
+        ->and($stats['specialities'])
         ->toBe(6);
 });

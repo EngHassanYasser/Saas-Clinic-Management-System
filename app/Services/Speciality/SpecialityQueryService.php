@@ -11,7 +11,5 @@ class specialityQueryService
     {
         return speciality::select(['id', 'name'])->get();
     }
-    // public function getAvailableSpecailities(): Collection {
-    //     return new Collection();
-    // }
+   
 }

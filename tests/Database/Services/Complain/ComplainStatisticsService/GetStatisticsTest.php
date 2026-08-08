@@ -35,11 +35,11 @@ it('returns correct complain statistics', function () {
 
     $statistics = $this->service->getStatistics($clinic->id);
 
-    expect($statistics->total)->toBe(10)
-        ->and($statistics->pending)->toBe(2)
-        ->and($statistics->under_review)->toBe(3)
-        ->and($statistics->resolved)->toBe(4)
-        ->and($statistics->rejected)->toBe(1);
+    expect($statistics['total'])->toBe(10)
+        ->and($statistics['pending'])->toBe(2)
+        ->and($statistics['under_review'])->toBe(3)
+        ->and($statistics['resolved'])->toBe(4)
+        ->and($statistics['rejected'])->toBe(1);
 
 });
 it('counts only complains of requested clinic', function () {
@@ -60,8 +60,8 @@ it('counts only complains of requested clinic', function () {
 
     $statistics = $this->service->getStatistics($clinic->id);
 
-    expect($statistics->total)->toBe(5)
-        ->and($statistics->pending)->toBe(5);
+    expect($statistics['total'])->toBe(5)
+        ->and($statistics['pending'])->toBe(5);
 
 });
 it('returns zeros when clinic has no complains', function () {
@@ -70,11 +70,11 @@ it('returns zeros when clinic has no complains', function () {
 
     $statistics = $this->service->getStatistics($clinic->id);
 
-    expect($statistics->total)->toBe(0)
-        ->and($statistics->pending)->toBe(0)
-        ->and($statistics->under_review)->toBe(0)
-        ->and($statistics->resolved)->toBe(0)
-        ->and($statistics->rejected)->toBe(0);
+    expect($statistics['total'])->toBe(0)
+        ->and($statistics['pending'])->toBe(0)
+        ->and($statistics['under_review'])->toBe(0)
+        ->and($statistics['resolved'])->toBe(0)
+        ->and($statistics['rejected'])->toBe(0);
 
 });
 it('returns integer statistics', function () {
@@ -87,11 +87,11 @@ it('returns integer statistics', function () {
 
     $statistics = $this->service->getStatistics($clinic->id);
 
-    expect($statistics->total)->toBeInt()
-        ->and($statistics->pending)->toBeInt()
-        ->and($statistics->under_review)->toBeInt()
-        ->and($statistics->resolved)->toBeInt()
-        ->and($statistics->rejected)->toBeInt();
+    expect($statistics['total'])->toBeInt()
+        ->and($statistics['pending'])->toBeInt()
+        ->and($statistics['under_review'])->toBeInt()
+        ->and($statistics['resolved'])->toBeInt()
+        ->and($statistics['rejected'])->toBeInt();
 
 });
 it('total equals sum of all statuses', function () {
@@ -115,12 +115,12 @@ it('total equals sum of all statuses', function () {
 
     $statistics = $this->service->getStatistics($clinic->id);
 
-    expect($statistics->total)
+    expect($statistics['total'])
         ->toBe(
-            $statistics->pending
-            + $statistics->under_review
-            + $statistics->resolved
-            + $statistics->rejected
+            $statistics['pending']
+            + $statistics['under_review']
+            + $statistics['resolved']
+            + $statistics['rejected']
         );
 
 });
@@ -130,6 +130,6 @@ it('returns complain model instance', function () {
 
     $statistics = $this->service->getStatistics($clinic->id);
 
-    expect($statistics)->toBeInstanceOf(Complain::class);
+    expect($statistics)->toBeArray();
 
 });

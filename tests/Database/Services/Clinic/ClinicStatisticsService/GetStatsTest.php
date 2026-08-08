@@ -12,10 +12,10 @@ it('returns zero statistics when there are no subscriptions', function () {
 
     $stats = $this->service->getStats();
 
-    expect($stats->total)->toBe(0)
-        ->and($stats->pending)->toBe(0)
-        ->and($stats->active)->toBe(0)
-        ->and($stats->inactive)->toBe(0);
+    expect($stats['total'])->toBe(0)
+        ->and($stats['pending'])->toBe(0)
+        ->and($stats['active'])->toBe(0)
+        ->and($stats['inactive'])->toBe(0);
 });
 
 it('counts subscriptions correctly', function () {
@@ -27,10 +27,10 @@ it('counts subscriptions correctly', function () {
 
     $stats = $this->service->getStats();
 
-    expect($stats->total)->toBe(4)
-        ->and($stats->pending)->toBe(1)
-        ->and($stats->active)->toBe(1)
-        ->and($stats->inactive)->toBe(2);
+    expect($stats['total'])->toBe(4)
+        ->and($stats['pending'])->toBe(1)
+        ->and($stats['active'])->toBe(1)
+        ->and($stats['inactive'])->toBe(2);
 });
 
 it('counts only latest subscription for each clinic', function () {
@@ -56,10 +56,10 @@ it('counts only latest subscription for each clinic', function () {
 
     $stats = $this->service->getStats();
 
-    expect($stats->total)->toBe(2)
-        ->and($stats->pending)->toBe(0)
-        ->and($stats->active)->toBe(1)
-        ->and($stats->inactive)->toBe(1);
+    expect($stats['total'])->toBe(2)
+        ->and($stats['pending'])->toBe(0)
+        ->and($stats['active'])->toBe(1)
+        ->and($stats['inactive'])->toBe(1);
 });
 
 it('ignores subscriptions without clinic id', function () {
@@ -74,10 +74,10 @@ it('ignores subscriptions without clinic id', function () {
 
     $stats = $this->service->getStats();
 
-    expect($stats->total)->toBe(0)
-        ->and($stats->pending)->toBe(0)
-        ->and($stats->active)->toBe(0)
-        ->and($stats->inactive)->toBe(0);
+    expect($stats['total'])->toBe(0)
+        ->and($stats['pending'])->toBe(0)
+        ->and($stats['active'])->toBe(0)
+        ->and($stats['inactive'])->toBe(0);
 });
 
 it('counts inactive as expired plus cancelled', function () {
@@ -90,9 +90,9 @@ it('counts inactive as expired plus cancelled', function () {
 
     $stats = $this->service->getStats();
 
-    expect($stats->inactive)->toBe(2)
-        ->and($stats->active)->toBe(1)
-        ->and($stats->pending)->toBe(0);
+    expect($stats['inactive'])->toBe(2)
+        ->and($stats['active'])->toBe(1)
+        ->and($stats['pending'])->toBe(0);
 });
 
 it('returns integer values', function () {
@@ -101,10 +101,10 @@ it('returns integer values', function () {
 
     $stats = $this->service->getStats();
 
-    expect($stats->total)->toBeInt()
-        ->and($stats->pending)->toBeInt()
-        ->and($stats->active)->toBeInt()
-        ->and($stats->inactive)->toBeInt();
+    expect($stats['total'])->toBeInt()
+        ->and($stats['pending'])->toBeInt()
+        ->and($stats['active'])->toBeInt()
+        ->and($stats['inactive'])->toBeInt();
 });
 
 it('uses latest subscription instead of old one', function () {
@@ -125,10 +125,10 @@ it('uses latest subscription instead of old one', function () {
 
     $stats = $this->service->getStats();
 
-    expect($stats->total)->toBe(1)
-        ->and($stats->pending)->toBe(0)
-        ->and($stats->active)->toBe(0)
-        ->and($stats->inactive)->toBe(1);
+    expect($stats['total'])->toBe(1)
+        ->and($stats['pending'])->toBe(0)
+        ->and($stats['active'])->toBe(0)
+        ->and($stats['inactive'])->toBe(1);
 });
 
 it('returns correct statistics with mixed clinics', function () {
@@ -151,8 +151,8 @@ it('returns correct statistics with mixed clinics', function () {
 
     $stats = $this->service->getStats();
 
-    expect($stats->total)->toBe(3)
-        ->and($stats->active)->toBe(1)
-        ->and($stats->pending)->toBe(1)
-        ->and($stats->inactive)->toBe(1);
+    expect($stats['total'])->toBe(3)
+        ->and($stats['active'])->toBe(1)
+        ->and($stats['pending'])->toBe(1)
+        ->and($stats['inactive'])->toBe(1);
 });

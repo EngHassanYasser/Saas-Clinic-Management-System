@@ -5,7 +5,7 @@ use App\http\Controllers\Clinic\ClinicLookupController;
 use App\http\Controllers\Clinic\ClinicStatisticsController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth','role:clinic')->group(function () {
     Route::get(
         '/clinics/search',
         [ClinicController::class, 'SearchResults']

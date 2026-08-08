@@ -3,6 +3,7 @@
 use App\Http\Controllers\Doctor\DoctorController;
 use App\Http\Controllers\Doctor\DoctorQueryController;
 use Illuminate\Support\Facades\Route;
+Route::middleware('auth')->group(function () {
 
 Route::get(
     '/doctors',
@@ -28,3 +29,4 @@ Route::get(
     '/doctors/clinic/{clinic}/speciality/{speciality}/service/{service}/',
     [DoctorQueryController::class, 'getAvailableDoctors']
 )->name('doctors.getAvailableDoctors');
+});

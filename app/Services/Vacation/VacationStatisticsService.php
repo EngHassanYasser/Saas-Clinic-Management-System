@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 
 class VacationStatisticsService
 {
-    public function getStatistics(int $clinicId): object
+    public function getStatistics(int $clinicId): array
     {
         return Cache::remember(
             "vications.statistics.clinic.{$clinicId}",
@@ -26,16 +26,12 @@ class VacationStatisticsService
                 ")
                     ->first();
 
-                foreach ([
-                    'total',
-                    'upcoming',
-                    'active',
-                    'ended',
-                ] as $field) {
-                    $statistics->{$field} = (int) $statistics->{$field};
-                }
-
-                return $statistics;
+                return [
+                    'total' => (int) $statistics->total,
+                    'upcoming' => (int) $statistics->upcoming,
+                    'active' => (int) $statistics->active,
+                    'ended' => (int) $statistics->ended,
+                ];
             }
         );
     }

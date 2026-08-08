@@ -3,6 +3,7 @@
 use App\Http\Controllers\Subscription\SubscriptionStatusController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Subscription\SubscriptoinController;
+Route::middleware('auth','role:clinic')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get(
@@ -21,4 +22,5 @@ Route::middleware('auth')->group(function () {
         '/subscriptions/',
         [SubscriptoinController::class, 'store']
     )->name('subscriptions.store');
+});
 });

@@ -56,7 +56,7 @@ it('returns a Subscription model', function () {
     $result = $this->service->getStats();
 
     expect($result)
-        ->toBeInstanceOf(Subscription::class);
+        ->toBeArray();
 });
 
 /*
@@ -68,25 +68,25 @@ it('returns a Subscription model', function () {
 it('returns zero statistics when there are no subscriptions', function () {
     $result = $this->service->getStats();
 
-    expect((int) $result->total)
+    expect((int) $result['total'])
         ->toBe(0);
 
-    expect((int) $result->pending)
+    expect((int) $result['pending'])
         ->toBe(0);
 
-    expect((int) $result->active)
+    expect((int) $result['active'])
         ->toBe(0);
 
-    expect((int) $result->expired)
+    expect((int) $result['expired'])
         ->toBe(0);
 
-    expect((int) $result->cancelled)
+    expect((int) $result['cancelled'])
         ->toBe(0);
 
-    expect((int) $result->inactive)
+    expect((int) $result['inactive'])
         ->toBe(0);
 
-    expect((int) $result->expiring)
+    expect((int) $result['expiring'])
         ->toBe(0);
 });
 
@@ -115,7 +115,7 @@ it('returns the total number of subscriptions', function () {
 
     $result = $this->service->getStats();
 
-    expect((int) $result->total)
+    expect((int) $result['total'])
         ->toBe(4);
 });
 
@@ -144,7 +144,7 @@ it('counts pending subscriptions correctly', function () {
 
     $result = $this->service->getStats();
 
-    expect((int) $result->pending)
+    expect((int) $result['pending'])
         ->toBe(2);
 });
 
@@ -173,7 +173,7 @@ it('counts active subscriptions correctly', function () {
 
     $result = $this->service->getStats();
 
-    expect((int) $result->active)
+    expect((int) $result['active'])
         ->toBe(3);
 });
 
@@ -198,7 +198,7 @@ it('counts expired subscriptions correctly', function () {
 
     $result = $this->service->getStats();
 
-    expect((int) $result->expired)
+    expect((int) $result['expired'])
         ->toBe(2);
 });
 
@@ -223,7 +223,7 @@ it('counts cancelled subscriptions correctly', function () {
 
     $result = $this->service->getStats();
 
-    expect((int) $result->cancelled)
+    expect((int) $result['cancelled'])
         ->toBe(2);
 });
 /*
@@ -254,7 +254,7 @@ it('counts cancelled subscriptions as inactive according to the current query', 
 
     $result = $this->service->getStats();
 
-    expect((int) $result->inactive)
+    expect((int) $result['inactive'])
         ->toBe(2);
 });
 
@@ -279,8 +279,8 @@ it('returns the same count for inactive and cancelled', function () {
 
     $result = $this->service->getStats();
 
-    expect((int) $result->inactive)
-        ->toBe((int) $result->cancelled);
+    expect((int) $result['inactive'])
+        ->toBe((int) $result['cancelled']);
 });
 
 /*
@@ -307,7 +307,7 @@ it('counts active subscriptions expiring within seven days', function () {
 
     $result = $this->service->getStats();
 
-    expect((int) $result->expiring)
+    expect((int) $result['expiring'])
         ->toBe(2);
 });
 
@@ -330,7 +330,7 @@ it('does not count pending subscriptions as expiring', function () {
 
     $result = $this->service->getStats();
 
-    expect((int) $result->expiring)
+    expect((int) $result['expiring'])
         ->toBe(1);
 });
 
@@ -342,7 +342,7 @@ it('does not count expired subscriptions as expiring', function () {
 
     $result = $this->service->getStats();
 
-    expect((int) $result->expiring)
+    expect((int) $result['expiring'])
         ->toBe(0);
 });
 
@@ -354,7 +354,7 @@ it('does not count cancelled subscriptions as expiring', function () {
 
     $result = $this->service->getStats();
 
-    expect((int) $result->expiring)
+    expect((int) $result['expiring'])
         ->toBe(0);
 });
 
@@ -372,7 +372,7 @@ it('counts an active subscription ending today as expiring', function () {
 
     $result = $this->service->getStats();
 
-    expect((int) $result->expiring)
+    expect((int) $result['expiring'])
         ->toBe(1);
 });
 
@@ -384,7 +384,7 @@ it('counts an active subscription ending exactly seven days from today as expiri
 
     $result = $this->service->getStats();
 
-    expect((int) $result->expiring)
+    expect((int) $result['expiring'])
         ->toBe(1);
 });
 
@@ -396,7 +396,7 @@ it('does not count an active subscription ending after seven days as expiring', 
 
     $result = $this->service->getStats();
 
-    expect((int) $result->expiring)
+    expect((int) $result['expiring'])
         ->toBe(0);
 });
 
@@ -408,7 +408,7 @@ it('does not count an active subscription ending yesterday as expiring', functio
 
     $result = $this->service->getStats();
 
-    expect((int) $result->expiring)
+    expect((int) $result['expiring'])
         ->toBe(0);
 });
 
@@ -433,7 +433,7 @@ it('counts all active subscriptions inside the seven day window', function () {
 
     $result = $this->service->getStats();
 
-    expect((int) $result->expiring)
+    expect((int) $result['expiring'])
         ->toBe(7);
 });
 
@@ -474,23 +474,23 @@ it('counts every subscription status independently', function () {
 
     $result = $this->service->getStats();
 
-    expect((int) $result->total)
+    expect((int) $result['total'])
         ->toBe(7);
 
-    expect((int) $result->pending)
+    expect((int) $result['pending'])
         ->toBe(2);
 
-    expect((int) $result->active)
+    expect((int) $result['active'])
         ->toBe(3);
 
-    expect((int) $result->expired)
+    expect((int) $result['expired'])
         ->toBe(1);
 
-    expect((int) $result->cancelled)
+    expect((int) $result['cancelled'])
         ->toBe(1);
 
-    expect((int) $result->inactive)
-    ->toBe(2);
+    expect((int) $result['inactive'])
+        ->toBe(2);
 });
 
 /*
@@ -519,12 +519,12 @@ it('returns total equal to the sum of all enum statuses', function () {
     $result = $this->service->getStats();
 
     $total =
-        (int) $result->pending +
-        (int) $result->active +
-        (int) $result->expired +
-        (int) $result->cancelled;
+        (int) $result['pending'] +
+        (int) $result['active'] +
+        (int) $result['expired'] +
+        (int) $result['cancelled'];
 
-    expect((int) $result->total)
+    expect((int) $result['total'])
         ->toBe($total);
 });
 
@@ -545,13 +545,13 @@ it('does not depend on clinic or plan values for status statistics', function ()
 
     $result = $this->service->getStats();
 
-    expect((int) $result->total)
+    expect((int) $result['total'])
         ->toBe(2);
 
-    expect((int) $result->active)
+    expect((int) $result['active'])
         ->toBe(1);
 
-    expect((int) $result->pending)
+    expect((int) $result['pending'])
         ->toBe(1);
 });
 
@@ -621,7 +621,7 @@ it('keeps query count constant as subscription count increases', function () {
     createStatsSubscription([
         'status' => SubscriptionStatus::CANCELLED->value,
     ]);
-     Cache::forget('subscriptions.statistics');
+    Cache::forget('subscriptions.statistics');
 
     DB::flushQueryLog();
     DB::enableQueryLog();
@@ -684,8 +684,8 @@ it('contains all expected statistic attributes', function () {
     createStatsSubscription();
 
     $result = $this->service->getStats();
-
-    expect($result->getAttributes())
+    expect($result)
+        ->toBeArray()
         ->toHaveKeys([
             'total',
             'pending',
@@ -710,25 +710,25 @@ it('returns numeric aggregate values', function () {
 
     $result = $this->service->getStats();
 
-    expect(is_numeric($result->total))
+    expect(is_numeric($result['total']))
         ->toBeTrue();
 
-    expect(is_numeric($result->pending))
+    expect(is_numeric($result['pending']))
         ->toBeTrue();
 
-    expect(is_numeric($result->active))
+    expect(is_numeric($result['active']))
         ->toBeTrue();
 
-    expect(is_numeric($result->expired))
+    expect(is_numeric($result['expired']))
         ->toBeTrue();
 
-    expect(is_numeric($result->cancelled))
+    expect(is_numeric($result['cancelled']))
         ->toBeTrue();
 
-    expect(is_numeric($result->inactive))
+    expect(is_numeric($result['inactive']))
         ->toBeTrue();
 
-    expect(is_numeric($result->expiring))
+    expect(is_numeric($result['expiring']))
         ->toBeTrue();
 });
 
@@ -775,24 +775,24 @@ it('calculates statistics correctly with a larger dataset', function () {
 
     $result = $this->service->getStats();
 
-    expect((int) $result->total)
+    expect((int) $result['total'])
         ->toBe(50);
 
-    expect((int) $result->active)
+    expect((int) $result['active'])
         ->toBe(20);
 
-    expect((int) $result->pending)
+    expect((int) $result['pending'])
         ->toBe(15);
 
-    expect((int) $result->expired)
+    expect((int) $result['expired'])
         ->toBe(10);
 
-    expect((int) $result->cancelled)
+    expect((int) $result['cancelled'])
         ->toBe(5);
 
-    expect((int) $result->inactive)
+    expect((int) $result['inactive'])
         ->toBe(15);
 
-    expect((int) $result->expiring)
+    expect((int) $result['expiring'])
         ->toBe(20);
 });

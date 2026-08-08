@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Cache;
 
 class ClinicStatisticsService
 {
-    public function getStats(): object
+    public function getStats(): array
     {
         return Cache::remember(
             'subscriptions.statistics',
@@ -27,7 +27,7 @@ class ClinicStatisticsService
                         SUM(
                             CASE
                                 WHEN status = 'cancelled'
-                                  OR status = 'expired'
+                                OR status = 'expired'
                                 THEN 1
                                 ELSE 0
                             END
@@ -43,16 +43,12 @@ class ClinicStatisticsService
                     })
                     ->first();
 
-                foreach ([
-                    'total',
-                    'pending',
-                    'active',
-                    'inactive',
-                ] as $field) {
-                    $statistics->{$field} = (int) $statistics->{$field};
-                }
-
-                return $statistics;
+                return [
+                    'total' => (int) $statistics->total,
+                    'pending' => (int) $statistics->pending,
+                    'active' => (int) $statistics->active,
+                    'inactive' => (int) $statistics->inactive,
+                ];
             }
         );
     }

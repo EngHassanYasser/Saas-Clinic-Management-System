@@ -30,11 +30,11 @@ it('returns patient appointment statistics', function () {
 
     $statistics = $this->service->getPatientStats($patient->id);
 
-    expect($statistics->total)->toBe(6)
-        ->and($statistics->pending)->toBe(2)
-        ->and($statistics->confirmed)->toBe(3)
-        ->and($statistics->completed)->toBe(1)
-        ->and($statistics->cancelled)->toBe(0);
+    expect($statistics['total'])->toBe(6)
+        ->and($statistics['pending'])->toBe(2)
+        ->and($statistics['confirmed'])->toBe(3)
+        ->and($statistics['completed'])->toBe(1)
+        ->and($statistics['cancelled'])->toBe(0);
 });
 it('returns zero statistics when patient has no appointments', function () {
 
@@ -42,9 +42,9 @@ it('returns zero statistics when patient has no appointments', function () {
 
     $statistics = $this->service->getPatientStats($patient->id);
 
-    expect($statistics->total)->toBe(0)
-        ->and($statistics->pending)->toBe(0)
-        ->and($statistics->confirmed)->toBe(0)
-        ->and($statistics->completed)->toBe(0)
-        ->and($statistics->cancelled)->toBe(0);
+    expect($statistics['total'])->toBe(0)
+        ->and($statistics['pending'])->toBe(0)
+        ->and($statistics['confirmed'])->toBe(0)
+        ->and($statistics['completed'])->toBe(0)
+        ->and($statistics['cancelled'])->toBe(0);
 });

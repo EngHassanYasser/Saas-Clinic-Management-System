@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 
 class ComplainStatisticsService
 {
-    public function getStatistics(int $clinicId): object
+    public function getStatistics(int $clinicId): array
     {
         return Cache::remember(
             "complains.statistics.clinic.{$clinicId}",
@@ -23,17 +23,13 @@ class ComplainStatisticsService
                 ")
                     ->first();
 
-                foreach ([
-                    'total',
-                    'pending',
-                    'under_review',
-                    'resolved',
-                    'rejected',
-                ] as $field) {
-                    $statistics->{$field} = (int) $statistics->{$field};
-                }
-
-                return $statistics;
+                return [
+                    'total' => (int) $statistics->total,
+                    'pending' => (int) $statistics->pending,
+                    'under_review' => (int) $statistics->under_review,
+                    'resolved' => (int) $statistics->resolved,
+                    'rejected' => (int) $statistics->rejected,
+                ];
             }
         );
     }

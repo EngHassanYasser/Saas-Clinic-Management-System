@@ -6,7 +6,7 @@ use App\Http\Controllers\Appointment\AppointmentRescheduleController;
 use App\Http\Controllers\Appointment\AppointmentStatusController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth','role:clinic,patient,super_admin')->group(function () {
     Route::get(
         'appointments',
         [AppointmentController::class, 'index']

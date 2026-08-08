@@ -26,10 +26,11 @@ class VacationController extends Controller
     public function index()
     {
         $clinicId = $this->clinicQueryService->getClinicByOwnereId(Auth::id())->id;
-        [$vications,$doctors,$clinic,$stats] = Concurrency::run([
+        $clinic = $this->clinicQueryService->getClinicByOwnereId(Auth::id());
+
+        [$vications,$doctors,$stats] = Concurrency::run([
             fn () => $this->vactionQueryService->getClinicVacations($clinicId),
             fn () => $this->doctorQueryService->getDoctorsNames($clinicId),
-            fn () => $this->clinicQueryService->getClinicByOwnereId(Auth::id()),
             fn () => $this->vacationStatisticsService->getStatistics($clinicId),
         ]);
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Schedule\ScheduleController;
 use Illuminate\Support\Facades\Route;
+Route::middleware('auth','role:clinic,patient')->group(function () {
 
 Route::get(
     'schedules',
@@ -19,3 +20,4 @@ Route::delete(
     'schedules/{schedule}',
     [ScheduleController::class, 'destroy']
 )->name('schedules.destroy');
+});
