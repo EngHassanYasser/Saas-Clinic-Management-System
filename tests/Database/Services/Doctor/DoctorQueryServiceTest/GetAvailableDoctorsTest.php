@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Clinic;
-use App\Models\ClinicService;
+use App\Models\DoctorService;
 use App\Models\Doctor;
 use App\Models\Doctor_service_price;
 use App\Models\Speciality;
@@ -18,8 +18,8 @@ it('returns only doctors who match the requested speciality and service', functi
     $speciality = Speciality::factory()->create();
     $otherSpeciality = Speciality::factory()->create();
 
-    $service = ClinicService::factory()->create();
-    $otherService = ClinicService::factory()->create();
+    $service = DoctorService::factory()->create();
+    $otherService = DoctorService::factory()->create();
 
     $doctor = Doctor::factory()->create();
 
@@ -28,7 +28,7 @@ it('returns only doctors who match the requested speciality and service', functi
     Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $service->id,
+        'doctorService_id' => $service->id,
     ]);
 
     $result = $this->service->getAvailableDoctors(
@@ -48,7 +48,7 @@ it('does not return doctors with a different speciality', function () {
     $requestedSpeciality = Speciality::factory()->create();
     $otherSpeciality = Speciality::factory()->create();
 
-    $service = ClinicService::factory()->create();
+    $service = DoctorService::factory()->create();
 
     $doctor = Doctor::factory()->create();
 
@@ -57,7 +57,7 @@ it('does not return doctors with a different speciality', function () {
     Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $service->id,
+        'doctorService_id' => $service->id,
     ]);
 
     $result = $this->service->getAvailableDoctors(
@@ -74,8 +74,8 @@ it('does not return doctors with a different service', function () {
 
     $speciality = Speciality::factory()->create();
 
-    $requestedService = ClinicService::factory()->create();
-    $otherService = ClinicService::factory()->create();
+    $requestedService = DoctorService::factory()->create();
+    $otherService = DoctorService::factory()->create();
 
     $doctor = Doctor::factory()->create();
 
@@ -84,7 +84,7 @@ it('does not return doctors with a different service', function () {
     Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $otherService->id,
+        'doctorService_id' => $otherService->id,
     ]);
 
     $result = $this->service->getAvailableDoctors(
@@ -101,7 +101,7 @@ it('does not return doctors whose service belongs to another clinic', function (
     $otherClinic = Clinic::factory()->create();
 
     $speciality = Speciality::factory()->create();
-    $service = ClinicService::factory()->create();
+    $service = DoctorService::factory()->create();
 
     $doctor = Doctor::factory()->create();
 
@@ -110,7 +110,7 @@ it('does not return doctors whose service belongs to another clinic', function (
     Doctor_service_price::factory()->create([
         'clinic_id' => $otherClinic->id,
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $service->id,
+        'doctorService_id' => $service->id,
     ]);
 
     $result = $this->service->getAvailableDoctors(
@@ -128,7 +128,7 @@ it('does not return doctors who are not assigned to the requested speciality', f
     $speciality = Speciality::factory()->create();
     $otherSpeciality = Speciality::factory()->create();
 
-    $service = ClinicService::factory()->create();
+    $service = DoctorService::factory()->create();
 
     $doctor = Doctor::factory()->create();
 
@@ -137,7 +137,7 @@ it('does not return doctors who are not assigned to the requested speciality', f
     Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $service->id,
+        'doctorService_id' => $service->id,
     ]);
 
     $result = $this->service->getAvailableDoctors(
@@ -153,7 +153,7 @@ it('returns multiple matching doctors', function () {
     $clinic = Clinic::factory()->create();
 
     $speciality = Speciality::factory()->create();
-    $service = ClinicService::factory()->create();
+    $service = DoctorService::factory()->create();
 
     $doctors = Doctor::factory()->count(3)->create();
 
@@ -163,7 +163,7 @@ it('returns multiple matching doctors', function () {
         Doctor_service_price::factory()->create([
             'clinic_id' => $clinic->id,
             'doctor_id' => $doctor->id,
-            'clinic_service_id' => $service->id,
+            'doctorService_id' => $service->id,
         ]);
     }
 
@@ -184,7 +184,7 @@ it('does not return duplicate doctors when a doctor has multiple specialities', 
     $requestedSpeciality = Speciality::factory()->create();
     $otherSpeciality = Speciality::factory()->create();
 
-    $service = ClinicService::factory()->create();
+    $service = DoctorService::factory()->create();
 
     $doctor = Doctor::factory()->create();
 
@@ -199,12 +199,12 @@ it('does not return duplicate doctors when a doctor has multiple specialities', 
 
     /*
      * Only one doctor_service_price is created because
-     * (clinic_id, doctor_id, clinic_service_id) is unique.
+     * (clinic_id, doctor_id, doctorService_id) is unique.
      */
     Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $service->id,
+        'doctorService_id' => $service->id,
     ]);
 
     $result = $this->service->getAvailableDoctors(
@@ -225,7 +225,7 @@ it('returns an empty collection when no doctors match', function () {
     $clinic = Clinic::factory()->create();
 
     $speciality = Speciality::factory()->create();
-    $service = ClinicService::factory()->create();
+    $service = DoctorService::factory()->create();
 
     $result = $this->service->getAvailableDoctors(
         $clinic->id,
@@ -241,7 +241,7 @@ it('returns only id and name for matching doctors', function () {
     $clinic = Clinic::factory()->create();
 
     $speciality = Speciality::factory()->create();
-    $service = ClinicService::factory()->create();
+    $service = DoctorService::factory()->create();
 
     $doctor = Doctor::factory()->create();
 
@@ -250,7 +250,7 @@ it('returns only id and name for matching doctors', function () {
     Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $service->id,
+        'doctorService_id' => $service->id,
     ]);
 
     $result = $this->service->getAvailableDoctors(
@@ -271,7 +271,7 @@ it('does not return a doctor when the speciality matches but the service is miss
     $clinic = Clinic::factory()->create();
 
     $speciality = Speciality::factory()->create();
-    $service = ClinicService::factory()->create();
+    $service = DoctorService::factory()->create();
 
     $doctor = Doctor::factory()->create();
 
@@ -290,14 +290,14 @@ it('does not return a doctor when the service matches but the speciality is miss
     $clinic = Clinic::factory()->create();
 
     $speciality = Speciality::factory()->create();
-    $service = ClinicService::factory()->create();
+    $service = DoctorService::factory()->create();
 
     $doctor = Doctor::factory()->create();
 
     Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $service->id,
+        'doctorService_id' => $service->id,
     ]);
 
     $result = $this->service->getAvailableDoctors(

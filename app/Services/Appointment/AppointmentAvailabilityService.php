@@ -2,6 +2,11 @@
 
 namespace App\Services\Appointment;
 
+use App\DTOs\Services\Appointment\AppointmentAvailabilityService\IsSlotAvailableDTO;
+use App\DTOs\Services\Appointment\AppointmentQueryService\GetSlotDurationByVisitDateDTO;
+use App\DTOs\Services\AppointmentService\GetAvailableAppointmentsDTO;
+use App\DTOs\Services\AppointmentService\GetBookedSlotsDTO;
+use App\DTOs\Services\AppointmentService\GetSchedulesDTO;
 use App\Models\Appointment;
 use App\Models\Schedule;
 use Carbon\Carbon;
@@ -9,13 +14,15 @@ use Illuminate\Database\Eloquent\Collection;
 
 class AppointmentAvailabilityService
 {
-    public function getAvailableAppointments(int $clinicId, int $doctorId, string $visitDate): array
+    public function getAvailableAppointments(GetAvailableAppointmentsDTO $dto): array
     {
-        if (Carbon::parse($visitDate)->isBefore(today())) {
+        if (Carbon::parse($dto->visisteDate)->isBefore(today())) {
             return [];
         }
-        $bookedSlots = $this->getBookedSlots($clinicId, $doctorId, $visitDate);
-        $schedules = $this->getSchedules($visitDate, $doctorId, $clinicId);
+        $getBookedSlotsDTO = new GetBookedSlotsDTO($dto->clinicId, $dto->doctorId, $dto->visisteDate);
+        $getSchedulesDTO = new GetSchedulesDTO($dto->clinicId, $dto->doctorId, $dto->visisteDate);
+        $bookedSlots = $this->getBookedSlots($getBookedSlotsDTO);
+        $schedules = $this->getSchedules($getSchedulesDTO);
 
         return $this->getAvailableSlots($bookedSlots, $schedules);
     }
@@ -61,22 +68,22 @@ class AppointmentAvailabilityService
         return $availableSlots;
     }
 
-    public function getBookedSlots(int $clinicId, int $doctorId, string $visitDate): array
+    public function getBookedSlots(GetBookedSlotsDTO $dto): array
     {
-        return Appointment::where('clinic_id', $clinicId)
-            ->where('doctor_id', $doctorId)
-            ->whereDate('visit_date', $visitDate)
+        return Appointment::where('clinic_id', $dto->clinicId)
+            ->where('doctor_id', $dto->doctorId)
+            ->whereDate('visit_date', $dto->visisteDate)
             ->get(['start_time', 'visit_date'])
             ->map(fn ($appointment) => Carbon::parse($appointment->start_time)->format('H:i'))
             ->toArray();
     }
 
-    public function getSchedules(string $visitDate, int $doctorId, int $clinicId)
+    public function getSchedules(GetSchedulesDTO $dto)
     {
-        $dayName = Carbon::parse($visitDate)->dayName;
+        $dayName = Carbon::parse($dto->visisteDate)->dayName;
 
-        return Schedule::where('clinic_id', $clinicId)
-            ->where('doctor_id', $doctorId)
+        return Schedule::where('clinic_id', $dto->clinicId)
+            ->where('doctor_id', $dto->doctorId)
             ->where('is_available', 1)
             ->whereHas('days', function ($query) use ($dayName) {
                 $query->where('name', $dayName);
@@ -89,11 +96,11 @@ class AppointmentAvailabilityService
             ]);
     }
 
-    public function getSlotDurationByVisitDate(int $clinicId, int $doctorId, string $visitDate): int
+    public function getSlotDurationByVisitDate(GetSlotDurationByVisitDateDTO $dto): int
     {
-        $dayName = Carbon::parse($visitDate)->dayName;
-        $slot_duration =  Schedule::where('clinic_id', $clinicId)
-            ->where('doctor_id', $doctorId)
+        $dayName = Carbon::parse($dto->visiteDate)->dayName;
+        $slot_duration = Schedule::where('clinic_id', $dto->clinicId)
+            ->where('doctor_id', $dto->doctorId)
             ->where('is_available', 1)
             ->whereHas('days', function ($query) use ($dayName) {
                 $query->where('name', $dayName);
@@ -102,16 +109,12 @@ class AppointmentAvailabilityService
         return (int) ($slot_duration?->value ?? 0);
     }
 
-    public function isSlotAvailable(
-        int $clinicId,
-        int $doctorId,
-        string $visitDate,
-        string $slot,
-    ): bool {
-        return Appointment::where('clinic_id', $clinicId)
-            ->where('doctor_id', $doctorId)
-            ->where('visit_date', $visitDate)
-            ->where('start_time', $slot)
+    public function isSlotAvailable(IsSlotAvailableDTO $dto): bool
+    {
+        return Appointment::where('clinic_id', $dto->clinicId)
+            ->where('doctor_id', $dto->doctorId)
+            ->where('visit_date', $dto->visiteDate)
+            ->where('start_time', $dto->slot)
             ->doesntExist();
     }
 }

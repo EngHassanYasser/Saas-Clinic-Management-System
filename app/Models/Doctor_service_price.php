@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable([
     'clinic_id',
     'doctor_id',
-    'clinic_service_id',
+    'doctorService_id',
     'description',
     'price',
 ])]
@@ -32,8 +32,8 @@ class Doctor_service_price extends Model
         return $this->belongsTo(Doctor::class, 'doctor_id');
     }
 
-    public function clinic_service()
+    public function doctorService()
     {
-        return $this->belongsTo(ClinicService::class, 'clinic_service_id');
+        return $this->belongsTo(DoctorService::class, 'doctorService_id');
     }
 }

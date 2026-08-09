@@ -2,7 +2,7 @@
 use App\Exceptions\SlotDoesNotAvailable;
 use App\Models\Appointment;
 use App\Models\Clinic;
-use App\Models\ClinicService;
+use App\Models\DoctorService;
 use App\Models\Doctor;
 use App\Models\User;
 use App\Services\Appointment\AppointmentAvailabilityService;
@@ -24,7 +24,7 @@ it('creates appointment successfully', function () {
     $clinic = Clinic::factory()->create();
     $doctor = Doctor::factory()->create();
     $patient = User::factory()->create();
-    $clinicService = ClinicService::factory()->create();
+    $clinicService = DoctorService::factory()->create();
 
     $this->availabilityService
         ->shouldReceive('isSlotAvailable')
@@ -50,7 +50,7 @@ it('creates appointment successfully', function () {
     $appointment = $this->service->add([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $clinicService->id,
+        'doctorService_id' => $clinicService->id,
         'visit_date' => '2026-08-20',
         'slot' => '10:00:00',
     ], $patient->id);
@@ -63,7 +63,7 @@ it('creates appointment successfully', function () {
         'patient_id' => $patient->id,
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $clinicService->id,
+        'doctorService_id' => $clinicService->id,
         'visit_date' => '2026-08-20',
         'start_time' => '10:00:00',
         'end_time' => '10:30:00',
@@ -74,7 +74,7 @@ it('throws exception when slot is not available', function () {
     $clinic = Clinic::factory()->create();
     $doctor = Doctor::factory()->create();
     $patient = User::factory()->create();
-    $clinicService = ClinicService::factory()->create();
+    $clinicService = DoctorService::factory()->create();
 
     $this->availabilityService
         ->shouldReceive('isSlotAvailable')
@@ -97,7 +97,7 @@ it('calculates end time using slot duration', function () {
     $clinic = Clinic::factory()->create();
     $doctor = Doctor::factory()->create();
     $patient = User::factory()->create();
-    $clinicService = ClinicService::factory()->create();
+    $clinicService = DoctorService::factory()->create();
 
     $this->availabilityService
         ->shouldReceive('isSlotAvailable')
@@ -112,7 +112,7 @@ it('calculates end time using slot duration', function () {
     $appointment = $this->service->add([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $clinicService->id,
+        'doctorService_id' => $clinicService->id,
         'visit_date' => '2026-08-20',
         'slot' => '09:00:00',
     ], $patient->id);

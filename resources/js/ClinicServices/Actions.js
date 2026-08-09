@@ -4,7 +4,7 @@ export default {
 
         this.form = {
             id: null,
-            clinic_service_id: null,
+            doctorService_id: null,
             doctor_id: null,
             description: "",
             price: 0,
@@ -18,7 +18,7 @@ export default {
 
         this.form = {
             id: item.id,
-            clinic_service_id: item.clinic_service_id,
+            doctorService_id: item.doctorService_id,
             doctor_id: item.doctor_id,
             description: item.description,
             price: item.price,

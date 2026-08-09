@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\ClinicService;
+use App\Models\DoctorService;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class ClinicServicesSeeder extends Seeder
+class DoctorServicesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -44,6 +44,6 @@ class ClinicServicesSeeder extends Seeder
             ['name' => 'حقن مفاصل', 'speciality_id' => 5],
         ];
 
-        ClinicService::insert($services);
+        DoctorService::insert($services);
     }
 }

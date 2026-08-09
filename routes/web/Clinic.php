@@ -40,8 +40,8 @@ Route::middleware('auth', 'role:clinic','verified')->group(function () {
     )->name('clinic.stats');
     Route::get(
         '/clinic/services/speciality/{speciality}',
-        [ClinicLookupController::class, 'getClinicServicesBySpecialityId']
-    )->name('clinic.getClinicServicesBySpecialityId');
+        [ClinicLookupController::class, 'getDoctorServicesBySpecialityId']
+    )->name('clinic.getDoctorServicesBySpecialityId');
     Route::get(
         '/clinics/speciality/{speciality}/service/{service}',
         [ClinicLookupController::class, 'getAvailableClinics']

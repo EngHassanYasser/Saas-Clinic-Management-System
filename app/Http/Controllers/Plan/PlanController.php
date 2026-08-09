@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Plan;
 
+use App\DTOs\Services\Plan\PlanService\StorePlanDTO;
+use App\DTOs\Services\Plan\PlanService\UpdatePlanDTO;
 use App\Enums\PlanStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\plans\StorePlanRequest;
@@ -26,7 +28,8 @@ class PlanController extends Controller
 
     public function store(StorePlanRequest $request)
     {
-        $newPlan = $this->planService->add($request->validated());
+        $dto= StorePlanDTO::fromRequest($request->validated());
+        $newPlan = $this->planService->add($dto);
 
         $message = $newPlan ? 'plan added successfully' : 'failed to add plan';
 
@@ -35,7 +38,8 @@ class PlanController extends Controller
 
     public function update(UpdatePlanRequest $request, int $id)
     {
-        $isUpdated = $this->planService->update($request->validated(), $id);
+        $dto=UpdatePlanDTO::fromRequest($request->validated());
+        $isUpdated = $this->planService->update($dto, $id);
         $message = $isUpdated ? 'plan updated successfully' : 'failed to update plan';
 
         return redirect()->route('plans.index')->with('message', $message);

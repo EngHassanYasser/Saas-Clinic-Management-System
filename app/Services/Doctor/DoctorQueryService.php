@@ -12,7 +12,7 @@ class DoctorQueryService
     {
         $clinic = Clinic::with([
             'doctors.specialities',
-            'doctors.servicePrices.clinic_service',
+            'doctors.servicePrices.doctorService',
             'schedules',
             'doctors.media',
         ])->findOrFail($clinicId);
@@ -25,7 +25,7 @@ class DoctorQueryService
                 'email' => $doctor->email,
                 $consultationFee = optional(
                     $doctor->servicePrices
-                        ->first(fn ($item) => $item->clinic_service?->name === 'كشف')
+                        ->first(fn ($item) => $item->doctorService?->name === 'كشف')
                 )->price,
 
                 'Consultation_Fee' => $consultationFee !== null
@@ -57,7 +57,7 @@ class DoctorQueryService
             ->join('doctor_speciality', 'doctor_speciality.doctor_id', '=', 'doctors.id')
             ->join('doctor_service_prices', 'doctor_service_prices.doctor_id', '=', 'doctors.id')
             ->where('doctor_speciality.speciality_id', $specialityId)
-            ->where('doctor_service_prices.clinic_service_id', $serviceId)
+            ->where('doctor_service_prices.doctorService_id', $serviceId)
             ->where('doctor_service_prices.clinic_id', $clinicId)
             ->distinct()
             ->get();

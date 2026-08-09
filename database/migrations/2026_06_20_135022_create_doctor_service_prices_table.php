@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\clinic;
-use App\Models\ClinicService;
+use App\Models\DoctorService;
 use App\Models\doctor;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -20,14 +20,14 @@ return new class extends Migration
 
             $table->foreignIdFor(Clinic::class)->constrained();
             $table->foreignIdFor(Doctor::class)->constrained();
-            $table->foreignIdFor(ClinicService::class)->constrained();
+            $table->foreignIdFor(DoctorService::class)->constrained();
             $table->string('description',500);
             $table->decimal('price', 8, 2)->check('price' > 0);
 
             $table->timestamps();
 
             $table->unique(
-                ['clinic_id', 'doctor_id', 'clinic_service_id'],
+                ['clinic_id', 'doctor_id', 'doctorService_id'],
                 'dsp_unique'
             );
         });
@@ -38,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('doctor_clinic_service_prices');
+        Schema::dropIfExists('doctor_doctorService_prices');
     }
 };

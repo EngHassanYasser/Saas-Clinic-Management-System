@@ -1,6 +1,6 @@
 import {
     getAvailableSlots,
-    getClinicServices,
+    getDoctorServices,
     getAvailableClinics,
     getAvailableDoctors,
 } from "./api";
@@ -14,7 +14,7 @@ export default {
         this.availableSlots = response;
     },
     async handelAvailableServices(specialityId) {
-        const response = await getClinicServices(specialityId);
+        const response = await getDoctorServices(specialityId);
         this.services = response.data;
     },
     async handleAvailableClinics(specialityId, serviceId) {

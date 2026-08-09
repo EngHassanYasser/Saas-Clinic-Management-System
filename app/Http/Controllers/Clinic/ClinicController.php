@@ -2,36 +2,40 @@
 
 namespace App\http\Controllers\Clinic;
 
+use App\DTOs\Services\Clinic\ClinicService\StoreClinicDTO;
+use App\DTOs\Services\Clinic\ClinicService\UpdateClinicDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Clinic\StoreClinicRequest;
 use App\Http\Requests\Clinic\UpdateClinicRequest;
 use App\Models\Clinic;
-use App\Models\Plan;
 use App\Services\Clinic\ClinicQueryService;
-use App\services\Clinic\ClinicService;
+use App\services\Clinic\DoctorService;
 use App\Services\Clinic\ClinicStatisticsService;
 use App\Services\Location\LocationQueryService;
+use App\Services\Plan\PlanQueryService;
 use App\Support\TenantContext;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Concurrency;
 
 class ClinicController extends Controller
 {
     public function __construct(
-        private ClinicService $clinicService,
+        private DoctorService $clinicService,
         private ClinicQueryService $clinicQueryService,
         private ClinicStatisticsService $clinicStatisticsService,
         private LocationQueryService $locationQueryService,
         private TenantContext $tenantContext,
+        private PlanQueryService $planQueryService,
     ) {}
 
     public function index()
     {
-        [$stats,$clinics,$citites,$plans] = Concurrency::run([
+        $this->authorize('viewAny', Clinic::class);
+
+        [$stats,$clinics,$cities,$plans] = Concurrency::run([
             fn () => $this->clinicStatisticsService->getStats(),
             fn () => $this->clinicQueryService->getAll(),
             fn () => $this->locationQueryService->getCities(),
-            fn () => Plan::get(['id', 'name']),
+            fn () => $this->planQueryService->getAll(),
         ]);
 
         return view('clinics.index', compact('clinics', 'cities', 'plans', 'stats'));
@@ -44,15 +48,19 @@ class ClinicController extends Controller
 
     public function store(StoreClinicRequest $request)
     {
-        $this->clinicService->add($request->validated());
+        $this->authorize('create', Clinic::class);
+        $dto=StoreClinicDTO::fromRequest($request->validated());
+        $this->clinicService->add($dto);
 
         return redirect()->route('clinics.index')->with('message', 'clinic added successfully');
     }
 
-    public function edit(Request $request)
+    public function edit()
     {
+        $this->authorize('update', Clinic::class);
+
         $currentClinic = $this->tenantContext->id();
-        
+
         [$cities,$days] = Concurrency::run([
             fn () => $this->locationQueryService->getCities(),
             fn () => $this->locationQueryService->getDays(),
@@ -63,13 +71,17 @@ class ClinicController extends Controller
 
     public function update(UpdateClinicRequest $request, Clinic $clinic)
     {
-        $this->clinicService->update($request->validated(), $clinic);
+        $this->authorize('update',$clinic);
+        $dto=UpdateClinicDTO::fromRequest($request->validated());
+        $this->clinicService->update($dto, $clinic);
 
         return redirect()->route('clinics.edit')->with('message', 'clinic updated successfully');
     }
 
     public function destroy(Clinic $clinic)
     {
+        $this->authorize('delete', $clinic);
+
         $isDeleted = $this->clinicService->delete($clinic);
         $message = $isDeleted ? 'clinic deleted duccessfully' : 'failed to delete clinic';
 

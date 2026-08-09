@@ -4,11 +4,11 @@ use App\Models\City;
 use App\Models\Clinic;
 use App\Models\Day;
 use App\Models\User;
-use App\Services\Clinic\ClinicService;
+use App\Services\Clinic\DoctorService;
 use Illuminate\Support\Facades\Hash;
 
 beforeEach(function () {
-    $this->service = app(ClinicService::class);
+    $this->service = app(DoctorService::class);
 });
 
 function updateData(Clinic $clinic): array

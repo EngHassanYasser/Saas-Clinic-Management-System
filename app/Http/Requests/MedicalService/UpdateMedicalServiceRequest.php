@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\clinicService;
+namespace App\Http\Requests\MedicalService;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateClinicServiceRequest extends FormRequest
+class UpdateMedicalServiceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +23,8 @@ class UpdateClinicServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'=>['required','integer'],
-            'clinic_service_id' => 'required|string|max:255',
+            'doctor_service_price_id'=>['required','integer'],
+            'doctorService_id' => 'required|string|max:255',
             'doctor_id' => 'required|exists:doctors,id',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0.01',

@@ -2,14 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\ClinicService;
 use App\Models\Speciality;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<ClinicService>
+ * @extends Factory<MedicalService>
  */
-class ClinicServiceFactory extends Factory
+class MedicalServiceFactory extends Factory
 {
     public function definition(): array
     {

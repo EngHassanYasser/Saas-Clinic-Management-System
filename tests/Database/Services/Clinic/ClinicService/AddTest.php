@@ -4,11 +4,11 @@ use App\Enums\RoleType;
 use App\Models\City;
 use App\Models\Clinic;
 use App\Models\User;
-use App\Services\Clinic\ClinicService;
+use App\Services\Clinic\DoctorService;
 use Illuminate\Support\Facades\Hash;
 
 beforeEach(function () {
-    $this->service = app(ClinicService::class);
+    $this->service = app(DoctorService::class);
 });
 
 function clinicData(int $cityId): array

@@ -9,8 +9,8 @@
             <div class="relative" @click.outside="serviceDropdownOpen = false">
                 <button type="button" @click="serviceDropdownOpen = !serviceDropdownOpen"
                     class="w-full flex items-center justify-between bg-gray-50 border border-gray-100 rounded-lg p-2 text-right focus:ring-2 focus:ring-teal-500 outline-none">
-                    <span x-text="serviceCatalogs.find(s => s.id === form.clinic_service_id)?.name || 'اختر الخدمة'"
-                        :class="form.clinic_service_id ? 'text-gray-800' : 'text-gray-400'"></span>
+                    <span x-text="serviceCatalogs.find(s => s.id === form.doctorService_id)?.name || 'اختر الخدمة'"
+                        :class="form.doctorService_id ? 'text-gray-800' : 'text-gray-400'"></span>
                     <svg class="w-4 h-4 text-gray-400 transition-transform shrink-0"
                         :class="serviceDropdownOpen && 'rotate-180'" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
@@ -23,9 +23,9 @@
                         <div class="px-3 py-2 text-sm text-gray-400">لا توجد خدمات</div>
                     </template>
                     <template x-for="service in serviceCatalogs" :key="service.id">
-                        <div @click="form.clinic_service_id = service.id; serviceDropdownOpen = false"
+                        <div @click="form.doctorService_id = service.id; serviceDropdownOpen = false"
                             class="px-3 py-2 cursor-pointer text-gray-700 hover:bg-teal-50"
-                            :class="form.clinic_service_id === service.id && 'bg-teal-600 text-white hover:bg-teal-600'"
+                            :class="form.doctorService_id === service.id && 'bg-teal-600 text-white hover:bg-teal-600'"
                             x-text="service.name"></div>
                     </template>
                 </div>
@@ -74,7 +74,7 @@
                     <input type="hidden" name="_method" value="PUT">
                 </template>
                 <input type="hidden" name="id" x-model="form.id">
-                <input type="hidden" name="clinic_service_id" x-model="form.clinic_service_id">
+                <input type="hidden" name="doctorService_id" x-model="form.doctorService_id">
                 <input type="hidden" name="price" x-model="form.price">
                 <input type="hidden" name="description" x-model="form.description">
 

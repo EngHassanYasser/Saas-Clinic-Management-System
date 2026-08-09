@@ -2,6 +2,8 @@
 
 namespace App\Services\Schedule;
 
+use App\DTOs\Services\Schedule\ScheduleService\StoreScheduleDTO;
+use App\DTOs\Services\Schedule\ScheduleService\UpdateScheduleDTO;
 use App\Exceptions\ScheduleConflictException;
 use App\Models\Schedule;
 use Illuminate\Support\Facades\DB;
@@ -10,31 +12,31 @@ class ScheduleService
 {
     public function __construct(private ScheduleConflictService $scheduleConfilctService) {}
 
-    public function add(array $data, int $clinicId): Schedule
+    public function add(StoreScheduleDTO $dto, int $clinicId): Schedule
     {
-        return DB::transaction(function () use ($data, $clinicId) {
+        return DB::transaction(function () use ($dto, $clinicId) {
             if ($this->scheduleConfilctService->hasScheduleConflict($data, $clinicId)) {
                 throw new ScheduleConflictException('يوجد تداخل مع جدول يوم الأحد.');
             }
             $schedule = Schedule::create([
-                'start_time' => $data['start_time'],
-                'end_time' => $data['end_time'],
-                'slot_duration' => $data['slot_duration'],
-                'start_break' => $data['start_break'],
-                'end_break' => $data['end_break'],
-                'is_available' => $data['is_available'],
-                'doctor_id' => $data['doctor_id'],
+                'start_time' => $dto->startTime,
+                'end_time' => $dto->endTime,
+                'slot_duration' => $dto->slotDuration,
+                'start_break' => $dto->startBreak,
+                'end_break' => $dto->endBreak,
+                'is_available' => $dto->isAvailable,
+                'doctor_id' => $dto->doctorId,
                 'clinic_id' => $clinicId,
             ]);
-            $schedule->days()->attach($data['day_ids']);
+            $schedule->days()->attach($dto->dayIds);
 
             return $schedule;
         }, 3);
     }
 
-    public function update(array $data, int $scheduleId): Schedule
+    public function update(UpdateScheduleDTO $dto, int $scheduleId): Schedule
     {
-        return DB::transaction(function () use ($data, $scheduleId) {
+        return DB::transaction(function () use ($dto, $scheduleId) {
 
             $schedule = Schedule::where('id', $scheduleId)
                 ->lockForUpdate()
@@ -55,15 +57,15 @@ class ScheduleService
             }
 
             $schedule->update([
-                'start_time' => $data['start_time'],
-                'end_time' => $data['end_time'],
-                'slot_duration' => $data['slot_duration'],
-                'start_break' => $data['start_break'],
-                'end_break' => $data['end_break'],
-                'is_available' => $data['is_available'],
+                'start_time' => $dto->startTime,
+                'end_time' => $dto->endTime,
+                'slot_duration' => $dto->slotDuration,
+                'start_break' => $dto->startBreak,
+                'end_break' => $dto->endBreak,
+                'is_available' => $dto->isAvailable,
             ]);
 
-            $schedule->days()->sync($data['day_ids']);
+            $schedule->days()->sync($dto->dayIds);
 
             return $schedule->fresh();
         }, 3);

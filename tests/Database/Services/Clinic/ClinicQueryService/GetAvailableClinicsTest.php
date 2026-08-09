@@ -4,7 +4,7 @@ use App\Models\City;
 use App\Models\Clinic;
 use App\Models\Doctor;
 use App\Models\Speciality;
-use App\Models\ClinicService;
+use App\Models\DoctorService;
 use App\Services\Clinic\ClinicQueryService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Collection;
@@ -23,7 +23,7 @@ it('returns available clinics', function () {
 
     $speciality = Speciality::factory()->create();
 
-    $service = ClinicService::factory()->create([
+    $service = DoctorService::factory()->create([
         'speciality_id' => $speciality->id,
     ]);
 
@@ -63,7 +63,7 @@ it('does not return inactive doctors', function () {
 
     $speciality = Speciality::factory()->create();
 
-    $service = ClinicService::factory()->create([
+    $service = DoctorService::factory()->create([
         'speciality_id' => $speciality->id,
     ]);
 
@@ -94,7 +94,7 @@ it('does not return clinic for wrong speciality', function () {
 
     $requestedSpeciality = Speciality::factory()->create();
 
-    $service = ClinicService::factory()->create([
+    $service = DoctorService::factory()->create([
         'speciality_id' => $requestedSpeciality->id,
     ]);
 
@@ -123,7 +123,7 @@ it('does not return clinic for wrong service', function () {
 
     $speciality = Speciality::factory()->create();
 
-    $service = ClinicService::factory()->create([
+    $service = DoctorService::factory()->create([
         'speciality_id' => $speciality->id,
     ]);
 
@@ -157,7 +157,7 @@ it('returns clinic only once using distinct', function () {
 
     $speciality = Speciality::factory()->create();
 
-    $service = ClinicService::factory()->create([
+    $service = DoctorService::factory()->create([
         'speciality_id' => $speciality->id,
     ]);
 

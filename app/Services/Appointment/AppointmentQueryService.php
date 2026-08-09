@@ -36,7 +36,7 @@ class AppointmentQueryService
             'deposit_amount',
             'cancellation_time',
             'patient_id',
-            'clinic_service_id',
+            'doctorService_id',
             'visit_date',
         )->where($column, $id)
             ->with(['patient:id,name', 'doctor:id,name', 'clinic:id,name,address', 'service:id,name'])
@@ -44,7 +44,7 @@ class AppointmentQueryService
             ->through(function ($appt) {
                 $price = Doctor_service_price::where('doctor_id', $appt->doctor_id)
                     ->where('clinic_id', $appt->clinic_id)
-                    ->where('clinic_service_id', $appt->clinic_service_id)
+                    ->where('doctorService_id', $appt->doctorService_id)
                     ->value('price');
                 return [
                     'id'                  => $appt->id,

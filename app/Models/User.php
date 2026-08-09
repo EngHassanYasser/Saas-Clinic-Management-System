@@ -75,10 +75,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(appointment::class);
     }
-    public function clinic()
-    {
-        return $this->hasMany(clinic::class);
-    }
     public function clinics()
     {
         return $this->belongsToMany(Clinic::class, 'clinic_users', 'user_id', 'clinic_id');

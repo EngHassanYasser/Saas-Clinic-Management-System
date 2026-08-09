@@ -16,7 +16,7 @@ export default function (serverData = {}) {
 
         form: {
             id: null,
-            clinic_service_id: null,
+            doctorService_id: null,
             doctor_id: null,
             description: "",
             price: 0,

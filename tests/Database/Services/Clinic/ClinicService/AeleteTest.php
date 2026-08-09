@@ -4,11 +4,11 @@ use App\Models\Clinic;
 use App\Models\Doctor;
 use App\Models\Doctor_service_price;
 use App\Models\User;
-use App\Services\Clinic\ClinicService;
+use App\Services\Clinic\DoctorService;
 use Illuminate\Support\Facades\DB;
 
 beforeEach(function () {
-    $this->service = app(ClinicService::class);
+    $this->service = app(DoctorService::class);
 });
 
 it('deletes clinic successfully', function () {

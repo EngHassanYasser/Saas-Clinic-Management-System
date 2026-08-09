@@ -1,17 +1,17 @@
 <?php
 
 use App\Models\Clinic;
-use App\Models\ClinicService;
+use App\Models\DoctorService;
 use App\Models\Doctor;
 use App\Models\Doctor_service_price;
-use App\Services\ServiceCatalog\ClinicServicePriceService;
+use App\Services\ServiceCatalog\DoctorServicePriceService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->service = app(ClinicServicePriceService::class);
+    $this->service = app(DoctorServicePriceService::class);
 });
 
 /*
@@ -20,18 +20,18 @@ beforeEach(function () {
 |--------------------------------------------------------------------------
 */
 
-function makeDeleteClinicServicePriceContext(): array
+function makeDeleteDoctorServicePriceContext(): array
 {
     $clinic = Clinic::factory()->create();
 
     $doctor = Doctor::factory()->create();
 
-    $clinicService = ClinicService::factory()->create();
+    $clinicService = DoctorService::factory()->create();
 
     $doctorServicePrice = Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $clinicService->id,
+        'doctorService_id' => $clinicService->id,
         'price' => 250.50,
         'description' => 'Test service price',
     ]);
@@ -52,7 +52,7 @@ function makeDeleteClinicServicePriceContext(): array
 */
 
 it('returns a boolean', function () {
-    $context = makeDeleteClinicServicePriceContext();
+    $context = makeDeleteDoctorServicePriceContext();
 
     $result = $this->service->deleteById(
         $context['doctorServicePrice']->id
@@ -70,7 +70,7 @@ it('returns a boolean', function () {
 */
 
 it('returns true when the record exists and is deleted', function () {
-    $context = makeDeleteClinicServicePriceContext();
+    $context = makeDeleteDoctorServicePriceContext();
 
     $result = $this->service->deleteById(
         $context['doctorServicePrice']->id
@@ -88,7 +88,7 @@ it('returns true when the record exists and is deleted', function () {
 */
 
 it('deletes the record from the database', function () {
-    $context = makeDeleteClinicServicePriceContext();
+    $context = makeDeleteDoctorServicePriceContext();
 
     $id = $context['doctorServicePrice']->id;
 
@@ -109,7 +109,7 @@ it('deletes the record from the database', function () {
 */
 
 it('makes the deleted model no longer exist in the database', function () {
-    $context = makeDeleteClinicServicePriceContext();
+    $context = makeDeleteDoctorServicePriceContext();
 
     $id = $context['doctorServicePrice']->id;
 
@@ -128,7 +128,7 @@ it('makes the deleted model no longer exist in the database', function () {
 */
 
 it('cannot find the deleted record anymore', function () {
-    $context = makeDeleteClinicServicePriceContext();
+    $context = makeDeleteDoctorServicePriceContext();
 
     $id = $context['doctorServicePrice']->id;
 
@@ -147,7 +147,7 @@ it('cannot find the deleted record anymore', function () {
 */
 
 it('decreases the database record count by exactly one', function () {
-    $context = makeDeleteClinicServicePriceContext();
+    $context = makeDeleteDoctorServicePriceContext();
 
     $before = Doctor_service_price::count();
 
@@ -169,9 +169,9 @@ it('decreases the database record count by exactly one', function () {
 */
 
 it('deletes only the requested record', function () {
-    $first = makeDeleteClinicServicePriceContext();
-    $second = makeDeleteClinicServicePriceContext();
-    $third = makeDeleteClinicServicePriceContext();
+    $first = makeDeleteDoctorServicePriceContext();
+    $second = makeDeleteDoctorServicePriceContext();
+    $third = makeDeleteDoctorServicePriceContext();
 
     $firstId = $first['doctorServicePrice']->id;
     $secondId = $second['doctorServicePrice']->id;
@@ -200,9 +200,9 @@ it('deletes only the requested record', function () {
 */
 
 it('keeps all other records unchanged', function () {
-    $first = makeDeleteClinicServicePriceContext();
-    $second = makeDeleteClinicServicePriceContext();
-    $third = makeDeleteClinicServicePriceContext();
+    $first = makeDeleteDoctorServicePriceContext();
+    $second = makeDeleteDoctorServicePriceContext();
+    $third = makeDeleteDoctorServicePriceContext();
 
     $secondId = $second['doctorServicePrice']->id;
 
@@ -254,9 +254,9 @@ it('returns false when the record does not exist', function () {
 */
 
 it('does not change the database when deleting a non-existing id', function () {
-    makeDeleteClinicServicePriceContext();
-    makeDeleteClinicServicePriceContext();
-    makeDeleteClinicServicePriceContext();
+    makeDeleteDoctorServicePriceContext();
+    makeDeleteDoctorServicePriceContext();
+    makeDeleteDoctorServicePriceContext();
 
     $before = Doctor_service_price::count();
 
@@ -279,7 +279,7 @@ it('does not change the database when deleting a non-existing id', function () {
 */
 
 it('returns false when deleting the same record twice', function () {
-    $context = makeDeleteClinicServicePriceContext();
+    $context = makeDeleteDoctorServicePriceContext();
 
     $id = $context['doctorServicePrice']->id;
 
@@ -302,7 +302,7 @@ it('returns false when deleting the same record twice', function () {
 */
 
 it('does not change the database on repeated deletion', function () {
-    $context = makeDeleteClinicServicePriceContext();
+    $context = makeDeleteDoctorServicePriceContext();
 
     $id = $context['doctorServicePrice']->id;
 
@@ -326,8 +326,8 @@ it('does not change the database on repeated deletion', function () {
 */
 
 it('deletes the exact record identified by the given id', function () {
-    $first = makeDeleteClinicServicePriceContext();
-    $second = makeDeleteClinicServicePriceContext();
+    $first = makeDeleteDoctorServicePriceContext();
+    $second = makeDeleteDoctorServicePriceContext();
 
     $targetId = $second['doctorServicePrice']->id;
 
@@ -357,19 +357,19 @@ it('deletes by primary key regardless of related models', function () {
     $doctorOne = Doctor::factory()->create();
     $doctorTwo = Doctor::factory()->create();
 
-    $clinicServiceOne = ClinicService::factory()->create();
-    $clinicServiceTwo = ClinicService::factory()->create();
+    $clinicServiceOne = DoctorService::factory()->create();
+    $clinicServiceTwo = DoctorService::factory()->create();
 
     $first = Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorOne->id,
-        'clinic_service_id' => $clinicServiceOne->id,
+        'doctorService_id' => $clinicServiceOne->id,
     ]);
 
     $second = Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorTwo->id,
-        'clinic_service_id' => $clinicServiceTwo->id,
+        'doctorService_id' => $clinicServiceTwo->id,
     ]);
 
     $this->service->deleteById($first->id);
@@ -396,19 +396,19 @@ it('deletes only the selected record when multiple records belong to the same cl
     $doctorOne = Doctor::factory()->create();
     $doctorTwo = Doctor::factory()->create();
 
-    $clinicServiceOne = ClinicService::factory()->create();
-    $clinicServiceTwo = ClinicService::factory()->create();
+    $clinicServiceOne = DoctorService::factory()->create();
+    $clinicServiceTwo = DoctorService::factory()->create();
 
     $first = Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorOne->id,
-        'clinic_service_id' => $clinicServiceOne->id,
+        'doctorService_id' => $clinicServiceOne->id,
     ]);
 
     $second = Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorTwo->id,
-        'clinic_service_id' => $clinicServiceTwo->id,
+        'doctorService_id' => $clinicServiceTwo->id,
     ]);
 
     $this->service->deleteById($first->id);
@@ -435,19 +435,19 @@ it('deletes only the selected record when multiple records belong to the same do
 
     $doctor = Doctor::factory()->create();
 
-    $clinicServiceOne = ClinicService::factory()->create();
-    $clinicServiceTwo = ClinicService::factory()->create();
+    $clinicServiceOne = DoctorService::factory()->create();
+    $clinicServiceTwo = DoctorService::factory()->create();
 
     $first = Doctor_service_price::factory()->create([
         'clinic_id' => $clinicOne->id,
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $clinicServiceOne->id,
+        'doctorService_id' => $clinicServiceOne->id,
     ]);
 
     $second = Doctor_service_price::factory()->create([
         'clinic_id' => $clinicTwo->id,
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $clinicServiceTwo->id,
+        'doctorService_id' => $clinicServiceTwo->id,
     ]);
 
     $this->service->deleteById($first->id);
@@ -475,18 +475,18 @@ it('deletes only the selected record when multiple records use the same clinic s
     $doctorOne = Doctor::factory()->create();
     $doctorTwo = Doctor::factory()->create();
 
-    $clinicService = ClinicService::factory()->create();
+    $clinicService = DoctorService::factory()->create();
 
     $first = Doctor_service_price::factory()->create([
         'clinic_id' => $clinicOne->id,
         'doctor_id' => $doctorOne->id,
-        'clinic_service_id' => $clinicService->id,
+        'doctorService_id' => $clinicService->id,
     ]);
 
     $second = Doctor_service_price::factory()->create([
         'clinic_id' => $clinicTwo->id,
         'doctor_id' => $doctorTwo->id,
-        'clinic_service_id' => $clinicService->id,
+        'doctorService_id' => $clinicService->id,
     ]);
 
     $this->service->deleteById($first->id);
@@ -508,7 +508,7 @@ it('deletes only the selected record when multiple records use the same clinic s
 */
 
 it('deletes a persisted record regardless of its field values', function () {
-    $context = makeDeleteClinicServicePriceContext();
+    $context = makeDeleteDoctorServicePriceContext();
 
     $record = $context['doctorServicePrice'];
 
@@ -537,9 +537,9 @@ it('deletes a persisted record regardless of its field values', function () {
 */
 
 it('removes exactly the targeted database row', function () {
-    $first = makeDeleteClinicServicePriceContext();
-    $second = makeDeleteClinicServicePriceContext();
-    $third = makeDeleteClinicServicePriceContext();
+    $first = makeDeleteDoctorServicePriceContext();
+    $second = makeDeleteDoctorServicePriceContext();
+    $third = makeDeleteDoctorServicePriceContext();
 
     $targetId = $second['doctorServicePrice']->id;
 
@@ -579,9 +579,9 @@ it('removes exactly the targeted database row', function () {
 */
 
 it('can delete multiple records independently', function () {
-    $first = makeDeleteClinicServicePriceContext();
-    $second = makeDeleteClinicServicePriceContext();
-    $third = makeDeleteClinicServicePriceContext();
+    $first = makeDeleteDoctorServicePriceContext();
+    $second = makeDeleteDoctorServicePriceContext();
+    $third = makeDeleteDoctorServicePriceContext();
 
     $firstResult = $this->service->deleteById(
         $first['doctorServicePrice']->id
@@ -657,7 +657,7 @@ it('deletes one record correctly when many records exist', function () {
 */
 
 it('does not delete the related clinic', function () {
-    $context = makeDeleteClinicServicePriceContext();
+    $context = makeDeleteDoctorServicePriceContext();
 
     $clinicId = $context['clinic']->id;
 
@@ -672,7 +672,7 @@ it('does not delete the related clinic', function () {
 
 
 it('does not delete the related doctor', function () {
-    $context = makeDeleteClinicServicePriceContext();
+    $context = makeDeleteDoctorServicePriceContext();
 
     $doctorId = $context['doctor']->id;
 
@@ -687,7 +687,7 @@ it('does not delete the related doctor', function () {
 
 
 it('does not delete the related clinic service', function () {
-    $context = makeDeleteClinicServicePriceContext();
+    $context = makeDeleteDoctorServicePriceContext();
 
     $clinicServiceId = $context['clinicService']->id;
 
@@ -696,7 +696,7 @@ it('does not delete the related clinic service', function () {
     );
 
     expect(
-        ClinicService::whereKey($clinicServiceId)->exists()
+        DoctorService::whereKey($clinicServiceId)->exists()
     )->toBeTrue();
 });
 
@@ -708,7 +708,7 @@ it('does not delete the related clinic service', function () {
 */
 
 it('keeps related models available after deleting the price record', function () {
-    $context = makeDeleteClinicServicePriceContext();
+    $context = makeDeleteDoctorServicePriceContext();
 
     $clinicId = $context['clinic']->id;
     $doctorId = $context['doctor']->id;
@@ -724,7 +724,7 @@ it('keeps related models available after deleting the price record', function ()
     expect(Doctor::find($doctorId))
         ->not->toBeNull();
 
-    expect(ClinicService::find($clinicServiceId))
+    expect(DoctorService::find($clinicServiceId))
         ->not->toBeNull();
 });
 
@@ -736,7 +736,7 @@ it('keeps related models available after deleting the price record', function ()
 */
 
 it('can delete the last remaining doctor service price', function () {
-    $context = makeDeleteClinicServicePriceContext();
+    $context = makeDeleteDoctorServicePriceContext();
 
     expect(Doctor_service_price::count())
         ->toBe(1);
@@ -794,9 +794,9 @@ it('returns false when deleting a negative id', function () {
 */
 
 it('does not affect the ids of remaining records', function () {
-    $first = makeDeleteClinicServicePriceContext();
-    $second = makeDeleteClinicServicePriceContext();
-    $third = makeDeleteClinicServicePriceContext();
+    $first = makeDeleteDoctorServicePriceContext();
+    $second = makeDeleteDoctorServicePriceContext();
+    $third = makeDeleteDoctorServicePriceContext();
 
     $firstId = $first['doctorServicePrice']->id;
     $secondId = $second['doctorServicePrice']->id;
@@ -824,9 +824,9 @@ it('does not affect the ids of remaining records', function () {
 */
 
 it('never deletes more than one record for a single id', function () {
-    makeDeleteClinicServicePriceContext();
-    makeDeleteClinicServicePriceContext();
-    makeDeleteClinicServicePriceContext();
+    makeDeleteDoctorServicePriceContext();
+    makeDeleteDoctorServicePriceContext();
+    makeDeleteDoctorServicePriceContext();
 
     $target = Doctor_service_price::first();
 
@@ -848,7 +848,7 @@ it('never deletes more than one record for a single id', function () {
 */
 
 it('does not require clinic id, doctor id or service id to delete', function () {
-    $context = makeDeleteClinicServicePriceContext();
+    $context = makeDeleteDoctorServicePriceContext();
 
     $id = $context['doctorServicePrice']->id;
 

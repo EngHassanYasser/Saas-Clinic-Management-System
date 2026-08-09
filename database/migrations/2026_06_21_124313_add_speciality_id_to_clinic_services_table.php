@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('clinic_services', function (Blueprint $table) {
+        Schema::table('doctorServices', function (Blueprint $table) {
             $table->foreignIdFor(speciality::class)->constrained();
         });
     }
@@ -22,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('clinic_services', function (Blueprint $table) {
+        Schema::table('doctorServices', function (Blueprint $table) {
             //
         });
     }

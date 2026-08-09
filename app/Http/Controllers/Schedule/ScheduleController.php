@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Schedule;
 
+use App\DTOs\Services\Schedule\ScheduleService\StoreScheduleDTO;
+use App\DTOs\Services\Schedule\ScheduleService\UpdateScheduleDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Schedule\StoreScheduleRequest;
 use App\Http\Requests\Schedule\UpdateScheduleRequest;
@@ -37,7 +39,8 @@ class ScheduleController extends Controller
     public function store(StoreScheduleRequest $request)
     {
         $clinicId = $this->tenantContext->id();
-        $this->scheduleService->add($request->validated(), $clinicId);
+        $dto = StoreScheduleDTO::fromRequest($request->validated());
+        $this->scheduleService->add($dto, $clinicId);
 
         return redirect()->route('schedules.index')
             ->with('message', 'تم اضافة الموعد بنجاح.');
@@ -45,7 +48,8 @@ class ScheduleController extends Controller
 
     public function update(UpdateScheduleRequest $request, int $id)
     {
-        $this->scheduleService->update($request->validated(), $id);
+        $dto= UpdateScheduleDTO::fromRequest($request->validated());
+        $this->scheduleService->update($dto, $id);
 
         return redirect()
             ->route('schedules.index')

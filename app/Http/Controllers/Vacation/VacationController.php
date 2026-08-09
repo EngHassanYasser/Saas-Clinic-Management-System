@@ -20,7 +20,6 @@ class VacationController extends Controller
         private VacationStatisticsService $vacationStatisticsService,
         private VacationQueryService $vactionQueryService,
         private DoctorQueryService $doctorQueryService,
-        private ClinicQueryService $clinicQueryService,
         private TenantContext $tenantContext,
     ) {}
 

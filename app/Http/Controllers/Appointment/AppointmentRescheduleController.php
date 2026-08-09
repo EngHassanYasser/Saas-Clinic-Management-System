@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers\Appointment;
 
+use App\DTOs\Services\AppointmentService\RescheduleDTO;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\appointments\RescheduleAppointment;
+use App\Models\Appointment;
 use App\services\Appointment\AppointmentService;
-use App\Support\TenantContext;
 
 class AppointmentRescheduleController extends Controller
 {
     public function __construct(
         private AppointmentService $appointmentService,
-        private TenantContext $tenantContext,
     ) {}
 
-    public function reschdule(RescheduleAppointment $request)
+    public function reschdule(Appointment $appointment, string $visiteDate, string $startTime)
     {
-        $clinicId = $this->tenantContext->id();
-        $isRescheduled = $this->appointmentService->reschedule($request->validated(), $clinicId);
+        $this->authorize('reschedule', $appointment);
+        $dto = new RescheduleDTO($appointment,$visiteDate,$startTime);
+        $isRescheduled = $this->appointmentService->reschedule($dto);
+
         $message = $isRescheduled ? 'rescheduled done successfully' : 'failed to reschedule appointment please try again';
 
         return redirect()->route('appointments.index')->with('message', $message);

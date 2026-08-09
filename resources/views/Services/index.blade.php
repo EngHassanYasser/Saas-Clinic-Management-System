@@ -1,7 +1,7 @@
 @extends('layouts-main.dashboard')
 @section('title', 'خدمات العيادة')
 @section('content')
-    <div x-data="ClinicServiceApp({
+    <div x-data="DoctorServiceApp({
         serviceCatalogs: @js($serviceCatalogs),
         doctors: @js($doctors),
         clinicServices: @js($clinicServices)

@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Appointment;
 
+use App\DTOs\Services\AppointmentService\GetAvailableAppointmentsDTO;
 use App\Http\Controllers\Controller;
 use App\services\Appointment\AppointmentAvailabilityService;
-use Illuminate\Http\Request;
 
 class AppointmentAvailabilityController extends Controller
 {
     public function __construct(
         private AppointmentAvailabilityService $appointmentAvailabilityService
     ) {}
-    public function getAvailableAppointments(Request $request, int $clinicId, int $doctorId, string $vistDate)
+    public function getAvailableAppointments(int $clinicId, int $doctorId, string $visiteDate)
     {
+        $dto = new GetAvailableAppointmentsDTO($clinicId,$doctorId,$visiteDate);
         return response()->json(
-            $this->appointmentAvailabilityService->getAvailableAppointments($clinicId, $doctorId, $vistDate)
+            $this->appointmentAvailabilityService->getAvailableAppointments($dto)
         );
     }
 }

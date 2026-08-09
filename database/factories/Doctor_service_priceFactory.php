@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Clinic;
-use App\Models\ClinicService;
+use App\Models\DoctorService;
 use App\Models\Doctor;
 use App\Models\Doctor_service_price;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,7 +22,7 @@ class Doctor_service_priceFactory extends Factory
 
             'doctor_id' => Doctor::factory(),
 
-            'clinic_service_id' => ClinicService::factory(),
+            'doctorService_id' => DoctorService::factory(),
 
             'description' => fake()->sentence(),
 

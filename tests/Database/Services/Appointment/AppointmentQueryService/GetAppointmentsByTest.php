@@ -2,7 +2,7 @@
 
 use App\Models\Appointment;
 use App\Models\Clinic;
-use App\Models\ClinicService;
+use App\Models\DoctorService;
 use App\Models\Doctor;
 use App\Models\Doctor_service_price;
 use App\Models\User;
@@ -53,7 +53,7 @@ it('loads appointment relations correctly', function () {
         'address' => 'Cairo',
     ]);
 
-    $service = ClinicService::factory()->create([
+    $service = DoctorService::factory()->create([
         'name' => 'Checkup',
     ]);
 
@@ -61,7 +61,7 @@ it('loads appointment relations correctly', function () {
         'patient_id' => $patient->id,
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic->id,
-        'clinic_service_id' => $service->id,
+        'doctorService_id' => $service->id,
     ]);
 
     $result = $this->service->getAppointmentsBy(
@@ -89,12 +89,12 @@ it('returns correct service price based on doctor clinic and service', function 
 
     $clinic = Clinic::factory()->create();
 
-    $service = ClinicService::factory()->create();
+    $service = DoctorService::factory()->create();
 
     Doctor_service_price::create([
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic->id,
-        'clinic_service_id' => $service->id,
+        'doctorService_id' => $service->id,
         'description' => 'this is mock description',
         'price' => 500,
     ]);
@@ -102,7 +102,7 @@ it('returns correct service price based on doctor clinic and service', function 
     $appointment = Appointment::factory()->create([
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic->id,
-        'clinic_service_id' => $service->id,
+        'doctorService_id' => $service->id,
     ]);
 
     $result = $this->service->getAppointmentsBy(
@@ -120,22 +120,22 @@ it('does not return wrong service price', function () {
 
     $clinic = Clinic::factory()->create();
 
-    $service = ClinicService::factory()->create();
+    $service = DoctorService::factory()->create();
 
     Doctor_service_price::create([
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic->id,
-        'clinic_service_id' => $service->id,
+        'doctorService_id' => $service->id,
         'description' => 'this is mock description',
         'price' => 500,
     ]);
 
-    $otherService = ClinicService::factory()->create();
+    $otherService = DoctorService::factory()->create();
 
     Appointment::factory()->create([
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic->id,
-        'clinic_service_id' => $otherService->id,
+        'doctorService_id' => $otherService->id,
     ]);
 
     $result = $this->service->getAppointmentsBy(
@@ -158,7 +158,7 @@ it('paginates appointments only for requested patient', function () {
 
     $doctor = Doctor::factory()->create();
 
-    $service = ClinicService::factory()->create();
+    $service = DoctorService::factory()->create();
 
     Appointment::factory()
         ->count(25)
@@ -166,7 +166,7 @@ it('paginates appointments only for requested patient', function () {
             'patient_id' => $patient->id,
             'clinic_id' => $clinic->id,
             'doctor_id' => $doctor->id,
-            'clinic_service_id' => $service->id,
+            'doctorService_id' => $service->id,
         ]);
 
     Appointment::factory()
@@ -175,7 +175,7 @@ it('paginates appointments only for requested patient', function () {
             'patient_id' => $otherPatient->id,
             'clinic_id' => $clinic->id,
             'doctor_id' => $doctor->id,
-            'clinic_service_id' => $service->id,
+            'doctorService_id' => $service->id,
         ]);
 
     $result = $this->service->getAppointmentsBy(

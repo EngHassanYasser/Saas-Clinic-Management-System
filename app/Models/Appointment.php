@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
     'clinic_id',
     'doctor_id',
     'visit_date',
-    'clinic_service_id',
+    'doctorService_id',
 ])]
 class Appointment extends Model
 {
@@ -44,7 +44,7 @@ class Appointment extends Model
 
     public function service()
     {
-        return $this->belongsTo(ClinicService::class, 'clinic_service_id');
+        return $this->belongsTo(DoctorService::class, 'doctorService_id');
     }
 
     public function patient()

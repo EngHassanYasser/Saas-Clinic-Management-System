@@ -1,0 +1,80 @@
+<?php
+
+namespace App\Http\Controllers\DoctorService;
+
+use App\DTOs\Services\Clinic\ClinicService\StoreDoctorServiceDTO;
+use App\DTOs\Services\DoctorService\UpdateDoctorServiceDTO;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\MedicalService\StoreMedicalServiceRequest;
+use App\Http\Requests\MedicalService\UpdateMedicalServiceRequest;
+use App\Models\MedicalService as MedicalServiceModel;
+use App\Services\Clinic\ClinicQueryService;
+use App\Services\Doctor\DoctorQueryService;
+use App\Services\MedicalService\MedicalServiceQueryService;
+use App\Services\MedicalService\MedicalServiceService;
+use App\Support\TenantContext;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Concurrency;
+
+class MedicalServiceController extends Controller
+{
+    public function __construct(
+        private MedicalServiceQueryService $medicalServiceQueryService,
+        private DoctorQueryService $doctorQueryService,
+        private MedicalServiceService $medicalServiceService,
+        private ClinicQueryService $clinicQueryService,
+        private TenantContext $tenantContext
+    ) {
+    }
+
+    public function index()
+    {
+        $this->authorize('viewAny', MedicalServiceModel::class);
+
+        $clinicId = $this->clinicQueryService->getClinicByOwnereId(Auth::id())->id;
+        [$serviceCatalogs,$doctors,$clinicServices] = Concurrency::run([
+            fn () => $this->medicalServiceQueryService->getAll(),
+            fn () => $this->doctorQueryService->getDoctorsNames($clinicId),
+            fn () => $this->medicalServiceService->getAllDoctorServices(),
+        ]);
+
+        return view('Services.index', compact('serviceCatalogs', 'doctors', 'clinicServices'));
+    }
+
+    public function store(StoreMedicalServiceRequest $request)
+    {
+        $this->authorize('create', MedicalServiceModel::class);
+        $dto =  StoreDoctorServiceDTO::fromRequest($request->validated());
+        $clinicId = $this->tenantContext->id();
+        $this->medicalServiceService->add($dto, $clinicId);
+
+        return back()->with('success', 'تم إضافة الخدمة بنجاح');
+    }
+
+    public function update(UpdateMedicalServiceRequest $request)
+    {
+        $dto = UpdateDoctorServiceDTO::fromRequest($request);
+
+        $this->authorize('update', MedicalServiceModel::class);
+
+        $clinicId = $this->tenantContext->id();
+
+        $this->medicalServiceService->update($dto, $clinicId);
+
+        return back()->with('success', 'تم تحديث الخدمة بنجاح');
+    }
+
+    public function destroy(MedicalServiceModel $clinicService)
+    {
+        $this->authorize('delete', $clinicService);
+
+        $isDeleted = $this->medicalServiceService->deleteById($clinicService->id);
+
+        return response()->json([
+            'success' => $isDeleted > 0,
+            'message' => $isDeleted > 0
+                ? 'Service deleted successfully'
+                : 'Service not found',
+        ]);
+    }
+}

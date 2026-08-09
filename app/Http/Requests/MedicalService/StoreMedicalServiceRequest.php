@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\clinicService;
+namespace App\Http\Requests\MedicalService;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreClinicServiceRequest extends FormRequest
+class StoreMedicalServiceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,7 @@ class StoreClinicServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'clinic_service_id' => 'required|string|max:255',
+            'doctorService_id' => 'required|string|max:255',
             'doctor_id' => 'required|exists:doctors,id',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0.01',

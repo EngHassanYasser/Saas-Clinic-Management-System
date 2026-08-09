@@ -1,10 +1,10 @@
 <?php
 
 use App\Models\Clinic;
-use App\Models\ClinicService;
+use App\Models\DoctorService;
 use App\Models\Doctor;
 use App\Models\Doctor_service_price;
-use App\Services\ServiceCatalog\ClinicServicePriceService;
+use App\Services\ServiceCatalog\DoctorServicePriceService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
@@ -12,7 +12,7 @@ use Illuminate\Database\QueryException;
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->service = app(ClinicServicePriceService::class);
+    $this->service = app(DoctorServicePriceService::class);
 });
 
 
@@ -22,18 +22,18 @@ beforeEach(function () {
 |--------------------------------------------------------------------------
 */
 
-function makeUpdateClinicServicePriceContext(): array
+function makeUpdateDoctorServicePriceContext(): array
 {
     $clinic = Clinic::factory()->create();
 
     $doctor = Doctor::factory()->create();
 
-    $clinicService = ClinicService::factory()->create();
+    $clinicService = DoctorService::factory()->create();
 
     $doctorServicePrice = Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $clinicService->id,
+        'doctorService_id' => $clinicService->id,
         'price' => 150.00,
         'description' => 'Original description',
     ]);
@@ -54,12 +54,12 @@ function makeUpdateClinicServicePriceContext(): array
 */
 
 it('returns a boolean result', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $result = $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 250.00,
         'description' => 'Updated description',
     ], $context['clinic']->id);
@@ -76,12 +76,12 @@ it('returns a boolean result', function () {
 */
 
 it('updates the doctor service price successfully', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $result = $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 250.00,
         'description' => 'Updated description',
     ], $context['clinic']->id);
@@ -108,12 +108,12 @@ it('updates the doctor service price successfully', function () {
 */
 
 it('persists updated values in the database', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 325.75,
         'description' => 'Database updated value',
     ], $context['clinic']->id);
@@ -131,7 +131,7 @@ it('persists updated values in the database', function () {
     expect($row->doctor_id)
         ->toBe($context['doctor']->id);
 
-    expect($row->clinic_service_id)
+    expect($row->doctorService_id)
         ->toBe($context['clinicService']->id);
 
     expect((float) $row->price)
@@ -149,7 +149,7 @@ it('persists updated values in the database', function () {
 */
 
 it('uses the clinic id argument instead of clinic_id from data', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $anotherClinic = Clinic::factory()->create();
 
@@ -157,7 +157,7 @@ it('uses the clinic id argument instead of clinic_id from data', function () {
         'id' => $context['doctorServicePrice']->id,
         'clinic_id' => $anotherClinic->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 275.00,
         'description' => 'Updated description',
     ];
@@ -184,14 +184,14 @@ it('uses the clinic id argument instead of clinic_id from data', function () {
 */
 
 it('updates the doctor id correctly', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $anotherDoctor = Doctor::factory()->create();
 
     $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $anotherDoctor->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 200.00,
         'description' => 'Changed doctor',
     ], $context['clinic']->id);
@@ -212,14 +212,14 @@ it('updates the doctor id correctly', function () {
 */
 
 it('updates the clinic service id correctly', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
-    $anotherClinicService = ClinicService::factory()->create();
+    $anotherDoctorService = DoctorService::factory()->create();
 
     $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $anotherClinicService->id,
+        'doctorService_id' => $anotherDoctorService->id,
         'price' => 200.00,
         'description' => 'Changed clinic service',
     ], $context['clinic']->id);
@@ -228,8 +228,8 @@ it('updates the clinic service id correctly', function () {
         $context['doctorServicePrice']->id
     );
 
-    expect($record->clinic_service_id)
-        ->toBe($anotherClinicService->id);
+    expect($record->doctorService_id)
+        ->toBe($anotherDoctorService->id);
 });
 
 
@@ -240,12 +240,12 @@ it('updates the clinic service id correctly', function () {
 */
 
 it('updates the price correctly', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 999.99,
         'description' => 'Updated price',
     ], $context['clinic']->id);
@@ -266,12 +266,12 @@ it('updates the price correctly', function () {
 */
 
 it('updates the description correctly', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 200.00,
         'description' => 'Completely new description',
     ], $context['clinic']->id);
@@ -292,15 +292,15 @@ it('updates the description correctly', function () {
 */
 
 it('updates all editable fields together', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $anotherDoctor = Doctor::factory()->create();
-    $anotherClinicService = ClinicService::factory()->create();
+    $anotherDoctorService = DoctorService::factory()->create();
 
     $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $anotherDoctor->id,
-        'clinic_service_id' => $anotherClinicService->id,
+        'doctorService_id' => $anotherDoctorService->id,
         'price' => 450.75,
         'description' => 'All fields updated',
     ], $context['clinic']->id);
@@ -315,8 +315,8 @@ it('updates all editable fields together', function () {
     expect($record->doctor_id)
         ->toBe($anotherDoctor->id);
 
-    expect($record->clinic_service_id)
-        ->toBe($anotherClinicService->id);
+    expect($record->doctorService_id)
+        ->toBe($anotherDoctorService->id);
 
     expect((float) $record->price)
         ->toBe(450.75);
@@ -333,15 +333,15 @@ it('updates all editable fields together', function () {
 */
 
 it('replaces the old values instead of keeping them', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $anotherDoctor = Doctor::factory()->create();
-    $anotherClinicService = ClinicService::factory()->create();
+    $anotherDoctorService = DoctorService::factory()->create();
 
     $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $anotherDoctor->id,
-        'clinic_service_id' => $anotherClinicService->id,
+        'doctorService_id' => $anotherDoctorService->id,
         'price' => 800.00,
         'description' => 'New description',
     ], $context['clinic']->id);
@@ -353,7 +353,7 @@ it('replaces the old values instead of keeping them', function () {
     expect($record->doctor_id)
         ->not->toBe($context['doctor']->id);
 
-    expect($record->clinic_service_id)
+    expect($record->doctorService_id)
         ->not->toBe($context['clinicService']->id);
 
     expect((float) $record->price)
@@ -376,13 +376,13 @@ it('updates only the requested record', function () {
     $doctorOne = Doctor::factory()->create();
     $doctorTwo = Doctor::factory()->create();
 
-    $serviceOne = ClinicService::factory()->create();
-    $serviceTwo = ClinicService::factory()->create();
+    $serviceOne = DoctorService::factory()->create();
+    $serviceTwo = DoctorService::factory()->create();
 
     $first = Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorOne->id,
-        'clinic_service_id' => $serviceOne->id,
+        'doctorService_id' => $serviceOne->id,
         'price' => 100.00,
         'description' => 'First',
     ]);
@@ -390,7 +390,7 @@ it('updates only the requested record', function () {
     $second = Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorTwo->id,
-        'clinic_service_id' => $serviceTwo->id,
+        'doctorService_id' => $serviceTwo->id,
         'price' => 200.00,
         'description' => 'Second',
     ]);
@@ -398,7 +398,7 @@ it('updates only the requested record', function () {
     $this->service->update([
         'id' => $first->id,
         'doctor_id' => $doctorOne->id,
-        'clinic_service_id' => $serviceOne->id,
+        'doctorService_id' => $serviceOne->id,
         'price' => 999.00,
         'description' => 'Updated first',
     ], $clinic->id);
@@ -427,12 +427,12 @@ it('updates only the requested record', function () {
 */
 
 it('updates the record matching the provided id', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 333.00,
         'description' => 'Found by id',
     ], $context['clinic']->id);
@@ -452,7 +452,7 @@ it('updates the record matching the provided id', function () {
 */
 
 it('returns false when the requested record does not exist', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $nonExistingId =
         Doctor_service_price::max('id') + 999;
@@ -460,7 +460,7 @@ it('returns false when the requested record does not exist', function () {
     $result = $this->service->update([
         'id' => $nonExistingId,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 500.00,
         'description' => 'Should not exist',
     ], $context['clinic']->id);
@@ -477,7 +477,7 @@ it('returns false when the requested record does not exist', function () {
 */
 
 it('does not create a new record when the id does not exist', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $beforeCount = Doctor_service_price::count();
 
@@ -487,7 +487,7 @@ it('does not create a new record when the id does not exist', function () {
     $this->service->update([
         'id' => $nonExistingId,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 500.00,
         'description' => 'Should not exist',
     ], $context['clinic']->id);
@@ -507,12 +507,12 @@ it('does not accidentally update another record when id is wrong', function () {
     $clinic = Clinic::factory()->create();
 
     $doctor = Doctor::factory()->create();
-    $clinicService = ClinicService::factory()->create();
+    $clinicService = DoctorService::factory()->create();
 
     $record = Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $clinicService->id,
+        'doctorService_id' => $clinicService->id,
         'price' => 100.00,
         'description' => 'Original',
     ]);
@@ -522,7 +522,7 @@ it('does not accidentally update another record when id is wrong', function () {
     $this->service->update([
         'id' => $wrongId,
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $clinicService->id,
+        'doctorService_id' => $clinicService->id,
         'price' => 999.00,
         'description' => 'Wrong target',
     ], $clinic->id);
@@ -544,12 +544,12 @@ it('does not accidentally update another record when id is wrong', function () {
 */
 
 it('does not modify the input data', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $data = [
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 275.50,
         'description' => 'Immutable input',
     ];
@@ -573,12 +573,12 @@ it('does not modify the input data', function () {
 */
 
 it('can update the price to zero', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 0,
         'description' => 'Zero price',
     ], $context['clinic']->id);
@@ -591,12 +591,12 @@ it('can update the price to zero', function () {
 
 
 it('preserves decimal price accurately', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 1234.75,
         'description' => 'Decimal price',
     ], $context['clinic']->id);
@@ -617,12 +617,12 @@ it('preserves decimal price accurately', function () {
 */
 
 it('can update description to an empty string', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 200.00,
         'description' => '',
     ], $context['clinic']->id);
@@ -645,12 +645,12 @@ it('can update description to an empty string', function () {
 */
 
 it('rejects a null description because the database column is not nullable', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     expect(fn () => $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 200.00,
         'description' => null,
     ], $context['clinic']->id))
@@ -670,13 +670,13 @@ it('rejects a null description because the database column is not nullable', fun
 */
 
 it('keeps the original record unchanged when database update fails', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     try {
         $this->service->update([
             'id' => $context['doctorServicePrice']->id,
             'doctor_id' => $context['doctor']->id,
-            'clinic_service_id' => $context['clinicService']->id,
+            'doctorService_id' => $context['clinicService']->id,
             'price' => 999.00,
             'description' => null,
         ], $context['clinic']->id);
@@ -695,7 +695,7 @@ it('keeps the original record unchanged when database update fails', function ()
     expect($record->doctor_id)
         ->toBe($context['doctor']->id);
 
-    expect($record->clinic_service_id)
+    expect($record->doctorService_id)
         ->toBe($context['clinicService']->id);
 
     expect($record->clinic_id)
@@ -710,14 +710,14 @@ it('keeps the original record unchanged when database update fails', function ()
 */
 
 it('can move the record to another clinic', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $anotherClinic = Clinic::factory()->create();
 
     $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 400.00,
         'description' => 'Moved clinic',
     ], $anotherClinic->id);
@@ -736,15 +736,15 @@ it('can move the record to another clinic', function () {
 */
 
 it('maintains valid relationships after update', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $anotherDoctor = Doctor::factory()->create();
-    $anotherClinicService = ClinicService::factory()->create();
+    $anotherDoctorService = DoctorService::factory()->create();
 
     $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $anotherDoctor->id,
-        'clinic_service_id' => $anotherClinicService->id,
+        'doctorService_id' => $anotherDoctorService->id,
         'price' => 500.00,
         'description' => 'Valid relationships',
     ], $context['clinic']->id);
@@ -754,7 +754,7 @@ it('maintains valid relationships after update', function () {
         ->load([
             'clinic',
             'doctor',
-            'clinic_service',
+            'doctorService',
         ]);
 
     expect($record->clinic->id)
@@ -763,8 +763,8 @@ it('maintains valid relationships after update', function () {
     expect($record->doctor->id)
         ->toBe($anotherDoctor->id);
 
-    expect($record->clinic_service->id)
-        ->toBe($anotherClinicService->id);
+    expect($record->doctorService->id)
+        ->toBe($anotherDoctorService->id);
 });
 
 
@@ -775,14 +775,14 @@ it('maintains valid relationships after update', function () {
 */
 
 it('does not delete any records', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $beforeCount = Doctor_service_price::count();
 
     $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 600.00,
         'description' => 'Updated without deletion',
     ], $context['clinic']->id);
@@ -805,12 +805,12 @@ it('does not delete any records', function () {
 */
 
 it('can update the same record multiple times', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 200.00,
         'description' => 'First update',
     ], $context['clinic']->id);
@@ -818,7 +818,7 @@ it('can update the same record multiple times', function () {
     $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 300.00,
         'description' => 'Second update',
     ], $context['clinic']->id);
@@ -845,13 +845,13 @@ it('rejects an update that violates the unique clinic doctor service combination
     $doctorOne = Doctor::factory()->create();
     $doctorTwo = Doctor::factory()->create();
 
-    $clinicServiceOne = ClinicService::factory()->create();
-    $clinicServiceTwo = ClinicService::factory()->create();
+    $clinicServiceOne = DoctorService::factory()->create();
+    $clinicServiceTwo = DoctorService::factory()->create();
 
     $first = Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorOne->id,
-        'clinic_service_id' => $clinicServiceOne->id,
+        'doctorService_id' => $clinicServiceOne->id,
         'price' => 100.00,
         'description' => 'First',
     ]);
@@ -859,7 +859,7 @@ it('rejects an update that violates the unique clinic doctor service combination
     Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorTwo->id,
-        'clinic_service_id' => $clinicServiceTwo->id,
+        'doctorService_id' => $clinicServiceTwo->id,
         'price' => 200.00,
         'description' => 'Second',
     ]);
@@ -867,7 +867,7 @@ it('rejects an update that violates the unique clinic doctor service combination
     expect(fn () => $this->service->update([
         'id' => $first->id,
         'doctor_id' => $doctorTwo->id,
-        'clinic_service_id' => $clinicServiceTwo->id,
+        'doctorService_id' => $clinicServiceTwo->id,
         'price' => 999.00,
         'description' => 'Duplicate combination',
     ], $clinic->id))
@@ -887,13 +887,13 @@ it('preserves the original record when a unique constraint is violated', functio
     $doctorOne = Doctor::factory()->create();
     $doctorTwo = Doctor::factory()->create();
 
-    $serviceOne = ClinicService::factory()->create();
-    $serviceTwo = ClinicService::factory()->create();
+    $serviceOne = DoctorService::factory()->create();
+    $serviceTwo = DoctorService::factory()->create();
 
     $first = Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorOne->id,
-        'clinic_service_id' => $serviceOne->id,
+        'doctorService_id' => $serviceOne->id,
         'price' => 100.00,
         'description' => 'First',
     ]);
@@ -901,7 +901,7 @@ it('preserves the original record when a unique constraint is violated', functio
     Doctor_service_price::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorTwo->id,
-        'clinic_service_id' => $serviceTwo->id,
+        'doctorService_id' => $serviceTwo->id,
         'price' => 200.00,
         'description' => 'Second',
     ]);
@@ -910,7 +910,7 @@ it('preserves the original record when a unique constraint is violated', functio
         $this->service->update([
             'id' => $first->id,
             'doctor_id' => $doctorTwo->id,
-            'clinic_service_id' => $serviceTwo->id,
+            'doctorService_id' => $serviceTwo->id,
             'price' => 999.00,
             'description' => 'Should fail',
         ], $clinic->id);
@@ -923,7 +923,7 @@ it('preserves the original record when a unique constraint is violated', functio
     expect($first->doctor_id)
         ->toBe($doctorOne->id);
 
-    expect($first->clinic_service_id)
+    expect($first->doctorService_id)
         ->toBe($serviceOne->id);
 
     expect((float) $first->price)
@@ -941,14 +941,14 @@ it('preserves the original record when a unique constraint is violated', functio
 */
 
 it('does not change the number of database rows', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $before = DB::table('doctor_service_prices')->count();
 
     $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 700.00,
         'description' => 'Updated',
     ], $context['clinic']->id);
@@ -967,12 +967,12 @@ it('does not change the number of database rows', function () {
 */
 
 it('returns one when one existing row is actually changed', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $result = $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 999.00,
         'description' => 'Changed',
     ], $context['clinic']->id);
@@ -989,12 +989,12 @@ it('returns one when one existing row is actually changed', function () {
 */
 
 it('can return zero when updating with values identical to the existing values', function () {
-    $context = makeUpdateClinicServicePriceContext();
+    $context = makeUpdateDoctorServicePriceContext();
 
     $result = $this->service->update([
         'id' => $context['doctorServicePrice']->id,
         'doctor_id' => $context['doctor']->id,
-        'clinic_service_id' => $context['clinicService']->id,
+        'doctorService_id' => $context['clinicService']->id,
         'price' => 150.00,
         'description' => 'Original description',
     ], $context['clinic']->id);
@@ -1009,7 +1009,7 @@ it('can return zero when updating with values identical to the existing values',
     expect($record->doctor_id)
         ->toBe($context['doctor']->id);
 
-    expect($record->clinic_service_id)
+    expect($record->doctorService_id)
         ->toBe($context['clinicService']->id);
 
     expect((float) $record->price)

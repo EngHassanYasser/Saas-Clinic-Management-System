@@ -6,8 +6,8 @@ import Api from "./Api";
 import GlobalHelpers from '../Global/Helpers';
 import GlobalState from '../Global/State';
 
-export function ClinicServiceApp(serverData) {
-    const ClinicServices = {
+export function DoctorServiceApp(serverData) {
+    const DoctorServices = {
         ...State(serverData),
         ...Actions,
         ...Helpers,
@@ -16,8 +16,8 @@ export function ClinicServiceApp(serverData) {
         ...GlobalState,
     };
     Object.defineProperties(
-        ClinicServices,
+        DoctorServices,
         Object.getOwnPropertyDescriptors(Getters),
     );
-    return ClinicServices;
+    return DoctorServices;
 }

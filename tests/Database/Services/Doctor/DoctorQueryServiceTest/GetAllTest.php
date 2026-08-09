@@ -3,7 +3,7 @@
 use App\Models\Clinic;
 use App\Models\Doctor;
 use App\Models\Speciality;
-use App\Models\ClinicService;
+use App\Models\DoctorService;
 use App\Models\Schedule;
 use App\Models\doctor_service_price;
 use App\Models\User;
@@ -64,13 +64,13 @@ it('returns the consultation fee from the كشف service', function () {
 
     $clinic->doctors()->attach($doctor->id);
 
-    $service = ClinicService::factory()->create([
+    $service = DoctorService::factory()->create([
         'name' => 'كشف',
     ]);
 
     doctor_service_price::factory()->create([
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $service->id,
+        'doctorService_id' => $service->id,
         'price' => 250,
     ]);
 
@@ -88,19 +88,19 @@ it('returns the first كشف service price when doctor has multiple prices', fun
 
     $clinic->doctors()->attach($doctor->id);
 
-    $consultationService = ClinicService::factory()->create([
+    $consultationService = DoctorService::factory()->create([
         'name' => 'كشف',
     ]);
 
     doctor_service_price::factory()->create([
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $consultationService->id,
+        'doctorService_id' => $consultationService->id,
         'price' => 300,
     ]);
 
     doctor_service_price::factory()->create([
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $consultationService->id,
+        'doctorService_id' => $consultationService->id,
         'price' => 500,
     ]);
 
@@ -118,13 +118,13 @@ it('ignores services other than كشف when finding consultation fee', function 
 
     $clinic->doctors()->attach($doctor->id);
 
-    $service = ClinicService::factory()->create([
+    $service = DoctorService::factory()->create([
         'name' => 'متابعة',
     ]);
 
     doctor_service_price::factory()->create([
         'doctor_id' => $doctor->id,
-        'clinic_service_id' => $service->id,
+        'doctorService_id' => $service->id,
         'price' => 400,
     ]);
 
@@ -331,7 +331,7 @@ it('does not modify the database', function () {
     $usersBefore = User::count();
     $clinicsBefore = Clinic::count();
     $doctorsBefore = Doctor::count();
-    $servicesBefore = ClinicService::count();
+    $servicesBefore = DoctorService::count();
     $servicePricesBefore = doctor_service_price::count();
     $schedulesBefore = Schedule::count();
 
@@ -340,7 +340,7 @@ it('does not modify the database', function () {
     expect(User::count())->toBe($usersBefore)
         ->and(Clinic::count())->toBe($clinicsBefore)
         ->and(Doctor::count())->toBe($doctorsBefore)
-        ->and(ClinicService::count())->toBe($servicesBefore)
+        ->and(DoctorService::count())->toBe($servicesBefore)
         ->and(doctor_service_price::count())->toBe($servicePricesBefore)
         ->and(Schedule::count())->toBe($schedulesBefore);
 });
@@ -381,19 +381,19 @@ it('returns consultation fee independently for each doctor', function () {
         $doctorTwo->id,
     ]);
 
-    $service = ClinicService::factory()->create([
+    $service = DoctorService::factory()->create([
         'name' => 'كشف',
     ]);
 
     doctor_service_price::factory()->create([
         'doctor_id' => $doctorOne->id,
-        'clinic_service_id' => $service->id,
+        'doctorService_id' => $service->id,
         'price' => 200,
     ]);
 
     doctor_service_price::factory()->create([
         'doctor_id' => $doctorTwo->id,
-        'clinic_service_id' => $service->id,
+        'doctorService_id' => $service->id,
         'price' => 350,
     ]);
 

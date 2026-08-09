@@ -6,7 +6,7 @@ use App\Http\Controllers\Appointment\AppointmentRescheduleController;
 use App\Http\Controllers\Appointment\AppointmentStatusController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth', 'role:clinic,patient','verified')->group(function () {
+Route::middleware('auth', 'role:clinic,patient', 'verified')->group(function () {
     Route::get(
         'appointments',
         [AppointmentController::class, 'index']
@@ -20,16 +20,16 @@ Route::middleware('auth', 'role:clinic,patient','verified')->group(function () {
         [AppointmentController::class, 'create']
     )->name('appointments.create');
     Route::patch(
-        '/appointments/{appointment}/status',
+        '/appointment/{appointment}/status/{status}',
         [AppointmentStatusController::class, 'changeStatus']
-    )->name('appointments.changeStatus-status');
+    )->name('appointments.changeStatus');
     Route::get(
         'appointments/AvailableAppointments/clinic/{clinic}/doctor/{doctor}/visitDate/{visit_date}/',
         [AppointmentAvailabilityController::class, 'getAvailableAppointments']
     )->name('appointments.getAvailableAppointments');
-    
-    Route::middleware('tenant.context')->patch(
-        'appointments/{appointmentId}/{visit_date}/{slot}/availableSlots',
+
+    Route::patch(
+        'appointments/{appointment}/{visit_date}/{slot}/availableSlots',
         [AppointmentRescheduleController::class, 'reschdule']
     )->name('appointments.reschdule');
 });

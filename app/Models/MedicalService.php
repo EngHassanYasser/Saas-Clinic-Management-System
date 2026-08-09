@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
     'name',
     'speciality_id'
 ])]
-class ClinicService extends Model
+class MedicalService extends Model
 {
     use HasFactory;
     public $timestamps = false;
@@ -20,7 +20,7 @@ class ClinicService extends Model
     }
     public function appointments()
     {
-        return $this->hasMany(appointment::class, 'clinic_service_id');
+        return $this->hasMany(appointment::class, 'doctorService_id');
     }
     public function doctorServicePrice()
     {

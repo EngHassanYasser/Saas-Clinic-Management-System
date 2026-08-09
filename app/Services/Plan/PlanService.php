@@ -2,28 +2,30 @@
 
 namespace App\Services\Plan;
 
+use App\DTOs\Services\Plan\PlanService\StorePlanDTO;
+use App\DTOs\Services\Plan\PlanService\UpdatePlanDTO;
 use App\Models\Plan;
 
 class PlanService
 {
-    public function add(array $data): Plan
+    public function add(StorePlanDTO $dto): Plan
     {
         return Plan::create([
-            'name' => $data['name'],
-            'monthly_price' => $data['monthly_price'],
-            'max_doctors' => $data['max_doctors'],
-            'monthly_appointments_limit' => $data['monthly_appointments_limit']
+            'name' => $dto->name,
+            'monthly_price' => $dto->monthlyPrice,
+            'max_doctors' => $dto->maxDoctors,
+            'monthly_appointments_limit' => $dto->monthlyAppointmentsLimit
         ]);
     }
-    public function update(array $data, int $id): bool
+    public function update(UpdatePlanDTO $dto, int $id): bool
     {
         $plan = Plan::whereKey($id)->lockForUpdate()->firstOrFail();
         return $plan->update([
-            'name' => $data['name'],
-            'monthly_price' => $data['monthly_price'],
-            'max_doctors' => $data['max_doctors'],
-            'monthly_appointments_limit' => $data['monthly_appointments_limit'],
-            'status' => $data['status'],
+            'name' => $dto->name,
+            'monthly_price' => $dto->monthlyPrice,
+            'max_doctors' => $dto->maxDoctors,
+            'monthly_appointments_limit' => $dto->monthlyAppointmentsLimit,
+            'status' => $dto->status,
         ]);
     }
 }

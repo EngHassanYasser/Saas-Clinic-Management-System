@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\ClinicService;
+use App\Models\DoctorService;
 use App\Services\ServiceCatalog\ServiceCatalogService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -20,9 +20,9 @@ beforeEach(function () {
 |--------------------------------------------------------------------------
 */
 
-function createCatalog(array $overrides = []): ClinicService
+function createCatalog(array $overrides = []): DoctorService
 {
-    return ClinicService::factory()->create($overrides);
+    return DoctorService::factory()->create($overrides);
 }
 
 /*
@@ -262,7 +262,7 @@ it('returns records that actually exist in the database', function () {
     )->toBeTrue();
 
     expect(
-        DB::table('clinic_services')
+        DB::table('doctorServices')
             ->where('id', $catalog->id)
             ->exists()
     )->toBeTrue();
@@ -278,11 +278,11 @@ it('does not modify the database', function () {
     createCatalog();
     createCatalog();
 
-    $beforeCount = ClinicService::count();
+    $beforeCount = DoctorService::count();
 
     $this->service->getAllCatalogs();
 
-    expect(ClinicService::count())
+    expect(DoctorService::count())
         ->toBe($beforeCount);
 });
 
@@ -293,11 +293,11 @@ it('does not delete any records', function () {
     $this->service->getAllCatalogs();
 
     expect(
-        ClinicService::whereKey($first->id)->exists()
+        DoctorService::whereKey($first->id)->exists()
     )->toBeTrue();
 
     expect(
-        ClinicService::whereKey($second->id)->exists()
+        DoctorService::whereKey($second->id)->exists()
     )->toBeTrue();
 });
 
@@ -564,7 +564,7 @@ it('returns only required clinic service columns', function () {
 it('matches the database values exactly', function () {
     $catalog = createCatalog();
 
-    $databaseRow = DB::table('clinic_services')
+    $databaseRow = DB::table('doctorServices')
         ->where('id', $catalog->id)
         ->first();
 
@@ -588,7 +588,7 @@ it('matches the database values exactly', function () {
 |--------------------------------------------------------------------------
 */
 it('handles many clinic services correctly', function () {
-    ClinicService::factory()
+    DoctorService::factory()
         ->count(100)
         ->create();
 

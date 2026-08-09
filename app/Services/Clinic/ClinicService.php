@@ -2,41 +2,44 @@
 
 namespace App\Services\Clinic;
 
+use App\DTOs\Services\Clinic\ClinicService\StoreClinicDTO;
+use App\DTOs\Services\Clinic\ClinicService\UpdateClinicDTO;
+use App\Enums\RoleType;
 use App\Models\Clinic;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-class ClinicService
+class DoctorService
 {
-    public function add(array $data): Clinic
+    public function add(StoreClinicDTO $dto): Clinic
     {
-        return DB::transaction(function () use ($data) {
+        return DB::transaction(function () use ($dto) {
             $user = User::create([
-                'name' => $data['full_name'],
-                'user_name' => $data['user_name'],
-                'email' => $data['email'],
-                'password' => Hash::make($data['password']),
-                'gendor' => $data['gendor'],
-                'city_id' => $data['city_id'],
-                'type' => 'clinic',
+                'name' => $dto->name,
+                'user_name' => $dto->username,
+                'email' => $dto->email,
+                'password' => Hash::make($dto->password),
+                'gendor' => $dto->gendor,
+                'city_id' => $dto->cityId,
+                'type' => RoleType::CLINIC->value,
             ]);
             $clinic = clinic::create([
-                'name' => $data['clinic_name'],
-                'slug' =>  Str::slug($data['clinic_name']),
-                'phone' => $data['phone'],
-                'email' => $data['email'],
-                'address' => $data['address'],
+                'name' => $dto->name,
+                'slug' =>  Str::slug($dto->name),
+                'phone' => $dto->phone,
+                'email' => $dto->email,
+                'address' => $dto->address,
                 'owner_id' => $user->id,
-                'city_id' => $data['city_id'],
+                'city_id' => $dto->cityId,
             ]);
             return $clinic;
         });
     }
-    public function update(array $data, Clinic $clinic): bool
+    public function update(UpdateClinicDTO $dto, Clinic $clinic): bool
     {
-        return DB::transaction(function () use ($data, $clinic) {
+        return DB::transaction(function () use ($dto, $clinic) {
 
             $clinic->load('owner');
 
@@ -45,19 +48,19 @@ class ClinicService
             }
             if (isset($data['logo'])) {
                 $clinic
-                    ->addMedia($data['logo'])
+                    ->addMedia($dto->logo)
                     ->toMediaCollection('logo');
             }
-            $clinic->days()->sync($data['work_days']);
+            $clinic->days()->sync($dto->workDays);
             return  $clinic->update([
-                'name' => $data['name'],
-                'slug' => Str::slug($data['name']),
-                'phone' => $data['phone'],
-                'email' => $data['email'],
-                'address' => $data['address'],
-                'city_id' => $data['city_id'],
-                'open_time'=>$data['open_time'],
-                'close_time'=>$data['close_time'],
+                'name' => $dto->name,
+                'slug' => Str::slug($dto->name),
+                'phone' => $dto->phone,
+                'email' => $dto->email,
+                'address' => $dto->address,
+                'city_id' => $dto->cityId,
+                'open_time'=>$dto->openTime,
+                'close_time'=>$dto->closeTime,
             ]);
         });
     }

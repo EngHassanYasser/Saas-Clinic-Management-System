@@ -6,7 +6,7 @@ export async function getAvailableSlots(clinidId,doctorId,visiteDate) {
     );
     return data;
 }
-export async function getClinicServices(specialityId) {
+export async function getDoctorServices(specialityId) {
     try {
         const response = await axios.get(
             `/clinic/services/speciality/${specialityId}`,

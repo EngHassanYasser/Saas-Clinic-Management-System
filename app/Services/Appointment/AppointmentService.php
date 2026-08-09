@@ -2,6 +2,9 @@
 
 namespace App\Services\Appointment;
 
+use App\DTOs\Services\Appointment\AppointmentQueryService\GetSlotDurationByVisitDateDTO;
+use App\DTOs\Services\AppointmentService\RescheduleDTO;
+use App\DTOs\Services\AppointmentService\StoreAppointmentDTO;
 use App\Enums\AppointmentStatus;
 use App\Exceptions\SlotDoesNotAvailable;
 use App\Models\Appointment;
@@ -13,9 +16,9 @@ class AppointmentService
 {
     public function __construct(private AppointmentAvailabilityService $appointmentQueryService) {}
 
-    public function add(array $data, int $patientId): Appointment
+    public function add(StoreAppointmentDTO $dto, int $patientId): Appointment
     {
-        return DB::transaction(function () use ($data, $patientId) {
+        return DB::transaction(function () use ($dto, $patientId) {
 
             $isSlotAvailable = $this->appointmentQueryService->isSlotAvailable($data['clinic_id'], $data['doctor_id'], $data['visit_date'], $data['slot']);
             if (! $isSlotAvailable) {
@@ -25,28 +28,28 @@ class AppointmentService
 
             return Appointment::create([
                 'patient_id' => $patientId,
-                'clinic_id' => $data['clinic_id'],
-                'doctor_id' => $data['doctor_id'],
-                'clinic_service_id' => $data['clinic_service_id'],
-                'visit_date' => $data['visit_date'],
-                'start_time' => $data['slot'],
-                'end_time' => Carbon::parse($data['slot'])->addMinutes($slot_duration),
+                'clinic_id' => $dto->clinicId,
+                'doctor_id' => $dto->doctorId,
+                'doctorService_id' => $dto->DoctorServiceId,
+                'visit_date' =>$dto->visiteDate,
+                'start_time' => $dto->slot,
+                'end_time' => Carbon::parse($dto->slot)->addMinutes($slot_duration),
             ]);
         });
     }
 
-    public function reschedule(array $data, int $clinicId): bool
+    public function reschedule(RescheduleDTO $dto): bool
     {
-        $appointment = Appointment::where('clinic_id', $clinicId)
-            ->findOrFail($data['appointmentId']);
-        $slot_duration = $this->appointmentQueryService->getSlotDurationByVisitDate($appointment->clinic_id, $appointment->doctor_id, $data['visit_date']);
+        $getSlotDurationByVisitDateDTO = new GetSlotDurationByVisitDateDTO($dto->appointment->clinic_id, $dto->appointment->doctor_id, $dto->visiteDate);
+        $slot_duration = $this->appointmentQueryService->getSlotDurationByVisitDate($getSlotDurationByVisitDateDTO);
         if ($slot_duration <= 0) {
             throw new Exception('No schedule found.');
         }
-        return $appointment->update([
-            'visit_date' => $data['visit_date'],
-            'start_time' => $data['start_time'],
-            'end_time' => Carbon::parse($data['start_time'])
+
+        return $dto->appointment->update([
+            'visit_date' => $dto->visiteDate,
+            'start_time' => $dto->startTime,
+            'end_time' => Carbon::parse($dto->startTime)
                 ->addMinutes($slot_duration)
                 ->toTimeString(),
         ]);

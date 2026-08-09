@@ -8,11 +8,11 @@ use App\Services\Clinic\ClinicQueryService;
 class ClinicLookupController extends Controller
 {
     public function __construct(private ClinicQueryService $clinicQueryService) {}
-    public function getClinicServicesBySpecialityId(int $specialityId)
+    public function getDoctorServicesBySpecialityId(int $specialityId)
     {
         return response()->json([
             'success' => true,
-            'data' => $this->clinicQueryService->getClinicServicesBySpecialityId($specialityId),
+            'data' => $this->clinicQueryService->getDoctorServicesBySpecialityId($specialityId),
         ]);
     }
     public function getAvailableClinics(int $specialityId, int $serviceId)

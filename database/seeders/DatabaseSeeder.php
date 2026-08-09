@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         //  daysSeeder::class,
         //  usersSeeder::class,
         // //  DoctorSeeder::class,
-        //  ClinicServicesSeeder::class,
+        //  DoctorServicesSeeder::class,
         // CountrySeeder::class,
         // CitySeeder::class,
     ]);
