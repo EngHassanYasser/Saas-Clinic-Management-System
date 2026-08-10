@@ -19,8 +19,8 @@ class AppointmentAvailabilityService
         if (Carbon::parse($dto->visisteDate)->isBefore(today())) {
             return [];
         }
-        $getBookedSlotsDTO = new GetBookedSlotsDTO($dto->clinicId, $dto->doctorId, $dto->visisteDate);
-        $getSchedulesDTO = new GetSchedulesDTO($dto->clinicId, $dto->doctorId, $dto->visisteDate);
+        $getBookedSlotsDTO = new GetBookedSlotsDTO($dto->clinic, $dto->doctor, $dto->visisteDate);
+        $getSchedulesDTO = new GetSchedulesDTO($dto->clinic, $dto->doctor, $dto->visisteDate);
         $bookedSlots = $this->getBookedSlots($getBookedSlotsDTO);
         $schedules = $this->getSchedules($getSchedulesDTO);
 
@@ -70,8 +70,8 @@ class AppointmentAvailabilityService
 
     public function getBookedSlots(GetBookedSlotsDTO $dto): array
     {
-        return Appointment::where('clinic_id', $dto->clinicId)
-            ->where('doctor_id', $dto->doctorId)
+        return Appointment::where('clinic_id', $dto->clinic->id)
+            ->where('doctor_id', $dto->doctor->id)
             ->whereDate('visit_date', $dto->visisteDate)
             ->get(['start_time', 'visit_date'])
             ->map(fn ($appointment) => Carbon::parse($appointment->start_time)->format('H:i'))
@@ -82,8 +82,8 @@ class AppointmentAvailabilityService
     {
         $dayName = Carbon::parse($dto->visisteDate)->dayName;
 
-        return Schedule::where('clinic_id', $dto->clinicId)
-            ->where('doctor_id', $dto->doctorId)
+        return Schedule::where('clinic_id', $dto->clinic->id)
+            ->where('doctor_id', $dto->doctor->id)
             ->where('is_available', 1)
             ->whereHas('days', function ($query) use ($dayName) {
                 $query->where('name', $dayName);

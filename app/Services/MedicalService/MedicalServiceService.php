@@ -24,7 +24,7 @@ class MedicalServiceService
             'clinic_id' => $clinicId,
             'doctor_id' => $dto->doctorId,
             'medicalService_id' => $dto->medicalServiceId,
-            'price' =>$dto->price,
+            'price' => $dto->price,
             'description' => $dto->description,
         ]);
     }
@@ -40,8 +40,9 @@ class MedicalServiceService
         ]);
     }
 
-    public function deleteById(int $clinicServiceId): bool
+    public function deleteById(int $medicalServiceId, int $clinicId): bool
     {
-        return Clinic_doctor_medicalService::destroy($clinicServiceId);
+        return Clinic_doctor_medicalService::where('id', $medicalServiceId)
+            ->where('clinic_id', $clinicId)->delete();
     }
 }

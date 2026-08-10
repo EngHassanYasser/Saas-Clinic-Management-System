@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Subscription;
 
 use App\Enums\EnSubscriptionStatus;
 use App\Http\Controllers\Controller;
+use App\Models\Subscription;
 use App\Services\Plan\PlanQueryService;
 use App\Services\Subscription\SubscriptionQueryService;
 use App\services\Subscription\SubscriptionService;
@@ -21,6 +22,8 @@ class SubscriptoinController extends Controller
 
     public function index()
     {
+        $this->authorize('viewAny',Subscription::class);
+        
         [$subscriptions,$plans,$stats,$clinics] = Concurrency::run([
             fn () => $this->subscriptionQueryService->getAll(),
             fn () => $this->planQueryService->getAll(),
@@ -41,9 +44,11 @@ class SubscriptoinController extends Controller
         );
     }
 
-    public function renew(int $subscriptionID)
+    public function renew(Subscription $subscription)
     {
-        $isRenewed = $this->subscriptionService->renew($subscriptionID);
+        $this->authorize('update',$subscription);
+
+        $isRenewed = $this->subscriptionService->renew($subscription);
         $message = $isRenewed ? 'subscription renewed successfully' : 'failed to isRenewed subscription';
 
         return redirect()->route('subscriptions.index')->with('message', $message);
@@ -51,6 +56,8 @@ class SubscriptoinController extends Controller
 
     public function store(int $clinicId,int $planId)
     {
+        $this->authorize('create',Subscription::class);
+
         $this->subscriptionService->add($clinicId,$planId);
 
         return redirect()->route('subscriptions.index')->with('message', 'subscription added successfully');

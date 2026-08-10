@@ -37,15 +37,15 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'type' =>EnRoleType::class,
+            'type' => EnRoleType::class,
         ];
     }
 
     public function usesDashboardLayout(): bool
     {
         return in_array($this->type, [
-           EnRoleType::CLINIC->value,
-           EnRoleType::PATIENT->value,
+            EnRoleType::CLINIC->value,
+            EnRoleType::PATIENT->value,
         ], true);
     }
 
@@ -64,6 +64,11 @@ class User extends Authenticatable
         return $username;
     }
 
+    public function clinics()
+    {
+        return $this->hasMany(Clinic::class, 'owner_id');
+    }
+
     public function notification_logs()
     {
         return $this->hasMany(NotificationLog::class);
@@ -78,6 +83,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(appointment::class);
     }
+
     public function vacations()
     {
         return $this->hasMany(vacation::class);

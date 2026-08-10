@@ -48,13 +48,12 @@ class ScheduleService
         }, 3);
     }
 
-    public function update(UpdateScheduleDTO $dto, int $scheduleId): Schedule
+    public function update(UpdateScheduleDTO $dto, Schedule $schedule): Schedule
     {
-        return DB::transaction(function () use ($dto, $scheduleId) {
+        return DB::transaction(function () use ($dto, $schedule) {
 
-            $schedule = Schedule::where('id', $scheduleId)
-                ->lockForUpdate()
-                ->firstOrFail();
+            $schedule->lockForUpdate();
+                
             $ConflictDTO = new HasScheduleConflictDTO($dto->startTime,
                 $dto->endTime,
                 $dto->slotDuration,
@@ -62,6 +61,7 @@ class ScheduleService
                 $dto->endBreak,
                 $dto->isAvailable,
                 $dto->dayIds);
+                
             if ($this->scheduleConfilctService->hasScheduleConflict(
                 $ConflictDTO,
                 $schedule
@@ -86,10 +86,8 @@ class ScheduleService
         }, 3);
     }
 
-    public function delete(int $scheduleId, int $clinicId): bool
+    public function delete(Schedule $schedule): bool
     {
-        $schedule = Schedule::where('clinic_id', $clinicId)->findOrFail($scheduleId);
-
         return $schedule->delete();
     }
 }

@@ -30,12 +30,10 @@ class DoctorService
         });
     }
 
-    public function update(UpdateDoctorDTO $dto, int $doctorId,int $clinicId): bool
+    public function update(UpdateDoctorDTO $dto, Doctor $doctor,int $clinicId): bool
     {
-        return DB::transaction(function () use ($dto, $doctorId, $clinicId) {
-
-            $doctor = Doctor::findOrFail($doctorId);
-
+        return DB::transaction(function () use ($dto, $doctor, $clinicId) {
+            
             $updated = $doctor->update([
                 'name' => $dto->name,
                 'phone' => $dto->phone,
@@ -61,15 +59,13 @@ class DoctorService
         });
     }
 
-    public function deleteById(int $doctorId, int $clinicId): bool
+    public function delete(Doctor $doctor, int $clinicId): bool
     {
-        return DB::transaction(function () use ($doctorId, $clinicId) {
-
-            $doctor = Doctor::findOrFail($doctorId);
+        return DB::transaction(function () use ($doctor, $clinicId) {
 
             $doctor->clinics()->detach($clinicId);
 
-            Clinic_doctor_medicalService::where('doctor_id', $doctorId)
+            Clinic_doctor_medicalService::where('doctor_id', $doctor->id)
                 ->where('clinic_id', $clinicId)
                 ->delete();
 

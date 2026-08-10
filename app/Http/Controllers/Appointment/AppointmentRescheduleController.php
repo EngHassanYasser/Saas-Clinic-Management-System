@@ -16,6 +16,7 @@ class AppointmentRescheduleController extends Controller
     public function reschdule(Appointment $appointment, string $visiteDate, string $startTime)
     {
         $this->authorize('reschedule', $appointment);
+        
         $dto = new RescheduleDTO($appointment,$visiteDate,$startTime);
         $isRescheduled = $this->appointmentService->reschedule($dto);
 

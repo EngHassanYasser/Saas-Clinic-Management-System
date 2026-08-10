@@ -8,11 +8,9 @@ use App\Models\Subscription;
 class EnSubscriptionStatusService
 {
     public function changeStatus(
-        int $subscriptionId,
+        Subscription $subscription,
         EnSubscriptionStatus $newStatus
     ): bool {
-        $subscription = Subscription::find($subscriptionId);
-
         if (! $subscription) {
             return false;
         }

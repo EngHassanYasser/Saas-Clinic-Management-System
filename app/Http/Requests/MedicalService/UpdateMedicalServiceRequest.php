@@ -24,7 +24,6 @@ class UpdateMedicalServiceRequest extends FormRequest
     {
         return [
             'medicalServicePriceId'=>['required','integer'],
-            'medicalServiceId' => 'required|string|max:255',
             'doctorId' => 'required|exists:doctors,id',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0.01',

@@ -2,11 +2,14 @@
 
 namespace App\DTOs\Services\Appointment;
 
+use App\Models\Clinic;
+use App\Models\Doctor;
+
 class GetBookedSlotsDTO
 {
     public function __construct(
-        public readonly int $clinicId,
-        public readonly int $doctorId,
+        public readonly Clinic $clinic,
+        public readonly Doctor $doctor,
         public readonly string $visisteDate,
     ) {}
 

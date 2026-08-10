@@ -17,7 +17,7 @@ Route::middleware('auth', 'role:clinic','verified')->group(function () {
         '/clinic/services/{clinic}',
         [MedicalServiceController::class, 'update']
     )->name('clinic.services.update');
-    Route::delete(
+    Route::middleware('tenant.context')->delete(
         '/clinic/services/{clinic}',
         [MedicalServiceController::class, 'destroy']
     )->name('clinic.services.destroy');

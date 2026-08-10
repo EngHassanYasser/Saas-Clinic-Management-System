@@ -24,8 +24,7 @@ class MedicalServiceController extends Controller
         private MedicalServiceService $medicalServiceService,
         private ClinicQueryService $clinicQueryService,
         private TenantContext $tenantContext
-    ) {
-    }
+    ) {}
 
     public function index()
     {
@@ -44,18 +43,19 @@ class MedicalServiceController extends Controller
     public function store(StoreMedicalServiceRequest $request)
     {
         $this->authorize('create', MedicalServiceModel::class);
-        $dto =  StoreMedicalrviceDTO::fromRequest($request->validated());
+        
+        $dto = StoreMedicalrviceDTO::fromRequest($request->validated());
         $clinicId = $this->tenantContext->id();
         $this->medicalServiceService->add($dto, $clinicId);
 
         return back()->with('success', 'تم إضافة الخدمة بنجاح');
     }
 
-    public function update(UpdateMedicalServiceRequest $request)
+    public function update(UpdateMedicalServiceRequest $request, MedicalServiceModel $medicalService)
     {
-        $dto = UpdateMedicalServiceDTO::fromRequest($request);
+        $this->authorize('update', $medicalService);
 
-        $this->authorize('update', MedicalServiceModel::class);
+        $dto = UpdateMedicalServiceDTO::fromRequest($request);
 
         $clinicId = $this->tenantContext->id();
 
@@ -64,11 +64,13 @@ class MedicalServiceController extends Controller
         return back()->with('success', 'تم تحديث الخدمة بنجاح');
     }
 
-    public function destroy(MedicalServiceModel $clinicService)
+    public function destroy(int $medicalServiceId)
     {
-        $this->authorize('delete', $clinicService);
+        $this->authorize('delete', MedicalServiceModel::class);
 
-        $isDeleted = $this->medicalServiceService->deleteById($clinicService->id);
+        $clinicId = $this->tenantContext->id();
+
+        $isDeleted = $this->medicalServiceService->deleteById($medicalServiceId, $clinicId);
 
         return response()->json([
             'success' => $isDeleted > 0,

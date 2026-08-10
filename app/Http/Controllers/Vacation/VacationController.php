@@ -7,6 +7,7 @@ use App\DTOs\Services\Vacation\UpdateVacationDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\vacations\StoreVacationsRequest;
 use App\Http\Requests\vacations\UpdateVacationsRequest;
+use App\Models\Vacation;
 use App\Services\Doctor\DoctorQueryService;
 use App\Services\Vacation\VacationQueryService;
 use App\Services\Vacation\VacationService;
@@ -26,8 +27,9 @@ class VacationController extends Controller
 
     public function index()
     {
+        $this->authorize('viewAny',Vacation::class);
+        
         $clinicId = $this->tenantContext->id();
-        $clinic = $this->tenantContext->get();
 
         [$vacations,$doctors,$stats] = Concurrency::run([
             fn () => $this->vactionQueryService->getClinicVacations($clinicId),
@@ -40,8 +42,10 @@ class VacationController extends Controller
 
     public function store(StoreVacationsRequest $request)
     {
+        $this->authorize('create',Vacation::class);
+
         $clinicId = $this->tenantContext->id();
-        $dto=StoreVacationDTO::fromRequest($request->validatd());
+        $dto = StoreVacationDTO::fromRequest($request->validatd());
         $isUpdated = $this->vacationService->add($dto, $clinicId);
         $message = $isUpdated
             ? 'Vacation added successfully.'
@@ -51,11 +55,13 @@ class VacationController extends Controller
             ->with('message', $message);
     }
 
-    public function update(UpdateVacationsRequest $request, int $vacationId)
+    public function update(UpdateVacationsRequest $request, Vacation $vacation)
     {
-        $clinicId = $this->tenantContext->id();
-        $dto= UpdateVacationDTO::fromRequest($request->validated());
-        $isUpdated = $this->vacationService->update($dto, $vacationId, $clinicId);
+        $this->authorize('update', $vacation);
+
+        $dto = UpdateVacationDTO::fromRequest($request->validated());
+        $isUpdated = $this->vacationService->update($dto, $vacation);
+
         $message = $isUpdated
             ? 'Vacation updated successfully.'
             : 'Failed to update vacation. Please try again.';
@@ -64,10 +70,11 @@ class VacationController extends Controller
             ->with('message', $message);
     }
 
-    public function destroy(int $vacationId)
+    public function destroy(Vacation $vacation)
     {
-        $clinicId = $this->tenantContext->id();
-        $isDeleted = $this->vacationService->delete($vacationId, $clinicId);
+        $this->authorize('delete', $vacation);
+
+        $isDeleted = $this->vacationService->delete($vacation);
 
         $message = $isDeleted ? 'vacation deleted successfully' : '
          failed to delete vacation please try again';

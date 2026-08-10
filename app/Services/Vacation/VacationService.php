@@ -29,18 +29,18 @@ class VacationService
         ]);
     }
 
-    public function update(UpdateVacationDTO $dto, int $vacationId, int $clinicId): bool
+    public function update(UpdateVacationDTO $dto, Vacation $vacation): bool
     {
-        return DB::transaction(function () use ($dto, $vacationId, $clinicId) {
+        return DB::transaction(function () use ($dto, $vacation) {
 
             $vacation = Vacation::lockForUpdate()
-                ->where('clinic_id', $clinicId)
-                ->findOrFail($vacationId);
+                ->where('clinic_id', $vacation->clinic_id)
+                ->findOrFail($vacation->clinic_id);
 
             if ($this->vactionValidationService->hasVacation(
                 $vacation->doctor_id,
-                $clinicId,
-                $vacationId
+                $vacation->clinic_id,
+                $vacation->id
             )) {
                 throw new HasVacationException(
                     'there are already vacation for this doctor'
@@ -57,10 +57,8 @@ class VacationService
         });
     }
 
-    public function delete(int $vacationId, int $clinicId): bool
+    public function delete(Vacation $vacation): bool
     {
-        return Vacation::whereKey($vacationId)
-            ->whereRelation('doctor.clinics', 'clinics.id', $clinicId)
-            ->firstOrFail()->delete();
+        return $vacation->delete();
     }
 }

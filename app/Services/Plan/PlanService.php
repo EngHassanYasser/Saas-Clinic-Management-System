@@ -14,12 +14,14 @@ class PlanService
             'name' => $dto->name,
             'monthly_price' => $dto->monthlyPrice,
             'max_doctors' => $dto->maxDoctors,
-            'monthly_appointments_limit' => $dto->monthlyAppointmentsLimit
+            'monthly_appointments_limit' => $dto->monthlyAppointmentsLimit,
         ]);
     }
-    public function update(UpdatePlanDTO $dto, int $id): bool
+
+    public function update(UpdatePlanDTO $dto, Plan $plan): bool
     {
-        $plan = Plan::whereKey($id)->lockForUpdate()->firstOrFail();
+        $plan->lockForUpdate();
+
         return $plan->update([
             'name' => $dto->name,
             'monthly_price' => $dto->monthlyPrice,

@@ -21,7 +21,7 @@ Route::middleware('auth','verified')->group(function () {
         '/complaintts',
         [ComplaintController::class, 'store']
     )->name('complaintts.store');
-    Route::middleware('tenant.context')->put(
+    Route::put(
         '/complaintts/{complaint}/',
         [ComplaintController::class, 'update']
     )->name('complaintts.update');

@@ -16,6 +16,8 @@ class DashboardStatisticsController extends Controller
 
     public function getstats()
     {
+        $this->authorize('viewAny',Dashboard::class);
+
         [$stats,$lastActivities] = Concurrency::run([
             fn () => $this->ClinicStatisticsService->getClinicDashboardStats(),
             fn () => $this->activityLogQueryService->getLastActivities(),

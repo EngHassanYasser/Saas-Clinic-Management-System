@@ -7,11 +7,11 @@ use App\DTOs\Services\Schedule\UpdateScheduleDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Schedule\StoreScheduleRequest;
 use App\Http\Requests\Schedule\UpdateScheduleRequest;
+use App\Models\Schedule;
 use App\Services\Doctor\DoctorQueryService;
 use App\Services\Location\LocationQueryService;
 use App\Services\Schedule\ScheduleService;
 use App\Support\TenantContext;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Concurrency;
 
 class ScheduleController extends Controller
@@ -25,6 +25,8 @@ class ScheduleController extends Controller
 
     public function index()
     {
+        $this->authorize('viewAny',Schedule::class);
+
         $clinicId = $this->tenantContext->id();
         [$doctors,$weekDays] = Concurrency::run([
             fn () => $this->doctorQueryService->getAll($clinicId),
@@ -34,10 +36,10 @@ class ScheduleController extends Controller
         return view('schedules.index', compact('doctors', 'weekDays'));
     }
 
-    public function create() {}
-
     public function store(StoreScheduleRequest $request)
     {
+        $this->authorize('create',Schedule::class);
+
         $clinicId = $this->tenantContext->id();
         $dto = StoreScheduleDTO::fromRequest($request->validated());
         $this->scheduleService->add($dto, $clinicId);
@@ -46,19 +48,23 @@ class ScheduleController extends Controller
             ->with('message', 'تم اضافة الموعد بنجاح.');
     }
 
-    public function update(UpdateScheduleRequest $request, int $id)
+    public function update(UpdateScheduleRequest $request, Schedule $schedule)
     {
+        $this->authorize('update',$schedule);
+
         $dto= UpdateScheduleDTO::fromRequest($request->validated());
-        $this->scheduleService->update($dto, $id);
+        $this->scheduleService->update($dto, $schedule);
 
         return redirect()
             ->route('schedules.index')
             ->with('message', 'تم تحديث الموعد بنجاح.');
     }
 
-    public function destroy(int $id)
+    public function destroy(Schedule $schedule)
     {
-        $isDeleted = $this->scheduleService->delete($id, Auth::user()->clinic_id);
+        $this->authorize('delete',$schedule);
+
+        $isDeleted = $this->scheduleService->delete($schedule);
         if ($isDeleted == false) {
             return redirect()
                 ->route('schedules.index')

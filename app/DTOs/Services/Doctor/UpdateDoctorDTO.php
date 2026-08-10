@@ -3,7 +3,7 @@
 namespace App\DTOs\Services\Doctor;
 
 use App\Http\Requests\doctor\UpdateDoctorRequest;
-
+use Illuminate\Http\UploadedFile;
 class UpdateDoctorDTO
 {
     public function __construct(

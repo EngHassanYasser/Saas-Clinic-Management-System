@@ -8,6 +8,7 @@ use App\Enums\EnRoleType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\complaintts\StoreComplaintRequest;
 use App\Http\Requests\complaintts\UpdateComplaintRequest;
+use App\Models\Complaint;
 use App\Services\Complaint\ComplaintQueryService;
 use App\services\Complaint\ComplaintService;
 use App\Services\Complaint\ComplaintStatisticsService;
@@ -28,6 +29,8 @@ class ComplaintController extends Controller
 
     public function index()
     {
+        $this->authorize('viewAny',Complaint::class);
+
         if (Auth::user()->type ==EnRoleType::CLINIC->value) {
             $clinicId = $this->tenantContext->id();
             $complaintts = $this->complaintQueryService->getClinicComplaints(Auth::user());
@@ -47,6 +50,8 @@ class ComplaintController extends Controller
 
     public function store(StoreComplaintRequest $request)
     {
+        $this->authorize('create',Complaint::class);
+
         $clinicId = $this->tenantContext->id();
         $dto = StoreComplaintDTO::fromRequest($request->validated());
         $complaint = $this->complaintService->add($dto, Auth::user(), $clinicId);
@@ -57,11 +62,12 @@ class ComplaintController extends Controller
         return redirect()->route('complaintts.index')->with('message', $message);
     }
 
-    public function update(UpdateComplaintRequest $request, int $complaintId)
+    public function update(UpdateComplaintRequest $request, Complaint $complaint)
     {
-        $clinicId = $this->tenantContext->id();
+        $this->authorize('update',$complaint);
+
         $dto=UpdateComplaintDTO::fromRequest($request->validated());
-        $isUpdated = $this->complaintService->update($dto, $complaintId, $clinicId);
+        $isUpdated = $this->complaintService->update($dto, $complaint);
         $message = $isUpdated
             ? 'complaint updated successfully.'
             : 'Failed to update complaint. Please try again.';
@@ -69,9 +75,11 @@ class ComplaintController extends Controller
         return redirect()->route('complaintts.index')->with('message', $message);
     }
 
-    public function destroy(int $complaintId)
+    public function destroy(Complaint $complaint)
     {
-        $isDeleted = $this->complaintService->delete($complaintId);
+        $this->authorize('delete',$complaint);
+        
+        $isDeleted = $this->complaintService->delete($complaint);
         $message = $isDeleted
             ? 'complaint deleted successfully.'
             : 'Failed to delete complaint. Please try again.';

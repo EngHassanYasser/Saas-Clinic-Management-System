@@ -46,6 +46,7 @@ class AppointmentController extends Controller
     public function store(StoreAppointmentRequest $request)
     {
         $this->authorize('create', Appointment::class);
+        
         $dto = StoreAppointmentDTO::fromRequest($request->validated());
         $this->appointmentService->add($dto, Auth::id());
 

@@ -81,7 +81,7 @@ class Clinic extends Model implements HasMedia
         return $this->belongsToMany(Doctor::class);
     }
 
-    public function complaintts()
+    public function complaints()
     {
         return $this->hasMany(complaint::class);
     }

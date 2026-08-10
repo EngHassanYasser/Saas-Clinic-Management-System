@@ -30,11 +30,8 @@ class ComplaintService
         return $complaint;
     }
 
-    public function update(UpdateComplaintDTO $dto, int $complaintId, int $clinicId): bool
+    public function update(UpdateComplaintDTO $dto, Complaint $complaint): bool
     {
-        $complaint = Complaint::where('id', $complaintId)
-            ->where('clinic_id', $clinicId)->firstOrFail();
-
         return $complaint->update([
             'doctor_id' => $dto->doctorId,
             'department' => $dto->departmentName,
@@ -48,10 +45,8 @@ class ComplaintService
         ]);
     }
 
-    public function delete(int $complaintId): bool
+    public function delete(Complaint $complaint): bool
     {
-        $complaint = $this->complaintQueryService->getById($complaintId);
-
         return $complaint->delete();
     }
 }

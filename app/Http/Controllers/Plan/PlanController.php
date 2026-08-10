@@ -8,6 +8,7 @@ use App\Enums\EnPlanStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\plans\StorePlanRequest;
 use App\Http\Requests\plans\UpdatePlanRequest;
+use App\Models\Plan;
 use App\Services\Plan\PlanQueryService;
 use App\services\Plan\PlanService;
 
@@ -20,6 +21,8 @@ class PlanController extends Controller
 
     public function index()
     {
+        $this->authorize('viewAny',Plan::class);
+        
         $plans = $this->planQueryService->getAll();
         $statuses = enumToArray(EnPlanStatus::class);
 
@@ -28,6 +31,8 @@ class PlanController extends Controller
 
     public function store(StorePlanRequest $request)
     {
+        $this->authorize('create',Plan::class);
+
         $dto= StorePlanDTO::fromRequest($request->validated());
         $newPlan = $this->planService->add($dto);
 
@@ -36,10 +41,12 @@ class PlanController extends Controller
         return redirect()->route('plans.index')->with('message', $message);
     }
 
-    public function update(UpdatePlanRequest $request, int $id)
+    public function update(UpdatePlanRequest $request, Plan $plan)
     {
+        $this->authorize('update',$plan);
+
         $dto=UpdatePlanDTO::fromRequest($request->validated());
-        $isUpdated = $this->planService->update($dto, $id);
+        $isUpdated = $this->planService->update($dto, $plan);
         $message = $isUpdated ? 'plan updated successfully' : 'failed to update plan';
 
         return redirect()->route('plans.index')->with('message', $message);

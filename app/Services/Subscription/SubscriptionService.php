@@ -38,13 +38,9 @@ class SubscriptionService
             ]);
         });
     }
-    public function renew(int $subscriptionId): bool
+    public function renew(Subscription $subscription): bool
     {
-        return DB::transaction(function () use ($subscriptionId) {
-
-            $subscription = Subscription::lockForUpdate()
-                ->select('id', 'clinic_id')
-                ->findOrFail($subscriptionId);
+        return DB::transaction(function () use ($subscription) {
 
             if ($this->subscriptionValidationService->hasActiveSubscription($subscription->clinic_id, $subscription->id)) {
                 throw new ActiveSubscriptionAlreadyExistsException();
