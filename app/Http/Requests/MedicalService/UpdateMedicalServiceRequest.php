@@ -23,9 +23,9 @@ class UpdateMedicalServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'doctor_service_price_id'=>['required','integer'],
-            'doctorService_id' => 'required|string|max:255',
-            'doctor_id' => 'required|exists:doctors,id',
+            'medicalServicePriceId'=>['required','integer'],
+            'medicalServiceId' => 'required|string|max:255',
+            'doctorId' => 'required|exists:doctors,id',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0.01',
         ];

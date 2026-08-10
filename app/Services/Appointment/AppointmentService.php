@@ -2,10 +2,11 @@
 
 namespace App\Services\Appointment;
 
-use App\DTOs\Services\Appointment\AppointmentQueryService\GetSlotDurationByVisitDateDTO;
-use App\DTOs\Services\AppointmentService\RescheduleDTO;
-use App\DTOs\Services\AppointmentService\StoreAppointmentDTO;
-use App\Enums\AppointmentStatus;
+use App\DTOs\Services\Appointment\IsSlotAvailableDTO;
+use App\DTOs\Services\Appointment\GetSlotDurationByVisitDateDTO;
+use App\DTOs\Services\Appointment\RescheduleDTO;
+use App\DTOs\Services\Appointment\StoreAppointmentDTO;
+use App\Enums\EnAppointmentStatus;
 use App\Exceptions\SlotDoesNotAvailable;
 use App\Models\Appointment;
 use Carbon\Carbon;
@@ -20,18 +21,25 @@ class AppointmentService
     {
         return DB::transaction(function () use ($dto, $patientId) {
 
-            $isSlotAvailable = $this->appointmentQueryService->isSlotAvailable($data['clinic_id'], $data['doctor_id'], $data['visit_date'], $data['slot']);
+            $isAvailabledto = new IsSlotAvailableDTO($dto->clinicId,
+                $dto->doctorId,
+                $dto->visiteDate,
+                $dto->slot);
+
+            $isSlotAvailable = $this->appointmentQueryService->isSlotAvailable($isAvailabledto);
             if (! $isSlotAvailable) {
                 throw new SlotDoesNotAvailable;
             }
-            $slot_duration = $this->appointmentQueryService->getSlotDurationByVisitDate($data['clinic_id'], $data['doctor_id'], $data['visit_date']);
+            $getSlotDurationByVisitDateDTO = new GetSlotDurationByVisitDateDTO($dto->clinicId,$dto->doctorId,$dto->visiteDate);
+
+            $slot_duration = $this->appointmentQueryService->getSlotDurationByVisitDate($getSlotDurationByVisitDateDTO);
 
             return Appointment::create([
                 'patient_id' => $patientId,
                 'clinic_id' => $dto->clinicId,
                 'doctor_id' => $dto->doctorId,
-                'doctorService_id' => $dto->DoctorServiceId,
-                'visit_date' =>$dto->visiteDate,
+                'medicalService_id' => $dto->DoctorServiceId,
+                'visit_date' => $dto->visiteDate,
                 'start_time' => $dto->slot,
                 'end_time' => Carbon::parse($dto->slot)->addMinutes($slot_duration),
             ]);
@@ -58,7 +66,7 @@ class AppointmentService
     public function confirmAfterPayment(Appointment $appointment): void
     {
         $appointment->update([
-            'status' => AppointmentStatus::CONFIRMED,
+            'status' => EnAppointmentStatus::CONFIRMED,
         ]);
     }
 }

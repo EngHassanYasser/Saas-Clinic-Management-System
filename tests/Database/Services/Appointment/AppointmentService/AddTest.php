@@ -50,7 +50,7 @@ it('creates appointment successfully', function () {
     $appointment = $this->service->add([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
-        'doctorService_id' => $clinicService->id,
+        'medicalService_id' => $clinicService->id,
         'visit_date' => '2026-08-20',
         'slot' => '10:00:00',
     ], $patient->id);
@@ -63,7 +63,7 @@ it('creates appointment successfully', function () {
         'patient_id' => $patient->id,
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
-        'doctorService_id' => $clinicService->id,
+        'medicalService_id' => $clinicService->id,
         'visit_date' => '2026-08-20',
         'start_time' => '10:00:00',
         'end_time' => '10:30:00',
@@ -112,7 +112,7 @@ it('calculates end time using slot duration', function () {
     $appointment = $this->service->add([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
-        'doctorService_id' => $clinicService->id,
+        'medicalService_id' => $clinicService->id,
         'visit_date' => '2026-08-20',
         'slot' => '09:00:00',
     ], $patient->id);

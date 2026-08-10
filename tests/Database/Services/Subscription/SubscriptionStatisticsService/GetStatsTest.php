@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\SubscriptionStatus;
+use App\Enums\EnSubscriptionStatus;
 use App\Models\Clinic;
 use App\Models\Plan;
 use App\Models\Subscription;
@@ -38,7 +38,7 @@ function createStatsSubscription(array $overrides = []): Subscription
     return Subscription::factory()->create(array_merge([
         'clinic_id' => $clinic->id,
         'plan_id' => $plan->id,
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
         'start_at' => now()->subMonth()->toDateString(),
         'end_at' => now()->addMonth()->toDateString(),
     ], $overrides));
@@ -98,19 +98,19 @@ it('returns zero statistics when there are no subscriptions', function () {
 
 it('returns the total number of subscriptions', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::PENDING->value,
+        'status' => EnSubscriptionStatus::PENDING->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::EXPIRED->value,
+        'status' => EnSubscriptionStatus::EXPIRED->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::CANCELLED->value,
+        'status' => EnSubscriptionStatus::CANCELLED->value,
     ]);
 
     $result = $this->service->getStats();
@@ -127,19 +127,19 @@ it('returns the total number of subscriptions', function () {
 
 it('counts pending subscriptions correctly', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::PENDING->value,
+        'status' => EnSubscriptionStatus::PENDING->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::PENDING->value,
+        'status' => EnSubscriptionStatus::PENDING->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::EXPIRED->value,
+        'status' => EnSubscriptionStatus::EXPIRED->value,
     ]);
 
     $result = $this->service->getStats();
@@ -156,19 +156,19 @@ it('counts pending subscriptions correctly', function () {
 
 it('counts active subscriptions correctly', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::PENDING->value,
+        'status' => EnSubscriptionStatus::PENDING->value,
     ]);
 
     $result = $this->service->getStats();
@@ -185,15 +185,15 @@ it('counts active subscriptions correctly', function () {
 
 it('counts expired subscriptions correctly', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::EXPIRED->value,
+        'status' => EnSubscriptionStatus::EXPIRED->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::EXPIRED->value,
+        'status' => EnSubscriptionStatus::EXPIRED->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     $result = $this->service->getStats();
@@ -210,15 +210,15 @@ it('counts expired subscriptions correctly', function () {
 
 it('counts cancelled subscriptions correctly', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::CANCELLED->value,
+        'status' => EnSubscriptionStatus::CANCELLED->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::CANCELLED->value,
+        'status' => EnSubscriptionStatus::CANCELLED->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     $result = $this->service->getStats();
@@ -241,15 +241,15 @@ it('counts cancelled subscriptions correctly', function () {
 
 it('counts cancelled subscriptions as inactive according to the current query', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::CANCELLED->value,
+        'status' => EnSubscriptionStatus::CANCELLED->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::CANCELLED->value,
+        'status' => EnSubscriptionStatus::CANCELLED->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     $result = $this->service->getStats();
@@ -266,15 +266,15 @@ it('counts cancelled subscriptions as inactive according to the current query', 
 
 it('returns the same count for inactive and cancelled', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::CANCELLED->value,
+        'status' => EnSubscriptionStatus::CANCELLED->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::CANCELLED->value,
+        'status' => EnSubscriptionStatus::CANCELLED->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::CANCELLED->value,
+        'status' => EnSubscriptionStatus::CANCELLED->value,
     ]);
 
     $result = $this->service->getStats();
@@ -291,17 +291,17 @@ it('returns the same count for inactive and cancelled', function () {
 
 it('counts active subscriptions expiring within seven days', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
         'end_at' => now()->addDays(3)->toDateString(),
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
         'end_at' => now()->addDays(5)->toDateString(),
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
         'end_at' => now()->addDays(20)->toDateString(),
     ]);
 
@@ -319,12 +319,12 @@ it('counts active subscriptions expiring within seven days', function () {
 
 it('does not count pending subscriptions as expiring', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::PENDING->value,
+        'status' => EnSubscriptionStatus::PENDING->value,
         'end_at' => now()->addDays(3)->toDateString(),
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
         'end_at' => now()->addDays(3)->toDateString(),
     ]);
 
@@ -336,7 +336,7 @@ it('does not count pending subscriptions as expiring', function () {
 
 it('does not count expired subscriptions as expiring', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::EXPIRED->value,
+        'status' => EnSubscriptionStatus::EXPIRED->value,
         'end_at' => now()->addDays(3)->toDateString(),
     ]);
 
@@ -348,7 +348,7 @@ it('does not count expired subscriptions as expiring', function () {
 
 it('does not count cancelled subscriptions as expiring', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::CANCELLED->value,
+        'status' => EnSubscriptionStatus::CANCELLED->value,
         'end_at' => now()->addDays(3)->toDateString(),
     ]);
 
@@ -366,7 +366,7 @@ it('does not count cancelled subscriptions as expiring', function () {
 
 it('counts an active subscription ending today as expiring', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
         'end_at' => now()->toDateString(),
     ]);
 
@@ -378,7 +378,7 @@ it('counts an active subscription ending today as expiring', function () {
 
 it('counts an active subscription ending exactly seven days from today as expiring', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
         'end_at' => now()->addDays(7)->toDateString(),
     ]);
 
@@ -390,7 +390,7 @@ it('counts an active subscription ending exactly seven days from today as expiri
 
 it('does not count an active subscription ending after seven days as expiring', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
         'end_at' => now()->addDays(8)->toDateString(),
     ]);
 
@@ -402,7 +402,7 @@ it('does not count an active subscription ending after seven days as expiring', 
 
 it('does not count an active subscription ending yesterday as expiring', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
         'end_at' => now()->subDay()->toDateString(),
     ]);
 
@@ -421,13 +421,13 @@ it('does not count an active subscription ending yesterday as expiring', functio
 it('counts all active subscriptions inside the seven day window', function () {
     foreach ([1, 2, 3, 4, 5, 6, 7] as $days) {
         createStatsSubscription([
-            'status' => SubscriptionStatus::ACTIVE->value,
+            'status' => EnSubscriptionStatus::ACTIVE->value,
             'end_at' => now()->addDays($days)->toDateString(),
         ]);
     }
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
         'end_at' => now()->addDays(8)->toDateString(),
     ]);
 
@@ -445,31 +445,31 @@ it('counts all active subscriptions inside the seven day window', function () {
 
 it('counts every subscription status independently', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::PENDING->value,
+        'status' => EnSubscriptionStatus::PENDING->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::PENDING->value,
+        'status' => EnSubscriptionStatus::PENDING->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::EXPIRED->value,
+        'status' => EnSubscriptionStatus::EXPIRED->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::CANCELLED->value,
+        'status' => EnSubscriptionStatus::CANCELLED->value,
     ]);
 
     $result = $this->service->getStats();
@@ -501,19 +501,19 @@ it('counts every subscription status independently', function () {
 
 it('returns total equal to the sum of all enum statuses', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::PENDING->value,
+        'status' => EnSubscriptionStatus::PENDING->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::EXPIRED->value,
+        'status' => EnSubscriptionStatus::EXPIRED->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::CANCELLED->value,
+        'status' => EnSubscriptionStatus::CANCELLED->value,
     ]);
 
     $result = $this->service->getStats();
@@ -536,11 +536,11 @@ it('returns total equal to the sum of all enum statuses', function () {
 
 it('does not depend on clinic or plan values for status statistics', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::PENDING->value,
+        'status' => EnSubscriptionStatus::PENDING->value,
     ]);
 
     $result = $this->service->getStats();
@@ -563,11 +563,11 @@ it('does not depend on clinic or plan values for status statistics', function ()
 
 it('gets all statistics using a single database query', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::PENDING->value,
+        'status' => EnSubscriptionStatus::PENDING->value,
     ]);
 
     DB::flushQueryLog();
@@ -591,7 +591,7 @@ it('gets all statistics using a single database query', function () {
 
 it('keeps query count constant as subscription count increases', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
     Cache::forget('subscriptions.statistics');
 
@@ -607,19 +607,19 @@ it('keeps query count constant as subscription count increases', function () {
     DB::disableQueryLog();
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::PENDING->value,
+        'status' => EnSubscriptionStatus::PENDING->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::EXPIRED->value,
+        'status' => EnSubscriptionStatus::EXPIRED->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::CANCELLED->value,
+        'status' => EnSubscriptionStatus::CANCELLED->value,
     ]);
     Cache::forget('subscriptions.statistics');
 
@@ -649,11 +649,11 @@ it('keeps query count constant as subscription count increases', function () {
 
 it('does not modify the database', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     createStatsSubscription([
-        'status' => SubscriptionStatus::PENDING->value,
+        'status' => EnSubscriptionStatus::PENDING->value,
     ]);
 
     $beforeCount = Subscription::count();
@@ -705,7 +705,7 @@ it('contains all expected statistic attributes', function () {
 
 it('returns numeric aggregate values', function () {
     createStatsSubscription([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     $result = $this->service->getStats();
@@ -744,7 +744,7 @@ it('calculates statistics correctly with a larger dataset', function () {
     Subscription::factory()->count(20)->create([
         'plan_id' => $plan->id,
         'clinic_id' => fn () => Clinic::factory()->create()->id,
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
         'start_at' => now()->subMonth()->toDateString(),
         'end_at' => now()->addDays(3)->toDateString(),
     ]);
@@ -752,7 +752,7 @@ it('calculates statistics correctly with a larger dataset', function () {
     Subscription::factory()->count(15)->create([
         'plan_id' => $plan->id,
         'clinic_id' => fn () => Clinic::factory()->create()->id,
-        'status' => SubscriptionStatus::PENDING->value,
+        'status' => EnSubscriptionStatus::PENDING->value,
         'start_at' => now()->subMonth()->toDateString(),
         'end_at' => now()->addMonth()->toDateString(),
     ]);
@@ -760,7 +760,7 @@ it('calculates statistics correctly with a larger dataset', function () {
     Subscription::factory()->count(10)->create([
         'plan_id' => $plan->id,
         'clinic_id' => fn () => Clinic::factory()->create()->id,
-        'status' => SubscriptionStatus::EXPIRED->value,
+        'status' => EnSubscriptionStatus::EXPIRED->value,
         'start_at' => now()->subMonths(2)->toDateString(),
         'end_at' => now()->subMonth()->toDateString(),
     ]);
@@ -768,7 +768,7 @@ it('calculates statistics correctly with a larger dataset', function () {
     Subscription::factory()->count(5)->create([
         'plan_id' => $plan->id,
         'clinic_id' => fn () => Clinic::factory()->create()->id,
-        'status' => SubscriptionStatus::CANCELLED->value,
+        'status' => EnSubscriptionStatus::CANCELLED->value,
         'start_at' => now()->subMonth()->toDateString(),
         'end_at' => now()->addMonth()->toDateString(),
     ]);

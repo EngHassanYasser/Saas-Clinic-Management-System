@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Enums\RoleType;
+use App\Enums\EnRoleType;
 use App\Models\Subscription;
 use App\Models\User;
 
@@ -20,8 +20,8 @@ class SubscriptionPolicy
     public function viewAny(User $user): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC,
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::CLINIC,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -33,9 +33,9 @@ class SubscriptionPolicy
     public function view(User $user, Subscription $subscription): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC => $this->belongsToClinicOwner($user, $subscription->id),
+           EnRoleType::CLINIC => $this->belongsToClinicOwner($user, $subscription->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -47,8 +47,8 @@ class SubscriptionPolicy
     public function create(User $user): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC,
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::CLINIC,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -60,9 +60,9 @@ class SubscriptionPolicy
     public function update(User $user, Subscription $subscription): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC => $this->belongsToClinicOwner($user, $subscription->id),
+           EnRoleType::CLINIC => $this->belongsToClinicOwner($user, $subscription->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -74,9 +74,9 @@ class SubscriptionPolicy
     public function cancel(User $user, Subscription $subscription): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC => $this->belongsToClinicOwner($user, $subscription->id),
+           EnRoleType::CLINIC => $this->belongsToClinicOwner($user, $subscription->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -88,9 +88,9 @@ class SubscriptionPolicy
     public function renew(User $user, Subscription $subscription): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC => $this->belongsToClinicOwner($user, $subscription->id),
+           EnRoleType::CLINIC => $this->belongsToClinicOwner($user, $subscription->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -102,9 +102,9 @@ class SubscriptionPolicy
     public function changePlan(User $user, Subscription $subscription): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC => $this->belongsToClinicOwner($user, $subscription->id),
+           EnRoleType::CLINIC => $this->belongsToClinicOwner($user, $subscription->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };

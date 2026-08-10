@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\DoctorService;
 
-use App\DTOs\Services\Clinic\ClinicService\StoreDoctorServiceDTO;
-use App\DTOs\Services\DoctorService\UpdateDoctorServiceDTO;
+use App\DTOs\Services\MedicalService\StoreMedicalrviceDTO;
+use App\DTOs\Services\MedicalService\UpdateMedicalServiceDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MedicalService\StoreMedicalServiceRequest;
 use App\Http\Requests\MedicalService\UpdateMedicalServiceRequest;
@@ -44,7 +44,7 @@ class MedicalServiceController extends Controller
     public function store(StoreMedicalServiceRequest $request)
     {
         $this->authorize('create', MedicalServiceModel::class);
-        $dto =  StoreDoctorServiceDTO::fromRequest($request->validated());
+        $dto =  StoreMedicalrviceDTO::fromRequest($request->validated());
         $clinicId = $this->tenantContext->id();
         $this->medicalServiceService->add($dto, $clinicId);
 
@@ -53,7 +53,7 @@ class MedicalServiceController extends Controller
 
     public function update(UpdateMedicalServiceRequest $request)
     {
-        $dto = UpdateDoctorServiceDTO::fromRequest($request);
+        $dto = UpdateMedicalServiceDTO::fromRequest($request);
 
         $this->authorize('update', MedicalServiceModel::class);
 

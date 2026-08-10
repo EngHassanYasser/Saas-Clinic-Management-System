@@ -2,8 +2,7 @@
 
 namespace App\Policies;
 
-use App\Enums\RoleType;
-use App\Models\Doctor;
+use App\Enums\EnRoleType;use App\Models\Doctor;
 use App\Models\User;
 
 class DoctorPolicy
@@ -22,9 +21,9 @@ class DoctorPolicy
     public function viewAny(User $user): bool
     {
         return match ($user->role) {
-            RoleType::PATIENT,
-            RoleType::CLINIC,
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::PATIENT,
+           EnRoleType::CLINIC,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -36,11 +35,11 @@ class DoctorPolicy
     public function view(User $user, Doctor $doctor): bool
     {
         return match ($user->role) {
-            RoleType::PATIENT => true,
+           EnRoleType::PATIENT => true,
 
-            RoleType::CLINIC => $this->isBelogToClinicOwner($user, $doctor->id),
+           EnRoleType::CLINIC => $this->isBelogToClinicOwner($user, $doctor->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -52,8 +51,8 @@ class DoctorPolicy
     public function create(User $user): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC,
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::CLINIC,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -65,9 +64,9 @@ class DoctorPolicy
     public function update(User $user, Doctor $doctor): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC => $this->isBelogToClinicOwner($user, $doctor->id),
+           EnRoleType::CLINIC => $this->isBelogToClinicOwner($user, $doctor->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -79,9 +78,9 @@ class DoctorPolicy
     public function delete(User $user, Doctor $doctor): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC => $this->isBelogToClinicOwner($user, $doctor->id),
+           EnRoleType::CLINIC => $this->isBelogToClinicOwner($user, $doctor->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -93,9 +92,9 @@ class DoctorPolicy
     public function manage(User $user, Doctor $doctor): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC => $this->isBelogToClinicOwner($user, $doctor->id),
+           EnRoleType::CLINIC => $this->isBelogToClinicOwner($user, $doctor->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };

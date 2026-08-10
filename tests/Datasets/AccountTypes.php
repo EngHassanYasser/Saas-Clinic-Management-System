@@ -1,8 +1,9 @@
 <?php
 
-use App\Enums\RoleType;
+use App\Enums\EnRoleType;
 
 dataset('account-types', [
-    [RoleType::PATIENT],
-    [RoleType::CLINIC],
+    [EnRoleType::PATIENT],
+    [EnRoleType::CLINIC],
+
 ]);

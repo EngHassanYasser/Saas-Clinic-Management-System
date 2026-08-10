@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Enums\RoleType;
+use App\Enums\EnRoleType;
 use App\Models\Clinic;
 use App\Models\User;
 
@@ -28,9 +28,9 @@ class UserPolicy
     public function viewAny(User $user): bool
     {
         return match ($user->role) {
-            RoleType::PATIENT,
-            RoleType::SUPER_ADMIN,
-            RoleType::CLINIC => true,
+           EnRoleType::PATIENT,
+           EnRoleType::SUPER_ADMIN,
+           EnRoleType::CLINIC => true,
 
             default => false,
         };
@@ -42,9 +42,9 @@ class UserPolicy
     public function view(User $user, User $model): bool
     {
         return match ($user->role) {
-            RoleType::PATIENT => $this->belongsToUser($user, $model),
-            RoleType::CLINIC => $this->belongsToClinic($user, $model->id),
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::PATIENT => $this->belongsToUser($user, $model),
+           EnRoleType::CLINIC => $this->belongsToClinic($user, $model->id),
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -56,8 +56,8 @@ class UserPolicy
     public function create(User $user): bool
     {
         return match ($user->role) {
-            RoleType::SUPER_ADMIN,
-            RoleType::CLINIC => true,
+           EnRoleType::SUPER_ADMIN,
+           EnRoleType::CLINIC => true,
 
             default => false,
         };
@@ -70,9 +70,9 @@ class UserPolicy
     {
 
         return match ($user->role) {
-            RoleType::PATIENT => $this->belongsToUser($user, $model),
-            RoleType::CLINIC => $this->belongsToClinic($user, $model->id),
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::PATIENT => $this->belongsToUser($user, $model),
+           EnRoleType::CLINIC => $this->belongsToClinic($user, $model->id),
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -85,9 +85,9 @@ class UserPolicy
     {
 
         return match ($user->role) {
-            RoleType::PATIENT => $this->belongsToUser($user, $model),
-            RoleType::CLINIC => $this->belongsToClinic($user, $model->id),
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::PATIENT => $this->belongsToUser($user, $model),
+           EnRoleType::CLINIC => $this->belongsToClinic($user, $model->id),
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };

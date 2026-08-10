@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\plans;
 
-use App\Enums\PlanStatus;
+use App\Enums\EnPlanStatus;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
@@ -27,13 +27,13 @@ class StorePlanRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:100'],
 
-            'max_doctors' => ['required', 'integer', 'min:1'],
+            'maxDoctors' => ['required', 'integer', 'min:1'],
 
-            'monthly_appointments_limit' => ['required', 'integer', 'min:1'],
+            'monthlyAppointmentsLimit' => ['required', 'integer', 'min:1'],
 
-            'monthly_price' => ['required', 'numeric', 'min:0'],
+            'monthlyPrice' => ['required', 'numeric', 'min:0'],
 
-            'status' => ['required', new Enum(PlanStatus::class)],
+            'status' => ['required', new Enum(EnPlanStatus::class)],
         ];
     }
 }

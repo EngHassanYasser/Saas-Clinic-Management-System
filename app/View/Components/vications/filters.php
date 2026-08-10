@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\vications;
+namespace App\View\Components\vacations;
 
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -21,6 +21,6 @@ class filters extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.vications.filters');
+        return view('components.vacations.filters');
     }
 }

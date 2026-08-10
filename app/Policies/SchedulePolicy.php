@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Enums\RoleType;
+use App\Enums\EnRoleType;
 use App\Models\Schedule;
 use App\Models\User;
 
@@ -21,9 +21,9 @@ class SchedulePolicy
     public function viewAny(User $user): bool
     {
         return match ($user->role) {
-            RoleType::PATIENT,
-            RoleType::CLINIC,
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::PATIENT,
+           EnRoleType::CLINIC,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -35,10 +35,10 @@ class SchedulePolicy
     public function view(User $user, Schedule $schedule): bool
     {
         return match ($user->role) {
-            RoleType::PATIENT => true,
-            RoleType::CLINIC => $this->belogsToClinicOwner($user, $schedule->id),
+           EnRoleType::PATIENT => true,
+           EnRoleType::CLINIC => $this->belogsToClinicOwner($user, $schedule->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -50,8 +50,8 @@ class SchedulePolicy
     public function create(User $user): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC,
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::CLINIC,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -63,9 +63,9 @@ class SchedulePolicy
     public function update(User $user, Schedule $schedule): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC => $this->belogsToClinicOwner($user, $schedule->id),
+           EnRoleType::CLINIC => $this->belogsToClinicOwner($user, $schedule->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -77,9 +77,9 @@ class SchedulePolicy
     public function delete(User $user, Schedule $schedule): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC => $this->belogsToClinicOwner($user, $schedule->id),
+           EnRoleType::CLINIC => $this->belogsToClinicOwner($user, $schedule->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };

@@ -2,83 +2,83 @@
 
 namespace App\Policies;
 
-use App\Enums\RoleType;
+use App\Enums\EnRoleType;
 use App\Models\User;
-use App\Models\Vication;
+use App\Models\Vacation;
 
-class VicationPolicy
+class VacationPolicy
 {
-    private function belongsToClinicOwner(User $user, int $vicationId): bool
+    private function belongsToClinicOwner(User $user, int $vacationId): bool
     {
         return $user->clinics()
-            ->whereHas('vications',
-                fn ($query) => $query->whereKey($vicationId))
+            ->whereHas('vacations',
+                fn ($query) => $query->whereKey($vacationId))
             ->exists();
     }
 
     /**
-     * Determine whether the user can view any vications.
+     * Determine whether the user can view any vacations.
      */
     public function viewAny(User $user): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC,
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::CLINIC,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
     }
 
     /**
-     * Determine whether the user can view the vication.
+     * Determine whether the user can view the vacation.
      */
-    public function view(User $user, Vication $vication): bool
+    public function view(User $user, Vacation $vacation): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC =>$this->belongsToClinicOwner($user,$vication->id),
+           EnRoleType::CLINIC =>$this->belongsToClinicOwner($user,$vacation->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
     }
 
     /**
-     * Determine whether the user can create a vication.
+     * Determine whether the user can create a vacation.
      */
     public function create(User $user): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC,
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::CLINIC,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
     }
 
     /**
-     * Determine whether the user can update the vication.
+     * Determine whether the user can update the vacation.
      */
-    public function update(User $user, Vication $vication): bool
+    public function update(User $user, Vacation $vacation): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC =>$this->belongsToClinicOwner($user,$vication->id),
+           EnRoleType::CLINIC =>$this->belongsToClinicOwner($user,$vacation->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
     }
 
     /**
-     * Determine whether the user can delete the vication.
+     * Determine whether the user can delete the vacation.
      */
-    public function delete(User $user, Vication $vication): bool
+    public function delete(User $user, Vacation $vacation): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC =>$this->belongsToClinicOwner($user,$vication->id),
+           EnRoleType::CLINIC =>$this->belongsToClinicOwner($user,$vacation->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };

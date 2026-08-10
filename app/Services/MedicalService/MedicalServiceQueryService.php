@@ -2,7 +2,7 @@
 
 namespace App\Services\MedicalService;
 
-use App\Models\MedicalService as MedicalServiceModel;
+use App\Models\MedicalService;
 use Illuminate\Support\Facades\Cache;
 
 class MedicalServiceQueryService
@@ -12,7 +12,7 @@ class MedicalServiceQueryService
         return Cache::remember(
             'clinicService.all',
             now()->addMinutes(5),
-            fn () => MedicalServiceModel::select('id', 'name', 'speciality_id')->get()->toArray()
+            fn () => MedicalService::select('id', 'name', 'speciality_id')->get()->toArray()
         );
     }
 }

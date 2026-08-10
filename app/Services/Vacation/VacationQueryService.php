@@ -2,14 +2,14 @@
 
 namespace App\Services\Vacation;
 
-use App\Models\Vication;
+use App\Models\Vacation;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class VacationQueryService
 {
     public function getClinicVacations(int $clinicId): LengthAwarePaginator
     {
-        return Vication::select(
+        return Vacation::select(
             'id',
             'start_date',
             'end_date',

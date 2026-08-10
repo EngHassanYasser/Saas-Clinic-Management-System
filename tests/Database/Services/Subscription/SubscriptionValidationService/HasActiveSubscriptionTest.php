@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\SubscriptionStatus;
+use App\Enums\EnSubscriptionStatus;
 use App\Models\Clinic;
 use App\Models\Plan;
 use App\Models\Subscription;
@@ -27,7 +27,7 @@ function createActiveCheckSubscription(array $overrides = []): Subscription
     return Subscription::factory()->create(array_merge([
         'clinic_id' => Clinic::factory()->create()->id,
         'plan_id' => Plan::factory()->create()->id,
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
         'start_at' => now()->subMonth()->toDateString(),
         'end_at' => now()->addMonth()->toDateString(),
     ], $overrides));
@@ -85,7 +85,7 @@ it('returns true when clinic has an active subscription', function () {
 it('does not count pending subscriptions as active', function () {
 
     $subscription = createActiveCheckSubscription([
-        'status' => SubscriptionStatus::PENDING->value,
+        'status' => EnSubscriptionStatus::PENDING->value,
     ]);
 
 
@@ -102,7 +102,7 @@ it('does not count pending subscriptions as active', function () {
 it('does not count expired subscriptions as active', function () {
 
     $subscription = createActiveCheckSubscription([
-        'status' => SubscriptionStatus::EXPIRED->value,
+        'status' => EnSubscriptionStatus::EXPIRED->value,
     ]);
 
 
@@ -119,7 +119,7 @@ it('does not count expired subscriptions as active', function () {
 it('does not count cancelled subscriptions as active', function () {
 
     $subscription = createActiveCheckSubscription([
-        'status' => SubscriptionStatus::CANCELLED->value,
+        'status' => EnSubscriptionStatus::CANCELLED->value,
     ]);
 
 
@@ -221,19 +221,19 @@ it('returns true when clinic has mixed subscriptions including active', function
 
     createActiveCheckSubscription([
         'clinic_id' => $clinic->id,
-        'status' => SubscriptionStatus::PENDING->value,
+        'status' => EnSubscriptionStatus::PENDING->value,
     ]);
 
 
     createActiveCheckSubscription([
         'clinic_id' => $clinic->id,
-        'status' => SubscriptionStatus::EXPIRED->value,
+        'status' => EnSubscriptionStatus::EXPIRED->value,
     ]);
 
 
     createActiveCheckSubscription([
         'clinic_id' => $clinic->id,
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
 
@@ -263,7 +263,7 @@ it('finds active subscription correctly with many subscriptions', function () {
         ->create([
             'clinic_id' => $clinic->id,
             'plan_id' => Plan::factory(),
-            'status' => SubscriptionStatus::PENDING->value,
+            'status' => EnSubscriptionStatus::PENDING->value,
         ]);
 
 

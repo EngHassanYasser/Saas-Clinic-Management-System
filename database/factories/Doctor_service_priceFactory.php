@@ -3,17 +3,17 @@
 namespace Database\Factories;
 
 use App\Models\Clinic;
-use App\Models\DoctorService;
 use App\Models\Doctor;
-use App\Models\Doctor_service_price;
+use App\Models\Clinic_doctor_medicalService;
+use App\Models\MedicalService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<DoctorServicePrice>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<MedicalService>
  */
-class Doctor_service_priceFactory extends Factory
+class Clinic_doctor_medicalServiceFactory extends Factory
 {
-    protected $model = Doctor_service_price::class;
+    protected $model = Clinic_doctor_medicalService::class;
 
     public function definition(): array
     {
@@ -22,7 +22,7 @@ class Doctor_service_priceFactory extends Factory
 
             'doctor_id' => Doctor::factory(),
 
-            'doctorService_id' => DoctorService::factory(),
+            'medicalService_id' => MedicalService::factory(),
 
             'description' => fake()->sentence(),
 

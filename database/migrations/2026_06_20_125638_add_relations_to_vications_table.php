@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('vications', function (Blueprint $table) {
+        Schema::table('vacations', function (Blueprint $table) {
             $table->foreignIdFor(doctor::class,'doctor_id')->constrained('doctors')->cascadeOnDelete();
         });
     }
@@ -22,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('vications', function (Blueprint $table) {
+        Schema::table('vacations', function (Blueprint $table) {
             //
         });
     }

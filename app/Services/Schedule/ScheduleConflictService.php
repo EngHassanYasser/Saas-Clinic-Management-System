@@ -2,25 +2,26 @@
 
 namespace App\Services\Schedule;
 
+use App\DTOs\Services\Schedule\HasScheduleConflictDTO;
 use App\Models\Schedule;
 
 class ScheduleConflictService
 {
-
-    public function hasScheduleConflict(array $data,int $clinicId, ?int $ignoreId = null): bool
+    public function hasScheduleConflict(HasScheduleConflictDTO $dto, Schedule $schedule): bool
     {
-        return Schedule::where('doctor_id', $data['doctor_id'])
-            ->where('clinic_id', $clinicId)
+        $ignoreId = $schedule->id;
+        
+        return Schedule::where('doctor_id', $schedule->doctor_id)
+            ->where('clinic_id', $schedule->clinic_id)
             ->when($ignoreId, function ($query) use ($ignoreId) {
                 $query->where('id', '!=', $ignoreId);
             })
-            ->where(function ($query) use ($data) {
-                $query->where('start_time', '<', $data['end_time'])
-                    ->where('end_time', '>', $data['start_time']);
+            ->where(function ($query) use ($dto) {
+                $query->where('start_time', '<', $dto->endTime)
+                    ->where('end_time', '>', $dto->startTime);
             })
-            ->whereHas('days', function ($query) use ($data) {
-                $query->whereIn('days.id', $data['day_ids']);
-            })
-            ->exists();
+            ->whereHas('days', function ($query) use ($dto) {
+                $query->whereIn('days.id', $dto->dayIds);
+            })->exists();
     }
 }

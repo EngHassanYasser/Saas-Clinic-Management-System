@@ -1,7 +1,6 @@
 <?php
 
-use App\Enums\RoleType;
-use App\Models\User;
+use App\Enums\EnRoleType;use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 it('allows user to login with valid credentials', function () {
@@ -66,7 +65,7 @@ it('logs out authenticated user successfully', function () {
 it('clinic user can login successfully', function () {
 
     $clinicUser = User::factory()->create([
-        'type' => RoleType::CLINIC->value,
+        'type' =>EnRoleType::CLINIC->value,
     ]);
 
     $response = $this->post(route('login.store'), [

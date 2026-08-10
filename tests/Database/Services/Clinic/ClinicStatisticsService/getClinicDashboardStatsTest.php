@@ -1,8 +1,7 @@
 <?php
 
 use App\Enums\AppointmentStatus;
-use App\Enums\RoleType;
-use App\Enums\SubscriptionStatus;
+use App\Enums\EnRoleType;use App\Enums\EnSubscriptionStatus;
 use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\Plan;
@@ -15,11 +14,11 @@ beforeEach(function () {
 });
 it('returns the expected dashboard statistics', function () {
     User::factory()->count(5)->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
 
     $clinicOwner = User::factory()->create([
-        'type' => RoleType::CLINIC,
+        'type' =>EnRoleType::CLINIC,
     ]);
 
     $clinics = Clinic::factory()
@@ -28,7 +27,7 @@ it('returns the expected dashboard statistics', function () {
             'owner_id' => $clinicOwner->id,
         ]);
 
-    $patient = User::where('type', RoleType::PATIENT)->first();
+    $patient = User::where('type',EnRoleType::PATIENT)->first();
     $clinic = $clinics->first();
 
     Appointment::factory()
@@ -42,7 +41,7 @@ it('returns the expected dashboard statistics', function () {
         ->count(3)
         ->create([
             'price' => 100,
-            'status' => SubscriptionStatus::ACTIVE->value,
+            'status' => EnSubscriptionStatus::ACTIVE->value,
             'clinic_id' => $clinic->id,
         ]);
 
@@ -50,7 +49,7 @@ it('returns the expected dashboard statistics', function () {
         ->count(2)
         ->create([
             'price' => 250,
-            'status' => SubscriptionStatus::EXPIRED->value,
+            'status' => EnSubscriptionStatus::EXPIRED->value,
             'clinic_id' => $clinic->id,
         ]);
 
@@ -78,15 +77,15 @@ it('returns the expected dashboard statistics', function () {
 
 it('counts only patients in users total', function () {
     User::factory()->count(7)->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
 
     User::factory()->count(5)->create([
-        'type' => RoleType::CLINIC,
+        'type' =>EnRoleType::CLINIC,
     ]);
 
     User::factory()->count(3)->create([
-        'type' => RoleType::SUPER_ADMIN,
+        'type' =>EnRoleType::SUPER_ADMIN,
     ]);
 
     $statistics = $this->service->getClinicDashboardStats();
@@ -96,11 +95,11 @@ it('counts only patients in users total', function () {
 
 it('returns zero users when there are no patients', function () {
     User::factory()->count(5)->create([
-        'type' => RoleType::CLINIC,
+        'type' =>EnRoleType::CLINIC,
     ]);
 
     User::factory()->count(2)->create([
-        'type' => RoleType::SUPER_ADMIN,
+        'type' =>EnRoleType::SUPER_ADMIN,
     ]);
 
     $statistics = $this->service->getClinicDashboardStats();
@@ -167,22 +166,22 @@ it('calculates total earnings from all subscriptions', function () {
 it('includes subscription prices regardless of subscription status', function () {
     Subscription::factory()->create([
         'price' => 100,
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     Subscription::factory()->create([
         'price' => 200,
-        'status' => SubscriptionStatus::EXPIRED->value,
+        'status' => EnSubscriptionStatus::EXPIRED->value,
     ]);
 
     Subscription::factory()->create([
         'price' => 300,
-        'status' => SubscriptionStatus::CANCELLED->value,
+        'status' => EnSubscriptionStatus::CANCELLED->value,
     ]);
 
     Subscription::factory()->create([
         'price' => 400,
-        'status' => SubscriptionStatus::PENDING->value,
+        'status' => EnSubscriptionStatus::PENDING->value,
     ]);
 
     $statistics = $this->service->getClinicDashboardStats();
@@ -201,22 +200,22 @@ it('counts only active subscriptions', function () {
     $plan = Plan::factory()->create();
 
     Subscription::factory()->count(5)->create([
-        'status' => SubscriptionStatus::ACTIVE,
+        'status' => EnSubscriptionStatus::ACTIVE,
         'plan_id' => $plan->id,
     ]);
 
     Subscription::factory()->count(3)->create([
-        'status' => SubscriptionStatus::EXPIRED,
+        'status' => EnSubscriptionStatus::EXPIRED,
         'plan_id' => $plan->id,
     ]);
 
     Subscription::factory()->count(2)->create([
-        'status' => SubscriptionStatus::CANCELLED,
+        'status' => EnSubscriptionStatus::CANCELLED,
         'plan_id' => $plan->id,
     ]);
 
     Subscription::factory()->count(4)->create([
-        'status' => SubscriptionStatus::PENDING,
+        'status' => EnSubscriptionStatus::PENDING,
         'plan_id' => $plan->id,
     ]);
 
@@ -227,15 +226,15 @@ it('counts only active subscriptions', function () {
 
 it('returns zero active subscriptions when none are active', function () {
     Subscription::factory()->count(3)->create([
-        'status' => SubscriptionStatus::EXPIRED,
+        'status' => EnSubscriptionStatus::EXPIRED,
     ]);
 
     Subscription::factory()->count(2)->create([
-        'status' => SubscriptionStatus::CANCELLED,
+        'status' => EnSubscriptionStatus::CANCELLED,
     ]);
 
     Subscription::factory()->count(4)->create([
-        'status' => SubscriptionStatus::PENDING,
+        'status' => EnSubscriptionStatus::PENDING,
     ]);
 
     $statistics = $this->service->getClinicDashboardStats();
@@ -296,7 +295,7 @@ it('returns exactly six statistics', function () {
 
 it('returns integer values for count statistics', function () {
     User::factory()->count(3)->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
 
     Clinic::factory()->count(2)->create();
@@ -304,7 +303,7 @@ it('returns integer values for count statistics', function () {
     Appointment::factory()->count(4)->create();
 
     Subscription::factory()->count(5)->create([
-        'status' => SubscriptionStatus::ACTIVE,
+        'status' => EnSubscriptionStatus::ACTIVE,
     ]);
 
     Appointment::factory()->count(2)->create([
@@ -332,7 +331,7 @@ it('returns earnings as a float', function () {
 
 it('does not change the database', function () {
     User::factory()->count(3)->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
 
     Clinic::factory()->count(2)->create();

@@ -2,7 +2,7 @@
 
 namespace App\Services\Plan;
 
-use App\Enums\PlanStatus;
+use App\Enums\EnPlanStatus;
 use App\Models\Plan;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -18,7 +18,7 @@ class PlanQueryService
             'max_doctors',
             'monthly_appointments_limit',
             'status',
-        ])->whereStatus(PlanStatus::ACTIVE->value)->get();
+        ])->whereStatus(EnPlanStatus::ACTIVE->value)->get();
     }
 
     public function getAll(): Collection

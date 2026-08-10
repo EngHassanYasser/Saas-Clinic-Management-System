@@ -5,7 +5,7 @@ namespace App\Services\Clinic;
 use App\Models\Clinic;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use App\Models\DoctorService as ModelDoctorService;
+use App\Models\MedicalService;
 
 class ClinicQueryService
 {
@@ -51,18 +51,18 @@ class ClinicQueryService
             ->join('cities', 'cities.id', '=', 'clinics.city_id')
             ->join('clinic_doctors', 'clinic_doctors.clinic_id', '=', 'clinics.id')
             ->join('doctor_speciality', 'doctor_speciality.doctor_id', '=', 'clinic_doctors.doctor_id')
-            ->join('doctorServices', 'doctorServices.speciality_id', '=', 'doctor_speciality.speciality_id')
+            ->join('medicalServices', 'medicalServices.speciality_id', '=', 'doctor_speciality.speciality_id')
             ->where('clinic_doctors.is_active', true)
-            ->where('doctorServices.speciality_id', $specialityId)
-            ->where('doctorServices.id', $serviceId)
+            ->where('medicalServices.speciality_id', $specialityId)
+            ->where('medicalServices.id', $serviceId)
             ->distinct()
             ->get();
     }
     public function getDoctorServicesBySpecialityId(int $specialityId): Collection
     {
-        return ModelDoctorService::where('speciality_id', $specialityId)->select(['id', 'name'])->get();
+        return MedicalService::where('speciality_id', $specialityId)->select(['id', 'name'])->get();
     }
-    public function getClinicByOwnereId($ownerId): Clinic
+    public function getClinicByOwnereId(int $ownerId): Clinic
     {
         $clinic = Clinic::where('owner_id', $ownerId)
             ->with(['city','days'])

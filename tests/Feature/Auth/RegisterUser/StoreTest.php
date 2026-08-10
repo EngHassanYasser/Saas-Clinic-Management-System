@@ -1,7 +1,6 @@
 <?php
 
-use App\Enums\RoleType;
-use App\Models\User;
+use App\Enums\EnRoleType;use App\Models\User;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use App\Events\UserCreated;
@@ -15,7 +14,7 @@ it('creates normal user successfully', function () {
         'email' => 'ahmed@test.com',
         'password' => 'Password123!',
         'password_confirmation' => 'Password123!',
-        'type' => RoleType::PATIENT->value,
+        'type' =>EnRoleType::PATIENT->value,
     ]);
 
 
@@ -25,7 +24,7 @@ it('creates normal user successfully', function () {
     $this->assertDatabaseHas('users', [
         'email' => 'ahmed@test.com',
         'name' => 'ahmed mohamed',
-        'type' => RoleType::PATIENT->value,
+        'type' =>EnRoleType::PATIENT->value,
     ]);
 
 
@@ -44,7 +43,7 @@ it('creates clinic with clinic user', function () {
         'email' => 'clinic@test.com',
         'password' => 'Password123!',
         'password_confirmation' => 'Password123!',
-        'type' => RoleType::CLINIC->value,
+        'type' =>EnRoleType::CLINIC->value,
 
     ]);
 

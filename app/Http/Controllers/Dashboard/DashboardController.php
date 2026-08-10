@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\EnRoleType;
 use App\Http\Controllers\Controller;
-use App\Enums\RoleType;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -11,9 +11,9 @@ class DashboardController extends Controller
     public function index()
     {
         return redirect()->route(match (Auth::user()->type) {
-            RoleType::PATIENT => 'appointments.index',
-            RoleType::CLINIC => 'clinic.stats',
-            RoleType::SUPER_ADMIN => 'dashboard.getstats',
+           EnRoleType::PATIENT => 'appointments.index',
+           EnRoleType::CLINIC => 'clinic.stats',
+           EnRoleType::SUPER_ADMIN => 'dashboard.getstats',
             default => abort(403),
         });
     }

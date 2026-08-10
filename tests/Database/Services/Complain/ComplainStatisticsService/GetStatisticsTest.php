@@ -1,36 +1,36 @@
 <?php
 
-use App\Enums\ComplainStatus;
+use App\Enums\ComplaintStatus;
 use App\Models\Clinic;
-use App\Models\Complain;
-use App\Services\Complain\ComplainStatisticsService;
+use App\Models\Complaint;
+use App\Services\Complaint\ComplaintStatisticsService;
 
 beforeEach(function () {
-    $this->service = app(ComplainStatisticsService::class);
+    $this->service = app(ComplaintStatisticsService::class);
 });
 
-it('returns correct complain statistics', function () {
+it('returns correct complaint statistics', function () {
 
     $clinic = Clinic::factory()->create();
 
-    Complain::factory(2)->create([
+    Complaint::factory(2)->create([
         'clinic_id' => $clinic->id,
-        'status' => ComplainStatus::PENDING,
+        'status' => ComplaintStatus::PENDING,
     ]);
 
-    Complain::factory(3)->create([
+    Complaint::factory(3)->create([
         'clinic_id' => $clinic->id,
-        'status' => ComplainStatus::UNDER_REVIEW,
+        'status' => ComplaintStatus::UNDER_REVIEW,
     ]);
 
-    Complain::factory(4)->create([
+    Complaint::factory(4)->create([
         'clinic_id' => $clinic->id,
-        'status' => ComplainStatus::RESOLVED,
+        'status' => ComplaintStatus::RESOLVED,
     ]);
 
-    Complain::factory()->create([
+    Complaint::factory()->create([
         'clinic_id' => $clinic->id,
-        'status' => ComplainStatus::REJECTED,
+        'status' => ComplaintStatus::REJECTED,
     ]);
 
     $statistics = $this->service->getStatistics($clinic->id);
@@ -42,20 +42,20 @@ it('returns correct complain statistics', function () {
         ->and($statistics['rejected'])->toBe(1);
 
 });
-it('counts only complains of requested clinic', function () {
+it('counts only complaintts of requested clinic', function () {
 
     $clinic = Clinic::factory()->create();
 
     $otherClinic = Clinic::factory()->create();
 
-    Complain::factory(5)->create([
+    Complaint::factory(5)->create([
         'clinic_id' => $clinic->id,
-        'status' => ComplainStatus::PENDING,
+        'status' => ComplaintStatus::PENDING,
     ]);
 
-    Complain::factory(100)->create([
+    Complaint::factory(100)->create([
         'clinic_id' => $otherClinic->id,
-        'status' => ComplainStatus::PENDING,
+        'status' => ComplaintStatus::PENDING,
     ]);
 
     $statistics = $this->service->getStatistics($clinic->id);
@@ -64,7 +64,7 @@ it('counts only complains of requested clinic', function () {
         ->and($statistics['pending'])->toBe(5);
 
 });
-it('returns zeros when clinic has no complains', function () {
+it('returns zeros when clinic has no complaintts', function () {
 
     $clinic = Clinic::factory()->create();
 
@@ -81,7 +81,7 @@ it('returns integer statistics', function () {
 
     $clinic = Clinic::factory()->create();
 
-    Complain::factory()->create([
+    Complaint::factory()->create([
         'clinic_id' => $clinic->id,
     ]);
 
@@ -98,19 +98,19 @@ it('total equals sum of all statuses', function () {
 
     $clinic = Clinic::factory()->create();
 
-    Complain::factory(2)->create([
+    Complaint::factory(2)->create([
         'clinic_id' => $clinic->id,
-        'status' => ComplainStatus::PENDING,
+        'status' => ComplaintStatus::PENDING,
     ]);
 
-    Complain::factory(3)->create([
+    Complaint::factory(3)->create([
         'clinic_id' => $clinic->id,
-        'status' => ComplainStatus::RESOLVED,
+        'status' => ComplaintStatus::RESOLVED,
     ]);
 
-    Complain::factory()->create([
+    Complaint::factory()->create([
         'clinic_id' => $clinic->id,
-        'status' => ComplainStatus::REJECTED,
+        'status' => ComplaintStatus::REJECTED,
     ]);
 
     $statistics = $this->service->getStatistics($clinic->id);
@@ -124,7 +124,7 @@ it('total equals sum of all statuses', function () {
         );
 
 });
-it('returns complain model instance', function () {
+it('returns complaint model instance', function () {
 
     $clinic = Clinic::factory()->create();
 

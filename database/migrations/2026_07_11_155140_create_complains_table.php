@@ -9,7 +9,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('complains', function (Blueprint $table) {
+        Schema::create('complaintts', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('clinic_id')->constrained()->cascadeOnDelete();
@@ -36,7 +36,7 @@ return new class extends Migration
                 'critical',
             ]);
             $table->enum('issue_type', [
-                'complaint',
+                'complaintt',
                 'suggestion',
                 'technical_issue',
                 'billing',
@@ -57,6 +57,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('complaints');
+        Schema::dropIfExists('complaintts');
     }
 };

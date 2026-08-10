@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Doctor;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ComplainFactory extends Factory
+class ComplaintFactory extends Factory
 {
     public function definition(): array
     {
@@ -41,7 +41,7 @@ class ComplainFactory extends Factory
             ]),
 
             'issue_type' => fake()->randomElement([
-                'complaint',
+                'complaintt',
                 'suggestion',
                 'technical_issue',
                 'billing',

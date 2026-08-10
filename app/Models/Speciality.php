@@ -23,9 +23,6 @@ class Speciality extends Model
 
     public function clinics()
     {
-        return $this->belongsToMany(
-            Clinic::class,
-            'clinic_specialities'
-        );
+        return $this->belongsToMany(Clinic::class);
     }
 }

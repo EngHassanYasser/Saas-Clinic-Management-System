@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Enums\RoleType;
-use App\Events\UserCreated;
+use App\Enums\EnRoleType;use App\Events\UserCreated;
 use App\Http\Controllers\Controller;
 use App\Models\Clinic;
 use App\Models\User;
@@ -53,7 +52,7 @@ class RegisteredUserController extends Controller
                 'user_name' => User::generateUniqueUsername($request->name),
             ]);
 
-            if ($user->type === RoleType::CLINIC) {
+            if ($user->type ===EnRoleType::CLINIC) {
                 Clinic::create([
                     'owner_id' => $user->id,
                     'name' => $user->name,

@@ -1,29 +1,29 @@
 export default {
-    editComplain(complaint) {
-        this.currentComplaint = complaint;
+    editComplaint(complaintt) {
+        this.currentComplaintt = complaintt;
         this.mode='update';
         this.showModel=true;
     },
-     addComplain() {
-        this.currentComplaint = null;
+     addComplaint() {
+        this.currentComplaintt = null;
         this.mode='add';
         this.showModel=true;
     },
-    confirmDelete(complaint) {
-        this.deleteComplaint = complaint;
+    confirmDelete(complaintt) {
+        this.deleteComplaintt = complaintt;
         this.deleteModal = true;
     },
 
     doDelete() {
-        this.complaints = this.complaints.filter(
-            (c) => c.id !== this.deleteComplaint.id,
+        this.complaintts = this.complaintts.filter(
+            (c) => c.id !== this.deleteComplaintt.id,
         );
 
         this.deleteModal = false;
-        this.deleteComplaint = null;
+        this.deleteComplaintt = null;
     },
 
     changeStatus(status) {
-        this.currentComplaint.status = status;
+        this.currentComplaintt.status = status;
     },
 };

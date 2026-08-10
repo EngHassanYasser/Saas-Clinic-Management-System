@@ -6,8 +6,8 @@ import Filters from "./Filters";
 import GlobalHelpers from "../Global/Helpers";
 import GlobalState from '../Global/State';
 
-export function ComplaintApp(serverData) {
-    const Complains = {
+export function ComplainttApp(serverData) {
+    const Complaints = {
         ...State(serverData),
         ...Actions,
         ...Helpers,
@@ -16,9 +16,9 @@ export function ComplaintApp(serverData) {
         ...GlobalState,
     };
     Object.defineProperties(
-        Complains,
+        Complaints,
         Object.getOwnPropertyDescriptors(Getters),
     );
 
-    return Complains;
+    return Complaints;
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Doctor;
 
+use App\DTOs\Services\Doctor\StoreDoctorDTO;
+use App\DTOs\Services\Doctor\UpdateDoctorDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\doctor\StoreDoctorRequest;
 use App\Http\Requests\doctor\UpdateDoctorRequest;
@@ -15,7 +17,7 @@ use Illuminate\Support\Facades\Concurrency;
 class DoctorController extends Controller
 {
     public function __construct(
-        private DoctorService $doctorService,
+        private DoctorService $medicalService,
         private DoctorQueryService $doctorQueryService,
         private DoctorStatisticsService $doctorStatisticsService,
         private SpecialityQueryService $specialityQueryService,
@@ -35,11 +37,12 @@ class DoctorController extends Controller
         return view('doctors.index', compact('doctors', 'specialities', 'stats'));
     }
 
-    public function store(StoreDoctorRequest $request, DoctorService $doctorService)
+    public function store(StoreDoctorRequest $request, DoctorService $medicalService)
     {
+        $dto=StoreDoctorDTO::fromRequest($request->validated());
         $clinicId = $this->tenantContext->id();
 
-        $doctorService->add($request->validated(), $clinicId);
+        $medicalService->add($dto, $clinicId);
 
         return redirect()
             ->route('doctors.index')
@@ -49,7 +52,8 @@ class DoctorController extends Controller
     public function update(UpdateDoctorRequest $request, int $doctorId)
     {
         $clinicId = $this->tenantContext->id();
-        $this->doctorService->update($request->validated(), $doctorId, $clinicId);
+        $dto=UpdateDoctorDTO::fromRequest($request->validated());
+        $this->medicalService->update($dto, $doctorId, $clinicId);
 
         return redirect()
             ->route('doctors.index')
@@ -59,7 +63,7 @@ class DoctorController extends Controller
     public function destroy(int $doctorId)
     {
         $clinicId = $this->tenantContext->id();
-        $this->doctorService->deleteById($doctorId, $clinicId);
+        $this->medicalService->deleteById($doctorId, $clinicId);
 
         return redirect()->route('doctors.index')->with('message', 'doctor deleted successfully');
     }

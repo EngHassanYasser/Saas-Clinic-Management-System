@@ -1,7 +1,6 @@
 <?php
 
-use App\Enums\RoleType;
-use App\Models\Appointment;
+use App\Enums\EnRoleType;use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\User;
 use App\Services\Appointment\AppointmentQueryService;
@@ -14,7 +13,7 @@ beforeEach(function () {
 it('returns appointment for clinic owner when appointment belongs to his clinic', function () {
 
     $clinicOwner = User::factory()->create([
-        'type' => RoleType::CLINIC,
+        'type' =>EnRoleType::CLINIC,
     ]);
 
     $clinic = Clinic::factory()->create([
@@ -39,7 +38,7 @@ it('returns appointment for clinic owner when appointment belongs to his clinic'
 it('does not return appointment from another clinic for clinic owner', function () {
 
     $clinicOwner = User::factory()->create([
-        'type' => RoleType::CLINIC,
+        'type' =>EnRoleType::CLINIC,
     ]);
 
     $clinic = Clinic::factory()->create([
@@ -65,7 +64,7 @@ it('does not return appointment from another clinic for clinic owner', function 
 it('returns appointment for patient when appointment belongs to patient', function () {
 
     $patient = User::factory()->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
 
     $appointment = Appointment::factory()->create([
@@ -86,11 +85,11 @@ it('returns appointment for patient when appointment belongs to patient', functi
 it('does not return appointment for another patient', function () {
 
     $patient = User::factory()->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
 
     $otherPatient = User::factory()->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
 
     $appointment = Appointment::factory()->create([
@@ -110,7 +109,7 @@ it('does not return appointment for another patient', function () {
 it('throws exception when appointment does not exist', function () {
 
     $patient = User::factory()->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
 
     $service = app(AppointmentQueryService::class);
@@ -126,7 +125,7 @@ it('throws exception when appointment does not exist', function () {
 it('does not return appointment for clinic owner without clinic', function () {
 
     $clinicOwner = User::factory()->create([
-        'type' => RoleType::CLINIC,
+        'type' =>EnRoleType::CLINIC,
     ]);
 
     $appointment = Appointment::factory()->create();

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\SubscriptionStatus;
+use App\Enums\EnSubscriptionStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,7 +22,7 @@ class Subscription extends Model
        protected function casts(): array
     {
         return [
-            'status' => SubscriptionStatus::class,
+            'status' => EnSubscriptionStatus::class,
         ];
     }
 

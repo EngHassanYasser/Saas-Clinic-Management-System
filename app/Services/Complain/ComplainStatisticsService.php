@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Services\Complain;
+namespace App\Services\Complaint;
 
-use App\Models\Complain;
+use App\Models\Complaint;
 use Illuminate\Support\Facades\Cache;
 
-class ComplainStatisticsService
+class ComplaintStatisticsService
 {
     public function getStatistics(int $clinicId): array
     {
         return Cache::remember(
-            "complains.statistics.clinic.{$clinicId}",
+            "complaintts.statistics.clinic.{$clinicId}",
             now()->addMinutes(5),
             function () use ($clinicId) {
-                $statistics = Complain::where('clinic_id', $clinicId)
+                $statistics = Complaint::where('clinic_id', $clinicId)
                     ->selectRaw("
                     COUNT(*) as total,
                     SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,

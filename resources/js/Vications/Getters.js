@@ -2,7 +2,7 @@ export default {
 
     get filteredVacations() {
 
-        const vacations = this.vications?.data ?? [];
+        const vacations = this.vacations?.data ?? [];
 
         return vacations.filter(v => {
 
@@ -26,23 +26,23 @@ export default {
     },
 
     get totalVacations() {
-        return this.vications?.total ?? 0;
+        return this.vacations?.total ?? 0;
     },
 
     get activeCount() {
-        return (this.vications?.data ?? [])
+        return (this.vacations?.data ?? [])
             .filter(v => v.status === "active")
             .length;
     },
 
     get upcomingCount() {
-        return (this.vications?.data ?? [])
+        return (this.vacations?.data ?? [])
             .filter(v => v.status === "upcoming")
             .length;
     },
 
     get endedCount() {
-        return (this.vications?.data ?? [])
+        return (this.vacations?.data ?? [])
             .filter(v => v.status === "ended")
             .length;
     }

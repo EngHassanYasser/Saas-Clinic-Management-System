@@ -4,7 +4,7 @@ use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\DoctorService;
 use App\Models\Doctor;
-use App\Models\Doctor_service_price;
+use App\Models\Clinic_doctor_medicalService;
 use App\Models\User;
 use App\Services\Appointment\AppointmentQueryService;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -61,7 +61,7 @@ it('loads appointment relations correctly', function () {
         'patient_id' => $patient->id,
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic->id,
-        'doctorService_id' => $service->id,
+        'medicalService_id' => $service->id,
     ]);
 
     $result = $this->service->getAppointmentsBy(
@@ -91,10 +91,10 @@ it('returns correct service price based on doctor clinic and service', function 
 
     $service = DoctorService::factory()->create();
 
-    Doctor_service_price::create([
+    Clinic_doctor_medicalService::create([
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic->id,
-        'doctorService_id' => $service->id,
+        'medicalService_id' => $service->id,
         'description' => 'this is mock description',
         'price' => 500,
     ]);
@@ -102,7 +102,7 @@ it('returns correct service price based on doctor clinic and service', function 
     $appointment = Appointment::factory()->create([
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic->id,
-        'doctorService_id' => $service->id,
+        'medicalService_id' => $service->id,
     ]);
 
     $result = $this->service->getAppointmentsBy(
@@ -122,10 +122,10 @@ it('does not return wrong service price', function () {
 
     $service = DoctorService::factory()->create();
 
-    Doctor_service_price::create([
+    Clinic_doctor_medicalService::create([
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic->id,
-        'doctorService_id' => $service->id,
+        'medicalService_id' => $service->id,
         'description' => 'this is mock description',
         'price' => 500,
     ]);
@@ -135,7 +135,7 @@ it('does not return wrong service price', function () {
     Appointment::factory()->create([
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic->id,
-        'doctorService_id' => $otherService->id,
+        'medicalService_id' => $otherService->id,
     ]);
 
     $result = $this->service->getAppointmentsBy(
@@ -166,7 +166,7 @@ it('paginates appointments only for requested patient', function () {
             'patient_id' => $patient->id,
             'clinic_id' => $clinic->id,
             'doctor_id' => $doctor->id,
-            'doctorService_id' => $service->id,
+            'medicalService_id' => $service->id,
         ]);
 
     Appointment::factory()
@@ -175,7 +175,7 @@ it('paginates appointments only for requested patient', function () {
             'patient_id' => $otherPatient->id,
             'clinic_id' => $clinic->id,
             'doctor_id' => $doctor->id,
-            'doctorService_id' => $service->id,
+            'medicalService_id' => $service->id,
         ]);
 
     $result = $this->service->getAppointmentsBy(

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\vications;
+namespace App\Http\Requests\vacations;
 
-use App\Enums\VicationStatus;
+use App\Enums\EnVacationStatus;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
-class StoreVicationsRequest extends FormRequest
+class StoreVacationsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,11 +25,11 @@ class StoreVicationsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'doctor_id' => ['required', 'integer', 'exists:doctors,id'],
+            'doctorId' => ['required', 'integer', 'exists:doctors,id'],
 
-            'start_date' => ['required', 'date'],
+            'startDate' => ['required', 'date'],
 
-            'end_date' => [
+            'endDate' => [
                 'required',
                 'date',
                 'after_or_equal:start_date',
@@ -43,7 +43,7 @@ class StoreVicationsRequest extends FormRequest
 
             'status' => [
                 'required',
-                new Enum(VicationStatus::class),
+                new Enum(EnVacationStatus::class),
             ],
         ];
     }

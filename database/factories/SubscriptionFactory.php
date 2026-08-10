@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Enums\SubscriptionStatus;
 use App\Models\Clinic;
 use App\Models\Plan;
 use App\Models\Subscription;

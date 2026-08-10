@@ -52,7 +52,7 @@ class UpdateClinicRequest extends FormRequest
                     ->ignore($clinic->id),
             ],
 
-            'city_id' => [
+            'cityId' => [
                 'required',
                 'integer',
                 'exists:cities,id',
@@ -63,10 +63,10 @@ class UpdateClinicRequest extends FormRequest
                 'mimes:jpg,jpeg,png,webp',
                 'max:5120',
             ],
-            'work_days' => ['required', 'array', 'min:1'],
-            'work_days.*' => ['integer', 'exists:days,id'],
-            'open_time' => ['required', 'date_format:H:i:s'],
-            'close_time' => ['required', 'date_format:H:i:s'],
+            'workDays' => ['required', 'array', 'min:1'],
+            'workDays.*' => ['integer', 'exists:days,id'],
+            'openTime' => ['required', 'date_format:H:i:s'],
+            'closeTime' => ['required', 'date_format:H:i:s'],
         ];
     }
 }

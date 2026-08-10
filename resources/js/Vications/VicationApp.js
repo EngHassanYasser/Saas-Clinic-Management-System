@@ -5,8 +5,8 @@ import Actions from "./Actions";
 import GlobalHelpers from "../Global/Helpers";
 import Api from "./Api";
 
-export function vicationApp(serverData = {}) {
-    const Vication = {
+export function vacationApp(serverData = {}) {
+    const Vacation = {
         ...State(serverData),
         ...Helpers,
         ...Actions,
@@ -14,9 +14,9 @@ export function vicationApp(serverData = {}) {
         ...Api,
     };
      Object.defineProperties(
-        Vication,
+        Vacation,
         Object.getOwnPropertyDescriptors(Getters),
     );
 
-    return Vication;
+    return Vacation;
 }

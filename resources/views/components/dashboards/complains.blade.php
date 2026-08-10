@@ -7,7 +7,7 @@
          </div>
          <div class="flex flex-col gap-3">
              @php
-                 $complaints = [
+                 $complaintts = [
                      [
                          'title' => 'تأخر موعد أكثر من ساعة',
                          'patient' => 'أحمد محمد',
@@ -42,16 +42,16 @@
                      ],
                  ];
              @endphp
-             @foreach ($complaints as $complaint)
+             @foreach ($complaintts as $complaintt)
                  <div class="flex items-start gap-3 p-3 rounded-lg border border-gray-100">
-                     <div class="w-2 h-2 rounded-full {{ $complaint['dot'] }} mt-1.5 flex-shrink-0"></div>
+                     <div class="w-2 h-2 rounded-full {{ $complaintt['dot'] }} mt-1.5 flex-shrink-0"></div>
                      <div class="flex-1">
                          <div class="flex justify-between items-center mb-1">
-                             <p class="text-sm font-medium text-gray-800">{{ $complaint['title'] }}</p>
+                             <p class="text-sm font-medium text-gray-800">{{ $complaintt['title'] }}</p>
                              <span
-                                 class="text-xs px-2 py-0.5 rounded-full {{ $complaint['badge'] }}">{{ $complaint['status'] }}</span>
+                                 class="text-xs px-2 py-0.5 rounded-full {{ $complaintt['badge'] }}">{{ $complaintt['status'] }}</span>
                          </div>
-                         <p class="text-xs text-gray-400">{{ $complaint['patient'] }} — {{ $complaint['time'] }}</p>
+                         <p class="text-xs text-gray-400">{{ $complaintt['patient'] }} — {{ $complaintt['time'] }}</p>
                      </div>
                  </div>
              @endforeach

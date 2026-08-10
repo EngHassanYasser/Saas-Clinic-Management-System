@@ -28,11 +28,11 @@ class Doctor extends Model implements HasMedia
      }
      public function servicePrices()
      {
-          return $this->hasMany(doctor_service_price::class);
+          return $this->hasMany(Clinic_doctor_medicalService::class);
      }
      public function clinics()
      {
-          return $this->belongsToMany(Clinic::class, 'clinic_doctors', 'doctor_id', 'clinic_id')->withPivot('is_active');
+          return $this->belongsToMany(Clinic::class)->withPivot('is_active');
      }
      public function schedules()
      {
@@ -41,7 +41,7 @@ class Doctor extends Model implements HasMedia
      public function appointments() {
           return $this->hasMany(appointment::class);
      }
-     public function complains() {
-          return $this->hasMany(complain::class);
+     public function complaintts() {
+          return $this->hasMany(complaint::class);
      }
 }

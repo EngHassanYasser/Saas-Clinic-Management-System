@@ -2,13 +2,13 @@
 
 namespace App\Services\Appointment;
 
-use App\Enums\AppointmentStatus;
+use App\Enums\EnAppointmentStatus;
 use App\Exceptions\UnauthorizedException;
 use App\Models\Appointment;
 
 class AppointmentStatusService
 {
-    public function changeStatus(Appointment $appointment, AppointmentStatus $status): bool
+    public function changeStatus(Appointment $appointment, EnAppointmentStatus $status): bool
     {
         $this->authorizeStatusChange($appointment, $status);
 
@@ -19,7 +19,7 @@ class AppointmentStatusService
 
     private function authorizeStatusChange(
         Appointment $appointment,
-        AppointmentStatus $status,
+        EnAppointmentStatus $status,
     ): void {
         if (
             ! $this->canPatientChangeStatus($appointment->status, $status)
@@ -30,36 +30,36 @@ class AppointmentStatusService
     }
 
     private function canClinicChangeStatus(
-        AppointmentStatus $currentStatus,
-        AppointmentStatus $newStatus
+        EnAppointmentStatus $currentStatus,
+        EnAppointmentStatus $newStatus
     ): bool {
         return match ($currentStatus) {
-            AppointmentStatus::PENDING => in_array($newStatus, [
-                AppointmentStatus::CONFIRMED,
-                AppointmentStatus::CANCELLED,
+            EnAppointmentStatus::PENDING => in_array($newStatus, [
+                EnAppointmentStatus::CONFIRMED,
+                EnAppointmentStatus::CANCELLED,
             ]),
 
-            AppointmentStatus::CONFIRMED => in_array($newStatus, [
-                AppointmentStatus::IN_PROGRESS,
-                AppointmentStatus::CANCELLED,
-                AppointmentStatus::NO_SHOW,
-                AppointmentStatus::RESCHEDULED,
+            EnAppointmentStatus::CONFIRMED => in_array($newStatus, [
+                EnAppointmentStatus::IN_PROGRESS,
+                EnAppointmentStatus::CANCELLED,
+                EnAppointmentStatus::NO_SHOW,
+                EnAppointmentStatus::RESCHEDULED,
             ]),
 
-            AppointmentStatus::IN_PROGRESS => $newStatus === AppointmentStatus::COMPLETED,
+            EnAppointmentStatus::IN_PROGRESS => $newStatus === EnAppointmentStatus::COMPLETED,
 
             default => false,
         };
     }
 
     private function canPatientChangeStatus(
-        AppointmentStatus $currentStatus,
-        AppointmentStatus $newStatus
+        EnAppointmentStatus $currentStatus,
+        EnAppointmentStatus $newStatus
     ): bool {
         return match ($currentStatus) {
-            AppointmentStatus::PENDING => $newStatus === AppointmentStatus::CANCELLED,
+            EnAppointmentStatus::PENDING => $newStatus === EnAppointmentStatus::CANCELLED,
 
-            AppointmentStatus::CONFIRMED => $newStatus === AppointmentStatus::CANCELLED,
+            EnAppointmentStatus::CONFIRMED => $newStatus === EnAppointmentStatus::CANCELLED,
 
             default => false,
         };

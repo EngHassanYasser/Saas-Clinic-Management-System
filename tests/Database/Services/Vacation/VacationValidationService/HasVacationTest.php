@@ -2,7 +2,7 @@
 
 use App\Models\Clinic;
 use App\Models\Doctor;
-use App\Models\Vication;
+use App\Models\Vacation;
 use App\Services\Vacation\VacationValidationService;
 
 beforeEach(function () {
@@ -30,7 +30,7 @@ function createValidationVacation(
     string $status = 'active'
 ) {
 
-    return Vication::factory()->create([
+    return Vacation::factory()->create([
 
         'doctor_id' => $doctorId,
 
@@ -346,7 +346,7 @@ it('handles multiple vacations correctly', function () {
 
 
 
-    Vication::factory()
+    Vacation::factory()
         ->count(10)
         ->create([
             'doctor_id' => $doctor->id,
@@ -392,7 +392,7 @@ it('works correctly with many vacations', function () {
 
 
 
-    Vication::factory()
+    Vacation::factory()
         ->count(200)
         ->create([
             'doctor_id' => $doctor->id,

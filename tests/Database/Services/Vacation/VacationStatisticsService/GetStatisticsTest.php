@@ -1,9 +1,9 @@
 <?php
 
-use App\Enums\VicationStatus;
+use App\Enums\VacationStatus;
 use App\Models\Clinic;
 use App\Models\Doctor;
-use App\Models\Vication;
+use App\Models\Vacation;
 use App\Services\Vacation\VacationStatisticsService;
 
 beforeEach(function () {
@@ -31,7 +31,7 @@ function createVacationForClinic(
         $clinic->id,
     ]);
 
-    return Vication::factory()->create([
+    return Vacation::factory()->create([
 
         'clinic_id' => $clinic->id,
 
@@ -84,14 +84,14 @@ it('returns correct total vacations count', function () {
     createVacationForClinic(
         $clinic,
         $doctor,
-                VicationStatus::UPCOMING->value
+                VacationStatus::UPCOMING->value
 
     );
 
     createVacationForClinic(
         $clinic,
         $doctor,
-               VicationStatus::ACTIVE->value
+               VacationStatus::ACTIVE->value
 
     );
 
@@ -118,27 +118,27 @@ it('counts each vacation status correctly', function () {
     createVacationForClinic(
         $clinic,
         $doctor,
-        VicationStatus::UPCOMING->value
+        VacationStatus::UPCOMING->value
     );
 
     createVacationForClinic(
         $clinic,
         $doctor,
-               VicationStatus::UPCOMING->value
-
-    );
-
-    createVacationForClinic(
-        $clinic,
-        $doctor,
-               VicationStatus::ACTIVE->value
+               VacationStatus::UPCOMING->value
 
     );
 
     createVacationForClinic(
         $clinic,
         $doctor,
-               VicationStatus::ENDED->value
+               VacationStatus::ACTIVE->value
+
+    );
+
+    createVacationForClinic(
+        $clinic,
+        $doctor,
+               VacationStatus::ENDED->value
 
     );
 
@@ -178,13 +178,13 @@ it('does not include other clinics vacations', function () {
     createVacationForClinic(
         $clinicOne,
         $doctorOne,
-        VicationStatus::ACTIVE->value
+        VacationStatus::ACTIVE->value
     );
 
     createVacationForClinic(
         $clinicTwo,
         $doctorTwo,
-        VicationStatus::ACTIVE->value
+        VacationStatus::ACTIVE->value
 
     );
 
@@ -214,13 +214,13 @@ it('counts multiple vacations for same doctor', function () {
     createVacationForClinic(
         $clinic,
         $doctor,
-        VicationStatus::UPCOMING->value,
+        VacationStatus::UPCOMING->value,
     );
 
     createVacationForClinic(
         $clinic,
         $doctor,
-        VicationStatus::ENDED->value,
+        VacationStatus::ENDED->value,
     );
 
     $result = $this->service
@@ -319,7 +319,7 @@ it('handles large number of vacations correctly', function () {
 
     $doctor->clinics()->attach($clinic->id);
 
-    Vication::factory()
+    Vacation::factory()
         ->count(200)
         ->create([
             'clinic_id' => $clinic->id,

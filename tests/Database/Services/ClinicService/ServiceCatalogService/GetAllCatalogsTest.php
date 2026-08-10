@@ -262,7 +262,7 @@ it('returns records that actually exist in the database', function () {
     )->toBeTrue();
 
     expect(
-        DB::table('doctorServices')
+        DB::table('medicalServices')
             ->where('id', $catalog->id)
             ->exists()
     )->toBeTrue();
@@ -564,7 +564,7 @@ it('returns only required clinic service columns', function () {
 it('matches the database values exactly', function () {
     $catalog = createCatalog();
 
-    $databaseRow = DB::table('doctorServices')
+    $databaseRow = DB::table('medicalServices')
         ->where('id', $catalog->id)
         ->first();
 

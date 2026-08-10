@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\AppointmentStatus;
+use App\Enums\EnAppointmentStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
     'clinic_id',
     'doctor_id',
     'visit_date',
-    'doctorService_id',
+    'medicalService_id',
 ])]
 class Appointment extends Model
 {
@@ -32,19 +32,19 @@ class Appointment extends Model
     protected function casts(): array
     {
         return [
-            'status' => AppointmentStatus::class,
+            'status' => EnAppointmentStatus::class,
             'visit_date' => 'date',
         ];
     }
 
-    public function doctorServicePrice()
+    public function medicalServicePrice()
     {
-        return $this->hasOne(Doctor_service_price::class);
+        return $this->hasOne(Clinic_doctor_medicalService::class);
     }
 
     public function service()
     {
-        return $this->belongsTo(DoctorService::class, 'doctorService_id');
+        return $this->belongsTo(MedicalService::class);
     }
 
     public function patient()
@@ -69,11 +69,11 @@ class Appointment extends Model
 
     public function appointment_status_logs()
     {
-        return $this->hasMany(appointment_status_log::class);
+        return $this->hasMany(appointmentStatusLog::class);
     }
 
-    public function complains()
+    public function complaintts()
     {
-        return $this->hasMany(complain::class);
+        return $this->hasMany(complaint::class);
     }
 }

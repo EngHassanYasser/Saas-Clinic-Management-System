@@ -2,8 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Enums\RoleType;
-use Closure;
+use App\Enums\EnRoleType;use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,7 +20,7 @@ class RoleMiddleware
         }
 
         $allowedRoles = array_map(
-            fn (string $role) => RoleType::from($role),
+            fn (string $role) =>EnRoleType::from($role),
             $roles
         );
 

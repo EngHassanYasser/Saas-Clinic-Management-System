@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Services\Complain;
+namespace App\Services\Complaint;
 
-use App\Enums\RoleType;
-use App\Models\Complain;
+use App\Enums\EnRoleType;
+use App\Models\Complaint;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
-class ComplainQueryService
+class ComplaintQueryService
 {
-    public function getClinicComplains(User $user): Collection
+    public function getClinicComplaints(User $user): Collection
     {
-        return Complain::select(
+        return Complaint::select(
             'id',
             'clinic_id',
             'user_id',
@@ -27,17 +27,17 @@ class ComplainQueryService
             'resolved_at',
             'updated_at',
             'created_at'
-        )->when($user->type === RoleType::CLINIC, function ($query) use ($user) {
+        )->when($user->type ===EnRoleType::CLINIC, function ($query) use ($user) {
             $query->whereHas('clinic', function ($q) use ($user) {
                 $q->where('owner_id', $user->id);
             });
-        })->when($user->type === RoleType::PATIENT, function ($query) use ($user) {
+        })->when($user->type ===EnRoleType::PATIENT, function ($query) use ($user) {
             $query->where('user_id', $user->id);
         })->with(['patient:id,name', 'doctor:id,name'])
             ->get();
     }
-    public function getById(int $complainId): Complain
+    public function getById(int $complaintId): Complaint
     {
-        return Complain::where('id', $complainId)->firstOrFail();
+        return Complaint::where('id', $complaintId)->firstOrFail();
     }
 }

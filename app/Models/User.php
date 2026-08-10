@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\RoleType;
+use App\Enums\EnRoleType;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -32,20 +32,20 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'type' => RoleType::class,
+            'type' =>EnRoleType::class,
         ];
     }
+
     public function usesDashboardLayout(): bool
     {
         return in_array($this->type, [
-            RoleType::CLINIC->value,
-            RoleType::PATIENT->value,
+           EnRoleType::CLINIC->value,
+           EnRoleType::PATIENT->value,
         ], true);
     }
 
@@ -58,43 +58,46 @@ class User extends Authenticatable
         }
 
         do {
-            $username = $baseUsername . random_int(1000, 9999);
+            $username = $baseUsername.random_int(1000, 9999);
         } while (self::where('user_name', $username)->exists());
 
         return $username;
     }
+
     public function notification_logs()
     {
-        return $this->hasMany(notification_log::class);
+        return $this->hasMany(NotificationLog::class);
     }
+
     public function schedules()
     {
         return $this->hasMany(schedule::class);
     }
+
     public function appointments()
     {
         return $this->hasMany(appointment::class);
     }
-    public function clinics()
+    public function vacations()
     {
-        return $this->belongsToMany(Clinic::class, 'clinic_users', 'user_id', 'clinic_id');
+        return $this->hasMany(vacation::class);
     }
-    public function vications()
-    {
-        return $this->hasMany(vication::class);
-    }
+
     public function notifications()
     {
         return $this->hasMany(notification::class);
     }
+
     public function otps()
     {
         return $this->hasMany(otp::class);
     }
-    public function complains()
+
+    public function complaints()
     {
-        return $this->hasMany(complain::class, 'user_id');
+        return $this->hasMany(complaint::class);
     }
+
     public function city()
     {
         return $this->belongsTo(city::class);

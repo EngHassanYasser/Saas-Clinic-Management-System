@@ -2,7 +2,7 @@
 
 use App\Models\Clinic;
 use App\Models\Doctor;
-use App\Models\Vication;
+use App\Models\Vacation;
 use App\Services\Vacation\VacationQueryService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -22,7 +22,7 @@ beforeEach(function () {
 |--------------------------------------------------------------------------
 */
 
-function createClinicVacation(array $overrides = []): Vication
+function createClinicVacation(array $overrides = []): Vacation
 {
     $clinic = Clinic::factory()->create();
 
@@ -31,7 +31,7 @@ function createClinicVacation(array $overrides = []): Vication
     $doctor->clinics()->attach($clinic->id);
 
 
-    return Vication::factory()->create(array_merge([
+    return Vacation::factory()->create(array_merge([
         'doctor_id' => $doctor->id,
         'start_date' => now()->toDateString(),
         'end_date' => now()->addDays(5)->toDateString(),
@@ -104,7 +104,7 @@ it('returns only vacations belonging to requested clinic', function () {
     $doctorOne = Doctor::factory()->create();
     $doctorOne->clinics()->attach($clinicOne->id);
 
-    $vacationOne = Vication::factory()->create([
+    $vacationOne = Vacation::factory()->create([
         'doctor_id' => $doctorOne->id,
     ]);
 
@@ -112,7 +112,7 @@ it('returns only vacations belonging to requested clinic', function () {
     $doctorTwo = Doctor::factory()->create();
     $doctorTwo->clinics()->attach($clinicTwo->id);
 
-    $vacationTwo = Vication::factory()->create([
+    $vacationTwo = Vacation::factory()->create([
         'doctor_id' => $doctorTwo->id,
     ]);
 
@@ -226,7 +226,7 @@ it('does not return vacation of doctor not assigned to clinic', function () {
     $doctor = Doctor::factory()->create();
 
 
-    $vacation = Vication::factory()->create([
+    $vacation = Vacation::factory()->create([
         'doctor_id' => $doctor->id,
     ]);
 
@@ -260,12 +260,12 @@ it('returns vacations from all doctors inside clinic', function () {
     $doctorTwo->clinics()->attach($clinic->id);
 
 
-    $vacationOne = Vication::factory()->create([
+    $vacationOne = Vacation::factory()->create([
         'doctor_id' => $doctorOne->id,
     ]);
 
 
-    $vacationTwo = Vication::factory()->create([
+    $vacationTwo = Vacation::factory()->create([
         'doctor_id' => $doctorTwo->id,
     ]);
 
@@ -297,7 +297,7 @@ it('paginates vacations by 10 records', function () {
     $doctor->clinics()->attach($clinic->id);
 
 
-    Vication::factory()
+    Vacation::factory()
         ->count(25)
         ->create([
             'doctor_id' => $doctor->id,
@@ -338,7 +338,7 @@ it('handles many vacations correctly', function () {
     $doctor->clinics()->attach($clinic->id);
 
 
-    Vication::factory()
+    Vacation::factory()
         ->count(100)
         ->create([
             'doctor_id' => $doctor->id,
@@ -366,7 +366,7 @@ it('does not modify database', function () {
     $vacation = createClinicVacation();
 
 
-    $before = Vication::count();
+    $before = Vacation::count();
 
 
     $this->service->getClinicVacations(
@@ -374,7 +374,7 @@ it('does not modify database', function () {
     );
 
 
-    expect(Vication::count())
+    expect(Vacation::count())
         ->toBe($before);
 });
 

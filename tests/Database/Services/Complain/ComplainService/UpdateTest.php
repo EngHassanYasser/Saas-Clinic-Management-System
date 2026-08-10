@@ -1,21 +1,21 @@
 <?php
 
-use App\Enums\ComplainStatus;
+use App\Enums\ComplaintStatus;
 use App\Models\Clinic;
-use App\Models\Complain;
+use App\Models\Complaint;
 use App\Models\Doctor;
-use App\Services\Complain\ComplainService;
+use App\Services\Complaint\ComplaintService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 beforeEach(function () {
-    $this->service = app(ComplainService::class);
+    $this->service = app(ComplaintService::class);
 });
 
-it('updates complain successfully', function () {
+it('updates complaint successfully', function () {
 
     $clinic = Clinic::factory()->create();
     $doctor = Doctor::factory()->create();
 
-    $complain = Complain::factory()->create([
+    $complaint = Complaint::factory()->create([
         'clinic_id' => $clinic->id,
     ]);
 
@@ -26,26 +26,26 @@ it('updates complain successfully', function () {
         'severity' => 'critical',
         'issue_type' => 'medical',
         'description' => 'Updated description',
-        'status' => ComplainStatus::RESOLVED,
+        'status' => ComplaintStatus::RESOLVED,
         'patient_name' => 'Ahmed',
         'resolution_notes' => 'Problem solved',
-    ], $complain->id, $clinic->id);
+    ], $complaint->id, $clinic->id);
 
     expect($result)->toBeTrue();
 
-    $complain->refresh();
+    $complaint->refresh();
 
-    expect($complain->doctor_id)->toBe($doctor->id)
-        ->and($complain->department)->toBe('radiology')
-        ->and($complain->description)->toBe('Updated description')
-        ->and($complain->patient_name)->toBe('Ahmed')
-        ->and($complain->resolution_notes)->toBe('Problem solved');
+    expect($complaint->doctor_id)->toBe($doctor->id)
+        ->and($complaint->department)->toBe('radiology')
+        ->and($complaint->description)->toBe('Updated description')
+        ->and($complaint->patient_name)->toBe('Ahmed')
+        ->and($complaint->resolution_notes)->toBe('Problem solved');
 });
-it('updates complain in database', function () {
+it('updates complaint in database', function () {
 
     $clinic = Clinic::factory()->create();
 
-    $complain = Complain::factory()->create([
+    $complaint = Complaint::factory()->create([
         'clinic_id' => $clinic->id,
     ]);
 
@@ -56,19 +56,19 @@ it('updates complain in database', function () {
         'severity' => 'medium',
         'issue_type' => 'billing',
         'description' => 'Updated',
-        'status' => ComplainStatus::UNDER_REVIEW,
+        'status' => ComplaintStatus::UNDER_REVIEW,
         'patient_name' => 'Ali',
         'resolution_notes' => 'Checking',
-    ], $complain->id, $clinic->id);
+    ], $complaint->id, $clinic->id);
 
-    $this->assertDatabaseHas('complains', [
-        'id' => $complain->id,
+    $this->assertDatabaseHas('complaintts', [
+        'id' => $complaint->id,
         'department' => 'pharmacy',
         'description' => 'Updated',
         'patient_name' => 'Ali',
     ]);
 });
-it('throws exception when complain does not exist', function () {
+it('throws exception when complaint does not exist', function () {
 
     $clinic = Clinic::factory()->create();
 
@@ -77,16 +77,16 @@ it('throws exception when complain does not exist', function () {
         'visit_date' => today(),
         'severity' => 'low',
         'issue_type' => 'other',
-        'status' => ComplainStatus::PENDING,
+        'status' => ComplaintStatus::PENDING,
     ], 999999, $clinic->id);
 
 })->throws(ModelNotFoundException::class);
-it('cannot update complain that belongs to another clinic', function () {
+it('cannot update complaint that belongs to another clinic', function () {
 
     $clinic1 = Clinic::factory()->create();
     $clinic2 = Clinic::factory()->create();
 
-    $complain = Complain::factory()->create([
+    $complaint = Complaint::factory()->create([
         'clinic_id' => $clinic1->id,
     ]);
 
@@ -95,8 +95,8 @@ it('cannot update complain that belongs to another clinic', function () {
         'visit_date' => today(),
         'severity' => 'medium',
         'issue_type' => 'other',
-        'status' => ComplainStatus::PENDING,
-    ], $complain->id, $clinic2->id);
+        'status' => ComplaintStatus::PENDING,
+    ], $complaint->id, $clinic2->id);
 
 })->throws(ModelNotFoundException::class);
 it('sets nullable fields to null when omitted', function () {
@@ -105,7 +105,7 @@ it('sets nullable fields to null when omitted', function () {
 
     $doctor = Doctor::factory()->create();
 
-    $complain = Complain::factory()->create([
+    $complaint = Complaint::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
         'description' => 'Old',
@@ -118,24 +118,24 @@ it('sets nullable fields to null when omitted', function () {
         'visit_date' => today(),
         'severity' => 'medium',
         'issue_type' => 'medical',
-        'status' => ComplainStatus::PENDING,
-    ], $complain->id, $clinic->id);
+        'status' => ComplaintStatus::PENDING,
+    ], $complaint->id, $clinic->id);
 
-    $complain->refresh();
-        expect($complain->doctor_id)->toBeNull()
-    ->and($complain->description)->toBe('Old')
-    ->and($complain->patient_name)->toBeNull()
-    ->and($complain->resolution_notes)->toBeNull();
+    $complaint->refresh();
+        expect($complaint->doctor_id)->toBeNull()
+    ->and($complaint->description)->toBe('Old')
+    ->and($complaint->patient_name)->toBeNull()
+    ->and($complaint->resolution_notes)->toBeNull();
 });
-it('updates only requested complain', function () {
+it('updates only requested complaint', function () {
 
     $clinic = Clinic::factory()->create();
 
-    $first = Complain::factory()->create([
+    $first = Complaint::factory()->create([
         'clinic_id' => $clinic->id,
     ]);
 
-    $second = Complain::factory()->create([
+    $second = Complaint::factory()->create([
         'clinic_id' => $clinic->id,
         'description' => 'Second',
     ]);
@@ -146,7 +146,7 @@ it('updates only requested complain', function () {
         'severity' => 'critical',
         'issue_type' => 'medical',
         'description' => 'Updated',
-        'status' => ComplainStatus::RESOLVED,
+        'status' => ComplaintStatus::RESOLVED,
     ], $first->id, $clinic->id);
 
     expect($second->fresh()->description)

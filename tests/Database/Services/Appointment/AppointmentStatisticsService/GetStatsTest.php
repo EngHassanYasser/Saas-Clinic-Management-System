@@ -1,7 +1,6 @@
 <?php
 
-use App\Enums\RoleType;
-use App\Models\Appointment;
+use App\Enums\EnRoleType;use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\User;
 use App\Services\Appointment\AppointmentStatisticsService;
@@ -12,7 +11,7 @@ beforeEach(function () {
 it('returns patient statistics when user type is patient', function () {
 
     $patient = User::factory()->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
 
     Appointment::factory()->count(2)->pending()->create([
@@ -38,7 +37,7 @@ it('returns patient statistics when user type is patient', function () {
 it('returns clinic statistics when user type is clinic', function () {
 
     $owner = User::factory()->create([
-        'type' => RoleType::CLINIC,
+        'type' =>EnRoleType::CLINIC,
     ]);
 
     $clinic = Clinic::factory()->create([
@@ -64,7 +63,7 @@ it('returns clinic statistics when user type is clinic', function () {
 it('does not include other clinics appointments', function () {
 
     $owner = User::factory()->create([
-        'type' => RoleType::CLINIC,
+        'type' =>EnRoleType::CLINIC,
     ]);
 
     $clinic = Clinic::factory()->create([
@@ -89,7 +88,7 @@ it('does not include other clinics appointments', function () {
 it('returns empty appointment when role is not supported', function () {
 
     $user = User::factory()->create([
-        'type' => RoleType::SUPER_ADMIN,
+        'type' =>EnRoleType::SUPER_ADMIN,
     ]);
 
     $result = $this->service->getStats($user);

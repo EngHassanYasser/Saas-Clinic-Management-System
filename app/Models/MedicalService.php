@@ -16,14 +16,14 @@ class MedicalService extends Model
     public $timestamps = false;
     public function servicePrices()
     {
-        return $this->hasMany(doctor_service_price::class);
+        return $this->hasMany(Clinic_doctor_medicalService::class);
     }
     public function appointments()
     {
-        return $this->hasMany(appointment::class, 'doctorService_id');
+        return $this->hasMany(appointment::class);
     }
-    public function doctorServicePrice()
+    public function medicalServicePrice()
     {
-        return $this->belongsTo(doctor_service_price::class);
+        return $this->belongsTo(Clinic_doctor_medicalService::class);
     }
 }

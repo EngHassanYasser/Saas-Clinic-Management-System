@@ -2,8 +2,7 @@
 
 namespace App\Policies;
 
-use App\Enums\RoleType;
-use App\Models\MedicalService as MedicalServiceModel;
+use App\Enums\EnRoleType;use App\Models\MedicalService as MedicalServiceModel;
 use App\Models\User;
 
 class MedicalService
@@ -12,11 +11,11 @@ class MedicalService
     {
         // return $user->clinics()
         //     ->servicePrices()
-        //     ->doctorService()
+        //     ->medicalService()
         //     ->whereKey($clinicServiceId)->exists();
 
         return $user->clinics()
-        ->whereHas('servicePrices.doctorService',
+        ->whereHas('servicePrices.medicalService',
         fn($query)=>$query->whereKey($clinicServiceId))->exists();
 
     }
@@ -27,9 +26,9 @@ class MedicalService
     public function viewAny(User $user): bool
     {
         return match ($user->role) {
-            RoleType::PATIENT,
-            RoleType::CLINIC,
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::PATIENT,
+           EnRoleType::CLINIC,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -41,11 +40,11 @@ class MedicalService
     public function view(User $user, MedicalServiceModel $clinicService): bool
     {
         return match ($user->role) {
-            RoleType::PATIENT => true,
+           EnRoleType::PATIENT => true,
 
-            RoleType::CLINIC => $this->isOwnerOfTheService($user, $clinicService->id),
+           EnRoleType::CLINIC => $this->isOwnerOfTheService($user, $clinicService->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -57,8 +56,8 @@ class MedicalService
     public function create(User $user): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC,
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::CLINIC,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -70,9 +69,9 @@ class MedicalService
     public function update(User $user, MedicalServiceModel $clinicService): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC => $this->isOwnerOfTheService($user, $clinicService->id),
+           EnRoleType::CLINIC => $this->isOwnerOfTheService($user, $clinicService->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -84,9 +83,9 @@ class MedicalService
     public function delete(User $user, MedicalServiceModel $clinicService): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC => $this->isOwnerOfTheService($user, $clinicService->id),
+           EnRoleType::CLINIC => $this->isOwnerOfTheService($user, $clinicService->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };

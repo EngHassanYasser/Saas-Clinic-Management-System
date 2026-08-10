@@ -2,8 +2,8 @@
 
 namespace App\Services\Plan;
 
-use App\DTOs\Services\Plan\PlanService\StorePlanDTO;
-use App\DTOs\Services\Plan\PlanService\UpdatePlanDTO;
+use App\DTOs\Services\Plan\StorePlanDTO;
+use App\DTOs\Services\Plan\UpdatePlanDTO;
 use App\Models\Plan;
 
 class PlanService

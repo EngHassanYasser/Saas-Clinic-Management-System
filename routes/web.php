@@ -7,11 +7,11 @@ Route::get('/', function () {
 })->name('home');
 require __DIR__ . '/web/Appointment.php';
 require __DIR__ . '/web/Doctor.php';
-require __DIR__ . '/web/Clinic_service.php';
+require __DIR__ . '/web/MedicalService.php';
 require __DIR__ . '/web/Schedule.php';
-require __DIR__ . '/web/Vication.php';
+require __DIR__ . '/web/Vacation.php';
 require __DIR__ . '/web/Subscription.php';
-require __DIR__ . '/web/Complain.php';
+require __DIR__ . '/web/Complaint.php';
 require __DIR__ . '/web/Clinic.php';
 require __DIR__ . '/web/Add.php';
 require __DIR__ . '/web/Dashboard.php';

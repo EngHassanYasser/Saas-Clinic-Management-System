@@ -2,9 +2,8 @@
 
 namespace App\Listeners;
 
-use App\Enums\RoleType;
 use App\Events\UserCreated;
-use App\Models\Clinic;
+
 class CreateClinic
 {
     /**
@@ -18,8 +17,5 @@ class CreateClinic
     /**
      * Handle the event.
      */
-    public function handle(UserCreated $event): void
-    {
-       
-    }
+    public function handle(UserCreated $event): void {}
 }

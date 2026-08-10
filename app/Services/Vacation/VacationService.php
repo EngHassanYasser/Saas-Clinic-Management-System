@@ -2,62 +2,64 @@
 
 namespace App\Services\Vacation;
 
-use App\Exceptions\HasVicationException;
-use App\Models\Vication;
+use App\DTOs\Services\Vacation\StoreVacationDTO;
+use App\DTOs\Services\Vacation\UpdateVacationDTO;
+use App\Exceptions\HasVacationException;
+use App\Models\Vacation;
 use Illuminate\Support\Facades\DB;
 
 class VacationService
 {
     public function __construct(private VacationValidationService $vactionValidationService) {}
 
-    public function add(array $data, int $clinicId): Vication
+    public function add(StoreVacationDTO $dto, int $clinicId): Vacation
     {
-        $hasVication = $this->vactionValidationService->hasVacation($data['doctor_id'], $clinicId);
-        if ($hasVication) {
-            throw new HasVicationException('thre are alread vication for this doctor');
+        $hasVacation = $this->vactionValidationService->hasVacation($dto->doctorId, $clinicId);
+        if ($hasVacation) {
+            throw new HasVacationException('thre are alread vacation for this doctor');
         }
 
-        return Vication::create([
+        return Vacation::create([
             'clinic_id' => $clinicId,
-            'doctor_id' => $data['doctor_id'],
-            'start_date' => $data['start_date'],
-            'end_date' => $data['end_date'],
-            'reason' => $data['reason'],
-            'status' => $data['status'],
+            'doctor_id' => $dto->doctorId,
+            'start_date' => $dto->StartDate,
+            'end_date' => $dto->endDate,
+            'reason' => $dto->reason,
+            'status' => $dto->status,
         ]);
     }
 
-    public function update(array $data, int $vicationId, int $clinicId): bool
+    public function update(UpdateVacationDTO $dto, int $vacationId, int $clinicId): bool
     {
-        return DB::transaction(function () use ($data, $vicationId, $clinicId) {
+        return DB::transaction(function () use ($dto, $vacationId, $clinicId) {
 
-            $vacation = Vication::lockForUpdate()
+            $vacation = Vacation::lockForUpdate()
                 ->where('clinic_id', $clinicId)
-                ->findOrFail($vicationId);
+                ->findOrFail($vacationId);
 
             if ($this->vactionValidationService->hasVacation(
                 $vacation->doctor_id,
                 $clinicId,
-                $vicationId
+                $vacationId
             )) {
-                throw new HasVicationException(
+                throw new HasVacationException(
                     'there are already vacation for this doctor'
                 );
             }
 
             return $vacation->update([
-                'start_date' => $data['start_date'],
-                'end_date' => $data['end_date'],
-                'reason' => $data['reason'],
-                'status' => $data['status'],
+                'start_date' => $dto->startDate,
+                'end_date' => $dto->endDate,
+                'reason' => $dto->reason,
+                'status' => $dto->status,
             ]);
 
         });
     }
 
-    public function delete(int $vicationId, int $clinicId): bool
+    public function delete(int $vacationId, int $clinicId): bool
     {
-        return Vication::whereKey($vicationId)
+        return Vacation::whereKey($vacationId)
             ->whereRelation('doctor.clinics', 'clinics.id', $clinicId)
             ->firstOrFail()->delete();
     }

@@ -1,21 +1,20 @@
 <?php
 
-use App\Enums\ComplainStatus;
-use App\Enums\RoleType;
-use App\Models\Clinic;
-use App\Models\Complain;
+use App\Enums\ComplaintStatus;
+use App\Enums\EnRoleType;use App\Models\Clinic;
+use App\Models\Complaint;
 use App\Models\Doctor;
 use App\Models\User;
-use App\Services\Complain\ComplainService;
+use App\Services\Complaint\ComplaintService;
 
 beforeEach(function () {
-    $this->service = app(ComplainService::class);
+    $this->service = app(ComplaintService::class);
 });
 
-it('creates complain and assigns patient as owner when user is patient', function () {
+it('creates complaint and assigns patient as owner when user is patient', function () {
 
     $patient = User::factory()->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
 
     $data = [
@@ -23,9 +22,9 @@ it('creates complain and assigns patient as owner when user is patient', functio
         'department_name' => 'reception',
         'visit_date' => now()->toDateString(),
         'severity' => 'high',
-        'issue_type' => 'complaint',
+        'issue_type' => 'complaintt',
         'description' => 'Bad experience',
-        'status' => ComplainStatus::PENDING,
+        'status' => ComplaintStatus::PENDING,
         'patient_name' => 'Ahmed',
     ];
 
@@ -38,11 +37,11 @@ it('creates complain and assigns patient as owner when user is patient', functio
     );
 
     expect($result)
-        ->toBeInstanceOf(Complain::class)
+        ->toBeInstanceOf(Complaint::class)
         ->and($result->user_id)
         ->toBe($patient->id);
 
-    expect(Complain::where([
+    expect(Complaint::where([
         'clinic_id' =>$clinic->id,
         'user_id' => $patient->id,
         'description' => 'Bad experience',
@@ -50,10 +49,10 @@ it('creates complain and assigns patient as owner when user is patient', functio
         ->toBeTrue();
 
 });
-it('creates complain without user when creator is not patient', function () {
+it('creates complaint without user when creator is not patient', function () {
 
     $clinicUser = User::factory()->create([
-        'type' => RoleType::CLINIC,
+        'type' =>EnRoleType::CLINIC,
     ]);
     $clinic = Clinic::factory()->create();
 
@@ -64,7 +63,7 @@ it('creates complain without user when creator is not patient', function () {
         'severity' => 'medium',
         'issue_type' => 'technical_issue',
         'description' => 'Machine problem',
-        'status' => ComplainStatus::PENDING,
+        'status' => ComplaintStatus::PENDING,
         'patient_name' => 'Mohamed',
     ];
 
@@ -78,10 +77,10 @@ it('creates complain without user when creator is not patient', function () {
         ->toBeNull();
 
 });
-it('stores complain data correctly', function () {
+it('stores complaint data correctly', function () {
 
     $patient = User::factory()->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
 
     $clinic = Clinic::factory()->create();
@@ -94,16 +93,16 @@ it('stores complain data correctly', function () {
         'severity' => 'critical',
         'issue_type' => 'medical',
         'description' => 'Medical issue',
-        'status' => ComplainStatus::PENDING,
+        'status' => ComplaintStatus::PENDING,
         'patient_name' => 'Ali',
     ];
 
-    $complain = $this->service->add(
+    $complaint = $this->service->add(
         $data,
         $patient,
         $clinic->id
     );
-    expect($complain->toArray())
+    expect($complaint->toArray())
         ->toMatchArray([
             'clinic_id' => $clinic->id,
             'doctor_id' => $doctor->id,
@@ -116,14 +115,14 @@ it('stores complain data correctly', function () {
         ]);
 
 });
-it('stores complain in database', function () {
+it('stores complaint in database', function () {
 
     $user = User::factory()->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
     $clinic = Clinic::factory()->create();
 
-    $complain = $this->service->add(
+    $complaint = $this->service->add(
         [
             'doctor_id' => null,
             'department_name' => 'pharmacy',
@@ -131,18 +130,18 @@ it('stores complain in database', function () {
             'severity' => 'low',
             'issue_type' => 'suggestion',
             'description' => 'Improve pharmacy',
-            'status' => ComplainStatus::PENDING,
+            'status' => ComplaintStatus::PENDING,
             'patient_name' => 'Test',
         ],
         $user,
         $clinic->id
     );
 
-    expect($complain->exists)
+    expect($complaint->exists)
         ->toBeTrue();
 
-    $this->assertDatabaseHas('complains', [
-        'id' => $complain->id,
+    $this->assertDatabaseHas('complaintts', [
+        'id' => $complaint->id,
         'clinic_id' => $clinic->id,
         'description' => 'Improve pharmacy',
     ]);
@@ -151,7 +150,7 @@ it('stores complain in database', function () {
 it('ignores provided user_id and uses authenticated patient id', function () {
 
     $patient = User::factory()->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
     $clinic = Clinic::factory()->create();
 
@@ -161,26 +160,26 @@ it('ignores provided user_id and uses authenticated patient id', function () {
         'department_name' => 'reception',
         'visit_date' => now()->toDateString(),
         'severity' => 'low',
-        'issue_type' => 'complaint',
+        'issue_type' => 'complaintt',
         'description' => 'test',
-        'status' => ComplainStatus::PENDING,
+        'status' => ComplaintStatus::PENDING,
         'patient_name' => 'Test',
     ];
-    $complain = $this->service->add(
+    $complaint = $this->service->add(
         $data,
         $patient,
         $clinic->id
     );
 
-    expect($complain->user_id)
+    expect($complaint->user_id)
         ->toBe($patient->id)
         ->not->toBe(999);
 
 });
-it('returns created complain model', function () {
+it('returns created complaint model', function () {
 
     $user = User::factory()->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
 
     $clinic = Clinic::factory()->create();
@@ -193,7 +192,7 @@ it('returns created complain model', function () {
             'severity' => 'medium',
             'issue_type' => 'other',
             'description' => 'test',
-            'status' => ComplainStatus::PENDING,
+            'status' => ComplaintStatus::PENDING,
             'patient_name' => 'Test',
         ],
         $user,
@@ -202,6 +201,6 @@ it('returns created complain model', function () {
     );
 
     expect($result)
-        ->toBeInstanceOf(Complain::class);
+        ->toBeInstanceOf(Complaint::class);
 
 });

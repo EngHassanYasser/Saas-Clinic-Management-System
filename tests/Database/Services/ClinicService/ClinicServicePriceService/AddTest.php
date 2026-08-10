@@ -3,7 +3,7 @@
 use App\Models\Clinic;
 use App\Models\DoctorService;
 use App\Models\Doctor;
-use App\Models\Doctor_service_price;
+use App\Models\Clinic_doctor_medicalService;
 use App\Services\ServiceCatalog\DoctorServicePriceService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +30,7 @@ function makeAddDoctorServicePriceContext(): array
 
     $data = [
         'doctor_id' => $doctor->id,
-        'doctorService_id' => $clinicService->id,
+        'medicalService_id' => $clinicService->id,
         'price' => 250.50,
         'description' => 'Initial consultation',
     ];
@@ -49,7 +49,7 @@ function makeAddDoctorServicePriceContext(): array
 |--------------------------------------------------------------------------
 */
 
-it('returns a Doctor_service_price model', function () {
+it('returns a Clinic_doctor_medicalService model', function () {
     $context = makeAddDoctorServicePriceContext();
 
     $result = $this->service->add(
@@ -58,7 +58,7 @@ it('returns a Doctor_service_price model', function () {
     );
 
     expect($result)
-        ->toBeInstanceOf(Doctor_service_price::class);
+        ->toBeInstanceOf(Clinic_doctor_medicalService::class);
 });
 
 /*
@@ -144,13 +144,13 @@ it('stores the provided clinic service id', function () {
         $context['clinic']->id
     );
 
-    expect($result->doctorService_id)
+    expect($result->medicalService_id)
         ->toBe($context['clinicService']->id);
 
     expect(
         DB::table('doctor_service_prices')
             ->where('id', $result->id)
-            ->value('doctorService_id')
+            ->value('medicalService_id')
     )->toBe($context['clinicService']->id);
 });
 
@@ -226,8 +226,8 @@ it('stores all provided fields correctly', function () {
     expect($row->doctor_id)
         ->toBe($context['data']['doctor_id']);
 
-    expect($row->doctorService_id)
-        ->toBe($context['data']['doctorService_id']);
+    expect($row->medicalService_id)
+        ->toBe($context['data']['medicalService_id']);
 
     expect((float) $row->price)
         ->toBe(250.50);
@@ -301,7 +301,7 @@ it('returns the exact database record that was created', function () {
         $context['clinic']->id
     );
 
-    $databaseRecord = Doctor_service_price::find($result->id);
+    $databaseRecord = Clinic_doctor_medicalService::find($result->id);
 
     expect($databaseRecord)
         ->not->toBeNull();
@@ -319,14 +319,14 @@ it('returns the exact database record that was created', function () {
 it('creates exactly one record', function () {
     $context = makeAddDoctorServicePriceContext();
 
-    $before = Doctor_service_price::count();
+    $before = Clinic_doctor_medicalService::count();
 
     $this->service->add(
         $context['data'],
         $context['clinic']->id
     );
 
-    $after = Doctor_service_price::count();
+    $after = Clinic_doctor_medicalService::count();
 
     expect($after)
         ->toBe($before + 1);
@@ -348,14 +348,14 @@ it('creates independent records when called multiple times', function () {
 
     $firstData = [
         'doctor_id' => $doctor->id,
-        'doctorService_id' => $firstDoctorService->id,
+        'medicalService_id' => $firstDoctorService->id,
         'price' => 100.00,
         'description' => 'First price',
     ];
 
     $secondData = [
         'doctor_id' => $doctor->id,
-        'doctorService_id' => $secondDoctorService->id,
+        'medicalService_id' => $secondDoctorService->id,
         'price' => 200.00,
         'description' => 'Second price',
     ];
@@ -379,10 +379,10 @@ it('creates independent records when called multiple times', function () {
     expect($second->clinic_id)
         ->toBe($clinic->id);
 
-    expect($first->doctorService_id)
+    expect($first->medicalService_id)
         ->toBe($firstDoctorService->id);
 
-    expect($second->doctorService_id)
+    expect($second->medicalService_id)
         ->toBe($secondDoctorService->id);
 
     expect((float) $first->price)
@@ -400,10 +400,10 @@ it('creates independent records when called multiple times', function () {
 it('does not modify existing doctor service prices', function () {
     $existing = makeAddDoctorServicePriceContext();
 
-    $existingRecord = Doctor_service_price::factory()->create([
+    $existingRecord = Clinic_doctor_medicalService::factory()->create([
         'clinic_id' => $existing['clinic']->id,
         'doctor_id' => $existing['doctor']->id,
-        'doctorService_id' => $existing['clinicService']->id,
+        'medicalService_id' => $existing['clinicService']->id,
         'price' => 150.00,
         'description' => 'Existing price',
     ]);
@@ -412,7 +412,7 @@ it('does not modify existing doctor service prices', function () {
 
     $newData = [
         'doctor_id' => $existing['doctor']->id,
-        'doctorService_id' => $anotherDoctorService->id,
+        'medicalService_id' => $anotherDoctorService->id,
         'price' => 300.00,
         'description' => 'New price',
     ];
@@ -436,7 +436,7 @@ it('does not modify existing doctor service prices', function () {
     expect($existingRecord->doctor_id)
         ->toBe($existing['doctor']->id);
 
-    expect($existingRecord->doctorService_id)
+    expect($existingRecord->medicalService_id)
         ->toBe($existing['clinicService']->id);
 });
 
@@ -500,12 +500,12 @@ it('creates a record with valid clinic service relationship', function () {
         $context['clinic']->id
     );
 
-    $result->load('doctorService');
+    $result->load('medicalService');
 
-    expect($result->doctorService)
+    expect($result->medicalService)
         ->toBeInstanceOf(DoctorService::class);
 
-    expect($result->doctorService->id)
+    expect($result->medicalService->id)
         ->toBe($context['clinicService']->id);
 });
 
@@ -621,14 +621,14 @@ it('can create prices for different doctors', function () {
 
     $first = $this->service->add([
         'doctor_id' => $doctorOne->id,
-        'doctorService_id' => $clinicService->id,
+        'medicalService_id' => $clinicService->id,
         'price' => 100,
         'description' => 'Doctor one',
     ], $clinic->id);
 
     $second = $this->service->add([
         'doctor_id' => $doctorTwo->id,
-        'doctorService_id' => $clinicService->id,
+        'medicalService_id' => $clinicService->id,
         'price' => 200,
         'description' => 'Doctor two',
     ], $clinic->id);
@@ -659,22 +659,22 @@ it('can create prices for different clinic services', function () {
 
     $first = $this->service->add([
         'doctor_id' => $doctor->id,
-        'doctorService_id' => $serviceOne->id,
+        'medicalService_id' => $serviceOne->id,
         'price' => 100,
         'description' => 'Service one',
     ], $clinic->id);
 
     $second = $this->service->add([
         'doctor_id' => $doctor->id,
-        'doctorService_id' => $serviceTwo->id,
+        'medicalService_id' => $serviceTwo->id,
         'price' => 200,
         'description' => 'Service two',
     ], $clinic->id);
 
-    expect($first->doctorService_id)
+    expect($first->medicalService_id)
         ->toBe($serviceOne->id);
 
-    expect($second->doctorService_id)
+    expect($second->medicalService_id)
         ->toBe($serviceTwo->id);
 
     expect($first->id)
@@ -696,14 +696,14 @@ it('stores each record under the correct clinic', function () {
 
     $first = $this->service->add([
         'doctor_id' => $doctor->id,
-        'doctorService_id' => $clinicService->id,
+        'medicalService_id' => $clinicService->id,
         'price' => 100,
         'description' => 'Clinic one',
     ], $clinicOne->id);
 
     $second = $this->service->add([
         'doctor_id' => $doctor->id,
-        'doctorService_id' => $clinicService->id,
+        'medicalService_id' => $clinicService->id,
         'price' => 200,
         'description' => 'Clinic two',
     ], $clinicTwo->id);
@@ -774,7 +774,7 @@ it('returns values that match the persisted database record', function () {
         $context['clinic']->id
     );
 
-    $databaseRecord = Doctor_service_price::findOrFail($result->id);
+    $databaseRecord = Clinic_doctor_medicalService::findOrFail($result->id);
 
     expect($databaseRecord->clinic_id)
         ->toBe($result->clinic_id);
@@ -782,8 +782,8 @@ it('returns values that match the persisted database record', function () {
     expect($databaseRecord->doctor_id)
         ->toBe($result->doctor_id);
 
-    expect($databaseRecord->doctorService_id)
-        ->toBe($result->doctorService_id);
+    expect($databaseRecord->medicalService_id)
+        ->toBe($result->medicalService_id);
 
     expect((float) $databaseRecord->price)
         ->toBe((float) $result->price);

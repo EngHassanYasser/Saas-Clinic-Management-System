@@ -2,7 +2,7 @@
 
 namespace App\Services\Subscription;
 
-use App\Enums\SubscriptionStatus;
+use App\Enums\EnSubscriptionStatus;
 use App\Models\Subscription;
 
 class SubscriptionValidationService
@@ -12,7 +12,7 @@ class SubscriptionValidationService
         ?int $ignoreSubscriptionId = null
     ): bool {
         return Subscription::where('clinic_id', $clinicId)
-            ->where('status', SubscriptionStatus::ACTIVE)
+            ->where('status', EnSubscriptionStatus::ACTIVE)
             ->when(
                 $ignoreSubscriptionId,
                 fn($query) => $query->whereKeyNot($ignoreSubscriptionId)

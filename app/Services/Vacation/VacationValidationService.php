@@ -2,17 +2,18 @@
 
 namespace App\Services\Vacation;
 
-use App\Models\Vication;
+use App\Enums\EnVacationStatus;
+use App\Models\Vacation;
 
 class VacationValidationService
 {
     public function hasVacation(int $doctorId, int $clinicId, int $ignoreId = 0): bool
     {
-        return Vication::where('doctor_id', $doctorId)
+        return Vacation::where('doctor_id', $doctorId)
             ->where('clinic_id', $clinicId)
             ->whereIn('status', [
-                'active',
-                'upcoming',
+                EnVacationStatus::ACTIVE->value,
+                EnVacationStatus::UPCOMING->value,
             ])
             ->when($ignoreId > 0, function ($query) use ($ignoreId) {
                 $query->where('id', '!=', $ignoreId);

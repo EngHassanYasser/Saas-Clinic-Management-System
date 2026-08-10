@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\complain;
-use App\Observers\ComplainObserver;
+use App\Models\complaint;
+use App\Observers\ComplaintObserver;
 use App\Support\TenantContext;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -41,6 +41,6 @@ class AppServiceProvider extends ServiceProvider
         return Limit::perMinute(3)
             ->by($request->ip());
     });
-        complain::observe(ComplainObserver::class);
+        complaint::observe(ComplaintObserver::class);
     }
 }

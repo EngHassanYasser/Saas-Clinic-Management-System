@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Schedule;
 
-use App\DTOs\Services\Schedule\ScheduleService\StoreScheduleDTO;
-use App\DTOs\Services\Schedule\ScheduleService\UpdateScheduleDTO;
+use App\DTOs\Services\Schedule\StoreScheduleDTO;
+use App\DTOs\Services\Schedule\UpdateScheduleDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Schedule\StoreScheduleRequest;
 use App\Http\Requests\Schedule\UpdateScheduleRequest;

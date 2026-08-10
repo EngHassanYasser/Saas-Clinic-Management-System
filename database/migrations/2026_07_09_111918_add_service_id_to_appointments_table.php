@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\DoctorService;
+use App\Models\MedicalService;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('appointments', function (Blueprint $table) {
-            $table->foreignIdFor(DoctorService::class)->default(1)->constrained();
+            $table->foreignIdFor(MedicalService::class)->default(1)->constrained();
         });
     }
 

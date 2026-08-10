@@ -6,8 +6,8 @@ return [
         ['label' => 'الحجوزات', 'route' => 'appointments.index', 'icon' => 'fas fa-calendar-check'],
         ['label' => 'الخدمات', 'route' => 'clinicServices.index', 'icon' => 'fas fa-stethoscope'],
         ['label' => 'الدكاتره', 'route' => 'doctors.index', 'icon' => 'fa-solid fa-user-doctor'],
-        ['label' => 'الأجازات', 'route' => 'vications.index', 'icon' => 'fa fa-umbrella-beach'],
-        ['label' => 'الشكاوي', 'route' => 'complains.index', 'icon' => 'fa-regular fa-comment-dots'],
+        ['label' => 'الأجازات', 'route' => 'vacations.index', 'icon' => 'fa fa-umbrella-beach'],
+        ['label' => 'الشكاوي', 'route' => 'complaintts.index', 'icon' => 'fa-regular fa-comment-dots'],
         ['label' => 'اعدادات العيادة', 'route' => 'clinics.edit', 'icon' => 'fas fa-cog'],
 
     ],
@@ -15,7 +15,7 @@ return [
         ['label' => 'حجوزاتي', 'route' => 'appointments.index', 'icon' => 'fas fa-calendar-check'],
         ['label' => 'اضافة حجز', 'route' => 'appointments.create', 'icon' => 'fas fa-calendar-plus'],
         ['label' => 'ابحث عن عيادة', 'route' => 'clinics.SearchResults', 'icon' => 'fas fa-search'],
-        ['label' => 'الشكاوي', 'route' => 'complains.index', 'icon' => 'fa-regular fa-comment-dots'],
+        ['label' => 'الشكاوي', 'route' => 'complaintts.index', 'icon' => 'fa-regular fa-comment-dots'],
         ['label' => 'بياناتي', 'route' => 'profile.edit', 'icon' => 'fas fa-user'],
     ],
     'super_admin' => [

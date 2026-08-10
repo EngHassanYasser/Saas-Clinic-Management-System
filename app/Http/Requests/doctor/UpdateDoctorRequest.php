@@ -25,10 +25,10 @@ class UpdateDoctorRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-            'speciality_id' => ['required', 'integer', 'exists:specialities,id'],
+            'specialityId' => ['required', 'integer', 'exists:specialities,id'],
             'email' => ['required', 'email', 'max:255'],
             'phone' => ['required', 'string', 'max:20'],
-            'is_active' => ['required', 'boolean'],
+            'isActive' => ['required', 'boolean'],
         ];
     }
 }

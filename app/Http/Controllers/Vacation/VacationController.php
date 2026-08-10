@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Vacation;
 
+use App\DTOs\Services\Vacation\StoreVacationDTO;
+use App\DTOs\Services\Vacation\UpdateVacationDTO;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\vications\StoreVicationsRequest;
-use App\Http\Requests\vications\UpdateVicationsRequest;
-use App\Services\Clinic\ClinicQueryService;
+use App\Http\Requests\vacations\StoreVacationsRequest;
+use App\Http\Requests\vacations\UpdateVacationsRequest;
 use App\Services\Doctor\DoctorQueryService;
 use App\Services\Vacation\VacationQueryService;
 use App\Services\Vacation\VacationService;
@@ -28,36 +29,38 @@ class VacationController extends Controller
         $clinicId = $this->tenantContext->id();
         $clinic = $this->tenantContext->get();
 
-        [$vications,$doctors,$stats] = Concurrency::run([
+        [$vacations,$doctors,$stats] = Concurrency::run([
             fn () => $this->vactionQueryService->getClinicVacations($clinicId),
             fn () => $this->doctorQueryService->getDoctorsNames($clinicId),
             fn () => $this->vacationStatisticsService->getStatistics($clinicId),
         ]);
 
-        return view('vacations.index', compact('vications', 'doctors', 'stats'));
+        return view('vacations.index', compact('vacations', 'doctors', 'stats'));
     }
 
-    public function store(StoreVicationsRequest $request)
+    public function store(StoreVacationsRequest $request)
     {
         $clinicId = $this->tenantContext->id();
-        $isUpdated = $this->vacationService->add($request->validated(), $clinicId);
+        $dto=StoreVacationDTO::fromRequest($request->validatd());
+        $isUpdated = $this->vacationService->add($dto, $clinicId);
         $message = $isUpdated
             ? 'Vacation added successfully.'
             : 'Failed to add vacation. Please try again.';
 
-        return redirect()->route('vications.index')
+        return redirect()->route('vacations.index')
             ->with('message', $message);
     }
 
-    public function update(UpdateVicationsRequest $request, int $vacationId)
+    public function update(UpdateVacationsRequest $request, int $vacationId)
     {
         $clinicId = $this->tenantContext->id();
-        $isUpdated = $this->vacationService->update($request->validated(), $vacationId, $clinicId);
+        $dto= UpdateVacationDTO::fromRequest($request->validated());
+        $isUpdated = $this->vacationService->update($dto, $vacationId, $clinicId);
         $message = $isUpdated
             ? 'Vacation updated successfully.'
             : 'Failed to update vacation. Please try again.';
 
-        return redirect()->route('vications.index')
+        return redirect()->route('vacations.index')
             ->with('message', $message);
     }
 
@@ -66,10 +69,10 @@ class VacationController extends Controller
         $clinicId = $this->tenantContext->id();
         $isDeleted = $this->vacationService->delete($vacationId, $clinicId);
 
-        $message = $isDeleted ? 'vication deleted successfully' : '
-         failed to delete vication please try again';
+        $message = $isDeleted ? 'vacation deleted successfully' : '
+         failed to delete vacation please try again';
 
-        return redirect()->route('vications.index')
+        return redirect()->route('vacations.index')
             ->with('message', $message);
     }
 }

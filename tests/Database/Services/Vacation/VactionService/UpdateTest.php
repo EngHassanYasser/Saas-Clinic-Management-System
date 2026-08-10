@@ -1,9 +1,9 @@
 <?php
 
-use App\Exceptions\HasVicationException;
+use App\Exceptions\HasVacationException;
 use App\Models\Clinic;
 use App\Models\Doctor;
-use App\Models\Vication;
+use App\Models\Vacation;
 use App\Services\Vacation\VacationService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -60,7 +60,7 @@ it('updates vacation successfully', function () {
     $doctor = updateVacationDoctor();
 
 
-    $vacation = Vication::factory()->create([
+    $vacation = Vacation::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
         'status' => 'upcoming',
@@ -102,7 +102,7 @@ it('stores updated values in database', function () {
     $doctor = updateVacationDoctor();
 
 
-    $vacation = Vication::factory()->create([
+    $vacation = Vacation::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
     ]);
@@ -124,7 +124,7 @@ it('stores updated values in database', function () {
     );
 
 
-    $this->assertDatabaseHas('vications', [
+    $this->assertDatabaseHas('vacations', [
 
         'id' => $vacation->id,
         'reason' => 'Medical leave',
@@ -153,7 +153,7 @@ it('cannot update vacation from another clinic', function () {
     $doctor = updateVacationDoctor();
 
 
-    $vacation = Vication::factory()->create([
+    $vacation = Vacation::factory()->create([
         'clinic_id' => $clinicOne->id,
         'doctor_id' => $doctor->id,
     ]);
@@ -188,7 +188,7 @@ it('throws exception when updated vacation conflicts with another vacation', fun
     $doctor = updateVacationDoctor();
 
 
-    $currentVacation = Vication::factory()->create([
+    $currentVacation = Vacation::factory()->create([
 
         'clinic_id' => $clinic->id,
 
@@ -199,7 +199,7 @@ it('throws exception when updated vacation conflicts with another vacation', fun
     ]);
 
 
-    Vication::factory()->create([
+    Vacation::factory()->create([
 
         'clinic_id' => $clinic->id,
 
@@ -220,7 +220,7 @@ it('throws exception when updated vacation conflicts with another vacation', fun
 
         $clinic->id
 
-    ))->toThrow(HasVicationException::class);
+    ))->toThrow(HasVacationException::class);
 
 
 });
@@ -242,7 +242,7 @@ it('allows updating same vacation without duplicate error', function () {
     $doctor = updateVacationDoctor();
 
 
-    $vacation = Vication::factory()->create([
+    $vacation = Vacation::factory()->create([
 
         'clinic_id' => $clinic->id,
 
@@ -289,7 +289,7 @@ it('allows updating vacation without reason', function () {
     $doctor = updateVacationDoctor();
 
 
-    $vacation = Vication::factory()->create([
+    $vacation = Vacation::factory()->create([
 
         'clinic_id' => $clinic->id,
 
@@ -348,7 +348,7 @@ it('updates all allowed statuses', function () {
         $doctor = updateVacationDoctor();
 
 
-        $vacation = Vication::factory()->create([
+        $vacation = Vacation::factory()->create([
 
             'clinic_id' => $clinic->id,
 
@@ -394,7 +394,7 @@ it('updates correctly when many vacations exist', function () {
     $clinic = updateVacationClinic();
 
 
-    Vication::factory()
+    Vacation::factory()
         ->count(100)
         ->create();
 
@@ -402,7 +402,7 @@ it('updates correctly when many vacations exist', function () {
     $doctor = updateVacationDoctor();
 
 
-    $vacation = Vication::factory()->create([
+    $vacation = Vacation::factory()->create([
 
         'clinic_id' => $clinic->id,
 

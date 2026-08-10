@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Appointment;
 
-use App\DTOs\Services\AppointmentService\RescheduleDTO;
+use App\DTOs\Services\Appointment\RescheduleDTO;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\services\Appointment\AppointmentService;

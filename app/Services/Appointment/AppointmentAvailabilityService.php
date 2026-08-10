@@ -2,11 +2,11 @@
 
 namespace App\Services\Appointment;
 
-use App\DTOs\Services\Appointment\AppointmentAvailabilityService\IsSlotAvailableDTO;
-use App\DTOs\Services\Appointment\AppointmentQueryService\GetSlotDurationByVisitDateDTO;
-use App\DTOs\Services\AppointmentService\GetAvailableAppointmentsDTO;
-use App\DTOs\Services\AppointmentService\GetBookedSlotsDTO;
-use App\DTOs\Services\AppointmentService\GetSchedulesDTO;
+use App\DTOs\Services\Appointment\IsSlotAvailableDTO;
+use App\DTOs\Services\Appointment\GetSlotDurationByVisitDateDTO;
+use App\DTOs\Services\Appointment\GetAvailableAppointmentsDTO;
+use App\DTOs\Services\Appointment\GetBookedSlotsDTO;
+use App\DTOs\Services\Appointment\GetSchedulesDTO;
 use App\Models\Appointment;
 use App\Models\Schedule;
 use Carbon\Carbon;

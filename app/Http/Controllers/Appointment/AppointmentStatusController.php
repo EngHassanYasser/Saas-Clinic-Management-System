@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Appointment;
 
-use App\Enums\AppointmentStatus;
+use App\Enums\EnAppointmentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Services\Appointment\AppointmentStatusService;
@@ -13,7 +13,7 @@ class AppointmentStatusController extends Controller
         private AppointmentStatusService $appointmentStatusService
     ) {}
 
-    public function changeStatus(Appointment $appointment, AppointmentStatus $status)
+    public function changeStatus(Appointment $appointment, EnAppointmentStatus $status)
     {
         $this->authorize('create', $appointment);
         $isUpdated = $this->appointmentStatusService->changeStatus($appointment, $status);

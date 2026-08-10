@@ -1,48 +1,48 @@
 <?php
 
-use App\Enums\ComplainStatus;
-use App\Models\Complain;
-use App\Services\Complain\ComplainQueryService;
+use App\Enums\ComplaintStatus;
+use App\Models\Complaint;
+use App\Services\Complaint\ComplaintQueryService;
 
 beforeEach(function () {
-    $this->service = app(ComplainQueryService::class);
+    $this->service = app(ComplaintQueryService::class);
 });
 
-it('returns complain by id', function () {
+it('returns complaint by id', function () {
 
-    $complain = Complain::factory()->create();
+    $complaint = Complaint::factory()->create();
 
-    $result = $this->service->getById($complain->id);
+    $result = $this->service->getById($complaint->id);
 
     expect($result)
-        ->toBeInstanceOf(Complain::class)
+        ->toBeInstanceOf(Complaint::class)
         ->and($result->id)
-        ->toBe($complain->id);
+        ->toBe($complaint->id);
 
 });
-it('returns correct complain data', function () {
+it('returns correct complaint data', function () {
 
-    $complain = Complain::factory()->create([
+    $complaint = Complaint::factory()->create([
         'description' => 'Bad reception service',
-        'status' => ComplainStatus::PENDING,
+        'status' => ComplaintStatus::PENDING,
         'severity' => 'high',
     ]);
 
-    $result = $this->service->getById($complain->id);
+    $result = $this->service->getById($complaint->id);
 
     expect($result->description)
         ->toBe('Bad reception service')
         ->and($result->status)
-        ->toBe(ComplainStatus::PENDING)
+        ->toBe(ComplaintStatus::PENDING)
         ->and($result->severity)
         ->toBe('high');
 
 });
-it('does not return another complain', function () {
+it('does not return another complaint', function () {
 
-    $first = Complain::factory()->create();
+    $first = Complaint::factory()->create();
 
-    $second = Complain::factory()->create();
+    $second = Complaint::factory()->create();
 
     $result = $this->service->getById($first->id);
 
@@ -50,13 +50,13 @@ it('does not return another complain', function () {
         ->not->toBe($second->id);
 
 });
-it('returns complain model not array', function () {
+it('returns complaint model not array', function () {
 
-    $complain = Complain::factory()->create();
+    $complaint = Complaint::factory()->create();
 
-    $result = $this->service->getById($complain->id);
+    $result = $this->service->getById($complaint->id);
 
     expect($result)
-        ->toBeInstanceOf(Complain::class);
+        ->toBeInstanceOf(Complaint::class);
 
 });

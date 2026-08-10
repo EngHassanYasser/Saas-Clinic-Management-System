@@ -8,7 +8,7 @@
         @if (auth()->user()->type == \App\Enums\RoleType::CLINIC)
             <x-dashboards.stat-cards />
             <x-dashboards.doctors-activity />
-            <x-dashboards.complains />
+            <x-dashboards.complaintts />
         @elseif(auth()->user()->type === \App\Enums\RoleType::SUPER_ADMIN)
             <x-dashboards.primary-stats />
             <x-dashboards.recent-activity />

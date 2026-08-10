@@ -2,39 +2,39 @@
 
 namespace App\Services\MedicalService;
 
-use App\DTOs\Services\Clinic\ClinicService\StoreDoctorServiceDTO;
-use App\DTOs\Services\DoctorService\UpdateDoctorServiceDTO;
-use App\Models\Doctor_service_price;
+use App\DTOs\Services\MedicalService\StoreMedicalrviceDTO;
+use App\DTOs\Services\MedicalService\UpdateMedicalServiceDTO;
+use App\Models\Clinic_doctor_medicalService;
 use Illuminate\Database\Eloquent\Collection;
 
 class MedicalServiceService
 {
     public function getAllDoctorServices(): Collection
     {
-        return Doctor_service_price::with([
+        return Clinic_doctor_medicalService::with([
             'clinic',
             'doctor',
-            'doctorService',
+            'medicalService',
         ])->get();
     }
 
-    public function add(StoreDoctorServiceDTO $dto, int $clinicId): Doctor_service_price
+    public function add(StoreMedicalrviceDTO $dto, int $clinicId): Clinic_doctor_medicalService
     {
-        return Doctor_service_price::create([
+        return Clinic_doctor_medicalService::create([
             'clinic_id' => $clinicId,
             'doctor_id' => $dto->doctorId,
-            'doctorService_id' => $dto->doctorServiceId,
+            'medicalService_id' => $dto->medicalServiceId,
             'price' =>$dto->price,
             'description' => $dto->description,
         ]);
     }
 
-    public function update(UpdateDoctorServiceDTO $dto, int $clinicId): bool
+    public function update(UpdateMedicalServiceDTO $dto, int $clinicId): bool
     {
-        return Doctor_service_price::where('id', $dto->doctorServiceId)->update([
+        return Clinic_doctor_medicalService::where('id', $dto->medicalServiceId)->update([
             'clinic_id' => $clinicId,
             'doctor_id' => $dto->doctorId,
-            'doctorService_id' => $dto->doctorServiceId,
+            'medicalService_id' => $dto->medicalServiceId,
             'price' => $dto->price,
             'description' => $dto->description,
         ]);
@@ -42,6 +42,6 @@ class MedicalServiceService
 
     public function deleteById(int $clinicServiceId): bool
     {
-        return Doctor_service_price::destroy($clinicServiceId);
+        return Clinic_doctor_medicalService::destroy($clinicServiceId);
     }
 }

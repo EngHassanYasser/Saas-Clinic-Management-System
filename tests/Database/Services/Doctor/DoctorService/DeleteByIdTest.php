@@ -2,7 +2,7 @@
 
 use App\Models\Clinic;
 use App\Models\Doctor;
-use App\Models\Doctor_service_price;
+use App\Models\Clinic_doctor_medicalService;
 use App\Models\Speciality;
 use App\Services\Doctor\DoctorService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -20,12 +20,12 @@ it('removes doctor from the specified clinic and deletes clinic-specific service
 
     $doctor->specialities()->attach($speciality->id);
 
-    $price1 = Doctor_service_price::factory()->create([
+    $price1 = Clinic_doctor_medicalService::factory()->create([
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic->id,
     ]);
 
-    $price2 = Doctor_service_price::factory()->create([
+    $price2 = Clinic_doctor_medicalService::factory()->create([
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic->id,
     ]);
@@ -65,11 +65,11 @@ it('removes doctor from the specified clinic and deletes clinic-specific service
 
     // Clinic-specific service prices must be deleted
     expect(
-        Doctor_service_price::whereKey($price1->id)->exists()
+        Clinic_doctor_medicalService::whereKey($price1->id)->exists()
     )->toBeFalse();
 
     expect(
-        Doctor_service_price::whereKey($price2->id)->exists()
+        Clinic_doctor_medicalService::whereKey($price2->id)->exists()
     )->toBeFalse();
 });
 
@@ -128,12 +128,12 @@ it('deletes only service prices belonging to the specified clinic', function () 
         $clinic2->id,
     ]);
 
-    $clinic1Price = Doctor_service_price::factory()->create([
+    $clinic1Price = Clinic_doctor_medicalService::factory()->create([
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic1->id,
     ]);
 
-    $clinic2Price = Doctor_service_price::factory()->create([
+    $clinic2Price = Clinic_doctor_medicalService::factory()->create([
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic2->id,
     ]);
@@ -145,12 +145,12 @@ it('deletes only service prices belonging to the specified clinic', function () 
 
     // Clinic 1 price must be deleted
     expect(
-        Doctor_service_price::whereKey($clinic1Price->id)->exists()
+        Clinic_doctor_medicalService::whereKey($clinic1Price->id)->exists()
     )->toBeFalse();
 
     // Clinic 2 price must remain
     expect(
-        Doctor_service_price::whereKey($clinic2Price->id)->exists()
+        Clinic_doctor_medicalService::whereKey($clinic2Price->id)->exists()
     )->toBeTrue();
 });
 
@@ -216,17 +216,17 @@ it('keeps service prices belonging to other clinics', function () {
         $clinic3->id,
     ]);
 
-    $price1 = Doctor_service_price::factory()->create([
+    $price1 = Clinic_doctor_medicalService::factory()->create([
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic1->id,
     ]);
 
-    $price2 = Doctor_service_price::factory()->create([
+    $price2 = Clinic_doctor_medicalService::factory()->create([
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic2->id,
     ]);
 
-    $price3 = Doctor_service_price::factory()->create([
+    $price3 = Clinic_doctor_medicalService::factory()->create([
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic3->id,
     ]);
@@ -237,15 +237,15 @@ it('keeps service prices belonging to other clinics', function () {
     );
 
     expect(
-        Doctor_service_price::whereKey($price1->id)->exists()
+        Clinic_doctor_medicalService::whereKey($price1->id)->exists()
     )->toBeTrue();
 
     expect(
-        Doctor_service_price::whereKey($price2->id)->exists()
+        Clinic_doctor_medicalService::whereKey($price2->id)->exists()
     )->toBeFalse();
 
     expect(
-        Doctor_service_price::whereKey($price3->id)->exists()
+        Clinic_doctor_medicalService::whereKey($price3->id)->exists()
     )->toBeTrue();
 });
 
@@ -260,12 +260,12 @@ it('does not affect another doctors data', function () {
     $doctor1->clinics()->attach($clinic->id);
     $doctor2->clinics()->attach($clinic->id);
 
-    $doctor1Price = Doctor_service_price::factory()->create([
+    $doctor1Price = Clinic_doctor_medicalService::factory()->create([
         'doctor_id' => $doctor1->id,
         'clinic_id' => $clinic->id,
     ]);
 
-    $doctor2Price = Doctor_service_price::factory()->create([
+    $doctor2Price = Clinic_doctor_medicalService::factory()->create([
         'doctor_id' => $doctor2->id,
         'clinic_id' => $clinic->id,
     ]);
@@ -293,12 +293,12 @@ it('does not affect another doctors data', function () {
 
     // Doctor 1 price removed
     expect(
-        Doctor_service_price::whereKey($doctor1Price->id)->exists()
+        Clinic_doctor_medicalService::whereKey($doctor1Price->id)->exists()
     )->toBeFalse();
 
     // Doctor 2 price remains
     expect(
-        Doctor_service_price::whereKey($doctor2Price->id)->exists()
+        Clinic_doctor_medicalService::whereKey($doctor2Price->id)->exists()
     )->toBeTrue();
 
     // Both doctors still exist
@@ -320,7 +320,7 @@ it('keeps doctor when he is removed from his only clinic', function () {
 
     $doctor->clinics()->attach($clinic->id);
 
-    $price = Doctor_service_price::factory()->create([
+    $price = Clinic_doctor_medicalService::factory()->create([
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic->id,
     ]);
@@ -345,7 +345,7 @@ it('keeps doctor when he is removed from his only clinic', function () {
 
     // Clinic-specific price removed
     expect(
-        Doctor_service_price::whereKey($price->id)->exists()
+        Clinic_doctor_medicalService::whereKey($price->id)->exists()
     )->toBeFalse();
 });
 

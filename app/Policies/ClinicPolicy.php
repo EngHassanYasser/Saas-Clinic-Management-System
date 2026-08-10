@@ -2,8 +2,7 @@
 
 namespace App\Policies;
 
-use App\Enums\RoleType;
-use App\Models\Clinic;
+use App\Enums\EnRoleType;use App\Models\Clinic;
 use App\Models\User;
 
 class ClinicPolicy
@@ -21,9 +20,9 @@ class ClinicPolicy
     public function viewAny(User $user): bool
     {
         return match ($user->role) {
-            RoleType::PATIENT,
-            RoleType::CLINIC,
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::PATIENT,
+           EnRoleType::CLINIC,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -35,10 +34,10 @@ class ClinicPolicy
     public function view(User $user, Clinic $clinic): bool
     {
         return match ($user->role) {
-            RoleType::PATIENT => true,
+           EnRoleType::PATIENT => true,
 
-            RoleType::CLINIC => $this->isOwnerOfClinic($user, $clinic->id),
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::CLINIC => $this->isOwnerOfClinic($user, $clinic->id),
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -49,7 +48,7 @@ class ClinicPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role === RoleType::SUPER_ADMIN;
+        return $user->role ===EnRoleType::SUPER_ADMIN;
     }
 
     /**
@@ -58,9 +57,9 @@ class ClinicPolicy
     public function update(User $user, Clinic $clinic): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC => $this->isOwnerOfClinic($user, $clinic->id),
+           EnRoleType::CLINIC => $this->isOwnerOfClinic($user, $clinic->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -72,9 +71,9 @@ class ClinicPolicy
     public function delete(User $user, Clinic $clinic): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC => $this->isOwnerOfClinic($user, $clinic->id),
+           EnRoleType::CLINIC => $this->isOwnerOfClinic($user, $clinic->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -86,9 +85,9 @@ class ClinicPolicy
     public function manage(User $user, Clinic $clinic): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC => $this->isOwnerOfClinic($user, $clinic->id),
+           EnRoleType::CLINIC => $this->isOwnerOfClinic($user, $clinic->id),
 
-            RoleType::SUPER_ADMIN => true,
+           EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };

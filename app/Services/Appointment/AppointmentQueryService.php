@@ -2,10 +2,10 @@
 
 namespace App\Services\Appointment;
 
-use App\Enums\RoleType;
+use App\Enums\EnRoleType;
 use App\Models\Appointment;
 use App\Models\Clinic;
-use App\Models\Doctor_service_price;
+use App\Models\Clinic_doctor_medicalService;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -14,9 +14,9 @@ class AppointmentQueryService
 {
     public function getAppointments(User $user): LengthAwarePaginator
     {
-        if ($user->type == RoleType::PATIENT) {
+        if ($user->type ==EnRoleType::PATIENT) {
             return $this->getAppointmentsBy('patient_id', $user->id);
-        } else if ($user->type == RoleType::CLINIC) {
+        } else if ($user->type ==EnRoleType::CLINIC) {
             $clinicId = Clinic::where('owner_id', $user->id)->value('id');
             return $this->getAppointmentsBy('clinic_id', $clinicId);
         }
@@ -36,15 +36,15 @@ class AppointmentQueryService
             'deposit_amount',
             'cancellation_time',
             'patient_id',
-            'doctorService_id',
+            'medicalService_id',
             'visit_date',
         )->where($column, $id)
             ->with(['patient:id,name', 'doctor:id,name', 'clinic:id,name,address', 'service:id,name'])
             ->paginate(20)
             ->through(function ($appt) {
-                $price = Doctor_service_price::where('doctor_id', $appt->doctor_id)
+                $price = Clinic_doctor_medicalService::where('doctor_id', $appt->doctor_id)
                     ->where('clinic_id', $appt->clinic_id)
-                    ->where('doctorService_id', $appt->doctorService_id)
+                    ->where('medicalService_id', $appt->medicalService_id)
                     ->value('price');
                 return [
                     'id'                  => $appt->id,
@@ -84,13 +84,13 @@ class AppointmentQueryService
     {
         $query = Appointment::whereKey($appointmentId);
 
-        if ($user->type === RoleType::CLINIC) {
+        if ($user->type ===EnRoleType::CLINIC) {
             $clinicId = Clinic::where('owner_id', $user->id)->value('id');
 
             $query->where('clinic_id', $clinicId);
         }
 
-        if ($user->type === RoleType::PATIENT) {
+        if ($user->type ===EnRoleType::PATIENT) {
             $query->where('patient_id', $user->id);
         }
 

@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clinic_settings', function (Blueprint $table) {
+        Schema::create('clinicSettings', function (Blueprint $table) {
             $table->id();
             $table->enum('appointment_duration',[15,30,45,60,90,120])->default(30);
             $table->unsignedTinyInteger('cancellation_hours_limit')->default(6);
@@ -22,16 +22,16 @@ return new class extends Migration
             $table->unsignedTinyInteger('deposit_percentage')->default(0);
             $table->unsignedTinyInteger('cancellation_fee_percentage')->default(10);
         });
-        DB::statement('ALTER TABLE clinic_settings ADD CONSTRAINT chk_appointment_duration 
+        DB::statement('ALTER TABLE clinicSettings ADD CONSTRAINT chk_appointment_duration 
     CHECK (appointment_duration IN (15, 30, 45, 60, 90, 120))');
 
-    DB::statement('ALTER TABLE clinic_settings ADD CONSTRAINT chk_deposit_percentage 
+    DB::statement('ALTER TABLE clinicSettings ADD CONSTRAINT chk_deposit_percentage 
     CHECK (deposit_percentage BETWEEN 0 AND 100)');
 
-    DB::statement('ALTER TABLE clinic_settings ADD CONSTRAINT chk_cancellation_fee_percentage 
+    DB::statement('ALTER TABLE clinicSettings ADD CONSTRAINT chk_cancellation_fee_percentage 
     CHECK (cancellation_fee_percentage BETWEEN 0 AND 100)');
 
-    DB::statement('ALTER TABLE clinic_settings ADD CONSTRAINT chk_cancellation_hours_limit 
+    DB::statement('ALTER TABLE clinicSettings ADD CONSTRAINT chk_cancellation_hours_limit 
     CHECK (cancellation_hours_limit BETWEEN 1 AND 168)');
 
     
@@ -42,6 +42,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clinic_settings');
+        Schema::dropIfExists('clinicSettings');
     }
 };

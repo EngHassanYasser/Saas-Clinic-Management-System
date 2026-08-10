@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Enums\RoleType;
+use App\Enums\EnRoleType;
 use App\Models\Payment;
 use App\Models\User;
 
@@ -32,9 +32,9 @@ class PaymentPolicy
     public function viewAny(User $user): bool
     {
         return match ($user->role) {
-            RoleType::PATIENT,
-            RoleType::CLINIC,
-            RoleType::SUPER_ADMIN => true,
+            EnRoleType::PATIENT,
+            EnRoleType::CLINIC,
+            EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -46,11 +46,11 @@ class PaymentPolicy
     public function view(User $user, Payment $payment): bool
     {
         return match ($user->role) {
-            RoleType::PATIENT => $this->belongsToPatient($user, $payment->id),
+            EnRoleType::PATIENT => $this->belongsToPatient($user, $payment->id),
 
-            RoleType::CLINIC => $this->belongsToClinicOwner($user, $payment->id),
+            EnRoleType::CLINIC => $this->belongsToClinicOwner($user, $payment->id),
 
-            RoleType::SUPER_ADMIN => true,
+            EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -62,8 +62,8 @@ class PaymentPolicy
     public function create(User $user): bool
     {
         return match ($user->role) {
-            RoleType::PATIENT,
-            RoleType::SUPER_ADMIN => true,
+            EnRoleType::PATIENT,
+            EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -75,7 +75,7 @@ class PaymentPolicy
     public function update(User $user, Payment $payment): bool
     {
         return match ($user->role) {
-            RoleType::SUPER_ADMIN => true,
+            EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
@@ -86,7 +86,7 @@ class PaymentPolicy
      */
     public function delete(User $user, Payment $payment): bool
     {
-        return $user->role === RoleType::SUPER_ADMIN;
+        return $user->role === EnRoleType::SUPER_ADMIN;
     }
 
     /**
@@ -95,9 +95,9 @@ class PaymentPolicy
     public function refund(User $user, Payment $payment): bool
     {
         return match ($user->role) {
-            RoleType::CLINIC => $this->belongsToClinicOwner($user, $payment->id),
+            EnRoleType::CLINIC => $this->belongsToClinicOwner($user, $payment->id),
 
-            RoleType::SUPER_ADMIN => true,
+            EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };

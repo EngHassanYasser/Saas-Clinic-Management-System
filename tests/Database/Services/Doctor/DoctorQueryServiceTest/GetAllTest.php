@@ -70,7 +70,7 @@ it('returns the consultation fee from the كشف service', function () {
 
     doctor_service_price::factory()->create([
         'doctor_id' => $doctor->id,
-        'doctorService_id' => $service->id,
+        'medicalService_id' => $service->id,
         'price' => 250,
     ]);
 
@@ -94,13 +94,13 @@ it('returns the first كشف service price when doctor has multiple prices', fun
 
     doctor_service_price::factory()->create([
         'doctor_id' => $doctor->id,
-        'doctorService_id' => $consultationService->id,
+        'medicalService_id' => $consultationService->id,
         'price' => 300,
     ]);
 
     doctor_service_price::factory()->create([
         'doctor_id' => $doctor->id,
-        'doctorService_id' => $consultationService->id,
+        'medicalService_id' => $consultationService->id,
         'price' => 500,
     ]);
 
@@ -124,7 +124,7 @@ it('ignores services other than كشف when finding consultation fee', function 
 
     doctor_service_price::factory()->create([
         'doctor_id' => $doctor->id,
-        'doctorService_id' => $service->id,
+        'medicalService_id' => $service->id,
         'price' => 400,
     ]);
 
@@ -387,13 +387,13 @@ it('returns consultation fee independently for each doctor', function () {
 
     doctor_service_price::factory()->create([
         'doctor_id' => $doctorOne->id,
-        'doctorService_id' => $service->id,
+        'medicalService_id' => $service->id,
         'price' => 200,
     ]);
 
     doctor_service_price::factory()->create([
         'doctor_id' => $doctorTwo->id,
-        'doctorService_id' => $service->id,
+        'medicalService_id' => $service->id,
         'price' => 350,
     ]);
 

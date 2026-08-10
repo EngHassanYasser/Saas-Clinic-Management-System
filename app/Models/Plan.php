@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\PlanStatus;
+use App\Enums\EnPlanStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,17 +18,17 @@ use Illuminate\Database\Eloquent\Model;
 ])]
 class Plan extends Model
 {
+    use HasFactory;
+
+    public $timestamps = false;
+
     protected function casts(): array
     {
         return [
             'features' => 'array',
-            'status' => PlanStatus::class,
+            'status' => EnPlanStatus::class,
         ];
     }
-
-    use HasFactory;
-
-    public $timestamps = false;
 
     public function subscriptions()
     {

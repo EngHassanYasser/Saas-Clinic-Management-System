@@ -1,14 +1,13 @@
 <?php
 
 use App\Enums\AppointmentStatus;
-use App\Enums\RoleType;
-use App\Exceptions\UnauthorizedException;
+use App\Enums\EnRoleType;use App\Exceptions\UnauthorizedException;
 use App\Models\Appointment;
 use App\Models\User;
 use App\Services\Appointment\AppointmentStatusService;
 
 it('does not throw exception for allowed status change', function (
-    RoleType $role,
+   EnRoleType $role,
     AppointmentStatus $currentStatus,
     AppointmentStatus $newStatus
 ) {
@@ -35,19 +34,19 @@ it('does not throw exception for allowed status change', function (
     expect(true)->toBeTrue();
 })->with([
     'patient allowed' => [
-        RoleType::PATIENT,
+       EnRoleType::PATIENT,
         AppointmentStatus::PENDING,
         AppointmentStatus::CANCELLED,
     ],
 
     'clinic allowed' => [
-        RoleType::CLINIC,
+       EnRoleType::CLINIC,
         AppointmentStatus::CONFIRMED,
         AppointmentStatus::IN_PROGRESS,
     ],
 ]);
 it('throws unauthorized exception for invalid status change', function (
-    RoleType $role,
+   EnRoleType $role,
     AppointmentStatus $currentStatus,
     AppointmentStatus $newStatus
 ) {
@@ -75,13 +74,13 @@ it('throws unauthorized exception for invalid status change', function (
 
 })->with([
     'patient denied' => [
-        RoleType::PATIENT,
+       EnRoleType::PATIENT,
         AppointmentStatus::PENDING,
         AppointmentStatus::COMPLETED,
     ],
 
     'clinic denied' => [
-        RoleType::CLINIC,
+       EnRoleType::CLINIC,
         AppointmentStatus::IN_PROGRESS,
         AppointmentStatus::CANCELLED,
     ],

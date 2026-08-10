@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\PlanStatus;
-use App\Enums\SubscriptionStatus;
+use App\Enums\EnSubscriptionStatus;
 use App\Exceptions\ActiveSubscriptionAlreadyExistsException;
 use App\Models\Clinic;
 use App\Models\Plan;
@@ -402,7 +402,7 @@ it('does not create another subscription when an active subscription exists', fu
     Subscription::factory()->create([
         'clinic_id' => $context['clinic']->id,
         'plan_id' => $context['plan']->id,
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     $before = Subscription::count();
@@ -665,7 +665,7 @@ it('does not leave partial database changes when validation fails', function () 
     Subscription::factory()->create([
         'clinic_id' => $context['clinic']->id,
         'plan_id' => $context['plan']->id,
-        'status' => SubscriptionStatus::ACTIVE,
+        'status' => EnSubscriptionStatus::ACTIVE,
     ]);
 
     $before = Subscription::count();

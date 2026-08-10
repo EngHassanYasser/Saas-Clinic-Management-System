@@ -2,8 +2,8 @@
 
 namespace App\http\Controllers\Clinic;
 
-use App\DTOs\Services\Clinic\ClinicService\StoreClinicDTO;
-use App\DTOs\Services\Clinic\ClinicService\UpdateClinicDTO;
+use App\DTOs\Services\Clinic\StoreClinicDTO;
+use App\DTOs\Services\Clinic\UpdateClinicDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Clinic\StoreClinicRequest;
 use App\Http\Requests\Clinic\UpdateClinicRequest;

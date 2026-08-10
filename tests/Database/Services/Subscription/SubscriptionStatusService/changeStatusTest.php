@@ -1,12 +1,12 @@
 <?php
 
-use App\Enums\SubscriptionStatus;
+use App\Enums\EnSubscriptionStatus;
 use App\Models\Clinic;
 use App\Models\Plan;
 use App\Models\Subscription;
-use App\Services\Subscription\SubscriptionStatusService;
+use App\Services\Subscription\EnSubscriptionStatusService;
 beforeEach(function () {
-    $this->service = app(SubscriptionStatusService::class);
+    $this->service = app(EnSubscriptionStatusService::class);
 });
 
 
@@ -21,7 +21,7 @@ function createChangeStatusSubscription(array $overrides = []): Subscription
     return Subscription::factory()->create(array_merge([
         'clinic_id' => Clinic::factory()->create()->id,
         'plan_id' => Plan::factory()->create()->id,
-        'status' => SubscriptionStatus::PENDING,
+        'status' => EnSubscriptionStatus::PENDING,
         'start_at' => now()->toDateString(),
         'end_at' => now()->addMonth()->toDateString(),
     ], $overrides));
@@ -41,7 +41,7 @@ it('returns true when subscription status is changed successfully', function () 
 
     $result = $this->service->changeStatus(
         $subscription->id,
-        SubscriptionStatus::ACTIVE
+        EnSubscriptionStatus::ACTIVE
     );
 
     expect($result)
@@ -53,7 +53,7 @@ it('returns false when subscription does not exist', function () {
 
     $result = $this->service->changeStatus(
         999999,
-        SubscriptionStatus::ACTIVE
+        EnSubscriptionStatus::ACTIVE
     );
 
     expect($result)
@@ -71,13 +71,13 @@ it('returns false when subscription does not exist', function () {
 it('updates the subscription status in database', function () {
 
     $subscription = createChangeStatusSubscription([
-        'status' => SubscriptionStatus::PENDING,
+        'status' => EnSubscriptionStatus::PENDING,
     ]);
 
 
     $this->service->changeStatus(
         $subscription->id,
-        SubscriptionStatus::ACTIVE
+        EnSubscriptionStatus::ACTIVE
     );
 
 
@@ -85,13 +85,13 @@ it('updates the subscription status in database', function () {
 
 
     expect($subscription->status)
-        ->toBe(SubscriptionStatus::ACTIVE);
+        ->toBe(EnSubscriptionStatus::ACTIVE);
 });
 
 
 it('stores all enum statuses correctly', function () {
 
-    foreach (SubscriptionStatus::cases() as $status) {
+    foreach (EnSubscriptionStatus::cases() as $status) {
 
         $subscription = createChangeStatusSubscription();
 
@@ -125,7 +125,7 @@ it('stores all enum statuses correctly', function () {
 it('does not modify other subscription fields', function () {
 
     $subscription = createChangeStatusSubscription([
-        'status' => SubscriptionStatus::PENDING,
+        'status' => EnSubscriptionStatus::PENDING,
     ]);
 
 
@@ -139,7 +139,7 @@ it('does not modify other subscription fields', function () {
 
     $this->service->changeStatus(
         $subscription->id,
-        SubscriptionStatus::ACTIVE
+        EnSubscriptionStatus::ACTIVE
     );
 
 
@@ -170,7 +170,7 @@ it('does not create a new subscription when changing status', function () {
 
     $this->service->changeStatus(
         $subscription->id,
-        SubscriptionStatus::ACTIVE
+        EnSubscriptionStatus::ACTIVE
     );
 
 
@@ -189,13 +189,13 @@ it('does not create a new subscription when changing status', function () {
 it('can update to the same current status', function () {
 
     $subscription = createChangeStatusSubscription([
-        'status' => SubscriptionStatus::ACTIVE,
+        'status' => EnSubscriptionStatus::ACTIVE,
     ]);
 
 
     $result = $this->service->changeStatus(
         $subscription->id,
-        SubscriptionStatus::ACTIVE
+        EnSubscriptionStatus::ACTIVE
     );
 
 
@@ -204,7 +204,7 @@ it('can update to the same current status', function () {
 
 
     expect($subscription->fresh()->status)
-        ->toBe(SubscriptionStatus::ACTIVE);
+        ->toBe(EnSubscriptionStatus::ACTIVE);
 });
 
 
@@ -218,54 +218,54 @@ it('can update to the same current status', function () {
 it('can change pending subscription to active', function () {
 
     $subscription = createChangeStatusSubscription([
-        'status' => SubscriptionStatus::PENDING,
+        'status' => EnSubscriptionStatus::PENDING,
     ]);
 
 
     $this->service->changeStatus(
         $subscription->id,
-        SubscriptionStatus::ACTIVE
+        EnSubscriptionStatus::ACTIVE
     );
 
 
     expect($subscription->fresh()->status)
-        ->toBe(SubscriptionStatus::ACTIVE);
+        ->toBe(EnSubscriptionStatus::ACTIVE);
 });
 
 
 it('can change active subscription to expired', function () {
 
     $subscription = createChangeStatusSubscription([
-        'status' => SubscriptionStatus::ACTIVE,
+        'status' => EnSubscriptionStatus::ACTIVE,
     ]);
 
 
     $this->service->changeStatus(
         $subscription->id,
-        SubscriptionStatus::EXPIRED
+        EnSubscriptionStatus::EXPIRED
     );
 
 
     expect($subscription->fresh()->status)
-        ->toBe(SubscriptionStatus::EXPIRED);
+        ->toBe(EnSubscriptionStatus::EXPIRED);
 });
 
 
 it('can change active subscription to cancelled', function () {
 
     $subscription = createChangeStatusSubscription([
-        'status' => SubscriptionStatus::ACTIVE,
+        'status' => EnSubscriptionStatus::ACTIVE,
     ]);
 
 
     $this->service->changeStatus(
         $subscription->id,
-        SubscriptionStatus::CANCELLED
+        EnSubscriptionStatus::CANCELLED
     );
 
 
     expect($subscription->fresh()->status)
-        ->toBe(SubscriptionStatus::CANCELLED);
+        ->toBe(EnSubscriptionStatus::CANCELLED);
 });
 
 
@@ -279,27 +279,27 @@ it('can change active subscription to cancelled', function () {
 it('only changes the requested subscription', function () {
 
     $first = createChangeStatusSubscription([
-        'status' => SubscriptionStatus::PENDING,
+        'status' => EnSubscriptionStatus::PENDING,
     ]);
 
 
     $second = createChangeStatusSubscription([
-        'status' => SubscriptionStatus::PENDING,
+        'status' => EnSubscriptionStatus::PENDING,
     ]);
 
 
     $this->service->changeStatus(
         $first->id,
-        SubscriptionStatus::ACTIVE
+        EnSubscriptionStatus::ACTIVE
     );
 
 
     expect($first->fresh()->status)
-        ->toBe(SubscriptionStatus::ACTIVE);
+        ->toBe(EnSubscriptionStatus::ACTIVE);
 
 
     expect($second->fresh()->status)
-        ->toBe(SubscriptionStatus::PENDING);
+        ->toBe(EnSubscriptionStatus::PENDING);
 });
 
 
@@ -317,7 +317,7 @@ it('persists the status change after reloading model', function () {
 
     $this->service->changeStatus(
         $subscription->id,
-        SubscriptionStatus::CANCELLED
+        EnSubscriptionStatus::CANCELLED
     );
 
 
@@ -325,7 +325,7 @@ it('persists the status change after reloading model', function () {
 
 
     expect($fresh->status)
-        ->toBe(SubscriptionStatus::CANCELLED);
+        ->toBe(EnSubscriptionStatus::CANCELLED);
 });
 
 
@@ -346,13 +346,13 @@ it('changes status correctly when many subscriptions exist', function () {
         ->create([
             'clinic_id' => Clinic::factory(),
             'plan_id' => Plan::factory(),
-            'status' => SubscriptionStatus::PENDING,
+            'status' => EnSubscriptionStatus::PENDING,
         ]);
 
 
     $result = $this->service->changeStatus(
         $target->id,
-        SubscriptionStatus::ACTIVE
+        EnSubscriptionStatus::ACTIVE
     );
 
 
@@ -361,5 +361,5 @@ it('changes status correctly when many subscriptions exist', function () {
 
 
     expect($target->fresh()->status)
-        ->toBe(SubscriptionStatus::ACTIVE);
+        ->toBe(EnSubscriptionStatus::ACTIVE);
 });

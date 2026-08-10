@@ -12,14 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vications', function (Blueprint $table) {
+        Schema::create('vacations', function (Blueprint $table) {
             $table->id();
             $table->date('start_date');
             $table->date('end_date');
             $table->text('reason')->nullable();
             $table->timestamps();
         });
-        DB::statement('ALTER TABLE vications ADD CONSTRAINT chk_vacation_dates 
+        DB::statement('ALTER TABLE vacations ADD CONSTRAINT chk_vacation_dates 
     CHECK (end_date >= start_date)');
     }
 
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('doctor_vications');
+        Schema::dropIfExists('vacations');
     }
 };

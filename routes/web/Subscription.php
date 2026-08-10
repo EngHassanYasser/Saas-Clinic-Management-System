@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Subscription\SubscriptionStatusController;
+use App\Http\Controllers\Subscription\EnSubscriptionStatusController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Subscription\SubscriptoinController;
 Route::middleware('auth','role:clinic','verified')->group(function () {
@@ -12,7 +12,7 @@ Route::middleware('auth')->group(function () {
     )->name('subscriptions.index');
     Route::put(
         '/subscriptions/{subscription}/status/{newStatus}',
-        [SubscriptionStatusController::class, 'changeStatus']
+        [EnSubscriptionStatusController::class, 'changeStatus']
     )->name('subscriptions.changeStatus');
     Route::put(
         '/subscriptions/renew/{subscription}/',

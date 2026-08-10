@@ -1,9 +1,9 @@
 <?php
 
-use App\Exceptions\HasVicationException;
+use App\Exceptions\HasVacationException;
 use App\Models\Clinic;
 use App\Models\Doctor;
-use App\Models\Vication;
+use App\Models\Vacation;
 use App\Services\Vacation\VacationService;
 
 
@@ -59,9 +59,9 @@ it('creates vacation successfully', function () {
     );
 
     expect($result)
-        ->toBeInstanceOf(Vication::class);
+        ->toBeInstanceOf(Vacation::class);
 
-    expect(Vication::count())
+    expect(Vacation::count())
         ->toBe(1);
 
 });
@@ -101,7 +101,7 @@ it('throws exception when doctor already has vacation in same clinic', function 
     $doctor = createAddVacationDoctor();
 
 
-    Vication::factory()->create([
+    Vacation::factory()->create([
 
         'clinic_id' => $clinic->id,
 
@@ -140,7 +140,7 @@ it('throws exception when doctor already has vacation in same clinic', function 
     );
 
 
-})->throws(HasVicationException::class);
+})->throws(HasVacationException::class);
 
 
 
@@ -156,7 +156,7 @@ it('does not create vacation when duplicate exists', function () {
     ]);
 
 
-    Vication::factory()->create([
+    Vacation::factory()->create([
 
         'clinic_id' => $clinic->id,
 
@@ -171,16 +171,16 @@ it('does not create vacation when duplicate exists', function () {
     ]);
 
 
-    $before = Vication::count();
+    $before = Vacation::count();
 
 
     expect(fn () => $this->service->add(
         $data,
         $clinic->id
-    ))->toThrow(HasVicationException::class);
+    ))->toThrow(HasVacationException::class);
 
 
-    expect(Vication::count())
+    expect(Vacation::count())
         ->toBe($before);
 
 });
@@ -196,7 +196,7 @@ it('allows same doctor to have vacation in different clinic', function () {
     $clinicTwo = createAddVacationClinic();
 
 
-    Vication::factory()->create([
+    Vacation::factory()->create([
 
         'clinic_id' => $clinicOne->id,
 
@@ -313,7 +313,7 @@ it('creates vacations for different doctors in same clinic', function () {
     );
 
 
-    expect(Vication::count())
+    expect(Vacation::count())
         ->toBe(2);
 
 });
@@ -322,7 +322,7 @@ it('creates vacations for different doctors in same clinic', function () {
 
 it('creates vacation correctly with many existing vacations', function () {
 
-    Vication::factory()
+    Vacation::factory()
         ->count(50)
         ->create();
 
@@ -343,6 +343,6 @@ it('creates vacation correctly with many existing vacations', function () {
 
 
     expect($result)
-        ->toBeInstanceOf(Vication::class);
+        ->toBeInstanceOf(Vacation::class);
 
 });

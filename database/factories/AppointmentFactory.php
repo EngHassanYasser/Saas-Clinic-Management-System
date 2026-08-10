@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Enums\AppointmentStatus;
+use App\Enums\EnAppointmentStatus;
 use App\Models\Clinic;
-use App\Models\DoctorService;
 use App\Models\Doctor;
+use App\Models\MedicalService;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -23,7 +23,7 @@ class AppointmentFactory extends Factory
             'start_time' => $start,
             'end_time' => $end,
 
-            'status' => AppointmentStatus::PENDING,
+            'status' => EnAppointmentStatus::PENDING,
 
             'notes' => fake()->optional()->sentence(),
 
@@ -40,7 +40,7 @@ class AppointmentFactory extends Factory
 
             'doctor_id' => Doctor::factory(),
 
-            'doctorService_id' => DoctorService::factory(),
+            'medicalService_id' => MedicalService::factory(),
 
             'visit_date' => fake()->date('Y-m-d'),
         ];
@@ -51,7 +51,7 @@ class AppointmentFactory extends Factory
         return $this->state(function (array $attributes) {
 
             return [
-                'status' => AppointmentStatus::CANCELLED,
+                'status' => EnAppointmentStatus::CANCELLED,
                 'cancellation_reason' => fake()->sentence(),
                 'cancellation_time' => Carbon::parse(
                     $attributes['visit_date'].' '.$attributes['start_time']
@@ -63,21 +63,21 @@ class AppointmentFactory extends Factory
     public function confirmed(): static
     {
         return $this->state([
-            'status' => AppointmentStatus::CONFIRMED,
+            'status' => EnAppointmentStatus::CONFIRMED,
         ]);
     }
 
     public function completed(): static
     {
         return $this->state([
-            'status' => AppointmentStatus::COMPLETED,
+            'status' => EnAppointmentStatus::COMPLETED,
         ]);
     }
 
     public function pending(): static
     {
         return $this->state([
-            'status' => AppointmentStatus::PENDING,
+            'status' => EnAppointmentStatus::PENDING,
         ]);
     }
 }

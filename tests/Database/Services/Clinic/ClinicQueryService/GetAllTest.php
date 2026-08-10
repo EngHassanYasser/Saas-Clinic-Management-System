@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\SubscriptionStatus;
+use App\Enums\EnSubscriptionStatus;
 use App\Models\City;
 use App\Models\Clinic;
 use App\Models\Plan;
@@ -34,7 +34,7 @@ it('returns paginated clinics with transformed data', function () {
     Subscription::factory()->create([
         'clinic_id' => $clinic->id,
         'plan_id' => $plan->id,
-        'status' => SubscriptionStatus::ACTIVE,
+        'status' => EnSubscriptionStatus::ACTIVE,
     ]);
 
     $result = app(ClinicQueryService::class)->getAll();
@@ -61,7 +61,7 @@ it('returns paginated clinics with transformed data', function () {
             'address',
         ]);
 
-    expect($clinic['status'])->toBe(SubscriptionStatus::ACTIVE);
+    expect($clinic['status'])->toBe(EnSubscriptionStatus::ACTIVE);
 
     expect($clinic['joined_at'])
         ->toBe('2026-08-01');
@@ -130,7 +130,7 @@ it('returns the latest subscription not the old one', function () {
     Subscription::factory()->create([
         'clinic_id' => $clinic->id,
         'plan_id' => $plan2->id,
-        'status' => SubscriptionStatus::ACTIVE,
+        'status' => EnSubscriptionStatus::ACTIVE,
         'created_at' => now(),
     ]);
 
@@ -138,7 +138,7 @@ it('returns the latest subscription not the old one', function () {
         ->getAll()
         ->items()[0];
 
-    expect($result['status'])->toBe(SubscriptionStatus::ACTIVE);
+    expect($result['status'])->toBe(EnSubscriptionStatus::ACTIVE);
 
     expect($result['plan']->name)->toBe('Premium');
 });

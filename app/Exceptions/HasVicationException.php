@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 
-class HasVicationException extends Exception
+class HasVacationException extends Exception
 {
     //
 }

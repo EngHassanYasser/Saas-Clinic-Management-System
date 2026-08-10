@@ -21,6 +21,6 @@ class Notification extends Model
     }
     public function notification_logs()
     {
-        return $this->hasMany(notification_log::class);
+        return $this->hasMany(notificationLog::class);
     }
 }

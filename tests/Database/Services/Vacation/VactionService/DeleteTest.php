@@ -2,7 +2,7 @@
 
 use App\Models\Clinic;
 use App\Models\Doctor;
-use App\Models\Vication;
+use App\Models\Vacation;
 use App\Services\Vacation\VacationService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -19,7 +19,7 @@ beforeEach(function () {
 |--------------------------------------------------------------------------
 */
 
-function createDeleteVacation(array $overrides = []): Vication
+function createDeleteVacation(array $overrides = []): Vacation
 {
     $clinic = Clinic::factory()->create();
 
@@ -28,7 +28,7 @@ function createDeleteVacation(array $overrides = []): Vication
     $doctor->clinics()->attach($clinic->id);
 
 
-    return Vication::factory()->create(array_merge([
+    return Vacation::factory()->create(array_merge([
         'doctor_id' => $doctor->id,
         'status' => 'upcoming',
     ], $overrides));
@@ -58,7 +58,7 @@ it('deletes vacation successfully', function () {
 
 
     expect(
-        Vication::find($vacation->id)
+        Vacation::find($vacation->id)
     )
         ->toBeNull();
 
@@ -158,12 +158,12 @@ it('deletes only vacation belonging to requested clinic', function () {
 
 
 
-    $vacationOne = Vication::factory()->create([
+    $vacationOne = Vacation::factory()->create([
         'doctor_id' => $doctorOne->id,
     ]);
 
 
-    $vacationTwo = Vication::factory()->create([
+    $vacationTwo = Vacation::factory()->create([
         'doctor_id' => $doctorTwo->id,
     ]);
 
@@ -177,14 +177,14 @@ it('deletes only vacation belonging to requested clinic', function () {
 
 
     expect(
-        Vication::find($vacationOne->id)
+        Vacation::find($vacationOne->id)
     )
         ->toBeNull();
 
 
 
     expect(
-        Vication::find($vacationTwo->id)
+        Vacation::find($vacationTwo->id)
     )
         ->not()
         ->toBeNull();
@@ -278,7 +278,7 @@ it('deletes correct vacation among many vacations', function () {
 
 
 
-    $vacations = Vication::factory()
+    $vacations = Vacation::factory()
         ->count(10)
         ->create([
             'doctor_id' => $doctor->id,
@@ -298,14 +298,14 @@ it('deletes correct vacation among many vacations', function () {
 
 
     expect(
-        Vication::find($target->id)
+        Vacation::find($target->id)
     )
         ->toBeNull();
 
 
 
     expect(
-        Vication::count()
+        Vacation::count()
     )
         ->toBe(9);
 

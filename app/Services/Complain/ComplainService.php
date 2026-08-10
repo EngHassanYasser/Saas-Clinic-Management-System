@@ -1,61 +1,57 @@
 <?php
 
-namespace App\Services\Complain;
+namespace App\Services\Complaint;
 
-use App\Enums\RoleType;
-use App\Models\Complain;
+use App\DTOs\Services\Complaint\StoreComplaintDTO;
+use App\DTOs\Services\Complaint\UpdateComplaintDTO;
+use App\Enums\EnRoleType;
+use App\Models\Complaint;
 use App\Models\User;
 
-class ComplainService
+class ComplaintService
 {
-    public function __construct(private ComplainQueryService $complainQueryService) {}
+    public function __construct(private ComplaintQueryService $complaintQueryService) {}
 
-    public function add(array $data, User $user, int $clinicId): Complain
+    public function add(StoreComplaintDTO $dto, User $user, int $clinicId): Complaint
     {
-        $data['user_id'] = $user->type === RoleType::PATIENT
-            ? $user->id
-            : null;
-        $complain = Complain::create([
+        $complaint = Complaint::create([
             'clinic_id' => $clinicId,
-            'user_id' => $data['user_id'],
-            'doctor_id' => $data['doctor_id'],
-            'department' => $data['department_name'],
-            'visit_date' => $data['visit_date'],
-            'severity' => $data['severity'],
-            'issue_type' => $data['issue_type'],
-            'description' => $data['description'],
-            'status' => $data['status'],
-            'patient_name' => $data['patient_name'],
+            'user_id' => $user->type ===EnRoleType::PATIENT ? $user->id : null,
+            'doctor_id' => $dto->doctorId,
+            'department' => $dto->departmentName,
+            'visit_date' => $dto->visiteDate,
+            'severity' => $dto->severity,
+            'issue_type' => $dto->issueType,
+            'description' => $dto->description,
+            'status' => $dto->status,
+            'patient_name' => $dto->patientName,
         ]);
 
-        return $complain;
+        return $complaint;
     }
 
-    public function update(array $data, int $complainId, int $clinicId): bool
+    public function update(UpdateComplaintDTO $dto, int $complaintId, int $clinicId): bool
     {
-        $complain = Complain::where('id', $complainId)
+        $complaint = Complaint::where('id', $complaintId)
             ->where('clinic_id', $clinicId)->firstOrFail();
-        $updateData = [
-            'doctor_id' => $data['doctor_id'] ?? null,
-            'department' => $data['department_name'],
-            'visit_date' => $data['visit_date'],
-            'severity' => $data['severity'],
-            'issue_type' => $data['issue_type'],
-            'status' => $data['status'],
-            'patient_name' => $data['patient_name'] ?? null,
-            'resolution_notes' => $data['resolution_notes'] ?? null,
-        ];
-        if (array_key_exists('description', $data)) {
-            $updateData['description'] = $data['description'];
-        }
 
-        return $complain->update($updateData);
+        return $complaint->update([
+            'doctor_id' => $dto->doctorId,
+            'department' => $dto->departmentName,
+            'visit_date' => $dto->visiteDate,
+            'severity' => $dto->severity,
+            'issue_type' => $dto->issueType,
+            'status' => $dto->status,
+            'patient_name' => $dto->patientName ?? null,
+            'resolution_notes' => $dto->resolutionNotes ?? null,
+            'description' => $dto->description ?? null,
+        ]);
     }
 
-    public function delete(int $complainId): bool
+    public function delete(int $complaintId): bool
     {
-        $complain = $this->complainQueryService->getById($complainId);
+        $complaint = $this->complaintQueryService->getById($complaintId);
 
-        return $complain->delete();
+        return $complaint->delete();
     }
 }

@@ -1,51 +1,51 @@
 <?php
 
-use App\Models\Complain;
+use App\Models\Complaint;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Services\Complain\ComplainService;
+use App\Services\Complaint\ComplaintService;
 beforeEach(function () {
-    $this->service = app(ComplainService::class);
+    $this->service = app(ComplaintService::class);
 });
-it('deletes existing complain', function () {
+it('deletes existing complaint', function () {
 
-    $complain = Complain::factory()->create();
+    $complaint = Complaint::factory()->create();
 
-    $result = $this->service->delete($complain->id);
+    $result = $this->service->delete($complaint->id);
 
     expect($result)->toBeTrue();
 
-    $this->assertDatabaseMissing('complains', [
-        'id' => $complain->id,
+    $this->assertDatabaseMissing('complaintts', [
+        'id' => $complaint->id,
     ]);
 });
 
-it('throws exception when complain does not exist', function () {
+it('throws exception when complaint does not exist', function () {
 
     $this->service->delete(999999);
 
 })->throws(ModelNotFoundException::class);
-it('deletes only requested complain', function () {
+it('deletes only requested complaint', function () {
 
-    $first = Complain::factory()->create();
+    $first = Complaint::factory()->create();
 
-    $second = Complain::factory()->create();
+    $second = Complaint::factory()->create();
 
     $this->service->delete($first->id);
 
-    $this->assertDatabaseMissing('complains', [
+    $this->assertDatabaseMissing('complaintts', [
         'id' => $first->id,
     ]);
 
-    $this->assertDatabaseHas('complains', [
+    $this->assertDatabaseHas('complaintts', [
         'id' => $second->id,
     ]);
 });
 it('returns true after successful deletion', function () {
 
-    $complain = Complain::factory()->create();
+    $complaint = Complaint::factory()->create();
 
     expect(
-        $this->service->delete($complain->id)
+        $this->service->delete($complaint->id)
     )->toBeTrue();
 
 });

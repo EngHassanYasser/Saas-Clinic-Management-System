@@ -2,8 +2,8 @@
 
 namespace App\Services\Clinic;
 
-use App\Enums\AppointmentStatus;
-use App\Enums\SubscriptionStatus;
+use App\Enums\EnAppointmentStatus;
+use App\Enums\EnSubscriptionStatus;
 use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\Subscription;
@@ -66,11 +66,11 @@ class ClinicStatisticsService
                     'earnings_total' => Subscription::sum('price'),
 
                     'active_subscriptions' => Subscription::whereStatus(
-                        SubscriptionStatus::ACTIVE->value
+                        EnSubscriptionStatus::ACTIVE->value
                     )->count(),
 
                     'cancelled_appointments' => Appointment::whereStatus(
-                        AppointmentStatus::CANCELLED->value
+                        EnAppointmentStatus::CANCELLED->value
                     )->count(),
                 ];
 

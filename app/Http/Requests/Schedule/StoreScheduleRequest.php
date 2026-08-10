@@ -23,18 +23,18 @@ class StoreScheduleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'start_time' => ['required', 'date_format:H:i'],
-            'end_time' => ['required', 'date_format:H:i', 'after:start_time'],
+            'startTime' => ['required', 'date_format:H:i'],
+            'endTime' => ['required', 'date_format:H:i', 'after:start_time'],
 
-            'slot_duration' => ['required', 'integer', 'min:15'],
+            'slotDuration' => ['required', 'integer', 'min:15'],
 
-            'start_break' => ['nullable', 'date_format:H:i'],
-            'end_break' => ['nullable', 'date_format:H:i', 'after:start_break'],
+            'startBreak' => ['nullable', 'date_format:H:i'],
+            'endBreak' => ['nullable', 'date_format:H:i', 'after:start_break'],
 
-            'is_available' => ['required', 'boolean'],
+            'isAvailable' => ['required', 'boolean'],
 
-            'doctor_id' => ['required', 'integer', 'exists:doctors,id'],
-            'day_ids.*' => ['integer', 'exists:days,id'],
+            'doctorId' => ['required', 'integer', 'exists:doctors,id'],
+            'dayIds.*' => ['integer', 'exists:days,id'],
         ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\SubscriptionStatus;
+use App\Enums\EnSubscriptionStatus;
 use App\Exceptions\ActiveSubscriptionAlreadyExistsException;
 use App\Models\Clinic;
 use App\Models\Plan;
@@ -33,7 +33,7 @@ function makeRenewSubscriptionContext(array $subscriptionOverrides = []): array
         'plan_id' => $plan->id,
         'start_at' => '2026-01-01',
         'end_at' => '2026-02-01',
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ], $subscriptionOverrides));
 
     return [
@@ -51,7 +51,7 @@ function makeRenewSubscriptionContext(array $subscriptionOverrides = []): array
 
 it('returns a boolean when renewal succeeds', function () {
     $context = makeRenewSubscriptionContext([
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     $result = $this->service->renew(
@@ -72,7 +72,7 @@ it('successfully renews the subscription', function () {
     $context = makeRenewSubscriptionContext([
         'start_at' => '2025-01-01',
         'end_at' => '2025-02-01',
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
     ]);
 
     $result = $this->service->renew(
@@ -93,7 +93,7 @@ it('persists the renewal changes in the database', function () {
     $context = makeRenewSubscriptionContext([
         'start_at' => '2025-01-01',
         'end_at' => '2025-02-01',
-        'status' => SubscriptionStatus::ACTIVE,
+        'status' => EnSubscriptionStatus::ACTIVE,
     ]);
 
     $this->service->renew(
@@ -111,7 +111,7 @@ it('persists the renewal changes in the database', function () {
         ->toBe(now()->addMonth()->toDateString());
 
     expect($subscription->status)
-        ->toBe(SubscriptionStatus::ACTIVE);
+        ->toBe(EnSubscriptionStatus::ACTIVE);
 });
 
 /*
@@ -170,7 +170,7 @@ it('sets end_at exactly one month after the renewal start date', function () {
 
 it('sets the subscription status to active after renewal', function () {
     $context = makeRenewSubscriptionContext([
-        'status' => SubscriptionStatus::ACTIVE,
+        'status' => EnSubscriptionStatus::ACTIVE,
     ]);
 
     $this->service->renew(
@@ -180,7 +180,7 @@ it('sets the subscription status to active after renewal', function () {
     $subscription = $context['subscription']->fresh();
 
     expect($subscription->status)
-        ->toBe(SubscriptionStatus::ACTIVE);
+        ->toBe(EnSubscriptionStatus::ACTIVE);
 });
 
 /*
@@ -191,7 +191,7 @@ it('sets the subscription status to active after renewal', function () {
 
 it('can renew an inactive subscription', function () {
     $context = makeRenewSubscriptionContext([
-        'status' => SubscriptionStatus::INACTIVE,
+        'status' => EnSubscriptionStatus::INACTIVE,
         'start_at' => '2025-01-01',
         'end_at' => '2025-02-01',
     ]);
@@ -206,7 +206,7 @@ it('can renew an inactive subscription', function () {
     $subscription = $context['subscription']->fresh();
 
     expect($subscription->status)
-        ->toBe(SubscriptionStatus::ACTIVE);
+        ->toBe(EnSubscriptionStatus::ACTIVE);
 });
 
 /*
@@ -217,7 +217,7 @@ it('can renew an inactive subscription', function () {
 
 it('does not consider the current subscription as another active subscription', function () {
     $context = makeRenewSubscriptionContext([
-        'status' => SubscriptionStatus::ACTIVE,
+        'status' => EnSubscriptionStatus::ACTIVE,
     ]);
 
     $result = $this->service->renew(
@@ -229,7 +229,7 @@ it('does not consider the current subscription as another active subscription', 
 
     expect(
         $context['subscription']->fresh()->status
-    )->toBe(SubscriptionStatus::ACTIVE);
+    )->toBe(EnSubscriptionStatus::ACTIVE);
 });
 
 /*
@@ -240,7 +240,7 @@ it('does not consider the current subscription as another active subscription', 
 
 it('throws when another active subscription exists for the same clinic', function () {
     $context = makeRenewSubscriptionContext([
-        'status' => SubscriptionStatus::INACTIVE,
+        'status' => EnSubscriptionStatus::INACTIVE,
         'start_at' => '2025-01-01',
         'end_at' => '2025-02-01',
     ]);
@@ -248,7 +248,7 @@ it('throws when another active subscription exists for the same clinic', functio
     $otherSubscription = Subscription::factory()->create([
         'clinic_id' => $context['clinic']->id,
         'plan_id' => $context['plan']->id,
-        'status' => SubscriptionStatus::ACTIVE,
+        'status' => EnSubscriptionStatus::ACTIVE,
         'start_at' => now()->subDays(10)->toDateString(),
         'end_at' => now()->addDays(20)->toDateString(),
     ]);
@@ -260,7 +260,7 @@ it('throws when another active subscription exists for the same clinic', functio
     );
 
     expect($otherSubscription->fresh()->status)
-        ->toBe(SubscriptionStatus::ACTIVE);
+        ->toBe(EnSubscriptionStatus::ACTIVE);
 });
 
 /*
@@ -271,7 +271,7 @@ it('throws when another active subscription exists for the same clinic', functio
 
 it('allows renewal when the active subscription belongs to another clinic', function () {
     $context = makeRenewSubscriptionContext([
-        'status' => SubscriptionStatus::INACTIVE,
+        'status' => EnSubscriptionStatus::INACTIVE,
         'start_at' => '2025-01-01',
         'end_at' => '2025-02-01',
     ]);
@@ -281,7 +281,7 @@ it('allows renewal when the active subscription belongs to another clinic', func
     Subscription::factory()->create([
         'clinic_id' => $anotherClinic->id,
         'plan_id' => $context['plan']->id,
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
         'start_at' => now()->subDays(10)->toDateString(),
         'end_at' => now()->addDays(20)->toDateString(),
     ]);
@@ -294,7 +294,7 @@ it('allows renewal when the active subscription belongs to another clinic', func
         ->toBeTrue();
 
     expect($context['subscription']->fresh()->status)
-        ->toBe(SubscriptionStatus::ACTIVE);
+        ->toBe(EnSubscriptionStatus::ACTIVE);
 });
 
 /*
@@ -453,7 +453,7 @@ it('replaces the old end_at date', function () {
 
 it('renews only the requested subscription', function () {
     $context = makeRenewSubscriptionContext([
-        'status' => SubscriptionStatus::INACTIVE,
+        'status' => EnSubscriptionStatus::INACTIVE,
         'start_at' => '2020-01-01',
         'end_at' => '2020-02-01',
     ]);
@@ -463,7 +463,7 @@ it('renews only the requested subscription', function () {
     $otherSubscription = Subscription::factory()->create([
         'clinic_id' => $anotherClinic->id,
         'plan_id' => $context['plan']->id,
-        'status' => SubscriptionStatus::INACTIVE,
+        'status' => EnSubscriptionStatus::INACTIVE,
         'start_at' => '2020-03-01',
         'end_at' => '2020-04-01',
     ]);
@@ -488,7 +488,7 @@ it('renews only the requested subscription', function () {
         ->toBe('2020-04-01');
 
     expect($other->status)
-        ->toBe(SubscriptionStatus::INACTIVE);
+        ->toBe(EnSubscriptionStatus::INACTIVE);
 });
 
 /*
@@ -499,7 +499,7 @@ it('renews only the requested subscription', function () {
 
 it('does not renew when another active subscription exists in the same clinic', function () {
     $context = makeRenewSubscriptionContext([
-        'status' => SubscriptionStatus::INACTIVE,
+        'status' => EnSubscriptionStatus::INACTIVE,
         'start_at' => '2020-01-01',
         'end_at' => '2020-02-01',
     ]);
@@ -507,7 +507,7 @@ it('does not renew when another active subscription exists in the same clinic', 
     $otherSubscription = Subscription::factory()->create([
         'clinic_id' => $context['clinic']->id,
         'plan_id' => $context['plan']->id,
-        'status' => SubscriptionStatus::ACTIVE,
+        'status' => EnSubscriptionStatus::ACTIVE,
         'start_at' => now()->subDays(10)->toDateString(),
         'end_at' => now()->addDays(20)->toDateString(),
     ]);
@@ -527,10 +527,10 @@ it('does not renew when another active subscription exists in the same clinic', 
         ->toBe('2020-02-01');
 
     expect($target->status)
-        ->toBe(SubscriptionStatus::INACTIVE);
+        ->toBe(EnSubscriptionStatus::INACTIVE);
 
     expect($otherSubscription->fresh()->status)
-        ->toBe(SubscriptionStatus::ACTIVE);
+        ->toBe(EnSubscriptionStatus::ACTIVE);
 });
 
 /*
@@ -547,7 +547,7 @@ it('does not create any subscription when renewal validation fails', function ()
     Subscription::factory()->create([
         'clinic_id' => $context['clinic']->id,
         'plan_id' => $context['plan']->id,
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
         'start_at' => now()->subDays(10)->toDateString(),
         'end_at' => now()->addDays(20)->toDateString(),
     ]);
@@ -580,7 +580,7 @@ it('does not leave partial changes when renewal validation fails', function () {
     Subscription::factory()->create([
         'clinic_id' => $context['clinic']->id,
         'plan_id' => $context['plan']->id,
-        'status' => SubscriptionStatus::ACTIVE->value,
+        'status' => EnSubscriptionStatus::ACTIVE->value,
         'start_at' => now()->subDays(10)->toDateString(),
         'end_at' => now()->addDays(20)->toDateString(),
     ]);
@@ -711,7 +711,7 @@ it('stores the exact renewal values in the database', function () {
         ->toBe(now()->addMonth()->toDateString());
 
     expect($row->status)
-        ->toBe(SubscriptionStatus::ACTIVE->value);
+        ->toBe(EnSubscriptionStatus::ACTIVE->value);
 
     expect($row->clinic_id)
         ->toBe($context['clinic']->id);
@@ -763,7 +763,7 @@ it('can renew the same subscription again when no other active subscription exis
 
 it('does not accidentally renew a different subscription', function () {
     $context = makeRenewSubscriptionContext([
-        'status' => SubscriptionStatus::INACTIVE,
+        'status' => EnSubscriptionStatus::INACTIVE,
         'start_at' => '2020-01-01',
         'end_at' => '2020-02-01',
     ]);

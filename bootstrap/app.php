@@ -2,7 +2,7 @@
 
 use App\Exceptions\ActiveSubscriptionAlreadyExistsException;
 use App\Exceptions\ActiveSubscriptionNotFoundException;
-use App\Exceptions\HasVicationException;
+use App\Exceptions\HasVacationException;
 use App\Exceptions\ScheduleConflictException;
 use App\Exceptions\UnauthorizedException;
 use App\Http\Middleware\RoleMiddleware;
@@ -31,7 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
             ScheduleConflictException::class,
             ActiveSubscriptionAlreadyExistsException::class,
             ActiveSubscriptionNotFoundException::class,
-            HasVicationException::class,
+            HasVacationException::class,
         ]);
 
         $exceptions->render(function (
@@ -62,11 +62,11 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (
-            HasVicationException $e,
+            HasVacationException $e,
             Request $request
         ) {
             return redirect()
-                ->route('vications.index')
+                ->route('vacations.index')
                 ->with('message', $e->getMessage());
         });
         $exceptions->render(function (

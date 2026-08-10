@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Subscription;
 
-use App\Enums\SubscriptionStatus;
+use App\Enums\EnSubscriptionStatus;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\subscriptions\StoreSubscriptionRequest;
-use App\Models\Plan;
+use App\Services\Plan\PlanQueryService;
 use App\Services\Subscription\SubscriptionQueryService;
 use App\services\Subscription\SubscriptionService;
 use App\Services\Subscription\SubscriptionStatisticsService;
@@ -17,17 +16,18 @@ class SubscriptoinController extends Controller
         private SubscriptionService $subscriptionService,
         private SubscriptionQueryService $subscriptionQueryService,
         private SubscriptionStatisticsService $subscriptionStatusticsService,
+        private PlanQueryService $planQueryService,
     ) {}
 
     public function index()
     {
         [$subscriptions,$plans,$stats,$clinics] = Concurrency::run([
             fn () => $this->subscriptionQueryService->getAll(),
-            fn () => Plan::get(['id', 'name', 'monthly_price']),
+            fn () => $this->planQueryService->getAll(),
             fn () => $this->subscriptionStatusticsService->getStats(),
             fn () => $this->subscriptionQueryService->getAll(),
         ]);
-        $statuses = enumToArray(SubscriptionStatus::class);
+        $statuses = enumToArray(EnSubscriptionStatus::class);
 
         return view(
             'subscriptions.index',
@@ -49,9 +49,9 @@ class SubscriptoinController extends Controller
         return redirect()->route('subscriptions.index')->with('message', $message);
     }
 
-    public function store(StoreSubscriptionRequest $request)
+    public function store(int $clinicId,int $planId)
     {
-        $this->subscriptionService->add($request->validated());
+        $this->subscriptionService->add($clinicId,$planId);
 
         return redirect()->route('subscriptions.index')->with('message', 'subscription added successfully');
     }

@@ -2,14 +2,14 @@
 
 namespace App\Services\Subscription;
 
-use App\Enums\SubscriptionStatus;
+use App\Enums\EnSubscriptionStatus;
 use App\Models\Subscription;
 
-class SubscriptionStatusService
+class EnSubscriptionStatusService
 {
     public function changeStatus(
         int $subscriptionId,
-        SubscriptionStatus $newStatus
+        EnSubscriptionStatus $newStatus
     ): bool {
         $subscription = Subscription::find($subscriptionId);
 

@@ -23,10 +23,10 @@ class StoreAppointmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'clinic_id' => ['required', 'integer', 'exists:clinics,id'],
-            'doctor_id' => ['required', 'integer', 'exists:doctors,id'],
-            'doctorService_id' => ['required', 'integer', 'exists:doctorServices,id'],
-            'visit_date' => ['required', 'date', 'after_or_equal:today'],
+            'clinicId' => ['required', 'integer', 'exists:clinics,id'],
+            'doctorId' => ['required', 'integer', 'exists:doctors,id'],
+            'medicalServiceId' => ['required', 'integer', 'exists:medicalServices,id'],
+            'visiteDate' => ['required', 'date', 'after_or_equal:today'],
             'slot' => ['required', 'date_format:H:i'],
         ];
     }

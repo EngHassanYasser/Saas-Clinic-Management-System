@@ -3,7 +3,7 @@ export default {
     //     const data = {
     //         ...this.form,
     //     };
-    //     const url = this.form.id ? `/vications/${this.form.id}` : "/vications";
+    //     const url = this.form.id ? `/vacations/${this.form.id}` : "/vacations";
 
     //     if (this.form.id) {
     //         data._method = "PUT";

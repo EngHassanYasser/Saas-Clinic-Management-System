@@ -2,22 +2,24 @@
 
 namespace App\Services\Doctor;
 
+use App\DTOs\Services\Doctor\StoreDoctorDTO;
+use App\DTOs\Services\Doctor\UpdateDoctorDTO;
 use App\Models\Doctor;
-use App\Models\Doctor_service_price;
+use App\Models\Clinic_doctor_medicalService;
 use Illuminate\Support\Facades\DB;
 
 class DoctorService
 {
-    public function add(array $data, int $clinicId): Doctor
+    public function add(StoreDoctorDTO $dto, int $clinicId): Doctor
     {
-        return DB::transaction(function () use ($data, $clinicId) {
+        return DB::transaction(function () use ($dto, $clinicId) {
 
             $doctor = Doctor::create([
-                'name' => $data['name'],
-                'phone' => $data['phone'],
-                'email' => $data['email'],
+                'name' => $dto->name,
+                'phone' => $dto->phone,
+                'email' => $dto->email,
             ]);
-            $doctor->specialities()->attach([$data['speciality_id']]);
+            $doctor->specialities()->attach([$dto->specialityId]);
             $doctor->clinics()->attach($clinicId);
             if (! empty($data['image'])) {
                 $doctor->addMedia($data['image'])
@@ -28,30 +30,30 @@ class DoctorService
         });
     }
 
-    public function update(array $data, int $doctorId, $clinicId): bool
+    public function update(UpdateDoctorDTO $dto, int $doctorId,int $clinicId): bool
     {
-        return DB::transaction(function () use ($data, $doctorId, $clinicId) {
+        return DB::transaction(function () use ($dto, $doctorId, $clinicId) {
 
             $doctor = Doctor::findOrFail($doctorId);
 
             $updated = $doctor->update([
-                'name' => $data['name'],
-                'phone' => $data['phone'],
-                'email' => $data['email'],
+                'name' => $dto->name,
+                'phone' => $dto->phone,
+                'email' => $dto->email,
             ]);
 
-            $doctor->specialities()->sync([$data['speciality_id']]);
+            $doctor->specialities()->sync([$dto->specialityId]);
             $doctor->clinics()->updateExistingPivot(
                 $clinicId,
                 [
-                    'is_active' => $data['is_active'],
+                    'is_active' => $dto->isActive,
                 ]
             );
-            if (! empty($data['image'])) {
+            if ($dto->image) {
 
                 $doctor->clearMediaCollection('avatar');
 
-                $doctor->addMedia($data['image'])
+                $doctor->addMedia($dto->image)
                     ->toMediaCollection('avatar');
             }
 
@@ -67,7 +69,7 @@ class DoctorService
 
             $doctor->clinics()->detach($clinicId);
 
-            Doctor_service_price::where('doctor_id', $doctorId)
+            Clinic_doctor_medicalService::where('doctor_id', $doctorId)
                 ->where('clinic_id', $clinicId)
                 ->delete();
 

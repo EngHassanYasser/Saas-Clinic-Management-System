@@ -44,11 +44,6 @@ class Clinic extends Model implements HasMedia
         return $this->belongsTo(user::class);
     }
 
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'clinic_users', 'clinic_id', 'user_id');
-    }
-
     public function settings()
     {
         return $this->hasOne(clinic_setting::class);
@@ -62,8 +57,7 @@ class Clinic extends Model implements HasMedia
     public function specialities()
     {
         return $this->belongsToMany(
-            Speciality::class,
-            'clinic_specialities'
+            Speciality::class
         );
     }
 
@@ -74,7 +68,7 @@ class Clinic extends Model implements HasMedia
 
     public function servicePrices()
     {
-        return $this->hasMany(doctor_service_price::class);
+        return $this->hasMany(Clinic_doctor_medicalService::class);
     }
 
     public function clinic_doctor()
@@ -84,12 +78,12 @@ class Clinic extends Model implements HasMedia
 
     public function doctors()
     {
-        return $this->belongsToMany(Doctor::class, 'clinic_doctors', 'clinic_id', 'doctor_id');
+        return $this->belongsToMany(Doctor::class);
     }
 
-    public function complains()
+    public function complaintts()
     {
-        return $this->hasMany(complain::class);
+        return $this->hasMany(complaint::class);
     }
 
     public function city()

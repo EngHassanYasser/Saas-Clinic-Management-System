@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clinic_doctors', function (Blueprint $table) {
+        Schema::create('clinic_doctor', function (Blueprint $table) {
             $table->boolean('is_active')->default(true);
         });
     }
@@ -21,6 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clinic_doctors');
+        Schema::dropIfExists('clinic_doctor');
     }
 };

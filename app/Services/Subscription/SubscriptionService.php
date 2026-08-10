@@ -2,8 +2,8 @@
 
 namespace App\Services\Subscription;
 
-use App\Enums\PlanStatus;
-use App\Enums\SubscriptionStatus;
+use App\Enums\EnPlanStatus;
+use App\Enums\EnSubscriptionStatus;
 use App\Exceptions\ActiveSubscriptionAlreadyExistsException;
 use App\Models\Clinic;
 use App\Models\Plan;
@@ -13,18 +13,18 @@ use Illuminate\Support\Facades\DB;
 class SubscriptionService
 {
     public function __construct(private SubscriptionValidationService $subscriptionValidationService) {}
-    public function add(array $data): Subscription
+    public function add(int $clinicId,int $planId): Subscription
     {
-        return DB::transaction(function () use ($data) {
-            Clinic::where('id', $data['clinic_id'])
+        return DB::transaction(function () use ($clinicId,$planId) {
+            Clinic::where('id', $clinicId)
                 ->lockForUpdate()
                 ->firstOrFail();
 
             $plan = Plan::select(['id', 'monthly_price'])
-                ->whereStatus(PlanStatus::ACTIVE->value)
-                ->findOrFail($data['plan_id']);
+                ->whereStatus(EnPlanStatus::ACTIVE->value)
+                ->findOrFail($planId);
 
-            if ($this->subscriptionValidationService->hasActiveSubscription($data['clinic_id'])) {
+            if ($this->subscriptionValidationService->hasActiveSubscription($clinicId)) {
                 throw new ActiveSubscriptionAlreadyExistsException();
             }
 
@@ -33,7 +33,7 @@ class SubscriptionService
                 'start_at' => $startAt->toDateString(),
                 'end_at'   => $startAt->copy()->addMonth()->toDateString(),
                 'price' => $plan->monthly_price,
-                'clinic_id' => $data['clinic_id'],
+                'clinic_id' => $clinicId,
                 'plan_id' => $plan->id,
             ]);
         });
@@ -50,12 +50,12 @@ class SubscriptionService
                 throw new ActiveSubscriptionAlreadyExistsException();
             }
 
-            $startAt = now();
+            $startAt = now()->utc();
 
             return $subscription->update([
                 'start_at' => $startAt->toDateString(),
                 'end_at'   => $startAt->copy()->addMonth()->toDateString(),
-                'status'   => SubscriptionStatus::ACTIVE->value,
+                'status'   => EnSubscriptionStatus::ACTIVE->value,
             ]);
         });
     }

@@ -2,7 +2,7 @@
 
 namespace App\Services\Appointment;
 
-use App\Enums\RoleType;
+use App\Enums\EnRoleType;
 use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\User;
@@ -13,8 +13,8 @@ class AppointmentStatisticsService
     public function getStats(User $user): array
     {
         return match ($user->type) {
-            RoleType::PATIENT => $this->getPatientStats($user->id),
-            RoleType::CLINIC => $this->getClinicStats(Clinic::where('owner_id', $user->id)->value('id')),
+           EnRoleType::PATIENT => $this->getPatientStats($user->id),
+           EnRoleType::CLINIC => $this->getClinicStats(Clinic::where('owner_id', $user->id)->value('id')),
             default => [
                 'total' => 0,
                 'pending' => 0,

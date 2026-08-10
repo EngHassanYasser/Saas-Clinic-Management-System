@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\ScheduleSlotDuration;
+use App\Enums\EnScheduleSlotDuration;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,7 +25,7 @@ class Schedule extends Model
     public $timestamps = false;
 
     protected $casts = [
-        'slot_duration' => ScheduleSlotDuration::class,
+        'slot_duration' => EnScheduleSlotDuration::class,
     ];
 
     public function formatTime12Hours($time): string

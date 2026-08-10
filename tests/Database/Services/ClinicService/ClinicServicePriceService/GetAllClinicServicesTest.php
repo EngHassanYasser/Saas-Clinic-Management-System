@@ -3,7 +3,7 @@
 use App\Models\Clinic;
 use App\Models\DoctorService;
 use App\Models\Doctor;
-use App\Models\Doctor_service_price;
+use App\Models\Clinic_doctor_medicalService;
 use App\Services\ServiceCatalog\DoctorServicePriceService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -26,17 +26,17 @@ function createDoctorServicePrice(): array
 
     $clinicService = DoctorService::factory()->create();
 
-    $doctorServicePrice = Doctor_service_price::factory()->create([
+    $medicalServicePrice = Clinic_doctor_medicalService::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
-        'doctorService_id' => $clinicService->id,
+        'medicalService_id' => $clinicService->id,
     ]);
 
     return [
         'clinic' => $clinic,
         'doctor' => $doctor,
         'clinicService' => $clinicService,
-        'doctorServicePrice' => $doctorServicePrice,
+        'medicalServicePrice' => $medicalServicePrice,
     ];
 }
 /*
@@ -88,9 +88,9 @@ it('returns all doctor service prices', function () {
     expect($result->pluck('id')->sort()->values()->all())
         ->toBe(
             collect([
-                $first['doctorServicePrice']->id,
-                $second['doctorServicePrice']->id,
-                $third['doctorServicePrice']->id,
+                $first['medicalServicePrice']->id,
+                $second['medicalServicePrice']->id,
+                $third['medicalServicePrice']->id,
             ])->sort()->values()->all()
         );
 });
@@ -101,13 +101,13 @@ it('returns all doctor service prices', function () {
 |--------------------------------------------------------------------------
 */
 
-it('returns Doctor_service_price models', function () {
+it('returns Clinic_doctor_medicalService models', function () {
     createDoctorServicePrice();
 
     $result = $this->service->getAllDoctorServices();
 
     expect($result->every(
-        fn (Doctor_service_price $item) => $item instanceof Doctor_service_price
+        fn (Clinic_doctor_medicalService $item) => $item instanceof Clinic_doctor_medicalService
     ))->toBeTrue();
 });
 
@@ -124,13 +124,13 @@ it('returns records that actually exist in the database', function () {
 
     expect(
         $result->contains(
-            fn (Doctor_service_price $item) => $item->id === $context['doctorServicePrice']->id
+            fn (Clinic_doctor_medicalService $item) => $item->id === $context['medicalServicePrice']->id
         )
     )->toBeTrue();
 
     expect(
         DB::table('doctor_service_prices')
-            ->where('id', $context['doctorServicePrice']->id)
+            ->where('id', $context['medicalServicePrice']->id)
             ->exists()
     )->toBeTrue();
 });
@@ -148,7 +148,7 @@ it('eager loads the clinic relationship', function () {
 
     $item = $result->firstWhere(
         'id',
-        $context['doctorServicePrice']->id
+        $context['medicalServicePrice']->id
     );
 
     expect($item->relationLoaded('clinic'))
@@ -174,7 +174,7 @@ it('eager loads the doctor relationship', function () {
 
     $item = $result->firstWhere(
         'id',
-        $context['doctorServicePrice']->id
+        $context['medicalServicePrice']->id
     );
 
     expect($item->relationLoaded('doctor'))
@@ -193,23 +193,23 @@ it('eager loads the doctor relationship', function () {
 |--------------------------------------------------------------------------
 */
 
-it('eager loads the doctorService relationship', function () {
+it('eager loads the medicalService relationship', function () {
     $context = createDoctorServicePrice();
 
     $result = $this->service->getAllDoctorServices();
 
     $item = $result->firstWhere(
         'id',
-        $context['doctorServicePrice']->id
+        $context['medicalServicePrice']->id
     );
 
-    expect($item->relationLoaded('doctorService'))
+    expect($item->relationLoaded('medicalService'))
         ->toBeTrue();
 
-    expect($item->doctorService)
+    expect($item->medicalService)
         ->not->toBeNull()
         ->toBeInstanceOf(DoctorService::class)
-        ->and($item->doctorService->id)
+        ->and($item->medicalService->id)
         ->toBe($context['clinicService']->id);
 });
 
@@ -235,7 +235,7 @@ it('eager loads all required relationships for every record', function () {
         expect($item->relationLoaded('doctor'))
             ->toBeTrue();
 
-        expect($item->relationLoaded('doctorService'))
+        expect($item->relationLoaded('medicalService'))
             ->toBeTrue();
     }
 });
@@ -255,17 +255,17 @@ it('returns the correct related models for every record', function () {
 
     $firstResult = $result->firstWhere(
         'id',
-        $first['doctorServicePrice']->id
+        $first['medicalServicePrice']->id
     );
 
     $secondResult = $result->firstWhere(
         'id',
-        $second['doctorServicePrice']->id
+        $second['medicalServicePrice']->id
     );
 
     $thirdResult = $result->firstWhere(
         'id',
-        $third['doctorServicePrice']->id
+        $third['medicalServicePrice']->id
     );
 
     expect($firstResult->clinic->id)
@@ -274,7 +274,7 @@ it('returns the correct related models for every record', function () {
     expect($firstResult->doctor->id)
         ->toBe($first['doctor']->id);
 
-    expect($firstResult->doctorService->id)
+    expect($firstResult->medicalService->id)
         ->toBe($first['clinicService']->id);
 
     expect($secondResult->clinic->id)
@@ -283,7 +283,7 @@ it('returns the correct related models for every record', function () {
     expect($secondResult->doctor->id)
         ->toBe($second['doctor']->id);
 
-    expect($secondResult->doctorService->id)
+    expect($secondResult->medicalService->id)
         ->toBe($second['clinicService']->id);
 
     expect($thirdResult->clinic->id)
@@ -292,7 +292,7 @@ it('returns the correct related models for every record', function () {
     expect($thirdResult->doctor->id)
         ->toBe($third['doctor']->id);
 
-    expect($thirdResult->doctorService->id)
+    expect($thirdResult->medicalService->id)
         ->toBe($third['clinicService']->id);
 });
 
@@ -321,7 +321,7 @@ it('does not execute N+1 queries when accessing relationships', function () {
     foreach ($result as $item) {
         $item->clinic;
         $item->doctor;
-        $item->doctorService;
+        $item->medicalService;
     }
 
     $queries = DB::getQueryLog();
@@ -334,7 +334,7 @@ it('does not execute N+1 queries when accessing relationships', function () {
      * 1 query for doctor_service_prices
      * 1 query for clinics
      * 1 query for doctors
-     * 1 query for doctorServices
+     * 1 query for medicalServices
      *
      * Total = 4 queries.
      */
@@ -360,7 +360,7 @@ it('keeps query count constant regardless of number of records', function () {
     foreach ($result as $item) {
         $item->clinic;
         $item->doctor;
-        $item->doctorService;
+        $item->medicalService;
     }
 
     $queriesForOneRecord = count(DB::getQueryLog());
@@ -382,7 +382,7 @@ it('keeps query count constant regardless of number of records', function () {
     foreach ($result as $item) {
         $item->clinic;
         $item->doctor;
-        $item->doctorService;
+        $item->medicalService;
     }
 
     $queriesForFiveRecords = count(DB::getQueryLog());
@@ -407,22 +407,22 @@ it('does not modify the database', function () {
     $first = createDoctorServicePrice();
     $second = createDoctorServicePrice();
 
-    $beforeCount = Doctor_service_price::count();
+    $beforeCount = Clinic_doctor_medicalService::count();
 
     $this->service->getAllDoctorServices();
 
-    expect(Doctor_service_price::count())
+    expect(Clinic_doctor_medicalService::count())
         ->toBe($beforeCount);
 
     expect(
-        Doctor_service_price::whereKey(
-            $first['doctorServicePrice']->id
+        Clinic_doctor_medicalService::whereKey(
+            $first['medicalServicePrice']->id
         )->exists()
     )->toBeTrue();
 
     expect(
-        Doctor_service_price::whereKey(
-            $second['doctorServicePrice']->id
+        Clinic_doctor_medicalService::whereKey(
+            $second['medicalServicePrice']->id
         )->exists()
     )->toBeTrue();
 });
@@ -447,13 +447,13 @@ it('returns each database record exactly once', function () {
         ->and($ids->unique()->count())
         ->toBe(3);
 
-    expect($ids->contains($first['doctorServicePrice']->id))
+    expect($ids->contains($first['medicalServicePrice']->id))
         ->toBeTrue();
 
-    expect($ids->contains($second['doctorServicePrice']->id))
+    expect($ids->contains($second['medicalServicePrice']->id))
         ->toBeTrue();
 
-    expect($ids->contains($third['doctorServicePrice']->id))
+    expect($ids->contains($third['medicalServicePrice']->id))
         ->toBeTrue();
 });
 
@@ -472,16 +472,16 @@ it('correctly handles multiple service prices belonging to the same clinic', fun
     $clinicServiceOne = DoctorService::factory()->create();
     $clinicServiceTwo = DoctorService::factory()->create();
 
-    $first = Doctor_service_price::factory()->create([
+    $first = Clinic_doctor_medicalService::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorOne->id,
-        'doctorService_id' => $clinicServiceOne->id,
+        'medicalService_id' => $clinicServiceOne->id,
     ]);
 
-    $second = Doctor_service_price::factory()->create([
+    $second = Clinic_doctor_medicalService::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorTwo->id,
-        'doctorService_id' => $clinicServiceTwo->id,
+        'medicalService_id' => $clinicServiceTwo->id,
     ]);
 
     $result = $this->service->getAllDoctorServices();
@@ -504,10 +504,10 @@ it('correctly handles multiple service prices belonging to the same clinic', fun
     expect($secondResult->doctor->id)
         ->toBe($doctorTwo->id);
 
-    expect($firstResult->doctorService->id)
+    expect($firstResult->medicalService->id)
         ->toBe($clinicServiceOne->id);
 
-    expect($secondResult->doctorService->id)
+    expect($secondResult->medicalService->id)
         ->toBe($clinicServiceTwo->id);
 });
 
@@ -526,16 +526,16 @@ it('correctly handles multiple service prices belonging to the same doctor', fun
     $serviceOne = DoctorService::factory()->create();
     $serviceTwo = DoctorService::factory()->create();
 
-    $first = Doctor_service_price::factory()->create([
+    $first = Clinic_doctor_medicalService::factory()->create([
         'clinic_id' => $clinicOne->id,
         'doctor_id' => $doctor->id,
-        'doctorService_id' => $serviceOne->id,
+        'medicalService_id' => $serviceOne->id,
     ]);
 
-    $second = Doctor_service_price::factory()->create([
+    $second = Clinic_doctor_medicalService::factory()->create([
         'clinic_id' => $clinicTwo->id,
         'doctor_id' => $doctor->id,
-        'doctorService_id' => $serviceTwo->id,
+        'medicalService_id' => $serviceTwo->id,
     ]);
 
     $result = $this->service->getAllDoctorServices();
@@ -566,12 +566,12 @@ it('does not mix relationships between records', function () {
 
     $firstResult = $result->firstWhere(
         'id',
-        $first['doctorServicePrice']->id
+        $first['medicalServicePrice']->id
     );
 
     $secondResult = $result->firstWhere(
         'id',
-        $second['doctorServicePrice']->id
+        $second['medicalServicePrice']->id
     );
 
     expect($firstResult->clinic->id)
@@ -582,7 +582,7 @@ it('does not mix relationships between records', function () {
         ->toBe($first['doctor']->id)
         ->not->toBe($second['doctor']->id);
 
-    expect($firstResult->doctorService->id)
+    expect($firstResult->medicalService->id)
         ->toBe($first['clinicService']->id)
         ->not->toBe($second['clinicService']->id);
 
@@ -594,7 +594,7 @@ it('does not mix relationships between records', function () {
         ->toBe($second['doctor']->id)
         ->not->toBe($first['doctor']->id);
 
-    expect($secondResult->doctorService->id)
+    expect($secondResult->medicalService->id)
         ->toBe($second['clinicService']->id)
         ->not->toBe($first['clinicService']->id);
 });
@@ -612,7 +612,7 @@ it('contains loaded relation models rather than only foreign keys', function () 
 
     $item = $result->firstWhere(
         'id',
-        $context['doctorServicePrice']->id
+        $context['medicalServicePrice']->id
     );
 
     expect($item->clinic)
@@ -621,7 +621,7 @@ it('contains loaded relation models rather than only foreign keys', function () 
     expect($item->doctor)
         ->toBeInstanceOf(Doctor::class);
 
-    expect($item->doctorService)
+    expect($item->medicalService)
         ->toBeInstanceOf(DoctorService::class);
 });
 

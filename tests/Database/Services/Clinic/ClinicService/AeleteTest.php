@@ -2,7 +2,7 @@
 
 use App\Models\Clinic;
 use App\Models\Doctor;
-use App\Models\Doctor_service_price;
+use App\Models\Clinic_doctor_medicalService;
 use App\Models\User;
 use App\Services\Clinic\DoctorService;
 use Illuminate\Support\Facades\DB;
@@ -51,18 +51,18 @@ it('deletes doctor service prices', function () {
         'owner_id' => $owner->id,
     ]);
 
-    Doctor_service_price::factory()->count(3)->create([
+    Clinic_doctor_medicalService::factory()->count(3)->create([
         'clinic_id' => $clinic->id,
     ]);
 
     expect(
-        Doctor_service_price::count()
+        Clinic_doctor_medicalService::count()
     )->toBe(3);
 
     $this->service->delete($clinic);
 
     expect(
-        Doctor_service_price::count()
+        Clinic_doctor_medicalService::count()
     )->toBe(0);
 });
 

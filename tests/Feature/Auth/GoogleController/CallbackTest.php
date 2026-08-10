@@ -1,6 +1,5 @@
 <?php
-use App\Enums\RoleType;
-use App\Events\UserCreated;
+use App\Enums\EnRoleType;use App\Events\UserCreated;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Event;
@@ -10,7 +9,7 @@ it('creates a new user from google account', function () {
     Event::fake();
 
     session([
-        'account_type' => RoleType::PATIENT->value,
+        'account_type' =>EnRoleType::PATIENT->value,
     ]);
 
     $googleUser = Mockery::mock();

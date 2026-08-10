@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Plan;
 
-use App\DTOs\Services\Plan\PlanService\StorePlanDTO;
-use App\DTOs\Services\Plan\PlanService\UpdatePlanDTO;
-use App\Enums\PlanStatus;
+use App\DTOs\Services\Plan\StorePlanDTO;
+use App\DTOs\Services\Plan\UpdatePlanDTO;
+use App\Enums\EnPlanStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\plans\StorePlanRequest;
 use App\Http\Requests\plans\UpdatePlanRequest;
@@ -21,7 +21,7 @@ class PlanController extends Controller
     public function index()
     {
         $plans = $this->planQueryService->getAll();
-        $statuses = enumToArray(PlanStatus::class);
+        $statuses = enumToArray(EnPlanStatus::class);
 
         return view('plans.index', compact('plans', 'statuses'));
     }

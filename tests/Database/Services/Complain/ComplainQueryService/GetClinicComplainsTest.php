@@ -1,26 +1,25 @@
 <?php
 
 use App\Models\User;
-use App\Models\Complain;
+use App\Models\Complaint;
 use App\Models\Clinic;
 use App\Models\Doctor;
-use App\Enums\RoleType;
-use App\Services\Complain\ComplainQueryService;
+use App\Enums\EnRoleType;use App\Services\Complaint\ComplaintQueryService;
 
 
 beforeEach(function () {
-    $this->service = app(ComplainQueryService::class);
+    $this->service = app(ComplaintQueryService::class);
 });
 
 
-it('returns only clinic complains for clinic owner', function () {
+it('returns only clinic complaintts for clinic owner', function () {
 
     $clinicOwner = User::factory()->create([
-        'type' => RoleType::CLINIC,
+        'type' =>EnRoleType::CLINIC,
     ]);
 
     $otherClinicOwner = User::factory()->create([
-        'type' => RoleType::CLINIC,
+        'type' =>EnRoleType::CLINIC,
     ]);
 
 
@@ -34,77 +33,77 @@ it('returns only clinic complains for clinic owner', function () {
     ]);
 
 
-    $firstComplain = Complain::factory()->create([
+    $firstComplaint = Complaint::factory()->create([
         'clinic_id' => $clinic->id
     ]);
 
 
-    $secondComplain = Complain::factory()->create([
+    $secondComplaint = Complaint::factory()->create([
         'clinic_id' => $otherClinic->id
     ]);
 
 
-    $result = $this->service->getClinicComplains($clinicOwner);
+    $result = $this->service->getClinicComplaints($clinicOwner);
 
 
     expect($result)
         ->toHaveCount(1)
         ->and($result->first()->id)
-        ->toBe($firstComplain->id);
+        ->toBe($firstComplaint->id);
 
 });
-it('returns only complains created by patient', function () {
+it('returns only complaintts created by patient', function () {
 
     $patient = User::factory()->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
 
 
     $otherPatient = User::factory()->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
 
 
     $clinic = Clinic::factory()->create();
 
 
-    $patientComplain = Complain::factory()->create([
+    $patientComplaint = Complaint::factory()->create([
         'clinic_id' => $clinic->id,
         'user_id' => $patient->id,
     ]);
 
 
-    Complain::factory()->create([
+    Complaint::factory()->create([
         'clinic_id' => $clinic->id,
         'user_id' => $otherPatient->id,
     ]);
 
 
-    $result = $this->service->getClinicComplains($patient);
+    $result = $this->service->getClinicComplaints($patient);
 
 
     expect($result)
         ->toHaveCount(1)
         ->and($result->first()->id)
-        ->toBe($patientComplain->id);
+        ->toBe($patientComplaint->id);
 
 });
 it('loads patient and doctor relationships', function () {
 
     $patient = User::factory()->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
 
     $doctor = Doctor::factory()->create();
 
 
-    $complain = Complain::factory()->create([
+    $complaint = Complaint::factory()->create([
         'user_id' => $patient->id,
         'doctor_id' => $doctor->id
     ]);
 
 
-    $result = $this->service->getClinicComplains($patient);
+    $result = $this->service->getClinicComplaints($patient);
 
 
     $item = $result->first();
@@ -119,15 +118,15 @@ it('loads patient and doctor relationships', function () {
 it('returns only required columns', function () {
 
     $patient = User::factory()->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
 
-    $complain = Complain::factory()->create([
+    $complaint = Complaint::factory()->create([
         'user_id' => $patient->id,
     ]);
 
 
-    $result = $this->service->getClinicComplains($patient);
+    $result = $this->service->getClinicComplaints($patient);
 
 
     $item = $result->first();
@@ -140,17 +139,17 @@ it('returns only required columns', function () {
         ->not->toHaveKey('some_hidden_column');
 
 });
-it('returns all complains for other roles', function () {
+it('returns all complaintts for other roles', function () {
 
     $admin = User::factory()->create([
-        'type' => RoleType::SUPER_ADMIN,
+        'type' =>EnRoleType::SUPER_ADMIN,
     ]);
 
 
-    Complain::factory(5)->create();
+    Complaint::factory(5)->create();
 
 
-    $result = $this->service->getClinicComplains($admin);
+    $result = $this->service->getClinicComplaints($admin);
 
 
     expect($result)->toHaveCount(5);
@@ -159,14 +158,14 @@ it('returns all complains for other roles', function () {
 it('returns empty collection if clinic has no owner match', function () {
 
     $clinicUser = User::factory()->create([
-        'type' => RoleType::CLINIC,
+        'type' =>EnRoleType::CLINIC,
     ]);
 
 
-    Complain::factory()->create();
+    Complaint::factory()->create();
 
 
-    $result = $this->service->getClinicComplains($clinicUser);
+    $result = $this->service->getClinicComplaints($clinicUser);
 
 
     expect($result)->toBeEmpty();

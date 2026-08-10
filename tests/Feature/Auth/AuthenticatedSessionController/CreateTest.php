@@ -1,7 +1,6 @@
 <?php
 
-use App\Enums\RoleType;
-use App\Models\User;
+use App\Enums\EnRoleType;use App\Models\User;
 
 it('displays the login page for guests', function () {
 
@@ -14,7 +13,7 @@ it('displays the login page for guests', function () {
 it('redirects patient to appointments page', function () {
 
     $user = User::factory()->create([
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]);
 
     $this->actingAs($user);
@@ -26,7 +25,7 @@ it('redirects patient to appointments page', function () {
 it('redirects clinic user to clinic dashboard', function () {
 
     $user = User::factory()->create([
-        'type' => RoleType::CLINIC,
+        'type' =>EnRoleType::CLINIC,
     ]);
 
     $this->actingAs($user);
@@ -38,7 +37,7 @@ it('redirects clinic user to clinic dashboard', function () {
 it('redirects super admin to admin dashboard', function () {
 
     $user = User::factory()->create([
-        'type' => RoleType::SUPER_ADMIN,
+        'type' =>EnRoleType::SUPER_ADMIN,
     ]);
 
     $this->actingAs($user);

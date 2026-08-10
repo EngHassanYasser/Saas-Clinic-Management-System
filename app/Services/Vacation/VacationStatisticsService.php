@@ -2,7 +2,7 @@
 
 namespace App\Services\Vacation;
 
-use App\Models\Vication;
+use App\Models\Vacation;
 use Illuminate\Support\Facades\Cache;
 
 class VacationStatisticsService
@@ -10,10 +10,10 @@ class VacationStatisticsService
     public function getStatistics(int $clinicId): array
     {
         return Cache::remember(
-            "vications.statistics.clinic.{$clinicId}",
+            "vacations.statistics.clinic.{$clinicId}",
             now()->addMinutes(5),
             function () use ($clinicId) {
-                $statistics = Vication::whereRelation(
+                $statistics = Vacation::whereRelation(
                     'doctor.clinics',
                     'clinics.id',
                     $clinicId

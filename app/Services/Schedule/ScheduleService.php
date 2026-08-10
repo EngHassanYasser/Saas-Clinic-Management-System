@@ -2,8 +2,9 @@
 
 namespace App\Services\Schedule;
 
-use App\DTOs\Services\Schedule\ScheduleService\StoreScheduleDTO;
-use App\DTOs\Services\Schedule\ScheduleService\UpdateScheduleDTO;
+use App\DTOs\Services\Schedule\HasScheduleConflictDTO;
+use App\DTOs\Services\Schedule\StoreScheduleDTO;
+use App\DTOs\Services\Schedule\UpdateScheduleDTO;
 use App\Exceptions\ScheduleConflictException;
 use App\Models\Schedule;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +16,20 @@ class ScheduleService
     public function add(StoreScheduleDTO $dto, int $clinicId): Schedule
     {
         return DB::transaction(function () use ($dto, $clinicId) {
-            if ($this->scheduleConfilctService->hasScheduleConflict($data, $clinicId)) {
+
+            $schedule = Schedule::where('clinic_id', $clinicId)
+                ->where('doctor_id', $dto->doctorId)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            $ConflictDTO = new HasScheduleConflictDTO($dto->startTime,
+                $dto->endTime,
+                $dto->slotDuration,
+                $dto->startBreak,
+                $dto->endBreak,
+                $dto->isAvailable,
+                $dto->dayIds);
+            if ($this->scheduleConfilctService->hasScheduleConflict($ConflictDTO, $schedule)) {
                 throw new ScheduleConflictException('يوجد تداخل مع جدول يوم الأحد.');
             }
             $schedule = Schedule::create([
@@ -41,15 +55,16 @@ class ScheduleService
             $schedule = Schedule::where('id', $scheduleId)
                 ->lockForUpdate()
                 ->firstOrFail();
-
-            $conflictData = array_merge($data, [
-                'doctor_id' => $schedule->doctor_id,
-            ]);
-
+            $ConflictDTO = new HasScheduleConflictDTO($dto->startTime,
+                $dto->endTime,
+                $dto->slotDuration,
+                $dto->startBreak,
+                $dto->endBreak,
+                $dto->isAvailable,
+                $dto->dayIds);
             if ($this->scheduleConfilctService->hasScheduleConflict(
-                $conflictData,
-                $schedule->clinic_id,
-                $schedule->id
+                $ConflictDTO,
+                $schedule
             )) {
                 throw new ScheduleConflictException(
                     'يوجد تداخل في جدول العمل.'

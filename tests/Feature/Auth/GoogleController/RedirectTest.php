@@ -1,7 +1,6 @@
 <?php
 
-use App\Enums\RoleType;
-use Laravel\Socialite\Facades\Socialite;
+use App\Enums\EnRoleType;use Laravel\Socialite\Facades\Socialite;
 it('stores account type in session and redirects to google', function () {
 
     Socialite::shouldReceive('driver')
@@ -14,7 +13,7 @@ it('stores account type in session and redirects to google', function () {
         ->andReturn(redirect('https://accounts.google.com'));
 
     $response = $this->get(route('google.redirect', [
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]));
 
     expect(session('account_type'))
@@ -53,11 +52,11 @@ it('overwrites previous account type in session', function () {
         ->andReturn(redirect('https://accounts.google.com'));
 
     $this->get(route('google.redirect', [
-        'type' => RoleType::PATIENT,
+        'type' =>EnRoleType::PATIENT,
     ]));
 
     $this->get(route('google.redirect', [
-        'type' => RoleType::CLINIC,
+        'type' =>EnRoleType::CLINIC,
     ]));
 
     expect(session('account_type'))
