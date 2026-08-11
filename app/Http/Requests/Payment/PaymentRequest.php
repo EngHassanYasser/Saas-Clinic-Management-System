@@ -28,7 +28,7 @@ class PaymentRequest extends FormRequest
                 'in:stripe,paypal',
             ],
 
-            'payment_method' => [
+            'paymentMethod' => [
                 'required',
                 'in:card,google_pay,paypal',
             ],

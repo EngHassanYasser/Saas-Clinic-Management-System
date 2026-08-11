@@ -2,8 +2,6 @@
 
 namespace App\DTOs\Services\Medical_Service;
 
-use App\Http\Requests\Medical_Service\StoreMedical_ServiceRequest;
-
 class StoreMedicalrviceDTO
 {
     public function __construct(
@@ -13,12 +11,12 @@ class StoreMedicalrviceDTO
         public readonly float $price,
     ) {}
 
-        public static function fromRequest(StoreMedical_ServiceRequest $request):self {
+        public static function fromRequest(array $validatedData):self {
             return new self(
-                medicalServiceId:$request->integer('medicalServiceId'),
-                doctorId:$request->integer('doctorId'),
-                description:$request->integer('description'),
-                price:$request->float('price'),
+                medicalServiceId:$validatedData['medicalServiceId'],
+                doctorId:$validatedData['doctorId'],
+                description:$validatedData['description'],
+                price:$validatedData['price'],
             );
         }
 }

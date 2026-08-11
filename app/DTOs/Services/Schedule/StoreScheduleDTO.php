@@ -1,8 +1,6 @@
 <?php
 namespace App\DTOs\Services\Schedule;
 
-use App\Http\Requests\Schedule\StoreScheduleRequest;
-
 class StoreScheduleDTO {
         public function __construct(
             public readonly string $startTime,
@@ -15,16 +13,16 @@ class StoreScheduleDTO {
             public readonly array $dayIds,
             
         ){}
-        public static function fromRequest(StoreScheduleRequest $request):self{
+        public static function fromRequest(array $validatedData):self{
             return new self(
-                startTime:$request->string('startTime'),
-                endTime:$request->string('endTime'),
-                slotDuration:$request->integer('slotDuration'),
-                startBreak:$request->string('startBreak'),
-                endBreak:$request->string('endBreak'),
-                isAvailable:$request->boolean('isAvailable'),
-                doctorId:$request->integer('doctorId'),
-                dayIds:$request->array('dayIds'),
+                startTime:$validatedData['startTime'],
+                endTime:$validatedData['endTime'],
+                slotDuration:$validatedData['slotDuration'],
+                startBreak:$validatedData['startBreak'],
+                endBreak:$validatedData['endBreak'],
+                isAvailable:$validatedData['isAvailable'],
+                doctorId:$validatedData['doctorId'],
+                dayIds:$validatedData['dayIds'],
             );
         }
 }

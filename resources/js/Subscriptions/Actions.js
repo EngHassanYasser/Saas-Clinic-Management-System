@@ -4,15 +4,15 @@ export default {
         this.formError = "";
         this.form = {
             id: "",
-            start_at: "",
-            end_at: "",
+            startAt: "",
+            endAt: "",
             status: "",
             price: "",
 
             plan: {
                 id: "",
                 name: "",
-                monthly_price: "",
+                monthlyPrice: "",
             },
             clinic: {
                 id: "",

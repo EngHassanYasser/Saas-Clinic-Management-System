@@ -2,8 +2,8 @@
 
 namespace App\DTOs\Services\Doctor;
 
-use App\Http\Requests\doctor\UpdateDoctorRequest;
 use Illuminate\Http\UploadedFile;
+
 class UpdateDoctorDTO
 {
     public function __construct(
@@ -15,15 +15,15 @@ class UpdateDoctorDTO
         public readonly bool $isActive
     ) {}
 
-    public static function fromRequest(UpdateDoctorRequest $request): self
+    public static function fromRequest(array $validatedData): self
     {
         return new self(
-            name: $request->string('name'),
-            image: $request->file('image'),
-            specialityId: $request->integer('specialityId'),
-            email: $request->string('email'),
-            phone: $request->string('phone'),
-            isActive: $request->boolean('isActive')
+            name: $validatedData['name'],
+            image: $validatedData['image'],
+            specialityId: $validatedData['specialityId'],
+            email: $validatedData['email'],
+            phone: $validatedData['phone'],
+            isActive: $validatedData['isActive']
         );
     }
 }

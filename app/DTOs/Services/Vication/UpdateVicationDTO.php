@@ -2,8 +2,7 @@
 
 namespace App\DTOs\Services\Vacation;
 
-use App\Enums\VacationStatus;
-use App\Http\Requests\vacations\UpdateVacationsRequest;
+use App\Enums\EnVacationStatus;
 
 class UpdateVacationDTO
 {
@@ -12,17 +11,17 @@ class UpdateVacationDTO
         public readonly string $startDate,
         public readonly string $endDate,
         public readonly string $reason,
-        public readonly VacationStatus $status
+        public readonly EnVacationStatus $status
     ) {}
 
-    public static function fromRequest(UpdateVacationsRequest $request): self
+    public static function fromRequest(array $validatedData): self
     {
         return new self(
-            doctorId: $request->integer('doctorId'),
-            startDate: $request->string('startDate'),
-            endDate: $request->string('endDate'),
-            reason: $request->string('reason'),
-            status: $request->VacationStastus('status')
+            doctorId: $validatedData['doctorId'],
+            startDate: $validatedData['startDate'],
+            endDate: $validatedData['endDate'],
+            reason: $validatedData['reason'],
+            status: $validatedData['status']
         );
     }
 }

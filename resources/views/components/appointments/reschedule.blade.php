@@ -24,7 +24,7 @@
             <div>
                 <label class="text-xs text-gray-500">التاريخ</label>
 
-                <input type="date" x-model="currentAppointment.visit_date"
+                <input type="date" x-model="currentAppointment.visitDate"
                     @change="handelAvailbleSlots(currentAppointment.clinic.id,currentAppointment.doctor.id,currentAppointment.visiteDate)"
                     class="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-teal-500 focus:ring-1 focus:ring-teal-100 outline-none">
             </div>

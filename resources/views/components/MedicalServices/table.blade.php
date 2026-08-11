@@ -16,7 +16,7 @@
 
                     <td class="p-4 text-gray-500" x-text="item.description"></td>
 
-                    <td class="p-4 text-gray-600" x-text="item.doctor_name"></td>
+                    <td class="p-4 text-gray-600" x-text="item.doctorName"></td>
 
                     <td class="p-4 text-teal-600 font-semibold" x-text="item.price + ' جنيه'"></td>
 

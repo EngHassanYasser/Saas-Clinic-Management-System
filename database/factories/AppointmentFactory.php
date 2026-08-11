@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Enums\EnAppointmentStatus;
 use App\Models\Clinic;
 use App\Models\Doctor;
-use App\Services\MedicalService;
+use App\Models\Medical_service;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -40,7 +40,7 @@ class AppointmentFactory extends Factory
 
             'doctor_id' => Doctor::factory(),
 
-            'medicalService_id' => Medical_Service::factory(),
+            'medicalService_id' => Medical_service::factory(),
 
             'visit_date' => fake()->date('Y-m-d'),
         ];

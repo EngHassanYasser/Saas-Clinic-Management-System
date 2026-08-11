@@ -2,8 +2,6 @@
 
 namespace App\DTOs\Services\Medical_Service;
 
-use App\Http\Requests\Medical_Service\UpdateMedical_ServiceRequest;
-
 class UpdateMedical_ServiceDTO
 {
     public function __construct(
@@ -14,14 +12,14 @@ class UpdateMedical_ServiceDTO
         public readonly string $description
     ) {}
 
-    public static function fromRequest(UpdateMedical_ServiceRequest $request): self
+    public static function fromRequest(array $validatedData): self
     {
         return new self(
-            clinicId: $request->integer('clinicId'),
-            doctorId: $request->integer('doctorId'),
-            medicalServiceId: $request->integer('medicalServiceId'),
-            price: $request->float('price'),
-            description: $request->string('description')
+            clinicId: $validatedData['clinicId'],
+            doctorId: $validatedData['doctorId'],
+            medicalServiceId: $validatedData['medicalServiceId'],
+            price: $validatedData['price'],
+            description: $validatedData['description']
         );
     }
 }

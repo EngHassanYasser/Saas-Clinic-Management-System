@@ -38,7 +38,7 @@ export default {
         this.handelAvailbleSlots(
             this.currentAppointment.clinic.id,
             this.currentAppointment.doctor.id,
-            this.currentAppointment.visit_date,
+            this.currentAppointment.visitDate,
         );
         this.showRescheduleModal = true;
     },
@@ -120,7 +120,7 @@ export default {
 
     selectDate(date) {
         this.selected.date = date;
-        this.visit_date=this.selected.date.dateStr;
+        this.visiteDate=this.selected.date.dateStr;
         this.selected.slot = null;
         this.loadSlots(date.dateStr);
     },

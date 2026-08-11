@@ -18,7 +18,7 @@ export default {
 
             const matchesMonth =
                 !this.month ||
-                (v.start_date ?? "").startsWith(this.month);
+                (v.startDate ?? "").startsWith(this.month);
 
             return matchesSearch && matchesStatus && matchesMonth;
         });

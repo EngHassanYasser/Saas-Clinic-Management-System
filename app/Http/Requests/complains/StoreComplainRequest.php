@@ -44,7 +44,7 @@ class StoreComplaintRequest extends FormRequest
         return [
             function ($validator) {
 
-                if (!$this->patient_name && Auth::user()->type==EnRoleType::CLINIC->value) {
+                if (!$this->patientName && Auth::user()->type==EnRoleType::CLINIC->value) {
                     $validator->errors()->add(
                         'patientName',
                         'الرجاء كتابة اسم المريض او المشتكي'

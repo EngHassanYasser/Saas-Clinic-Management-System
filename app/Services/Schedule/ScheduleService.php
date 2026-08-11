@@ -42,7 +42,7 @@ class ScheduleService
                 'doctor_id' => $dto->doctorId,
                 'clinic_id' => $clinicId,
             ]);
-            $schedule->days()->attach($dto->dayIds);
+            $schedule->days()->attach([$dto->dayIds]);
 
             return $schedule;
         }, 3);

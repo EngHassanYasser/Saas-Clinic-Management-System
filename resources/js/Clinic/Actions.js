@@ -99,7 +99,7 @@ export default {
             this.clinics.unshift({
                 ...this.form,
                 id: this.nextId++,
-                joined_at: today,
+                joinedAt: today,
             });
             this.showToast(
                 "تمت إضافة العيادة بنجاح",

@@ -22,7 +22,7 @@
     <div>
         <p class="text-[11px] text-indigo-600 leading-none">المتبقي</p>
         <p class="text-xs font-black text-indigo-700 mt-0.5">
-            <span x-text="appointment.service.price - appointment.deposit_amount"></span> جنيه
+            <span x-text="appointment.service.price - appointment.depositAmount"></span> جنيه
         </p>
     </div>
 </div>

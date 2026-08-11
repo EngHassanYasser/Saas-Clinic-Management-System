@@ -6,7 +6,7 @@
             </div>
             <p class="text-sm text-gray-500"> الحجوزات الملغية</p>
         </div>
-                    <p class="text-xl font-bold text-red-600" x-text="stats.cancelled_appointments"></p>
+                    <p class="text-xl font-bold text-red-600" x-text="stats.cancelledAppointments"></p>
     </div>
     <div class="w-full bg-gray-100 rounded-full h-2">
     </div>

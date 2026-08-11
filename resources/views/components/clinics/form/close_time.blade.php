@@ -27,7 +27,7 @@
 
                   <button type="button"
                       @click="
-                                        currentClinic.close_time =
+                                        currentClinic.closeTime =
                                         String(hour-1).padStart(2,'0') + ':' + minute + ':00';
                                         open=false;
                                     "

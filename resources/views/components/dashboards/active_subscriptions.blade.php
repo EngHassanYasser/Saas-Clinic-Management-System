@@ -6,7 +6,7 @@
             </div>
             <p class="text-sm text-gray-500">الاشتراكات النشطة</p>
         </div>
-        <p class="text-xl font-bold text-green-600" x-text="stats.active_subscriptions"></p>
+        <p class="text-xl font-bold text-green-600" x-text="stats.activeSubscriptions"></p>
     </div>
     <div class="w-full bg-gray-100 rounded-full h-2">
         <div class="bg-green-500 h-2 rounded-full" style="width: 78%"></div>

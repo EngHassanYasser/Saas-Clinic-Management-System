@@ -12,7 +12,7 @@ export default {
         this.editeMode = true;
 
 
-        console.log(schedule.start_time);
+        console.log(schedule.startTime);
     },
     openAdd() {
         this.addMode = true;

@@ -12,7 +12,6 @@ use App\Services\Doctor\DoctorQueryService;
 use App\Services\Location\LocationQueryService;
 use App\Services\Schedule\ScheduleService;
 use App\Support\TenantContext;
-use Illuminate\Support\Facades\Concurrency;
 
 class ScheduleController extends Controller
 {
@@ -25,23 +24,21 @@ class ScheduleController extends Controller
 
     public function index()
     {
-        $this->authorize('viewAny',Schedule::class);
+        $this->authorize('viewAny', Schedule::class);
 
         $clinicId = $this->tenantContext->id();
-        [$doctors,$weekDays] = Concurrency::run([
-            fn () => $this->doctorQueryService->getAll($clinicId),
-            fn () => $this->locationService->getDays(),
-        ]);
-
+        $doctors = $this->doctorQueryService->getAll($clinicId);
+        $weekDays = $this->locationService->getDays();
         return view('schedules.index', compact('doctors', 'weekDays'));
     }
 
     public function store(StoreScheduleRequest $request)
     {
-        $this->authorize('create',Schedule::class);
+        $this->authorize('create', Schedule::class);
 
         $clinicId = $this->tenantContext->id();
         $dto = StoreScheduleDTO::fromRequest($request->validated());
+
         $this->scheduleService->add($dto, $clinicId);
 
         return redirect()->route('schedules.index')
@@ -50,9 +47,9 @@ class ScheduleController extends Controller
 
     public function update(UpdateScheduleRequest $request, Schedule $schedule)
     {
-        $this->authorize('update',$schedule);
+        $this->authorize('update', $schedule);
 
-        $dto= UpdateScheduleDTO::fromRequest($request->validated());
+        $dto = UpdateScheduleDTO::fromRequest($request->validated());
         $this->scheduleService->update($dto, $schedule);
 
         return redirect()
@@ -62,7 +59,7 @@ class ScheduleController extends Controller
 
     public function destroy(Schedule $schedule)
     {
-        $this->authorize('delete',$schedule);
+        $this->authorize('delete', $schedule);
 
         $isDeleted = $this->scheduleService->delete($schedule);
         if ($isDeleted == false) {

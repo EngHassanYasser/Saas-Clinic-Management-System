@@ -10,12 +10,12 @@ const severities = [
     { label: "عالية", value: "high" },
     { label: "حرجة", value: "urgent" },
 ];
-const issue_types = [
+const issueTypes = [
     { label: "اختر نوع المشكلة", value: "" },
     { label: "طبية", value: "medical" },
     { label: "خدمة", value: "service" },
-    { label: "وقت انتظار", value: "waiting_time" },
-    { label: "تعامل الموظفين", value: "staff_behavior" },
+    { label: "وقت انتظار", value: "waitingTime" },
+    { label: "تعامل الموظفين", value: "staffBehavior" },
     { label: "فواتير", value: "billing" },
     { label: "أخرى", value: "other" },
 ];
@@ -25,11 +25,11 @@ const departments = [
     { label: "المعامل", value: "laboratory" },
     { label: "الصيدلية", value: "pharmacy" },
     { label: "الحسابات", value: "accounting" },
-    { label: "خدمة العملاء", value: "customer_service" },
+    { label: "خدمة العملاء", value: "customerService" },
     { label: "التمريض", value: "nursing" },
     { label: "الإدارة", value: "administration" },
     { label: "العيادات", value: "clinics" },
-    { label: "الدعم الفني", value: "technical_support" },
+    { label: "الدعم الفني", value: "technicalSupport" },
 ];
 const statuses = [
     {
@@ -40,7 +40,7 @@ const statuses = [
         checked: "peer-checked:bg-blue-600 peer-checked:border-blue-600",
     },
     {
-        value: "under_review",
+        value: "underReview",
         label: "قيد المراجعة",
         border: "border-amber-200",
         text: "text-amber-600",

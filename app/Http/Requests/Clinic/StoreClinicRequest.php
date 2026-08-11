@@ -23,7 +23,7 @@ class StoreClinicRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'clinic_name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
 
             'email' => [
                 'required',
@@ -32,7 +32,7 @@ class StoreClinicRequest extends FormRequest
                 'unique:users,email',
             ],
 
-            'user_name' => [
+            'userName' => [
                 'required',
                 'string',
                 'min:3',
@@ -41,7 +41,7 @@ class StoreClinicRequest extends FormRequest
                 'unique:users,user_name',
             ],
 
-            'full_name' => [
+            'fullName' => [
                 'required',
                 'string',
                 'max:255',
@@ -67,7 +67,7 @@ class StoreClinicRequest extends FormRequest
                 'unique:clinics,phone',
             ],
 
-            'city_id' => [
+            'cityId' => [
                 'required',
                 'integer',
                 'exists:cities,id',

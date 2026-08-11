@@ -14,17 +14,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('clinics', function (Blueprint $table) {
-            $table->time('open_time')->nullable()->after('address');
-            $table->time('close_time')->nullable()->after('open_time');
+            $table->time('openTime')->nullable()->after('address');
+            $table->time('closeTime')->nullable()->after('openTime');
         });
 
         DB::statement("
         ALTER TABLE clinics
         ADD CONSTRAINT chk_clinic_working_hours
         CHECK (
-            open_time IS NULL
-            OR close_time IS NULL
-            OR close_time > open_time
+            openTime IS NULL
+            OR closeTime IS NULL
+            OR closeTime > openTime
         )
     ");
     }
@@ -37,7 +37,7 @@ return new class extends Migration
     ");
 
         Schema::table('clinics', function (Blueprint $table) {
-            $table->dropColumn(['open_time', 'close_time']);
+            $table->dropColumn(['openTime', 'closeTime']);
         });
     }
 };

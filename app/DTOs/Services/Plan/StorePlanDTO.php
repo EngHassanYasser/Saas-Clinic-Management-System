@@ -2,8 +2,7 @@
 
 namespace App\DTOs\Services\Plan;
 
-use App\Enums\PlanStatus;
-use App\Http\Requests\plans\StorePlanRequest;
+use App\Enums\EnPlanStatus;
 
 class StorePlanDTO
 {
@@ -12,17 +11,17 @@ class StorePlanDTO
         public readonly int $maxDoctors,
         public readonly int $monthlyAppointmentsLimit,
         public readonly float $monthlyPrice,
-        public readonly PlanStatus $status,
+        public readonly EnPlanStatus $status,
     ) {}
 
-    public static function fromRequest(StorePlanRequest $request): self
+    public static function fromRequest(array $validatedData): self
     {
         return new self(
-            name: $request->string('name'),
-            maxDoctors: $request->integer('maxDoctors'),
-            monthlyAppointmentsLimit: $request->integetr('monthlyAppointmentsLimit'),
-            monthlyPrice: $request->float('monthlyPrice'),
-            status: $request->PlanStatus('status'),
+            name: $validatedData['name'],
+            maxDoctors: $validatedData['maxDoctors'],
+            monthlyAppointmentsLimit: $validatedData['monthlyAppointmentsLimit'],
+            monthlyPrice: $validatedData['monthlyPrice'],
+            status: $validatedData['status'],
         );
     }
 }

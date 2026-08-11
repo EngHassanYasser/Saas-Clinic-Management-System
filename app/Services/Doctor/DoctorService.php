@@ -21,8 +21,8 @@ class DoctorService
             ]);
             $doctor->specialities()->attach([$dto->specialityId]);
             $doctor->clinics()->attach($clinicId);
-            if (! empty($data['image'])) {
-                $doctor->addMedia($data['image'])
+            if ($dto->image) {
+                $doctor->addMedia($dto->image)
                     ->toMediaCollection('avatar');
             }
 

@@ -48,7 +48,7 @@
             <div class="min-w-0">
                 <p class="text-xs text-gray-400">الموعد</p>
                 <p dir="ltr" class="font-semibold text-gray-900 text-sm"
-                    x-text="`${appointment.visit_date} ${convertUtcToLocalTime(appointment.visit_date, appointment.start_time)} - ${convertUtcToLocalTime(appointment.visit_date, appointment.end_time)}`">
+                    x-text="`${appointment.visiteDate} ${convertUtcToLocalTime(appointment.visiteDate, appointment.startTime)} - ${convertUtcToLocalTime(appointment.visiteDate, appointment.endTime)}`">
                 </p>
             </div>
         </div>

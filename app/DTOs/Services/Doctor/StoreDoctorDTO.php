@@ -2,7 +2,6 @@
 
 namespace App\DTOs\Services\Doctor;
 
-use App\Http\Requests\doctor\StoreDoctorRequest;
 use Illuminate\Http\UploadedFile;
 
 class StoreDoctorDTO
@@ -15,13 +14,13 @@ class StoreDoctorDTO
         public readonly int $specialityId,
     ){}
 
-    public static function fromRequest(StoreDoctorRequest $request):self{
+    public static function fromRequest(array $validatedData):self{
         return new self(
-            name:$request->string('name'),
-            email:$request->string('email'),
-            phone:$request->string('phone'),
-            image:$request->file('image'),
-            specialityId:$request->integer('specialityId')
+            name:$validatedData['name'],
+            email:$validatedData['email'],
+            phone:$validatedData['phone'],
+            image:$validatedData['image'],
+            specialityId:$validatedData['specialityId']
         );
     }
 }

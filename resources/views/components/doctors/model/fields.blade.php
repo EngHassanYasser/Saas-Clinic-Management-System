@@ -15,7 +15,7 @@
              <span>▼</span>
          </button>
          <!-- Hidden input -->
-         <input type="hidden" name="speciality_id" :value="selectedSpeciality?.id">
+         <input type="hidden" name="specialityId" :value="selectedSpeciality?.id">
          <!-- Dropdown -->
          <div x-show="open" @click.outside="open = false"
              class="absolute z-50 mt-2 w-full max-h-60 overflow-auto border bg-white rounded-lg shadow">

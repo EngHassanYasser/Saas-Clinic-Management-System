@@ -16,7 +16,7 @@ export default {
     },
     get filterdServices() {
         return this.services.filter(
-            (s) => s.speciality_id == this.selected.specialty.id,
+            (s) => s.specialityId == this.selected.specialty.id,
         );
     },
 
@@ -24,7 +24,7 @@ export default {
         if (!this.selected.clinic) return [];
 
         return this.doctors.filter(
-            (d) => d.clinic_id === this.selected.clinic.id,
+            (d) => d.clinicId === this.selected.clinic.id,
         );
     },
 

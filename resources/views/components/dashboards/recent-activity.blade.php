@@ -22,7 +22,7 @@
                 <div class="flex items-center gap-2 flex-shrink-0">
                     <span class="text-xs bg-blue-50 text-blue-600 font-medium px-2.5 py-1 rounded-full"
                         x-text="lastActivity.status"></span>
-                    <span class="text-xs text-gray-400" x-text="lastActivity.created_at"></span>
+                    <span class="text-xs text-gray-400" x-text="lastActivity.createdAt"></span>
                 </div>
             </div>
         </template>

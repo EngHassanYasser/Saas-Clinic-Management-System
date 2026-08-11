@@ -36,13 +36,13 @@ export default function (serverData) {
             owner: {
                 id: null,
                 name: null,
-                user_name: null,
+                userName: null,
                 gendor: null,
             },
             Clinic: null,
             gendor: null,
             phone: null,
-            user_name: "",
+            userName: "",
             password: "",
             plan: {
                 id: null,

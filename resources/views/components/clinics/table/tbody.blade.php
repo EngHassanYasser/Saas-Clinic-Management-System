@@ -34,7 +34,7 @@
                     <span x-text="c.plan.name"></span>
                 </span>
             </td>
-            <td class="py-3.5 px-4 text-gray-400 text-xs" x-text="c.joined_at"></td>
+            <td class="py-3.5 px-4 text-gray-400 text-xs" x-text="c.joinedAt"></td>
             <td class="py-3.5 px-4">
                 <div class="flex items-center justify-center gap-2">
 

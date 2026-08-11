@@ -23,7 +23,7 @@
                         <div class="px-3 py-2 text-sm text-gray-400">لا توجد خدمات</div>
                     </template>
                     <template x-for="service in medicalService" :key="service.id">
-                        <div @click="form.medicalService_id = service.id; serviceDropdownOpen = false"
+                        <div @click="form.medicalServiceId = service.id; serviceDropdownOpen = false"
                             class="px-3 py-2 cursor-pointer text-gray-700 hover:bg-teal-50"
                             :class="form.medicalServiceId === service.id && 'bg-teal-600 text-white hover:bg-teal-600'"
                             x-text="service.name"></div>

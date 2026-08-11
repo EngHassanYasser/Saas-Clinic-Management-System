@@ -21,12 +21,12 @@ export default {
     },
 
     generateSlots() {
-        const start = document.querySelector("[name=work_start]").value;
-        const end = document.querySelector("[name=work_end]").value;
-        const bStart = document.querySelector("[name=break_start]").value;
-        const bEnd = document.querySelector("[name=break_end]").value;
+        const start = document.querySelector("[name=workStart]").value;
+        const end = document.querySelector("[name=workEnd]").value;
+        const bStart = document.querySelector("[name=breakStart]").value;
+        const bEnd = document.querySelector("[name=breakEnd]").value;
         const duration =
-            parseInt(document.querySelector("[name=session_duration]").value) ||
+            parseInt(document.querySelector("[name=sessionDuration]").value) ||
             30;
 
         if (!start || !end) return;

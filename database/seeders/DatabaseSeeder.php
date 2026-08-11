@@ -16,12 +16,12 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
         //  SpecialitySeeder::class,
-        //  daysSeeder::class,
+        //   daysSeeder::class,
         //  usersSeeder::class,
         // //  DoctorSeeder::class,
         //  DoctorServicesSeeder::class,
         // CountrySeeder::class,
-        // CitySeeder::class,
+        //  CitySeeder::class,
     ]);
     }
 }

@@ -2,7 +2,7 @@
     open: false,
     selected: null,
  }" class="relative w-full">
-    <input x-model="form.clinic.id" type="hidden" name="clinic_id" :value="selected?.id">
+    <input x-model="form.clinic.id" type="hidden" name="clinicId" :value="selected?.id">
     <button type="button" @click="open = !open"
         class="w-full border rounded-xl p-3 text-right flex justify-between items-center">
         <span x-text="selected?.name ?? 'اختر العيادة'"></span>

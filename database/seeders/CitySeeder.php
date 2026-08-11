@@ -17,41 +17,41 @@ class CitySeeder extends Seeder
         City::insert([
             // Kuwait
             [
-                'country_id' => $kuwait->id,
+                'countryId' => $kuwait->id,
                 'name' => 'Kuwait City',
                 'timezone' => 'Asia/Kuwait',
             ],
             [
-                'country_id' => $kuwait->id,
+                'countryId' => $kuwait->id,
                 'name' => 'Hawalli',
                 'timezone' => 'Asia/Kuwait',
             ],
             [
-                'country_id' => $kuwait->id,
+                'countryId' => $kuwait->id,
                 'name' => 'Al Ahmadi',
                 'timezone' => 'Asia/Kuwait',
             ],
 
             // Egypt
             [
-                'country_id' => $egypt->id,
+                'countryId' => $egypt->id,
                 'name' => 'Cairo',
                 'timezone' => 'Africa/Cairo',
             ],
             [
-                'country_id' => $egypt->id,
+                'countryId' => $egypt->id,
                 'name' => 'Alexandria',
                 'timezone' => 'Africa/Cairo',
             ],
 
             // Saudi Arabia
             [
-                'country_id' => $saudi->id,
+                'countryId' => $saudi->id,
                 'name' => 'Riyadh',
                 'timezone' => 'Asia/Riyadh',
             ],
             [
-                'country_id' => $saudi->id,
+                'countryId' => $saudi->id,
                 'name' => 'Jeddah',
                 'timezone' => 'Asia/Riyadh',
             ],
