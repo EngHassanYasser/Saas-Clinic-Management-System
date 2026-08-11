@@ -3,7 +3,7 @@
 use App\Models\Clinic;
 use App\Models\DoctorService;
 use App\Models\Doctor;
-use App\Models\Clinic_doctor_medicalService;
+use App\Models\Clinic_doctor_medical_service;
 use App\Services\ServiceCatalog\DoctorServicePriceService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -49,7 +49,7 @@ function makeAddDoctorServicePriceContext(): array
 |--------------------------------------------------------------------------
 */
 
-it('returns a Clinic_doctor_medicalService model', function () {
+it('returns a Clinic_doctor_medical_service model', function () {
     $context = makeAddDoctorServicePriceContext();
 
     $result = $this->service->add(
@@ -58,7 +58,7 @@ it('returns a Clinic_doctor_medicalService model', function () {
     );
 
     expect($result)
-        ->toBeInstanceOf(Clinic_doctor_medicalService::class);
+        ->toBeInstanceOf(Clinic_doctor_medical_service::class);
 });
 
 /*
@@ -301,7 +301,7 @@ it('returns the exact database record that was created', function () {
         $context['clinic']->id
     );
 
-    $databaseRecord = Clinic_doctor_medicalService::find($result->id);
+    $databaseRecord = Clinic_doctor_medical_service::find($result->id);
 
     expect($databaseRecord)
         ->not->toBeNull();
@@ -319,14 +319,14 @@ it('returns the exact database record that was created', function () {
 it('creates exactly one record', function () {
     $context = makeAddDoctorServicePriceContext();
 
-    $before = Clinic_doctor_medicalService::count();
+    $before = Clinic_doctor_medical_service::count();
 
     $this->service->add(
         $context['data'],
         $context['clinic']->id
     );
 
-    $after = Clinic_doctor_medicalService::count();
+    $after = Clinic_doctor_medical_service::count();
 
     expect($after)
         ->toBe($before + 1);
@@ -400,7 +400,7 @@ it('creates independent records when called multiple times', function () {
 it('does not modify existing doctor service prices', function () {
     $existing = makeAddDoctorServicePriceContext();
 
-    $existingRecord = Clinic_doctor_medicalService::factory()->create([
+    $existingRecord = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $existing['clinic']->id,
         'doctor_id' => $existing['doctor']->id,
         'medicalService_id' => $existing['clinicService']->id,
@@ -774,7 +774,7 @@ it('returns values that match the persisted database record', function () {
         $context['clinic']->id
     );
 
-    $databaseRecord = Clinic_doctor_medicalService::findOrFail($result->id);
+    $databaseRecord = Clinic_doctor_medical_service::findOrFail($result->id);
 
     expect($databaseRecord->clinic_id)
         ->toBe($result->clinic_id);

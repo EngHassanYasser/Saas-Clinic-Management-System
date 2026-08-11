@@ -1,6 +1,6 @@
 export default function (serverData = {}) {
     return {
-        complaintts: serverData.complaintts ?? [],
+        complaints: serverData.complaints ?? [],
         stats: serverData.stats ?? [],
         doctors:serverData.doctors ?? [],
         showModel:false,

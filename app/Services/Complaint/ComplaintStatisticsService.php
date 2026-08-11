@@ -7,10 +7,13 @@ use Illuminate\Support\Facades\Cache;
 
 class ComplaintStatisticsService
 {
-    public function getStatistics(int $clinicId): array
+    public function getStatistics(?int $clinicId): array
     {
+        if($clinicId == null) {
+            return [];
+        }
         return Cache::remember(
-            "complaintts.statistics.clinic.{$clinicId}",
+            "complaints.statistics.clinic.{$clinicId}",
             now()->addMinutes(5),
             function () use ($clinicId) {
                 $statistics = Complaint::where('clinic_id', $clinicId)

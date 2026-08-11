@@ -14,7 +14,7 @@ it('deletes existing complaint', function () {
 
     expect($result)->toBeTrue();
 
-    $this->assertDatabaseMissing('complaintts', [
+    $this->assertDatabaseMissing('complaints', [
         'id' => $complaint->id,
     ]);
 });
@@ -32,11 +32,11 @@ it('deletes only requested complaint', function () {
 
     $this->service->delete($first->id);
 
-    $this->assertDatabaseMissing('complaintts', [
+    $this->assertDatabaseMissing('complaints', [
         'id' => $first->id,
     ]);
 
-    $this->assertDatabaseHas('complaintts', [
+    $this->assertDatabaseHas('complaints', [
         'id' => $second->id,
     ]);
 });

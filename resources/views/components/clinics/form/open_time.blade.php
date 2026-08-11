@@ -12,21 +12,21 @@
     <button type="button" @click="open=!open"
         class="w-full flex items-center justify-center rounded-xl border border-gray-200 p-3 bg-white hover:border-teal-500">
 
-        <span x-text="format12Hour(currentClinic.open_time)"></span>
+        <span x-text="format12Hour(currentClinic.openTime)"></span>
 
         <i class="fa-solid fa-chevron-down text-gray-400"></i>
     </button>
 
     <div x-cloak x-show="open" x-transition @click.outside="open=false"
         class="absolute z-50 mt-2 w-full rounded-xl border border-gray-200 bg-white shadow-lg max-h-72 overflow-y-auto">
-    <input type="hidden" x-model="currentClinic.open_time" name="open_time"/>
+    <input type="hidden" x-model="currentClinic.openTime" name="openTime"/>
         <template x-for="hour in 24" :key="hour">
 
             <template x-for="minute in ['00','15','30','45']" :key="minute">
 
                 <button type="button"
                     @click="
-                                        currentClinic.open_time =
+                                        currentClinic.openTime =
                                         String(hour-1).padStart(2,'0') + ':' + minute + ':00';
                                         open=false;
                                     "

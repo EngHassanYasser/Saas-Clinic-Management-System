@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\services\ActivityLog\ActivityLogQueryService;
 use App\Services\Clinic\ClinicStatisticsService;
-use Illuminate\Support\Facades\Concurrency;
 
 class DashboardStatisticsController extends Controller
 {
@@ -16,12 +15,10 @@ class DashboardStatisticsController extends Controller
 
     public function getstats()
     {
-        $this->authorize('viewAny',Dashboard::class);
+        // $this->authorize('viewAny',Dashboard::class);
 
-        [$stats,$lastActivities] = Concurrency::run([
-            fn () => $this->ClinicStatisticsService->getClinicDashboardStats(),
-            fn () => $this->activityLogQueryService->getLastActivities(),
-        ]);
+           $stats= $this->ClinicStatisticsService->getClinicDashboardStats();
+            $lastActivities= $this->activityLogQueryService->getLastActivities();
 
         return view('stats.index', compact('stats', 'lastActivities'));
     }

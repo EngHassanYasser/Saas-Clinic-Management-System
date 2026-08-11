@@ -45,8 +45,12 @@ class DoctorQueryService
         });
     }
 
-    public function getDoctorsNames(int $clinicId): Collection
+    public function getDoctorsNames(?int $clinicId): Collection
     {
+        if ($clinicId == null) {
+            return new Collection([]);
+        }
+
         return Doctor::select('id', 'name')
             ->whereRelation('clinics', 'clinic_id', $clinicId)->get();
     }

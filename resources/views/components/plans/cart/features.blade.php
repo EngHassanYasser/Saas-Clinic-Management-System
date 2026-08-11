@@ -33,7 +33,7 @@
 
             <span
                 class="rounded-lg bg-white px-3 py-1 text-lg font-bold text-gray-900 shadow-sm"
-                x-text="plan.max_doctors">
+                x-text="plan.maxDoctors">
             </span>
 
         </div>
@@ -65,7 +65,7 @@
 
             <span
                 class="rounded-lg bg-white px-3 py-1 text-lg font-bold text-gray-900 shadow-sm"
-                x-text="plan.monthly_appointments_limit">
+                x-text="plan.monthlyAppointmentsLimit">
             </span>
 
         </div>

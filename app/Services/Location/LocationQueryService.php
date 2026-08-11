@@ -17,19 +17,19 @@ class LocationQueryService
         //
     }
 
-    public function getCities()
+    public function getCities():array
     {
         return Cache::rememberForever(
             'cities.all',
-            fn () => City::get(['id', 'name'])
+            fn () => City::get(['id', 'name'])->toArray()
         );
     }
 
-    public function getDays()
+    public function getDays():array
     {
         return Cache::rememberForever(
             'days.all',
-            fn () => Day::get(['id', 'name'])
+            fn () => Day::get(['id', 'name'])->toArray()
         );
     }
 }

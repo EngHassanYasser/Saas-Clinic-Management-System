@@ -4,17 +4,17 @@
 
 @section('content')
     <div class="p-6 min-h-screen bg-gray-50" dir="rtl" x-data="ComplainttApp({
-        complaintts: @js($complaintts),
+        complaints: @js($complaints),
         stats: @js($stats),
         doctors:@js($doctors),
     })">
      @if (auth()->user()->type === 'clinic')
-            <x-complaintts.status />
+            <x-complaints.status />
         @endif
-        <x-complaintts.add-button />
+        <x-complaints.add-button />
         <x-shared.errors/>
-        <x-complaintts.filters />
-        <x-complaintts.table />
-        <x-complaintts.model/>
+        <x-complaints.filters />
+        <x-complaints.table />
+        <x-complaints.model/>
     </div>
 @endsection

@@ -1,4 +1,4 @@
-@if (auth()->user()->type === \App\Enums\RoleType::CLINIC)
+@if (auth()->user()->type === \App\Enums\EnRoleType::CLINIC)
     <div x-show="mode == 'update'">
         <p class="text-xs text-gray-400 mb-1.5">الرد على الشكوى</p>
         <textarea name="resolution_notes" rows="3"

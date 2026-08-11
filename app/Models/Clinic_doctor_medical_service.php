@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
     'description',
     'price',
 ])]
-class Clinic_doctor_medicalService extends Model
+class Clinic_doctor_medical_service extends Model
 {
     use HasFactory;
 
@@ -32,8 +32,8 @@ class Clinic_doctor_medicalService extends Model
         return $this->belongsTo(Doctor::class);
     }
 
-    public function medicalService()
+    public function medical_service()
     {
-        return $this->belongsTo(MedicalService::class);
+        return $this->belongsTo(Medical_service::class);
     }
 }

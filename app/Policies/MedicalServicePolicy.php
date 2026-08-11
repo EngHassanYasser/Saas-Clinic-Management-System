@@ -2,10 +2,11 @@
 
 namespace App\Policies;
 
-use App\Enums\EnRoleType;use App\Models\MedicalService as MedicalServiceModel;
+use App\Enums\EnRoleType;
+use App\Models\Medical_service;
 use App\Models\User;
 
-class MedicalService
+class Medical_servicePolicy
 {
     public function isOwnerOfTheService(User $user, int $clinicServiceId): bool
     {
@@ -25,7 +26,7 @@ class MedicalService
      */
     public function viewAny(User $user): bool
     {
-        return match ($user->role) {
+       return match ($user->type) {
            EnRoleType::PATIENT,
            EnRoleType::CLINIC,
            EnRoleType::SUPER_ADMIN => true,
@@ -37,9 +38,9 @@ class MedicalService
     /**
      * Determine whether the user can view the service.
      */
-    public function view(User $user, MedicalServiceModel $clinicService): bool
+    public function view(User $user, Medical_service $clinicService): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT => true,
 
            EnRoleType::CLINIC => $this->isOwnerOfTheService($user, $clinicService->id),
@@ -55,7 +56,7 @@ class MedicalService
      */
     public function create(User $user): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC,
            EnRoleType::SUPER_ADMIN => true,
 
@@ -66,9 +67,9 @@ class MedicalService
     /**
      * Determine whether the user can update the service.
      */
-    public function update(User $user, MedicalServiceModel $clinicService): bool
+    public function update(User $user, Medical_service $clinicService): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->isOwnerOfTheService($user, $clinicService->id),
 
            EnRoleType::SUPER_ADMIN => true,
@@ -80,9 +81,9 @@ class MedicalService
     /**
      * Determine whether the user can delete the service.
      */
-    public function delete(User $user, MedicalServiceModel $clinicService): bool
+    public function delete(User $user, Medical_service $clinicService): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->isOwnerOfTheService($user, $clinicService->id),
 
            EnRoleType::SUPER_ADMIN => true,

@@ -6,8 +6,8 @@
         </div>
         <div>
             <p class="text-sm font-medium text-gray-800"><span x-text="doctor?.name"></span></p>
-            <p class="text-xs text-gray-400"><span x-text="doctor?.speciality_name"></span> —
-                <span x-text="currentDoctor?.schedules_count"></span> جدول
+            <p class="text-xs text-gray-400"><span x-text="doctor?.specialityName"></span> —
+                <span x-text="currentDoctor?.schedulesCount"></span> جدول
             </p>
         </div>
     </div>

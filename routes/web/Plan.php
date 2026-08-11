@@ -8,10 +8,12 @@ Route::middleware('auth','role:clinic,patient,super_admin','verified')->group(fu
         '/plans',
         [PlanController::class, 'index']
     )->name('plans.index');
+
     Route::post(
         '/plans',
         [PlanController::class, 'store']
     )->name('plans.store');
+    
     Route::put(
         '/plans/{plan}',
         [PlanController::class, 'update']

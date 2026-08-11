@@ -27,7 +27,7 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT,
            EnRoleType::SUPER_ADMIN,
            EnRoleType::CLINIC => true,
@@ -41,7 +41,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT => $this->belongsToUser($user, $model),
            EnRoleType::CLINIC => $this->belongsToClinic($user, $model->id),
            EnRoleType::SUPER_ADMIN => true,
@@ -55,7 +55,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::SUPER_ADMIN,
            EnRoleType::CLINIC => true,
 
@@ -69,7 +69,7 @@ class UserPolicy
     public function update(User $user, User $model): bool
     {
 
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT => $this->belongsToUser($user, $model),
            EnRoleType::CLINIC => $this->belongsToClinic($user, $model->id),
            EnRoleType::SUPER_ADMIN => true,
@@ -84,7 +84,7 @@ class UserPolicy
     public function delete(User $user, User $model): bool
     {
 
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT => $this->belongsToUser($user, $model),
            EnRoleType::CLINIC => $this->belongsToClinic($user, $model->id),
            EnRoleType::SUPER_ADMIN => true,

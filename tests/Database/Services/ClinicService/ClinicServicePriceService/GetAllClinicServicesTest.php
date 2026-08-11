@@ -3,7 +3,7 @@
 use App\Models\Clinic;
 use App\Models\DoctorService;
 use App\Models\Doctor;
-use App\Models\Clinic_doctor_medicalService;
+use App\Models\Clinic_doctor_medical_service;
 use App\Services\ServiceCatalog\DoctorServicePriceService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +26,7 @@ function createDoctorServicePrice(): array
 
     $clinicService = DoctorService::factory()->create();
 
-    $medicalServicePrice = Clinic_doctor_medicalService::factory()->create([
+    $medicalServicePrice = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
         'medicalService_id' => $clinicService->id,
@@ -101,13 +101,13 @@ it('returns all doctor service prices', function () {
 |--------------------------------------------------------------------------
 */
 
-it('returns Clinic_doctor_medicalService models', function () {
+it('returns Clinic_doctor_medical_service models', function () {
     createDoctorServicePrice();
 
     $result = $this->service->getAllDoctorServices();
 
     expect($result->every(
-        fn (Clinic_doctor_medicalService $item) => $item instanceof Clinic_doctor_medicalService
+        fn (Clinic_doctor_medical_service $item) => $item instanceof Clinic_doctor_medical_service
     ))->toBeTrue();
 });
 
@@ -124,7 +124,7 @@ it('returns records that actually exist in the database', function () {
 
     expect(
         $result->contains(
-            fn (Clinic_doctor_medicalService $item) => $item->id === $context['medicalServicePrice']->id
+            fn (Clinic_doctor_medical_service $item) => $item->id === $context['medicalServicePrice']->id
         )
     )->toBeTrue();
 
@@ -407,21 +407,21 @@ it('does not modify the database', function () {
     $first = createDoctorServicePrice();
     $second = createDoctorServicePrice();
 
-    $beforeCount = Clinic_doctor_medicalService::count();
+    $beforeCount = Clinic_doctor_medical_service::count();
 
     $this->service->getAllDoctorServices();
 
-    expect(Clinic_doctor_medicalService::count())
+    expect(Clinic_doctor_medical_service::count())
         ->toBe($beforeCount);
 
     expect(
-        Clinic_doctor_medicalService::whereKey(
+        Clinic_doctor_medical_service::whereKey(
             $first['medicalServicePrice']->id
         )->exists()
     )->toBeTrue();
 
     expect(
-        Clinic_doctor_medicalService::whereKey(
+        Clinic_doctor_medical_service::whereKey(
             $second['medicalServicePrice']->id
         )->exists()
     )->toBeTrue();
@@ -472,13 +472,13 @@ it('correctly handles multiple service prices belonging to the same clinic', fun
     $clinicServiceOne = DoctorService::factory()->create();
     $clinicServiceTwo = DoctorService::factory()->create();
 
-    $first = Clinic_doctor_medicalService::factory()->create([
+    $first = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorOne->id,
         'medicalService_id' => $clinicServiceOne->id,
     ]);
 
-    $second = Clinic_doctor_medicalService::factory()->create([
+    $second = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorTwo->id,
         'medicalService_id' => $clinicServiceTwo->id,
@@ -526,13 +526,13 @@ it('correctly handles multiple service prices belonging to the same doctor', fun
     $serviceOne = DoctorService::factory()->create();
     $serviceTwo = DoctorService::factory()->create();
 
-    $first = Clinic_doctor_medicalService::factory()->create([
+    $first = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinicOne->id,
         'doctor_id' => $doctor->id,
         'medicalService_id' => $serviceOne->id,
     ]);
 
-    $second = Clinic_doctor_medicalService::factory()->create([
+    $second = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinicTwo->id,
         'doctor_id' => $doctor->id,
         'medicalService_id' => $serviceTwo->id,

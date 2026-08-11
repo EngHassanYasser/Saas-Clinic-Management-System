@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\complaintts;
+namespace App\Http\Requests\complaints;
 
 use App\Enums\EnComplaintStatus;
 use App\Enums\EnDepartmentType;

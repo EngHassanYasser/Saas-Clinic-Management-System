@@ -17,7 +17,7 @@
             Confirm Password
         </label>
 
-        <input type="password" name="password_confirmation" autocomplete="new-password"
+        <input type="password" name="passwordConfirmation" autocomplete="new-password"
             class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 shadow-sm
                    focus:border-cyan-600 focus:ring-2 focus:ring-cyan-200 focus:outline-none">
     </div>

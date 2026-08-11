@@ -44,8 +44,8 @@ class User extends Authenticatable
     public function usesDashboardLayout(): bool
     {
         return in_array($this->type, [
-            EnRoleType::CLINIC->value,
-            EnRoleType::PATIENT->value,
+            EnRoleType::CLINIC,
+            EnRoleType::PATIENT,
         ], true);
     }
 
@@ -71,7 +71,7 @@ class User extends Authenticatable
 
     public function notification_logs()
     {
-        return $this->hasMany(NotificationLog::class);
+        return $this->hasMany(Notification_log::class);
     }
 
     public function schedules()

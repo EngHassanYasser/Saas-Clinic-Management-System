@@ -16,6 +16,6 @@
     </div>
 
     <template x-for="day in selectedDays" :key="day">
-        <input type="hidden" name="day_ids[]" :value="day">
+        <input type="hidden" name="dayIds[]" :value="day">
     </template>
 </div>

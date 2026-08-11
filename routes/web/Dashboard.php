@@ -9,6 +9,7 @@ Route::middleware('auth','role:clinic,patient,super_admin','verified')->group(fu
         '/dashboard',
         [DashboardController::class, 'index']
     )->name('dashboard.index');
+    
     Route::get(
         '/stats',
         [DashboardStatisticsController::class, 'getstats']

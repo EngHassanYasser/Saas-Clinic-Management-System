@@ -3,7 +3,7 @@
 use App\Models\Clinic;
 use App\Models\DoctorService;
 use App\Models\Doctor;
-use App\Models\Clinic_doctor_medicalService;
+use App\Models\Clinic_doctor_medical_service;
 use App\Services\ServiceCatalog\DoctorServicePriceService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +30,7 @@ function makeUpdateDoctorServicePriceContext(): array
 
     $clinicService = DoctorService::factory()->create();
 
-    $medicalServicePrice = Clinic_doctor_medicalService::factory()->create([
+    $medicalServicePrice = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
         'medicalService_id' => $clinicService->id,
@@ -89,7 +89,7 @@ it('updates the doctor service price successfully', function () {
     expect($result)
         ->toBeTrue();
 
-    $record = Clinic_doctor_medicalService::findOrFail(
+    $record = Clinic_doctor_medical_service::findOrFail(
         $context['medicalServicePrice']->id
     );
 
@@ -167,7 +167,7 @@ it('uses the clinic id argument instead of clinic_id from data', function () {
         $context['clinic']->id
     );
 
-    $record = Clinic_doctor_medicalService::findOrFail(
+    $record = Clinic_doctor_medical_service::findOrFail(
         $context['medicalServicePrice']->id
     );
 
@@ -196,7 +196,7 @@ it('updates the doctor id correctly', function () {
         'description' => 'Changed doctor',
     ], $context['clinic']->id);
 
-    $record = Clinic_doctor_medicalService::findOrFail(
+    $record = Clinic_doctor_medical_service::findOrFail(
         $context['medicalServicePrice']->id
     );
 
@@ -224,7 +224,7 @@ it('updates the clinic service id correctly', function () {
         'description' => 'Changed clinic service',
     ], $context['clinic']->id);
 
-    $record = Clinic_doctor_medicalService::findOrFail(
+    $record = Clinic_doctor_medical_service::findOrFail(
         $context['medicalServicePrice']->id
     );
 
@@ -250,7 +250,7 @@ it('updates the price correctly', function () {
         'description' => 'Updated price',
     ], $context['clinic']->id);
 
-    $record = Clinic_doctor_medicalService::findOrFail(
+    $record = Clinic_doctor_medical_service::findOrFail(
         $context['medicalServicePrice']->id
     );
 
@@ -276,7 +276,7 @@ it('updates the description correctly', function () {
         'description' => 'Completely new description',
     ], $context['clinic']->id);
 
-    $record = Clinic_doctor_medicalService::findOrFail(
+    $record = Clinic_doctor_medical_service::findOrFail(
         $context['medicalServicePrice']->id
     );
 
@@ -305,7 +305,7 @@ it('updates all editable fields together', function () {
         'description' => 'All fields updated',
     ], $context['clinic']->id);
 
-    $record = Clinic_doctor_medicalService::findOrFail(
+    $record = Clinic_doctor_medical_service::findOrFail(
         $context['medicalServicePrice']->id
     );
 
@@ -346,7 +346,7 @@ it('replaces the old values instead of keeping them', function () {
         'description' => 'New description',
     ], $context['clinic']->id);
 
-    $record = Clinic_doctor_medicalService::findOrFail(
+    $record = Clinic_doctor_medical_service::findOrFail(
         $context['medicalServicePrice']->id
     );
 
@@ -379,7 +379,7 @@ it('updates only the requested record', function () {
     $serviceOne = DoctorService::factory()->create();
     $serviceTwo = DoctorService::factory()->create();
 
-    $first = Clinic_doctor_medicalService::factory()->create([
+    $first = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorOne->id,
         'medicalService_id' => $serviceOne->id,
@@ -387,7 +387,7 @@ it('updates only the requested record', function () {
         'description' => 'First',
     ]);
 
-    $second = Clinic_doctor_medicalService::factory()->create([
+    $second = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorTwo->id,
         'medicalService_id' => $serviceTwo->id,
@@ -455,7 +455,7 @@ it('returns false when the requested record does not exist', function () {
     $context = makeUpdateDoctorServicePriceContext();
 
     $nonExistingId =
-        Clinic_doctor_medicalService::max('id') + 999;
+        Clinic_doctor_medical_service::max('id') + 999;
 
     $result = $this->service->update([
         'id' => $nonExistingId,
@@ -479,10 +479,10 @@ it('returns false when the requested record does not exist', function () {
 it('does not create a new record when the id does not exist', function () {
     $context = makeUpdateDoctorServicePriceContext();
 
-    $beforeCount = Clinic_doctor_medicalService::count();
+    $beforeCount = Clinic_doctor_medical_service::count();
 
     $nonExistingId =
-        Clinic_doctor_medicalService::max('id') + 999;
+        Clinic_doctor_medical_service::max('id') + 999;
 
     $this->service->update([
         'id' => $nonExistingId,
@@ -492,7 +492,7 @@ it('does not create a new record when the id does not exist', function () {
         'description' => 'Should not exist',
     ], $context['clinic']->id);
 
-    expect(Clinic_doctor_medicalService::count())
+    expect(Clinic_doctor_medical_service::count())
         ->toBe($beforeCount);
 });
 
@@ -509,7 +509,7 @@ it('does not accidentally update another record when id is wrong', function () {
     $doctor = Doctor::factory()->create();
     $clinicService = DoctorService::factory()->create();
 
-    $record = Clinic_doctor_medicalService::factory()->create([
+    $record = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
         'medicalService_id' => $clinicService->id,
@@ -777,7 +777,7 @@ it('maintains valid relationships after update', function () {
 it('does not delete any records', function () {
     $context = makeUpdateDoctorServicePriceContext();
 
-    $beforeCount = Clinic_doctor_medicalService::count();
+    $beforeCount = Clinic_doctor_medical_service::count();
 
     $this->service->update([
         'id' => $context['medicalServicePrice']->id,
@@ -787,11 +787,11 @@ it('does not delete any records', function () {
         'description' => 'Updated without deletion',
     ], $context['clinic']->id);
 
-    expect(Clinic_doctor_medicalService::count())
+    expect(Clinic_doctor_medical_service::count())
         ->toBe($beforeCount);
 
     expect(
-        Clinic_doctor_medicalService::whereKey(
+        Clinic_doctor_medical_service::whereKey(
             $context['medicalServicePrice']->id
         )->exists()
     )->toBeTrue();
@@ -848,7 +848,7 @@ it('rejects an update that violates the unique clinic doctor service combination
     $clinicServiceOne = DoctorService::factory()->create();
     $clinicServiceTwo = DoctorService::factory()->create();
 
-    $first = Clinic_doctor_medicalService::factory()->create([
+    $first = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorOne->id,
         'medicalService_id' => $clinicServiceOne->id,
@@ -856,7 +856,7 @@ it('rejects an update that violates the unique clinic doctor service combination
         'description' => 'First',
     ]);
 
-    Clinic_doctor_medicalService::factory()->create([
+    Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorTwo->id,
         'medicalService_id' => $clinicServiceTwo->id,
@@ -890,7 +890,7 @@ it('preserves the original record when a unique constraint is violated', functio
     $serviceOne = DoctorService::factory()->create();
     $serviceTwo = DoctorService::factory()->create();
 
-    $first = Clinic_doctor_medicalService::factory()->create([
+    $first = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorOne->id,
         'medicalService_id' => $serviceOne->id,
@@ -898,7 +898,7 @@ it('preserves the original record when a unique constraint is violated', functio
         'description' => 'First',
     ]);
 
-    Clinic_doctor_medicalService::factory()->create([
+    Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorTwo->id,
         'medicalService_id' => $serviceTwo->id,

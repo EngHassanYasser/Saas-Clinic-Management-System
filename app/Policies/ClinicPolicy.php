@@ -19,7 +19,7 @@ class ClinicPolicy
      */
     public function viewAny(User $user): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT,
            EnRoleType::CLINIC,
            EnRoleType::SUPER_ADMIN => true,
@@ -33,7 +33,7 @@ class ClinicPolicy
      */
     public function view(User $user, Clinic $clinic): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT => true,
 
            EnRoleType::CLINIC => $this->isOwnerOfClinic($user, $clinic->id),
@@ -48,7 +48,7 @@ class ClinicPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role ===EnRoleType::SUPER_ADMIN;
+        return $user->type ===EnRoleType::SUPER_ADMIN;
     }
 
     /**
@@ -56,7 +56,7 @@ class ClinicPolicy
      */
     public function update(User $user, Clinic $clinic): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->isOwnerOfClinic($user, $clinic->id),
 
            EnRoleType::SUPER_ADMIN => true,
@@ -70,7 +70,7 @@ class ClinicPolicy
      */
     public function delete(User $user, Clinic $clinic): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->isOwnerOfClinic($user, $clinic->id),
 
            EnRoleType::SUPER_ADMIN => true,
@@ -84,7 +84,7 @@ class ClinicPolicy
      */
     public function manage(User $user, Clinic $clinic): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->isOwnerOfClinic($user, $clinic->id),
 
            EnRoleType::SUPER_ADMIN => true,

@@ -6,7 +6,7 @@
 
     </label>
 
-    <input x-model="form.max_doctors" name="max_doctors" type="number"
+    <input x-model="form.maxDoctors" name="maxDoctors" type="number"
         class="w-full rounded-xl border border-gray-300 px-4 py-3 transition focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-100">
 
 </div>

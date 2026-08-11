@@ -1,6 +1,6 @@
 <div class="flex flex-wrap gap-2 lg:flex-shrink-0">
 
-    @if (Auth()->user()->type == \App\Enums\RoleType::CLINIC)
+    @if (Auth()->user()->type == \App\Enums\EnRoleType::CLINIC)
         <!-- Reschedule -->
         <button type="button" @click="openReschedule(appointment)"
             class="px-3 py-2 rounded-xl bg-blue-50 border border-blue-100 text-blue-700 text-xs font-semibold hover:bg-blue-100 transition whitespace-nowrap">
@@ -27,7 +27,7 @@
         </button>
     </form>
 
-    <button x-show="appointment.status == '{{ \App\Enums\AppointmentStatus::PENDING->value }}'" type="submit"
+    <button x-show="appointment.status == '{{ \App\Enums\EnAppointmentStatus::PENDING->value }}'" type="submit"
         class="px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold hover:bg-emerald-100 transition whitespace-nowrap">
         <i class="fas fa-check"></i> تأكيد
     </button>

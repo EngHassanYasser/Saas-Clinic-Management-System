@@ -15,7 +15,7 @@ export default {
     },
 
     doDelete() {
-        this.complaintts = this.complaintts.filter(
+        this.complaints = this.complaints.filter(
             (c) => c.id !== this.deleteComplaintt.id,
         );
 

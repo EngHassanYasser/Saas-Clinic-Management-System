@@ -4,8 +4,8 @@
     <select x-model="filters.doctorId"
         class="w-full bg-gray-50 border border-gray-100 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 outline-none">
         <option value="">كل الدكاترة</option>
-        <template x-for="doc in clinicServices" :key="doc.doctor_id">
-            <option :value="doc.doctor_id" x-text="doc.doctor_name"></option>
+        <template x-for="doc in clinicServices" :key="doc.doctorId">
+            <option :value="doc.doctorId" x-text="doc.doctorName"></option>
         </template>
     </select>
     <div class="flex items-center text-sm text-gray-500">

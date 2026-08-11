@@ -1,13 +1,13 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <x-complaintts._form.patient />
-    <x-complaintts._form.department />
-    <x-complaintts._form.doctor />
-    <x-complaintts._form.visit_date />
-    <x-complaintts._form.issue_type />
-    <x-complaintts._form.severity />
+    <x-complaints._form.patient />
+    <x-complaints._form.department />
+    <x-complaints._form.doctor />
+    <x-complaints._form.visit_date />
+    <x-complaints._form.issue_type />
+    <x-complaints._form.severity />
 </div>
-<x-complaintts._form.description />
-<x-complaintts._form.status_section />
-<x-complaintts._form.resolution_notes />
-<x-complaintts._form.actions />
+<x-complaints._form.description />
+<x-complaints._form.status_section />
+<x-complaints._form.resolution_notes />
+<x-complaints._form.actions />
  

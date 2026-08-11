@@ -7,7 +7,7 @@
          </div>
          <div class="flex flex-col gap-3">
              @php
-                 $complaintts = [
+                 $complaints = [
                      [
                          'title' => 'تأخر موعد أكثر من ساعة',
                          'patient' => 'أحمد محمد',
@@ -42,7 +42,7 @@
                      ],
                  ];
              @endphp
-             @foreach ($complaintts as $complaintt)
+             @foreach ($complaints as $complaintt)
                  <div class="flex items-start gap-3 p-3 rounded-lg border border-gray-100">
                      <div class="w-2 h-2 rounded-full {{ $complaintt['dot'] }} mt-1.5 flex-shrink-0"></div>
                      <div class="flex-1">

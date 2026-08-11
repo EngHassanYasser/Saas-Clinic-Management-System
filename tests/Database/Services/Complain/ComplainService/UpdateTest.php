@@ -61,7 +61,7 @@ it('updates complaint in database', function () {
         'resolution_notes' => 'Checking',
     ], $complaint->id, $clinic->id);
 
-    $this->assertDatabaseHas('complaintts', [
+    $this->assertDatabaseHas('complaints', [
         'id' => $complaint->id,
         'department' => 'pharmacy',
         'description' => 'Updated',

@@ -11,18 +11,22 @@ Route::middleware('auth', 'role:clinic,patient', 'verified')->group(function () 
         'appointments',
         [AppointmentController::class, 'index']
     )->name('appointments.index');
+    
     Route::post(
         'appointments',
         [AppointmentController::class, 'store']
     )->name('appointments.store');
+
     Route::get(
         'appointments/create',
         [AppointmentController::class, 'create']
     )->name('appointments.create');
+
     Route::patch(
         '/appointment/{appointment}/status/{status}',
         [AppointmentStatusController::class, 'changeStatus']
     )->name('appointments.changeStatus');
+
     Route::get(
         'appointments/AvailableAppointments/clinic/{clinic}/doctor/{doctor}/visitDate/{visit_date}/',
         [AppointmentAvailabilityController::class, 'getAvailableAppointments']

@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
     'subject_id',
     'created_by',
 ])]
-class ActivityLog extends Model
+class Activity_log extends Model
 {
     use HasFactory;
 }

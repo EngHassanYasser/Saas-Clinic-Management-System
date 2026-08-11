@@ -9,7 +9,7 @@ use App\Models\User;
 class ComplaintPolicy
 {
     /**
-     * Determine whether the user can view any complaintts.
+     * Determine whether the user can view any complaints.
      */
     private function isPatientOwnerOfComplaint(User $user, Complaint $complaint): bool
     {
@@ -18,15 +18,15 @@ class ComplaintPolicy
 
     private function isComplaintBelongToThatClinicOwner(User $user, int $complaintId): bool
     {
-        // return $user->clinics()->complaintts()->whereKey($complaintId);
+        // return $user->clinics()->complaints()->whereKey($complaintId);
 
         return $user->clinics()
-        ->Where('complaintts',fn($query)=>$query->whereKey($complaintId));
+        ->Where('complaints',fn($query)=>$query->whereKey($complaintId));
     }
 
     public function viewAny(User $user): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT,
            EnRoleType::CLINIC,
            EnRoleType::SUPER_ADMIN => true,
@@ -40,7 +40,7 @@ class ComplaintPolicy
      */
     public function view(User $user, Complaint $complaint): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT => $this->isPatientOwnerOfComplaint($user, $complaint),
 
            EnRoleType::CLINIC => $this->isComplaintBelongToThatClinicOwner($user, $complaint->id),
@@ -56,7 +56,7 @@ class ComplaintPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role ===EnRoleType::PATIENT;
+        return $user->type ===EnRoleType::PATIENT;
     }
 
     /**
@@ -64,7 +64,7 @@ class ComplaintPolicy
      */
     public function update(User $user, Complaint $complaint): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT => $this->isPatientOwnerOfComplaint($user, $complaint),
 
            EnRoleType::CLINIC => $this->isComplaintBelongToThatClinicOwner($user, $complaint->id),
@@ -80,7 +80,7 @@ class ComplaintPolicy
      */
     public function delete(User $user, Complaint $complaint): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT => $this->isPatientOwnerOfComplaint($user, $complaint),
 
            EnRoleType::CLINIC => $this->isComplaintBelongToThatClinicOwner($user, $complaint->id),
@@ -96,7 +96,7 @@ class ComplaintPolicy
      */
     public function respond(User $user, Complaint $complaint): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->isComplaintBelongToThatClinicOwner($user, $complaint->id),
 
            EnRoleType::SUPER_ADMIN => true,
@@ -110,7 +110,7 @@ class ComplaintPolicy
      */
     public function changeStatus(User $user, Complaint $complaint): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->isComplaintBelongToThatClinicOwner($user, $complaint->id),
 
            EnRoleType::SUPER_ADMIN => true,

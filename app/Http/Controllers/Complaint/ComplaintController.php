@@ -4,18 +4,17 @@ namespace App\Http\Controllers\Complaint;
 
 use App\DTOs\Services\Complaint\StoreComplaintDTO;
 use App\DTOs\Services\Complaint\UpdateComplaintDTO;
-use App\Enums\EnRoleType;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\complaintts\StoreComplaintRequest;
-use App\Http\Requests\complaintts\UpdateComplaintRequest;
+use App\Http\Requests\complaints\StoreComplaintRequest;
+use App\Http\Requests\complaints\UpdateComplaintRequest;
 use App\Models\Complaint;
+use App\Services\Clinic\ClinicQueryService;
 use App\Services\Complaint\ComplaintQueryService;
 use App\services\Complaint\ComplaintService;
 use App\Services\Complaint\ComplaintStatisticsService;
 use App\Services\Doctor\DoctorQueryService;
 use App\Support\TenantContext;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Concurrency;
 
 class ComplaintController extends Controller
 {
@@ -25,32 +24,24 @@ class ComplaintController extends Controller
         private ComplaintStatisticsService $comaplainStatisticsService,
         private DoctorQueryService $doctorQueryService,
         private TenantContext $tenantContext,
+        private ClinicQueryService $clincQueryService,
     ) {}
 
     public function index()
     {
-        $this->authorize('viewAny',Complaint::class);
+        $this->authorize('viewAny', Complaint::class);
 
-        if (Auth::user()->type ==EnRoleType::CLINIC->value) {
-            $clinicId = $this->tenantContext->id();
-            $complaintts = $this->complaintQueryService->getClinicComplaints(Auth::user());
+        $complaints = $this->complaintQueryService->getClinicComplaints(Auth::user());
+        $clinicId = $this->clincQueryService->getClinicByOwnereId(Auth::id())->id;
+        $stats = $this->comaplainStatisticsService->getStatistics($clinicId);
+        $doctors = $this->doctorQueryService->getDoctorsNames($clinicId);
 
-            [$stats,$doctors] = Concurrency::run([
-                fn () => $this->comaplainStatisticsService->getStatistics($clinicId),
-                fn () => $this->doctorQueryService->getDoctorsNames($clinicId),
-            ]);
-        } else {
-            $complaintts = $this->complaintQueryService->getClinicComplaints(Auth::user());
-            $stats = [];
-            $doctors = [];
-        }
-
-        return view('complaintts.index', compact('complaintts', 'stats', 'doctors'));
+        return view('complaints.index', compact('complaints', 'stats', 'doctors'));
     }
 
     public function store(StoreComplaintRequest $request)
     {
-        $this->authorize('create',Complaint::class);
+        $this->authorize('create', Complaint::class);
 
         $clinicId = $this->tenantContext->id();
         $dto = StoreComplaintDTO::fromRequest($request->validated());
@@ -59,31 +50,31 @@ class ComplaintController extends Controller
             ? 'complaint added successfully.'
             : 'Failed to add complaint. Please try again.';
 
-        return redirect()->route('complaintts.index')->with('message', $message);
+        return redirect()->route('complaints.index')->with('message', $message);
     }
 
     public function update(UpdateComplaintRequest $request, Complaint $complaint)
     {
-        $this->authorize('update',$complaint);
+        $this->authorize('update', $complaint);
 
-        $dto=UpdateComplaintDTO::fromRequest($request->validated());
+        $dto = UpdateComplaintDTO::fromRequest($request->validated());
         $isUpdated = $this->complaintService->update($dto, $complaint);
         $message = $isUpdated
             ? 'complaint updated successfully.'
             : 'Failed to update complaint. Please try again.';
 
-        return redirect()->route('complaintts.index')->with('message', $message);
+        return redirect()->route('complaints.index')->with('message', $message);
     }
 
     public function destroy(Complaint $complaint)
     {
-        $this->authorize('delete',$complaint);
-        
+        $this->authorize('delete', $complaint);
+
         $isDeleted = $this->complaintService->delete($complaint);
         $message = $isDeleted
             ? 'complaint deleted successfully.'
             : 'Failed to delete complaint. Please try again.';
 
-        return redirect()->route('complaintts.index')->with('message', $message);
+        return redirect()->route('complaints.index')->with('message', $message);
     }
 }

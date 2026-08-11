@@ -9,6 +9,7 @@ Route::post(
     '/appointments/{appointment}/pay',
     [PaymentController::class, 'pay']
 );
+
 Route::post(
     '/webhooks/stripe',
     StripeWebhookController::class

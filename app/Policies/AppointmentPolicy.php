@@ -24,7 +24,7 @@ class AppointmentPolicy
      */
     public function viewAny(User $user): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT,
            EnRoleType::CLINIC,
            EnRoleType::SUPER_ADMIN => true,
@@ -38,7 +38,7 @@ class AppointmentPolicy
      */
     public function view(User $user, Appointment $appointment): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT => $this->isPatientOwner($user, $appointment),
 
            EnRoleType::CLINIC => $this->belongsToClinic($user, $appointment),
@@ -54,7 +54,7 @@ class AppointmentPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role ===EnRoleType::PATIENT;
+        return $user->type ===EnRoleType::PATIENT;
     }
 
     /**
@@ -62,7 +62,7 @@ class AppointmentPolicy
      */
     public function update(User $user, Appointment $appointment): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT => $this->isPatientOwner($user, $appointment),
 
            EnRoleType::CLINIC => $this->belongsToClinic($user, $appointment),
@@ -78,7 +78,7 @@ class AppointmentPolicy
      */
     public function cancel(User $user, Appointment $appointment): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT => $this->isPatientOwner($user, $appointment),
 
            EnRoleType::CLINIC => $this->belongsToClinic($user, $appointment),
@@ -94,7 +94,7 @@ class AppointmentPolicy
      */
     public function confirm(User $user, Appointment $appointment): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->belongsToClinic($user, $appointment),
 
            EnRoleType::SUPER_ADMIN => true,
@@ -108,7 +108,7 @@ class AppointmentPolicy
      */
     public function reschedule(User $user, Appointment $appointment): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT => $this->isPatientOwner($user, $appointment),
 
            EnRoleType::CLINIC => $this->belongsToClinic($user, $appointment),
@@ -124,7 +124,7 @@ class AppointmentPolicy
      */
     public function changeStatus(User $user, Appointment $appointment): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->belongsToClinic($user, $appointment),
 
            EnRoleType::SUPER_ADMIN => true,
@@ -138,7 +138,7 @@ class AppointmentPolicy
      */
     public function delete(User $user, Appointment $appointment): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->belongsToClinic($user, $appointment),
 
            EnRoleType::SUPER_ADMIN => true,

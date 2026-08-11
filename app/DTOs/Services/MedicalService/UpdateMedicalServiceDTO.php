@@ -1,10 +1,10 @@
 <?php
 
-namespace App\DTOs\Services\MedicalService;
+namespace App\DTOs\Services\Medical_Service;
 
-use App\Http\Requests\MedicalService\UpdateMedicalServiceRequest;
+use App\Http\Requests\Medical_Service\UpdateMedical_ServiceRequest;
 
-class UpdateMedicalServiceDTO
+class UpdateMedical_ServiceDTO
 {
     public function __construct(
         public readonly int $clinicId,
@@ -14,7 +14,7 @@ class UpdateMedicalServiceDTO
         public readonly string $description
     ) {}
 
-    public static function fromRequest(UpdateMedicalServiceRequest $request): self
+    public static function fromRequest(UpdateMedical_ServiceRequest $request): self
     {
         return new self(
             clinicId: $request->integer('clinicId'),

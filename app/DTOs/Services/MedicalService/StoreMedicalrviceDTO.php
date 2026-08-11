@@ -1,8 +1,8 @@
 <?php
 
-namespace App\DTOs\Services\MedicalService;
+namespace App\DTOs\Services\Medical_Service;
 
-use App\Http\Requests\MedicalService\StoreMedicalServiceRequest;
+use App\Http\Requests\Medical_Service\StoreMedical_ServiceRequest;
 
 class StoreMedicalrviceDTO
 {
@@ -13,7 +13,7 @@ class StoreMedicalrviceDTO
         public readonly float $price,
     ) {}
 
-        public static function fromRequest(StoreMedicalServiceRequest $request):self {
+        public static function fromRequest(StoreMedical_ServiceRequest $request):self {
             return new self(
                 medicalServiceId:$request->integer('medicalServiceId'),
                 doctorId:$request->integer('doctorId'),
