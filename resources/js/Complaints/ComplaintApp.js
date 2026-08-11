@@ -6,7 +6,7 @@ import Filters from "./Filters";
 import GlobalHelpers from "../Global/Helpers";
 import GlobalState from '../Global/State';
 
-export function ComplainttApp(serverData) {
+export function ComplaintApp(serverData) {
     const Complaints = {
         ...State(serverData),
         ...Actions,

@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $this->authorize('viewAny', Dashboard::class);
+        // $this->authorize('viewAny', Dashboard::class);
 
         return redirect()->route(match (Auth::user()->type) {
             EnRoleType::PATIENT => 'appointments.index',

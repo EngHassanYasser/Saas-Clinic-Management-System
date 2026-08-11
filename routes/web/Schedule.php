@@ -9,14 +9,17 @@ Route::middleware('auth', 'role:clinic,patient','verified')->group(function () {
         'schedules',
         [ScheduleController::class, 'index']
     )->name('schedules.index');
+
     Route::middleware('tenant.context')->post(
         'schedules/',
         [ScheduleController::class, 'store']
     )->name('schedules.store');
+
     Route::put(
         'schedules/{schedule}',
         [ScheduleController::class, 'update']
     )->name('schedules.update');
+    
     Route::delete(
         'schedules/{schedule}',
         [ScheduleController::class, 'destroy']

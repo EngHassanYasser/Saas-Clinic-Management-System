@@ -42,7 +42,7 @@ it('returns correct complaint statistics', function () {
         ->and($statistics['rejected'])->toBe(1);
 
 });
-it('counts only complaintts of requested clinic', function () {
+it('counts only complaints of requested clinic', function () {
 
     $clinic = Clinic::factory()->create();
 
@@ -64,7 +64,7 @@ it('counts only complaintts of requested clinic', function () {
         ->and($statistics['pending'])->toBe(5);
 
 });
-it('returns zeros when clinic has no complaintts', function () {
+it('returns zeros when clinic has no complaints', function () {
 
     $clinic = Clinic::factory()->create();
 

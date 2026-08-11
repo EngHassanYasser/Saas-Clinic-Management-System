@@ -3,7 +3,6 @@ import Helpers from "./Helpers";
 import Getters from "./Getters";
 import Actions from "./Actions";
 import GlobalHelpers from "../Global/Helpers";
-import Api from "./Api";
 
 export function vacationApp(serverData = {}) {
     const Vacation = {

@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Enums\EnRoleType;use App\Events\UserCreated;
+use App\Enums\EnRoleType;
+use App\Events\UserCreated;
 use App\Http\Controllers\Controller;
 use App\Models\Clinic;
 use App\Models\User;
@@ -41,7 +42,7 @@ class RegisteredUserController extends Controller
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
-                'type' => ['required', new Enum(RoleType::class)],
+                'type' => ['required', new Enum(EnRoleType::class)],
             ]);
 
             $user = User::create([

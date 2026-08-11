@@ -31,7 +31,7 @@ class PaymentPolicy
 
     public function viewAny(User $user): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
             EnRoleType::PATIENT,
             EnRoleType::CLINIC,
             EnRoleType::SUPER_ADMIN => true,
@@ -45,7 +45,7 @@ class PaymentPolicy
      */
     public function view(User $user, Payment $payment): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
             EnRoleType::PATIENT => $this->belongsToPatient($user, $payment->id),
 
             EnRoleType::CLINIC => $this->belongsToClinicOwner($user, $payment->id),
@@ -61,7 +61,7 @@ class PaymentPolicy
      */
     public function create(User $user): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
             EnRoleType::PATIENT,
             EnRoleType::SUPER_ADMIN => true,
 
@@ -74,7 +74,7 @@ class PaymentPolicy
      */
     public function update(User $user, Payment $payment): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
             EnRoleType::SUPER_ADMIN => true,
 
             default => false,
@@ -86,7 +86,7 @@ class PaymentPolicy
      */
     public function delete(User $user, Payment $payment): bool
     {
-        return $user->role === EnRoleType::SUPER_ADMIN;
+        return $user->type === EnRoleType::SUPER_ADMIN;
     }
 
     /**
@@ -94,7 +94,7 @@ class PaymentPolicy
      */
     public function refund(User $user, Payment $payment): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
             EnRoleType::CLINIC => $this->belongsToClinicOwner($user, $payment->id),
 
             EnRoleType::SUPER_ADMIN => true,

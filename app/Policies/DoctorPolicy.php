@@ -20,7 +20,7 @@ class DoctorPolicy
 
     public function viewAny(User $user): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT,
            EnRoleType::CLINIC,
            EnRoleType::SUPER_ADMIN => true,
@@ -34,7 +34,7 @@ class DoctorPolicy
      */
     public function view(User $user, Doctor $doctor): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT => true,
 
            EnRoleType::CLINIC => $this->isBelogToClinicOwner($user, $doctor->id),
@@ -50,7 +50,7 @@ class DoctorPolicy
      */
     public function create(User $user): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC,
            EnRoleType::SUPER_ADMIN => true,
 
@@ -63,7 +63,7 @@ class DoctorPolicy
      */
     public function update(User $user, Doctor $doctor): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->isBelogToClinicOwner($user, $doctor->id),
 
            EnRoleType::SUPER_ADMIN => true,
@@ -77,7 +77,7 @@ class DoctorPolicy
      */
     public function delete(User $user, Doctor $doctor): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->isBelogToClinicOwner($user, $doctor->id),
 
            EnRoleType::SUPER_ADMIN => true,
@@ -91,7 +91,7 @@ class DoctorPolicy
      */
     public function manage(User $user, Doctor $doctor): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->isBelogToClinicOwner($user, $doctor->id),
 
            EnRoleType::SUPER_ADMIN => true,

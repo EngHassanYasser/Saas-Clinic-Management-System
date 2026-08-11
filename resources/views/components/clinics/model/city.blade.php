@@ -1,5 +1,5 @@
 <div class="relative col-span-2" x-data="{ open: false, selected: null }" class="relative">
-    <input type="hidden" x-model="form.city.id" name="city_id">
+    <input type="hidden" x-model="form.city.id" name="cityId">
     <label class="block text-xs font-semibold text-gray-500 mb-1.5">
         المدينة
         <span class="text-red-400">*</span>

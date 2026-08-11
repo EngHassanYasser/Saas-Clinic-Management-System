@@ -30,11 +30,11 @@ class DoctorController extends Controller
         $this->authorize('viewAny',Doctor::class);
         
         $clinicId = $this->tenantContext->id();
+        $stats=   $this->doctorStatisticsService->getStats($clinicId);
 
-        [$doctors,$specialities,$stats] = Concurrency::run([
+        [$doctors,$specialities] = Concurrency::run([
             fn () => $this->doctorQueryService->getAll($clinicId),
             fn () => $this->specialityQueryService->getAll(),
-            fn () => $this->doctorStatisticsService->getStats($clinicId),
         ]);
 
         return view('doctors.index', compact('doctors', 'specialities', 'stats'));

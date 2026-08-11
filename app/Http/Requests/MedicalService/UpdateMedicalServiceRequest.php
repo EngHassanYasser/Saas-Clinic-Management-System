@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\MedicalService;
+namespace App\Http\Requests\Medical_Service;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateMedicalServiceRequest extends FormRequest
+class UpdateMedical_ServiceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

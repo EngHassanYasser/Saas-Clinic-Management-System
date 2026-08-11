@@ -34,7 +34,7 @@
 
             <div class="mt-8 flex items-end gap-2">
 
-                <span class="text-5xl font-extrabold leading-none" x-text="plan.monthly_price">
+                <span class="text-5xl font-extrabold leading-none" x-text="plan.monthlyPrice">
                 </span>
 
                 <div class="pb-1">

@@ -7,10 +7,9 @@ use App\DTOs\Services\Complaint\UpdateComplaintDTO;
 use App\Enums\EnRoleType;
 use App\Models\Complaint;
 use App\Models\User;
-
 class ComplaintService
 {
-    public function __construct(private ComplaintQueryService $complaintQueryService) {}
+    public function __construct() {}
 
     public function add(StoreComplaintDTO $dto, User $user, int $clinicId): Complaint
     {

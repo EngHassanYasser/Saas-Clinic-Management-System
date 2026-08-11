@@ -1,24 +1,30 @@
 <?php
 
-use App\Http\Controllers\DoctorService\MedicalServiceController;
+use App\Http\Controllers\MedicalService\MedicalServiceController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth', 'role:clinic','verified')->group(function () {
+Route::middleware('auth', 'role:clinic', 'verified')->group(function () {
 
     Route::get(
         '/clinic/services/index',
         [MedicalServiceController::class, 'index']
     )->name('clinicServices.index');
-    Route::middleware('tenant.context')->post(
+    
+    Route::post(
         '/clinic/services',
         [MedicalServiceController::class, 'store']
-    )->name('clinic.services.store');
-    Route::middleware('tenant.context')->put(
+    )->name('clinic.services.store')
+        ->middleware('tenant.context');
+
+    Route::put(
         '/clinic/services/{clinic}',
         [MedicalServiceController::class, 'update']
-    )->name('clinic.services.update');
-    Route::middleware('tenant.context')->delete(
+    )->name('clinic.services.update')
+        ->middleware('tenant.context');
+
+    Route::delete(
         '/clinic/services/{clinic}',
         [MedicalServiceController::class, 'destroy']
-    )->name('clinic.services.destroy');
+    )->name('clinic.services.destroy')
+        ->middleware('tenant.context');
 });

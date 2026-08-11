@@ -5,7 +5,7 @@ namespace App\DTOs\Services\Complaint;
 use App\Enums\ComplaintStatus;
 use App\Enums\enSeverity;
 use App\Enums\IssueType;
-use App\Http\Requests\complaintts\StoreComplaintRequest;
+use App\Http\Requests\complaints\StoreComplaintRequest;
 
 class StoreComplaintDTO
 {

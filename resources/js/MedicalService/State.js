@@ -5,7 +5,7 @@ export default function (serverData = {}) {
 
         serviceDropdownOpen: false,
         doctorDropdownOpen: false,
-        serviceCatalogs: serverData.serviceCatalogs,
+        medicalService: serverData.medicalService,
         doctors: serverData.doctors,
         clinicServices: serverData.clinicServices,
 
@@ -16,8 +16,8 @@ export default function (serverData = {}) {
 
         form: {
             id: null,
-            medicalService_id: null,
-            doctor_id: null,
+            medicalServiceId: null,
+            doctorId: null,
             description: "",
             price: 0,
         },

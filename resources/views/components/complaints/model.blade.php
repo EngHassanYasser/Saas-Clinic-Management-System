@@ -23,14 +23,14 @@
             <div class="flex-1 overflow-y-auto p-6">
                 <form
                     :action="mode == 'add' ?
-                        '{{ route('complaintts.store') }}' :
-                        '{{ url('complaintts') }}/' + currentComplaintt.id"
+                        '{{ route('complaints.store') }}' :
+                        '{{ url('complaints') }}/' + currentComplaint.id"
                     method="POST">
                     @csrf
                     <template x-if="mode == 'update'">
                         <input type="hidden" name="_method" value="PUT">
                     </template>
-                    <x-complaintts._form />
+                    <x-complaints._form />
                 </form>
             </div>
         </div>

@@ -3,9 +3,9 @@
 namespace App\Services\Clinic;
 
 use App\Models\Clinic;
+use App\Models\Medical_service;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use App\Models\MedicalService;
 
 class ClinicQueryService
 {
@@ -60,7 +60,7 @@ class ClinicQueryService
     }
     public function getDoctorServicesBySpecialityId(int $specialityId): Collection
     {
-        return MedicalService::where('speciality_id', $specialityId)->select(['id', 'name'])->get();
+        return Medical_service::where('speciality_id', $specialityId)->select(['id', 'name'])->get();
     }
     public function getClinicByOwnereId(int $ownerId): Clinic
     {

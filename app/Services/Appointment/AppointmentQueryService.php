@@ -5,7 +5,7 @@ namespace App\Services\Appointment;
 use App\Enums\EnRoleType;
 use App\Models\Appointment;
 use App\Models\Clinic;
-use App\Models\Clinic_doctor_medicalService;
+use App\Models\Clinic_doctor_medical_service;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -42,7 +42,7 @@ class AppointmentQueryService
             ->with(['patient:id,name', 'doctor:id,name', 'clinic:id,name,address', 'service:id,name'])
             ->paginate(20)
             ->through(function ($appt) {
-                $price = Clinic_doctor_medicalService::where('doctor_id', $appt->doctor_id)
+                $price = Clinic_doctor_medical_service::where('doctor_id', $appt->doctor_id)
                     ->where('clinic_id', $appt->clinic_id)
                     ->where('medicalService_id', $appt->medicalService_id)
                     ->value('price');

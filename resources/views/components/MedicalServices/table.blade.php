@@ -12,7 +12,7 @@
         <tbody>
             <template x-for="item in filteredServices" :key="item.id">
                 <tr class="hover:bg-gray-50/60 transition">
-                    <td class="p-4 text-gray-800 font-medium" x-text="item.service_name"></td>
+                    <td class="p-4 text-gray-800 font-medium" x-text="item.serviceName"></td>
 
                     <td class="p-4 text-gray-500" x-text="item.description"></td>
 

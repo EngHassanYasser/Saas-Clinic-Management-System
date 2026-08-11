@@ -1,6 +1,6 @@
 const statusMap = {
     pending: { label: "في الانتظار", cls: "bg-blue-100 text-blue-700" },
-    under_review: { label: "قيد المراجعة", cls: "bg-amber-100 text-amber-700" },
+    underReview: { label: "قيد المراجعة", cls: "bg-amber-100 text-amber-700" },
     resolved: { label: "تم الحل", cls: "bg-emerald-100 text-emerald-700" },
     rejected: { label: "تم الرفض", cls: "bg-red-100 text-emerald-700" },
 };
@@ -72,6 +72,6 @@ export default {
     statuses,
     priorityMap,
     departments,
-    issue_types,
+    issueTypes,
     severities,
 };

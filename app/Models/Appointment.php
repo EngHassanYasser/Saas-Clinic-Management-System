@@ -39,12 +39,12 @@ class Appointment extends Model
 
     public function medicalServicePrice()
     {
-        return $this->hasOne(Clinic_doctor_medicalService::class);
+        return $this->hasOne(Clinic_doctor_medical_service::class);
     }
 
     public function service()
     {
-        return $this->belongsTo(MedicalService::class);
+        return $this->belongsTo(Medical_Service::class);
     }
 
     public function patient()
@@ -72,7 +72,7 @@ class Appointment extends Model
         return $this->hasMany(appointmentStatusLog::class);
     }
 
-    public function complaintts()
+    public function complaints()
     {
         return $this->hasMany(complaint::class);
     }

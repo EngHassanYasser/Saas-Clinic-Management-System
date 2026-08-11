@@ -4,8 +4,8 @@ export default {
 
         this.form = {
             id: null,
-            medicalService_id: null,
-            doctor_id: null,
+            medicalServiceId: null,
+            doctorId: null,
             description: "",
             price: 0,
         };
@@ -18,8 +18,8 @@ export default {
 
         this.form = {
             id: item.id,
-            medicalService_id: item.medicalService_id,
-            doctor_id: item.doctor_id,
+            medicalServiceId: item.medicalServiceId,
+            doctorId: item.doctorId,
             description: item.description,
             price: item.price,
         };

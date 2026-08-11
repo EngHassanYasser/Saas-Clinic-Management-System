@@ -1,7 +1,7 @@
 <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
     <table class="w-full text-sm">
-        <x-complaintts.table.thead />
-        <x-complaintts.table.tbody />
+        <x-complaints.table.thead />
+        <x-complaints.table.tbody />
     </table>
-    <x-complaintts.table.no_complaintts_found />
+    <x-complaints.table.no_complaints_found />
 </div>

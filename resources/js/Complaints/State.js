@@ -1,6 +1,6 @@
 export default function (serverData = {}) {
     return {
-        complaintts: serverData.complaintts ?? [],
+        complaints: serverData.complaints ?? [],
         stats: serverData.stats ?? [],
         doctors:serverData.doctors ?? [],
         showModel:false,
@@ -12,8 +12,8 @@ export default function (serverData = {}) {
         query: "",
         patientId: "",
         open: false,
-        currentComplaintt: null,
-        deleteComplaintt: null,
+        currentComplaint: null,
+        deleteComplaint: null,
         detailsModal: false,
         deleteModal: false,
     };

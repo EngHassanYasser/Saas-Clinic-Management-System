@@ -12,7 +12,7 @@ beforeEach(function () {
 });
 
 
-it('returns only clinic complaintts for clinic owner', function () {
+it('returns only clinic complaints for clinic owner', function () {
 
     $clinicOwner = User::factory()->create([
         'type' =>EnRoleType::CLINIC,
@@ -52,7 +52,7 @@ it('returns only clinic complaintts for clinic owner', function () {
         ->toBe($firstComplaint->id);
 
 });
-it('returns only complaintts created by patient', function () {
+it('returns only complaints created by patient', function () {
 
     $patient = User::factory()->create([
         'type' =>EnRoleType::PATIENT,
@@ -139,7 +139,7 @@ it('returns only required columns', function () {
         ->not->toHaveKey('some_hidden_column');
 
 });
-it('returns all complaintts for other roles', function () {
+it('returns all complaints for other roles', function () {
 
     $admin = User::factory()->create([
         'type' =>EnRoleType::SUPER_ADMIN,

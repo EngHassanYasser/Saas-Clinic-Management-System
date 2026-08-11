@@ -15,10 +15,10 @@ class DoctorStatisticsService
             function () use ($clinicId) {
                 $statistics = Doctor::query()
                     ->join(
-                        'clinic_doctors',
+                        'clinic_doctor',
                         'doctors.id',
                         '=',
-                        'clinic_doctors.doctor_id'
+                        'clinic_doctor.doctor_id'
                     )
                     ->leftJoin(
                         'doctor_speciality',
@@ -26,20 +26,20 @@ class DoctorStatisticsService
                         '=',
                         'doctor_speciality.doctor_id'
                     )
-                    ->where('clinic_doctors.clinic_id', $clinicId)
+                    ->where('clinic_doctor.clinic_id', $clinicId)
                     ->selectRaw('
                     COUNT(DISTINCT doctors.id) as total,
 
                     COUNT(
                         DISTINCT CASE
-                            WHEN clinic_doctors.is_active = 1
+                            WHEN clinic_doctor.is_active = 1
                             THEN doctors.id
                         END
                     ) as active,
 
                     COUNT(
                         DISTINCT CASE
-                            WHEN clinic_doctors.is_active = 0
+                            WHEN clinic_doctor.is_active = 0
                             THEN doctors.id
                         END
                     ) as inactive,

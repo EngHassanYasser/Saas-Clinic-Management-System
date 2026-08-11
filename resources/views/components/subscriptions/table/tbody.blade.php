@@ -9,10 +9,10 @@
                 x-text="item.price + ' EGP'"></td>
 
             <td class="px-6 py-5 text-gray-600 whitespace-nowrap"
-                x-text="item.start_at"></td>
+                x-text="item.startAt"></td>
 
             <td class="px-6 py-5 text-gray-600 whitespace-nowrap"
-                x-text="item.end_at"></td>
+                x-text="item.endAt"></td>
 
             <td class="px-6 py-5">
                 <span

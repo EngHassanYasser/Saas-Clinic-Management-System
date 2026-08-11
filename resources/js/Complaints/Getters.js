@@ -1,6 +1,6 @@
 export default {
-    get filteredComplaintts() {
-        return this.complaintts.filter((c) => {
+    get filteredComplaints() {
+        return this.complaints.filter((c) => {
             const matchSearch =
                 !this.filters.search ||
                 c.patient.includes(this.filters.search) ||
@@ -23,7 +23,7 @@ export default {
         );
     },
 
-    get totalComplaintts() {
-        return this.complaintts.length;
+    get totalComplaints() {
+        return this.complaints.length;
     },
 };

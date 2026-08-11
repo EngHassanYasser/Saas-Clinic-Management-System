@@ -20,7 +20,7 @@ class SchedulePolicy
      */
     public function viewAny(User $user): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT,
            EnRoleType::CLINIC,
            EnRoleType::SUPER_ADMIN => true,
@@ -34,7 +34,7 @@ class SchedulePolicy
      */
     public function view(User $user, Schedule $schedule): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::PATIENT => true,
            EnRoleType::CLINIC => $this->belogsToClinicOwner($user, $schedule->id),
 
@@ -49,7 +49,7 @@ class SchedulePolicy
      */
     public function create(User $user): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC,
            EnRoleType::SUPER_ADMIN => true,
 
@@ -62,7 +62,7 @@ class SchedulePolicy
      */
     public function update(User $user, Schedule $schedule): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->belogsToClinicOwner($user, $schedule->id),
 
            EnRoleType::SUPER_ADMIN => true,
@@ -76,7 +76,7 @@ class SchedulePolicy
      */
     public function delete(User $user, Schedule $schedule): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->belogsToClinicOwner($user, $schedule->id),
 
            EnRoleType::SUPER_ADMIN => true,

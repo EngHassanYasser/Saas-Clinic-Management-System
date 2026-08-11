@@ -14,7 +14,7 @@
          </div>
          <div>
              <p class="text-xs text-gray-400">قيد المراجعة</p>
-             <p class="text-xl font-medium text-gray-800" x-text="stats.under_review ?? 'N/A'"></p>
+             <p class="text-xl font-medium text-gray-800" x-text="stats.underReview ?? 'N/A'"></p>
          </div>
      </div>
      <div class="bg-white rounded-xl border border-gray-100 p-4 flex items-center gap-3">

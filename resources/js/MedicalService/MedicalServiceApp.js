@@ -6,7 +6,7 @@ import Api from "./Api";
 import GlobalHelpers from '../Global/Helpers';
 import GlobalState from '../Global/State';
 
-export function DoctorServiceApp(serverData) {
+export function MedicalServiceApp(serverData) {
     const DoctorServices = {
         ...State(serverData),
         ...Actions,

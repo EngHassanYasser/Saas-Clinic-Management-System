@@ -1,8 +1,8 @@
 <?php
 
-use App\Models\ActivityLog;
+use App\Models\Activity_log;
 use App\Models\User;
-use App\Services\ActivityLog\ActivityLogQueryService;
+use App\Services\Activity_log\ActivityLogQueryService;
 
 beforeEach(function () {
     $this->service = app(ActivityLogQueryService::class);
@@ -10,7 +10,7 @@ beforeEach(function () {
 
 
 it('returns a length aware paginator', function () {
-    ActivityLog::factory()->count(3)->create();
+    Activity_log::factory()->count(3)->create();
 
     $result = $this->service->getLastActivities();
 
@@ -19,7 +19,7 @@ it('returns a length aware paginator', function () {
 
 
 it('returns activities from the database', function () {
-    ActivityLog::factory()->count(5)->create();
+    Activity_log::factory()->count(5)->create();
 
     $result = $this->service->getLastActivities();
 
@@ -29,7 +29,7 @@ it('returns activities from the database', function () {
 
 
 it('paginates activities with five records per page', function () {
-    ActivityLog::factory()->count(12)->create();
+    Activity_log::factory()->count(12)->create();
 
     $result = $this->service->getLastActivities();
 
@@ -40,7 +40,7 @@ it('paginates activities with five records per page', function () {
 
 
 it('returns the correct number of pages', function () {
-    ActivityLog::factory()->count(12)->create();
+    Activity_log::factory()->count(12)->create();
 
     $result = $this->service->getLastActivities();
 
@@ -49,7 +49,7 @@ it('returns the correct number of pages', function () {
 
 
 it('returns all records when total records are less than five', function () {
-    ActivityLog::factory()->count(3)->create();
+    Activity_log::factory()->count(3)->create();
 
     $result = $this->service->getLastActivities();
 
@@ -69,15 +69,15 @@ it('returns an empty paginator when there are no activities', function () {
 
 
 it('returns the latest activities first', function () {
-    $oldest = ActivityLog::factory()->create([
+    $oldest = Activity_log::factory()->create([
         'created_at' => now()->subDays(3),
     ]);
 
-    $middle = ActivityLog::factory()->create([
+    $middle = Activity_log::factory()->create([
         'created_at' => now()->subDay(),
     ]);
 
-    $latest = ActivityLog::factory()->create([
+    $latest = Activity_log::factory()->create([
         'created_at' => now(),
     ]);
 
@@ -90,7 +90,7 @@ it('returns the latest activities first', function () {
 
 
 it('returns only five latest activities on the first page', function () {
-    $activities = ActivityLog::factory()
+    $activities = Activity_log::factory()
         ->count(8)
         ->sequence(fn ($sequence) => [
             'created_at' => now()->subDays($sequence->index),
@@ -105,7 +105,7 @@ it('returns only five latest activities on the first page', function () {
         ->pluck('id')
         ->all();
 
-    $expectedIds = ActivityLog::query()
+    $expectedIds = Activity_log::query()
         ->latest('created_at')
         ->limit(5)
         ->pluck('id')
@@ -116,7 +116,7 @@ it('returns only five latest activities on the first page', function () {
 
 
 it('returns the second page correctly', function () {
-    ActivityLog::factory()
+    Activity_log::factory()
         ->count(12)
         ->sequence(fn ($sequence) => [
             'created_at' => now()->subDays($sequence->index),
@@ -136,7 +136,7 @@ it('returns the second page correctly', function () {
 
 
 it('returns the remaining records on the last page', function () {
-    ActivityLog::factory()->count(12)->create();
+    Activity_log::factory()->count(12)->create();
 
     request()->merge([
         'page' => 3,
@@ -150,7 +150,7 @@ it('returns the remaining records on the last page', function () {
 
 
 it('does not return more than five activities per page', function () {
-    ActivityLog::factory()->count(100)->create();
+    Activity_log::factory()->count(100)->create();
 
     $result = $this->service->getLastActivities();
 
@@ -163,7 +163,7 @@ it('does not return more than five activities per page', function () {
 it('returns the expected activity attributes', function () {
     $user = User::factory()->create();
 
-    $activity = ActivityLog::factory()->create([
+    $activity = Activity_log::factory()->create([
         'type' => 'appointment.updated',
         'title' => 'Appointment Updated',
         'description' => 'Appointment status was changed',
@@ -190,7 +190,7 @@ it('returns the expected activity attributes', function () {
 
 
 it('does not select columns that are not part of the activity response', function () {
-    $activity = ActivityLog::factory()->create();
+    $activity = Activity_log::factory()->create();
 
     $result = $this->service->getLastActivities();
 
@@ -212,7 +212,7 @@ it('does not select columns that are not part of the activity response', functio
 
 
 it('does not modify the activity records', function () {
-    $activity = ActivityLog::factory()->create([
+    $activity = Activity_log::factory()->create([
         'title' => 'Original title',
         'status' => 'success',
     ]);
@@ -227,18 +227,18 @@ it('does not modify the activity records', function () {
 
 
 it('does not create new activity records', function () {
-    ActivityLog::factory()->count(5)->create();
+    Activity_log::factory()->count(5)->create();
 
-    $before = ActivityLog::count();
+    $before = Activity_log::count();
 
     $this->service->getLastActivities();
 
-    expect(ActivityLog::count())->toBe($before);
+    expect(Activity_log::count())->toBe($before);
 });
 
 
 it('keeps the total count independent from pagination', function () {
-    ActivityLog::factory()->count(17)->create();
+    Activity_log::factory()->count(17)->create();
 
     $result = $this->service->getLastActivities();
 

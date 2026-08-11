@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\DoctorService;
+namespace App\Http\Controllers\MedicalService;
 
-use App\DTOs\Services\MedicalService\StoreMedicalrviceDTO;
-use App\DTOs\Services\MedicalService\UpdateMedicalServiceDTO;
+use App\DTOs\Services\Medical_Service\StoreMedicalrviceDTO;
+use App\DTOs\Services\Medical_Service\UpdateMedical_ServiceDTO;
+use App\Enums\EnRoleType;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\MedicalService\StoreMedicalServiceRequest;
-use App\Http\Requests\MedicalService\UpdateMedicalServiceRequest;
-use App\Models\MedicalService as MedicalServiceModel;
+use App\Http\Requests\Medical_Service\StoreMedical_ServiceRequest;
+use App\Http\Requests\Medical_Service\UpdateMedical_ServiceRequest;
+use App\Models\Medical_service;
 use App\Services\Clinic\ClinicQueryService;
 use App\Services\Doctor\DoctorQueryService;
 use App\Services\MedicalService\MedicalServiceQueryService;
 use App\Services\MedicalService\MedicalServiceService;
 use App\Support\TenantContext;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Concurrency;
 
 class MedicalServiceController extends Controller
 {
@@ -28,22 +28,20 @@ class MedicalServiceController extends Controller
 
     public function index()
     {
-        $this->authorize('viewAny', MedicalServiceModel::class);
+
 
         $clinicId = $this->clinicQueryService->getClinicByOwnereId(Auth::id())->id;
-        [$serviceCatalogs,$doctors,$clinicServices] = Concurrency::run([
-            fn () => $this->medicalServiceQueryService->getAll(),
-            fn () => $this->doctorQueryService->getDoctorsNames($clinicId),
-            fn () => $this->medicalServiceService->getAllDoctorServices(),
-        ]);
+        $medicalService = $this->medicalServiceQueryService->getAll();
+        $doctors = $this->doctorQueryService->getDoctorsNames($clinicId);
+        $clinicServices = $this->medicalServiceService->getAllDoctorServices();
 
-        return view('Services.index', compact('serviceCatalogs', 'doctors', 'clinicServices'));
+        return view('MedicalServices.index', compact('medicalService', 'doctors', 'clinicServices'));
     }
 
-    public function store(StoreMedicalServiceRequest $request)
+    public function store(StoreMedical_ServiceRequest $request)
     {
-        $this->authorize('create', MedicalServiceModel::class);
-        
+        $this->authorize('create', Medical_service::class);
+
         $dto = StoreMedicalrviceDTO::fromRequest($request->validated());
         $clinicId = $this->tenantContext->id();
         $this->medicalServiceService->add($dto, $clinicId);
@@ -51,11 +49,11 @@ class MedicalServiceController extends Controller
         return back()->with('success', 'تم إضافة الخدمة بنجاح');
     }
 
-    public function update(UpdateMedicalServiceRequest $request, MedicalServiceModel $medicalService)
+    public function update(UpdateMedical_ServiceRequest $request, Medical_service $medicalService)
     {
         $this->authorize('update', $medicalService);
 
-        $dto = UpdateMedicalServiceDTO::fromRequest($request);
+        $dto = UpdateMedical_ServiceDTO::fromRequest($request);
 
         $clinicId = $this->tenantContext->id();
 
@@ -66,7 +64,7 @@ class MedicalServiceController extends Controller
 
     public function destroy(int $medicalServiceId)
     {
-        $this->authorize('delete', MedicalServiceModel::class);
+        $this->authorize('delete', Medical_service::class);
 
         $clinicId = $this->tenantContext->id();
 

@@ -68,7 +68,7 @@ class Clinic extends Model implements HasMedia
 
     public function servicePrices()
     {
-        return $this->hasMany(Clinic_doctor_medicalService::class);
+        return $this->hasMany(Clinic_doctor_medical_service::class);
     }
 
     public function clinic_doctor()

@@ -19,12 +19,13 @@ class SubscriptionPolicy
      */
     public function viewAny(User $user): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC,
            EnRoleType::SUPER_ADMIN => true,
 
             default => false,
         };
+    
     }
 
     /**
@@ -32,7 +33,7 @@ class SubscriptionPolicy
      */
     public function view(User $user, Subscription $subscription): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->belongsToClinicOwner($user, $subscription->id),
 
            EnRoleType::SUPER_ADMIN => true,
@@ -46,7 +47,7 @@ class SubscriptionPolicy
      */
     public function create(User $user): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC,
            EnRoleType::SUPER_ADMIN => true,
 
@@ -59,7 +60,7 @@ class SubscriptionPolicy
      */
     public function update(User $user, Subscription $subscription): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->belongsToClinicOwner($user, $subscription->id),
 
            EnRoleType::SUPER_ADMIN => true,
@@ -73,7 +74,7 @@ class SubscriptionPolicy
      */
     public function cancel(User $user, Subscription $subscription): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->belongsToClinicOwner($user, $subscription->id),
 
            EnRoleType::SUPER_ADMIN => true,
@@ -87,7 +88,7 @@ class SubscriptionPolicy
      */
     public function renew(User $user, Subscription $subscription): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->belongsToClinicOwner($user, $subscription->id),
 
            EnRoleType::SUPER_ADMIN => true,
@@ -101,7 +102,7 @@ class SubscriptionPolicy
      */
     public function changePlan(User $user, Subscription $subscription): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC => $this->belongsToClinicOwner($user, $subscription->id),
 
            EnRoleType::SUPER_ADMIN => true,

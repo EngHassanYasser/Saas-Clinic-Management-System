@@ -6,9 +6,9 @@ use App\Models\Speciality;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<MedicalService>
+ * @extends Factory<Medical_Service>
  */
-class MedicalServiceFactory extends Factory
+class Medical_ServiceFactory extends Factory
 {
     public function definition(): array
     {

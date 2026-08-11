@@ -5,7 +5,7 @@ namespace App\Services\Doctor;
 use App\DTOs\Services\Doctor\StoreDoctorDTO;
 use App\DTOs\Services\Doctor\UpdateDoctorDTO;
 use App\Models\Doctor;
-use App\Models\Clinic_doctor_medicalService;
+use App\Models\Clinic_doctor_medical_service;
 use Illuminate\Support\Facades\DB;
 
 class DoctorService
@@ -65,7 +65,7 @@ class DoctorService
 
             $doctor->clinics()->detach($clinicId);
 
-            Clinic_doctor_medicalService::where('doctor_id', $doctor->id)
+            Clinic_doctor_medical_service::where('doctor_id', $doctor->id)
                 ->where('clinic_id', $clinicId)
                 ->delete();
 

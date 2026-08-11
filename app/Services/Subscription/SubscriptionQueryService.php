@@ -19,7 +19,7 @@ class SubscriptionQueryService
             'clinic_id',
             'plan_id'
         ])->with(['plan:id,name,monthly_price', 'clinic:id,name'])
-            ->get()->makeHidden(['clinic_id', 'plan_id']);
+            ->paginate(10)->makeHidden(['clinic_id', 'plan_id']);
     }
     public function getById() {}
     public function getClinicSubscriptions() {}

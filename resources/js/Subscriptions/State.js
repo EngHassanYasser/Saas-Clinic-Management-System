@@ -19,15 +19,15 @@ export default function (serverData = {}) {
 
         form: {
             id: null,
-            start_at:null,
-            end_at:null,
+            startAt:null,
+            endAt:null,
             status:null,
             price:null,
 
             plan: {
                 id:null,
                 name:null,
-                monthly_price:null,
+                monthlyPrice:null,
             },
             clinic: {
                 id:null,

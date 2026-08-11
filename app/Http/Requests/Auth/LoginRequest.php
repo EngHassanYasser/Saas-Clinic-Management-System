@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
-use App\Enums\UserStatus;
+use App\Enums\EnUserStatus;
 use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -45,7 +45,7 @@ class LoginRequest extends FormRequest
         $this->ensureIsNotRateLimited();
 
         $user = User::where('email', $this->email)->first();
-        if ($user && $user->status === UserStatus::INACTIVE->value) {
+        if ($user && $user->status === EnUserStatus::INACTIVE->value) {
             throw ValidationException::withMessages([
                 'email' => 'Your account is inactive.',
             ]);

@@ -9,9 +9,9 @@ export default function (serverData = {}) {
         form: {
             id: null,
             name: "",
-            monthly_price: "",
-            monthly_appointments_limit: 0,
-            max_doctors: 0,
+            monthlyPrice: "",
+            monthlyAppointmentsLimit: 0,
+            maxDoctors: 0,
             status: null,
         },
     };

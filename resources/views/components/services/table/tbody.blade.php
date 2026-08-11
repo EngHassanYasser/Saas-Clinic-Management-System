@@ -1,9 +1,9 @@
 <tbody>
     <template x-for="clinicService in clinicServices" :key="clinicService.id">
         <tr class="hover:bg-gray-50 transition">
-            <td class="p-4" x-text="clinicService.service_name ?? ''"></td>
+            <td class="p-4" x-text="clinicService.serviceName ?? ''"></td>
             <td class="p-4 text-gray-600" x-text="clinicService.description"></td>
-            <td class="p-4" x-text="clinicService.doctor_name ?? ''"></td>
+            <td class="p-4" x-text="clinicService.doctorName ?? ''"></td>
             <td class="p-4 text-teal-600 font-semibold" x-text="clinicService.price + ' جنيه'"></td>
             <td class="p-4">
                 <div class="flex justify-center gap-2">

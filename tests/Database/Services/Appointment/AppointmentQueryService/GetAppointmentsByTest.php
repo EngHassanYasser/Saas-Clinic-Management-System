@@ -4,7 +4,7 @@ use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\DoctorService;
 use App\Models\Doctor;
-use App\Models\Clinic_doctor_medicalService;
+use App\Models\Clinic_doctor_medical_service;
 use App\Models\User;
 use App\Services\Appointment\AppointmentQueryService;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -91,7 +91,7 @@ it('returns correct service price based on doctor clinic and service', function 
 
     $service = DoctorService::factory()->create();
 
-    Clinic_doctor_medicalService::create([
+    Clinic_doctor_medical_service::create([
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic->id,
         'medicalService_id' => $service->id,
@@ -122,7 +122,7 @@ it('does not return wrong service price', function () {
 
     $service = DoctorService::factory()->create();
 
-    Clinic_doctor_medicalService::create([
+    Clinic_doctor_medical_service::create([
         'doctor_id' => $doctor->id,
         'clinic_id' => $clinic->id,
         'medicalService_id' => $service->id,

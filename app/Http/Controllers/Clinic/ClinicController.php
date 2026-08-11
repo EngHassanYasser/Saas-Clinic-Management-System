@@ -9,7 +9,7 @@ use App\Http\Requests\Clinic\StoreClinicRequest;
 use App\Http\Requests\Clinic\UpdateClinicRequest;
 use App\Models\Clinic;
 use App\Services\Clinic\ClinicQueryService;
-use App\services\Clinic\DoctorService;
+use App\services\Clinic\ClinicService;
 use App\Services\Clinic\ClinicStatisticsService;
 use App\Services\Location\LocationQueryService;
 use App\Services\Plan\PlanQueryService;
@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Concurrency;
 class ClinicController extends Controller
 {
     public function __construct(
-        private DoctorService $clinicService,
+        private ClinicService $clinicService,
         private ClinicQueryService $clinicQueryService,
         private ClinicStatisticsService $clinicStatisticsService,
         private LocationQueryService $locationQueryService,
@@ -31,12 +31,10 @@ class ClinicController extends Controller
     {
         $this->authorize('viewAny', Clinic::class);
 
-        [$stats,$clinics,$cities,$plans] = Concurrency::run([
-            fn () => $this->clinicStatisticsService->getStats(),
-            fn () => $this->clinicQueryService->getAll(),
-            fn () => $this->locationQueryService->getCities(),
-            fn () => $this->planQueryService->getAll(),
-        ]);
+        $stats = $this->clinicStatisticsService->getStats();
+        $clinics = $this->clinicQueryService->getAll();
+        $cities = $this->locationQueryService->getCities();
+        $plans = $this->planQueryService->getAll();
 
         return view('clinics.index', compact('clinics', 'cities', 'plans', 'stats'));
     }
@@ -49,7 +47,7 @@ class ClinicController extends Controller
     public function store(StoreClinicRequest $request)
     {
         $this->authorize('create', Clinic::class);
-        $dto=StoreClinicDTO::fromRequest($request->validated());
+        $dto = StoreClinicDTO::fromRequest($request->validated());
         $this->clinicService->add($dto);
 
         return redirect()->route('clinics.index')->with('message', 'clinic added successfully');
@@ -57,9 +55,8 @@ class ClinicController extends Controller
 
     public function edit()
     {
-        $this->authorize('update', Clinic::class);
-
-        $currentClinic = $this->tenantContext->id();
+        $currentClinic=$this->tenantContext->get();
+        $this->authorize('update', $currentClinic);
 
         [$cities,$days] = Concurrency::run([
             fn () => $this->locationQueryService->getCities(),
@@ -71,8 +68,8 @@ class ClinicController extends Controller
 
     public function update(UpdateClinicRequest $request, Clinic $clinic)
     {
-        $this->authorize('update',$clinic);
-        $dto=UpdateClinicDTO::fromRequest($request->validated());
+        $this->authorize('update', $clinic);
+        $dto = UpdateClinicDTO::fromRequest($request->validated());
         $this->clinicService->update($dto, $clinic);
 
         return redirect()->route('clinics.edit')->with('message', 'clinic updated successfully');

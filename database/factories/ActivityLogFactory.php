@@ -2,16 +2,16 @@
 
 namespace Database\Factories;
 
-use App\Models\ActivityLog;
+use App\Models\Activity_log;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<ActivityLog>
+ * @extends Factory<Activity_log>
  */
-class ActivityLogFactory extends Factory
+class Activity_logFactory extends Factory
 {
-    protected $model = ActivityLog::class;
+    protected $model = Activity_log::class;
 
     public function definition(): array
     {

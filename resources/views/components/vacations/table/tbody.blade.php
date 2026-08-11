@@ -32,14 +32,14 @@
             <td class="px-4 py-3 text-gray-500" x-text="v.reason">
             </td>
             {{-- من --}}
-            <td class="px-4 py-3 text-gray-600" x-text="formatDate(v.start_date)">
+            <td class="px-4 py-3 text-gray-600" x-text="formatDate(v.startDate)">
             </td>
             {{-- إلى --}}
-            <td class="px-4 py-3 text-gray-600" x-text="formatDate(v.end_date)">
+            <td class="px-4 py-3 text-gray-600" x-text="formatDate(v.endDate)">
             </td>
             {{-- المدة --}}
             <td class="px-4 py-3">
-                <span class="text-xs text-gray-500" x-text="daysBetween(v.start_date,v.end_date) + ' يوم'">
+                <span class="text-xs text-gray-500" x-text="daysBetween(v.startDate,v.endDate) + ' يوم'">
                 </span>
             </td>
             {{-- الحالة --}}

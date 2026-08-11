@@ -3,30 +3,35 @@
 use App\Http\Controllers\Complaint\ComplaintController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth','verified')->group(function () {
+Route::middleware('auth','role:clinic,patient','verified')->group(function () {
 
-    Route::middleware('tenant.context')->get(
-        '/complaintts',
+    Route::get(
+        '/complaints',
         [ComplaintController::class, 'index']
-    )->name('complaintts.index');
+    )->name('complaints.index');
+    
     Route::get(
-        '/complaintts/create',
+        '/complaints/create',
         [ComplaintController::class, 'create']
-    )->name('complaintts.create');
+    )->name('complaints.create');
+
     Route::get(
-        '/complaintts/{complaint}',
+        '/complaints/{complaint}',
         [ComplaintController::class, 'edit']
-    )->name('complaintts.edit');
+    )->name('complaints.edit');
+
     Route::middleware('tenant.context')->post(
-        '/complaintts',
+        '/complaints',
         [ComplaintController::class, 'store']
-    )->name('complaintts.store');
+    )->name('complaints.store');
+
     Route::put(
-        '/complaintts/{complaint}/',
+        '/complaints/{complaint}/',
         [ComplaintController::class, 'update']
-    )->name('complaintts.update');
+    )->name('complaints.update');
+
     Route::delete(
-        '/complaintts/{complaint}/',
+        '/complaints/{complaint}/',
         [ComplaintController::class, 'destroy']
-    )->name('complaintts.destroy');
+    )->name('complaints.destroy');
 });

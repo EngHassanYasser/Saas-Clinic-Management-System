@@ -21,7 +21,7 @@ class PlanQueryService
         ])->whereStatus(EnPlanStatus::ACTIVE->value)->get();
     }
 
-    public function getAll(): Collection
+    public function getAll(): array
     {
         return Cache::remember(
             'plans.all',
@@ -33,7 +33,7 @@ class PlanQueryService
                 'max_doctors',
                 'monthly_appointments_limit',
                 'status',
-            ])->get()
+            ])->get()->toArray()
         );
     }
 }

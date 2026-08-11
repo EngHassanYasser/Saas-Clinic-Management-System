@@ -3,7 +3,7 @@
 use App\Models\Clinic;
 use App\Models\DoctorService;
 use App\Models\Doctor;
-use App\Models\Clinic_doctor_medicalService;
+use App\Models\Clinic_doctor_medical_service;
 use App\Services\ServiceCatalog\DoctorServicePriceService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +28,7 @@ function makeDeleteDoctorServicePriceContext(): array
 
     $clinicService = DoctorService::factory()->create();
 
-    $medicalServicePrice = Clinic_doctor_medicalService::factory()->create([
+    $medicalServicePrice = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctor->id,
         'medicalService_id' => $clinicService->id,
@@ -116,7 +116,7 @@ it('makes the deleted model no longer exist in the database', function () {
     $this->service->deleteById($id);
 
     expect(
-        Clinic_doctor_medicalService::whereKey($id)->exists()
+        Clinic_doctor_medical_service::whereKey($id)->exists()
     )->toBeFalse();
 });
 
@@ -135,7 +135,7 @@ it('cannot find the deleted record anymore', function () {
     $this->service->deleteById($id);
 
     expect(
-        Clinic_doctor_medicalService::find($id)
+        Clinic_doctor_medical_service::find($id)
     )->toBeNull();
 });
 
@@ -149,13 +149,13 @@ it('cannot find the deleted record anymore', function () {
 it('decreases the database record count by exactly one', function () {
     $context = makeDeleteDoctorServicePriceContext();
 
-    $before = Clinic_doctor_medicalService::count();
+    $before = Clinic_doctor_medical_service::count();
 
     $this->service->deleteById(
         $context['medicalServicePrice']->id
     );
 
-    $after = Clinic_doctor_medicalService::count();
+    $after = Clinic_doctor_medical_service::count();
 
     expect($after)
         ->toBe($before - 1);
@@ -180,15 +180,15 @@ it('deletes only the requested record', function () {
     $this->service->deleteById($secondId);
 
     expect(
-        Clinic_doctor_medicalService::whereKey($firstId)->exists()
+        Clinic_doctor_medical_service::whereKey($firstId)->exists()
     )->toBeTrue();
 
     expect(
-        Clinic_doctor_medicalService::whereKey($secondId)->exists()
+        Clinic_doctor_medical_service::whereKey($secondId)->exists()
     )->toBeFalse();
 
     expect(
-        Clinic_doctor_medicalService::whereKey($thirdId)->exists()
+        Clinic_doctor_medical_service::whereKey($thirdId)->exists()
     )->toBeTrue();
 });
 
@@ -211,11 +211,11 @@ it('keeps all other records unchanged', function () {
 
     $this->service->deleteById($secondId);
 
-    $firstAfter = Clinic_doctor_medicalService::findOrFail(
+    $firstAfter = Clinic_doctor_medical_service::findOrFail(
         $first['medicalServicePrice']->id
     )->toArray();
 
-    $thirdAfter = Clinic_doctor_medicalService::findOrFail(
+    $thirdAfter = Clinic_doctor_medical_service::findOrFail(
         $third['medicalServicePrice']->id
     )->toArray();
 
@@ -237,7 +237,7 @@ it('returns false when the record does not exist', function () {
     $nonExistingId = 999999;
 
     expect(
-        Clinic_doctor_medicalService::whereKey($nonExistingId)->exists()
+        Clinic_doctor_medical_service::whereKey($nonExistingId)->exists()
     )->toBeFalse();
 
     $result = $this->service->deleteById($nonExistingId);
@@ -258,11 +258,11 @@ it('does not change the database when deleting a non-existing id', function () {
     makeDeleteDoctorServicePriceContext();
     makeDeleteDoctorServicePriceContext();
 
-    $before = Clinic_doctor_medicalService::count();
+    $before = Clinic_doctor_medical_service::count();
 
     $result = $this->service->deleteById(999999);
 
-    $after = Clinic_doctor_medicalService::count();
+    $after = Clinic_doctor_medical_service::count();
 
     expect($result)
         ->toBeFalse();
@@ -308,11 +308,11 @@ it('does not change the database on repeated deletion', function () {
 
     $this->service->deleteById($id);
 
-    $countAfterFirstDelete = Clinic_doctor_medicalService::count();
+    $countAfterFirstDelete = Clinic_doctor_medical_service::count();
 
     $this->service->deleteById($id);
 
-    $countAfterSecondDelete = Clinic_doctor_medicalService::count();
+    $countAfterSecondDelete = Clinic_doctor_medical_service::count();
 
     expect($countAfterSecondDelete)
         ->toBe($countAfterFirstDelete);
@@ -334,11 +334,11 @@ it('deletes the exact record identified by the given id', function () {
     $this->service->deleteById($targetId);
 
     expect(
-        Clinic_doctor_medicalService::whereKey($targetId)->exists()
+        Clinic_doctor_medical_service::whereKey($targetId)->exists()
     )->toBeFalse();
 
     expect(
-        Clinic_doctor_medicalService::whereKey(
+        Clinic_doctor_medical_service::whereKey(
             $first['medicalServicePrice']->id
         )->exists()
     )->toBeTrue();
@@ -360,13 +360,13 @@ it('deletes by primary key regardless of related models', function () {
     $clinicServiceOne = DoctorService::factory()->create();
     $clinicServiceTwo = DoctorService::factory()->create();
 
-    $first = Clinic_doctor_medicalService::factory()->create([
+    $first = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorOne->id,
         'medicalService_id' => $clinicServiceOne->id,
     ]);
 
-    $second = Clinic_doctor_medicalService::factory()->create([
+    $second = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorTwo->id,
         'medicalService_id' => $clinicServiceTwo->id,
@@ -375,11 +375,11 @@ it('deletes by primary key regardless of related models', function () {
     $this->service->deleteById($first->id);
 
     expect(
-        Clinic_doctor_medicalService::whereKey($first->id)->exists()
+        Clinic_doctor_medical_service::whereKey($first->id)->exists()
     )->toBeFalse();
 
     expect(
-        Clinic_doctor_medicalService::whereKey($second->id)->exists()
+        Clinic_doctor_medical_service::whereKey($second->id)->exists()
     )->toBeTrue();
 });
 
@@ -399,13 +399,13 @@ it('deletes only the selected record when multiple records belong to the same cl
     $clinicServiceOne = DoctorService::factory()->create();
     $clinicServiceTwo = DoctorService::factory()->create();
 
-    $first = Clinic_doctor_medicalService::factory()->create([
+    $first = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorOne->id,
         'medicalService_id' => $clinicServiceOne->id,
     ]);
 
-    $second = Clinic_doctor_medicalService::factory()->create([
+    $second = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinic->id,
         'doctor_id' => $doctorTwo->id,
         'medicalService_id' => $clinicServiceTwo->id,
@@ -414,11 +414,11 @@ it('deletes only the selected record when multiple records belong to the same cl
     $this->service->deleteById($first->id);
 
     expect(
-        Clinic_doctor_medicalService::whereKey($first->id)->exists()
+        Clinic_doctor_medical_service::whereKey($first->id)->exists()
     )->toBeFalse();
 
     expect(
-        Clinic_doctor_medicalService::whereKey($second->id)->exists()
+        Clinic_doctor_medical_service::whereKey($second->id)->exists()
     )->toBeTrue();
 });
 
@@ -438,13 +438,13 @@ it('deletes only the selected record when multiple records belong to the same do
     $clinicServiceOne = DoctorService::factory()->create();
     $clinicServiceTwo = DoctorService::factory()->create();
 
-    $first = Clinic_doctor_medicalService::factory()->create([
+    $first = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinicOne->id,
         'doctor_id' => $doctor->id,
         'medicalService_id' => $clinicServiceOne->id,
     ]);
 
-    $second = Clinic_doctor_medicalService::factory()->create([
+    $second = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinicTwo->id,
         'doctor_id' => $doctor->id,
         'medicalService_id' => $clinicServiceTwo->id,
@@ -453,11 +453,11 @@ it('deletes only the selected record when multiple records belong to the same do
     $this->service->deleteById($first->id);
 
     expect(
-        Clinic_doctor_medicalService::whereKey($first->id)->exists()
+        Clinic_doctor_medical_service::whereKey($first->id)->exists()
     )->toBeFalse();
 
     expect(
-        Clinic_doctor_medicalService::whereKey($second->id)->exists()
+        Clinic_doctor_medical_service::whereKey($second->id)->exists()
     )->toBeTrue();
 });
 
@@ -477,13 +477,13 @@ it('deletes only the selected record when multiple records use the same clinic s
 
     $clinicService = DoctorService::factory()->create();
 
-    $first = Clinic_doctor_medicalService::factory()->create([
+    $first = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinicOne->id,
         'doctor_id' => $doctorOne->id,
         'medicalService_id' => $clinicService->id,
     ]);
 
-    $second = Clinic_doctor_medicalService::factory()->create([
+    $second = Clinic_doctor_medical_service::factory()->create([
         'clinic_id' => $clinicTwo->id,
         'doctor_id' => $doctorTwo->id,
         'medicalService_id' => $clinicService->id,
@@ -492,11 +492,11 @@ it('deletes only the selected record when multiple records use the same clinic s
     $this->service->deleteById($first->id);
 
     expect(
-        Clinic_doctor_medicalService::whereKey($first->id)->exists()
+        Clinic_doctor_medical_service::whereKey($first->id)->exists()
     )->toBeFalse();
 
     expect(
-        Clinic_doctor_medicalService::whereKey($second->id)->exists()
+        Clinic_doctor_medical_service::whereKey($second->id)->exists()
     )->toBeTrue();
 });
 
@@ -516,7 +516,7 @@ it('deletes a persisted record regardless of its field values', function () {
         ->toBeTrue();
 
     expect(
-        Clinic_doctor_medicalService::whereKey($record->id)->exists()
+        Clinic_doctor_medical_service::whereKey($record->id)->exists()
     )->toBeTrue();
 
     $result = $this->service->deleteById($record->id);
@@ -525,7 +525,7 @@ it('deletes a persisted record regardless of its field values', function () {
         ->toBeTrue();
 
     expect(
-        Clinic_doctor_medicalService::whereKey($record->id)->exists()
+        Clinic_doctor_medical_service::whereKey($record->id)->exists()
     )->toBeFalse();
 });
 
@@ -604,7 +604,7 @@ it('can delete multiple records independently', function () {
     expect($thirdResult)
         ->toBeTrue();
 
-    expect(Clinic_doctor_medicalService::count())
+    expect(Clinic_doctor_medical_service::count())
         ->toBe(0);
 });
 
@@ -616,17 +616,17 @@ it('can delete multiple records independently', function () {
 */
 
 it('deletes one record correctly when many records exist', function () {
-    $records = Clinic_doctor_medicalService::factory()
+    $records = Clinic_doctor_medical_service::factory()
         ->count(10)
         ->create();
 
     $target = $records->get(5);
 
-    $before = Clinic_doctor_medicalService::count();
+    $before = Clinic_doctor_medical_service::count();
 
     $result = $this->service->deleteById($target->id);
 
-    $after = Clinic_doctor_medicalService::count();
+    $after = Clinic_doctor_medical_service::count();
 
     expect($result)
         ->toBeTrue();
@@ -635,7 +635,7 @@ it('deletes one record correctly when many records exist', function () {
         ->toBe($before - 1);
 
     expect(
-        Clinic_doctor_medicalService::whereKey($target->id)->exists()
+        Clinic_doctor_medical_service::whereKey($target->id)->exists()
     )->toBeFalse();
 
     foreach ($records as $record) {
@@ -644,7 +644,7 @@ it('deletes one record correctly when many records exist', function () {
         }
 
         expect(
-            Clinic_doctor_medicalService::whereKey($record->id)->exists()
+            Clinic_doctor_medical_service::whereKey($record->id)->exists()
         )->toBeTrue();
     }
 });
@@ -738,7 +738,7 @@ it('keeps related models available after deleting the price record', function ()
 it('can delete the last remaining doctor service price', function () {
     $context = makeDeleteDoctorServicePriceContext();
 
-    expect(Clinic_doctor_medicalService::count())
+    expect(Clinic_doctor_medical_service::count())
         ->toBe(1);
 
     $result = $this->service->deleteById(
@@ -748,7 +748,7 @@ it('can delete the last remaining doctor service price', function () {
     expect($result)
         ->toBeTrue();
 
-    expect(Clinic_doctor_medicalService::count())
+    expect(Clinic_doctor_medical_service::count())
         ->toBe(0);
 });
 
@@ -765,7 +765,7 @@ it('returns false when deleting id zero', function () {
     expect($result)
         ->toBeFalse();
 
-    expect(Clinic_doctor_medicalService::count())
+    expect(Clinic_doctor_medical_service::count())
         ->toBe(0);
 });
 
@@ -782,7 +782,7 @@ it('returns false when deleting a negative id', function () {
     expect($result)
         ->toBeFalse();
 
-    expect(Clinic_doctor_medicalService::count())
+    expect(Clinic_doctor_medical_service::count())
         ->toBe(0);
 });
 
@@ -804,7 +804,7 @@ it('does not affect the ids of remaining records', function () {
 
     $this->service->deleteById($secondId);
 
-    $remainingIds = Clinic_doctor_medicalService::pluck('id')
+    $remainingIds = Clinic_doctor_medical_service::pluck('id')
         ->sort()
         ->values()
         ->all();
@@ -828,13 +828,13 @@ it('never deletes more than one record for a single id', function () {
     makeDeleteDoctorServicePriceContext();
     makeDeleteDoctorServicePriceContext();
 
-    $target = Clinic_doctor_medicalService::first();
+    $target = Clinic_doctor_medical_service::first();
 
-    $before = Clinic_doctor_medicalService::count();
+    $before = Clinic_doctor_medical_service::count();
 
     $this->service->deleteById($target->id);
 
-    $after = Clinic_doctor_medicalService::count();
+    $after = Clinic_doctor_medical_service::count();
 
     expect($before - $after)
         ->toBe(1);
@@ -858,6 +858,6 @@ it('does not require clinic id, doctor id or service id to delete', function () 
         ->toBeTrue();
 
     expect(
-        Clinic_doctor_medicalService::whereKey($id)->exists()
+        Clinic_doctor_medical_service::whereKey($id)->exists()
     )->toBeFalse();
 });

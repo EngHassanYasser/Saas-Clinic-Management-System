@@ -21,7 +21,7 @@ class VacationPolicy
      */
     public function viewAny(User $user): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC,
            EnRoleType::SUPER_ADMIN => true,
 
@@ -34,7 +34,7 @@ class VacationPolicy
      */
     public function view(User $user, Vacation $vacation): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC =>$this->belongsToClinicOwner($user,$vacation->id),
 
            EnRoleType::SUPER_ADMIN => true,
@@ -48,7 +48,7 @@ class VacationPolicy
      */
     public function create(User $user): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC,
            EnRoleType::SUPER_ADMIN => true,
 
@@ -61,7 +61,7 @@ class VacationPolicy
      */
     public function update(User $user, Vacation $vacation): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC =>$this->belongsToClinicOwner($user,$vacation->id),
 
            EnRoleType::SUPER_ADMIN => true,
@@ -75,7 +75,7 @@ class VacationPolicy
      */
     public function delete(User $user, Vacation $vacation): bool
     {
-        return match ($user->role) {
+        return match ($user->type) {
            EnRoleType::CLINIC =>$this->belongsToClinicOwner($user,$vacation->id),
 
            EnRoleType::SUPER_ADMIN => true,

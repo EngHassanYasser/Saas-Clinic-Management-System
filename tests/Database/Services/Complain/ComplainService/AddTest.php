@@ -140,7 +140,7 @@ it('stores complaint in database', function () {
     expect($complaint->exists)
         ->toBeTrue();
 
-    $this->assertDatabaseHas('complaintts', [
+    $this->assertDatabaseHas('complaints', [
         'id' => $complaint->id,
         'clinic_id' => $clinic->id,
         'description' => 'Improve pharmacy',

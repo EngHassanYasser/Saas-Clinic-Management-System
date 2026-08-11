@@ -2,14 +2,14 @@
 
 namespace App\services\ActivityLog;
 
-use App\Models\ActivityLog;
+use App\Models\Activity_log;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ActivityLogQueryService
 {
     public function getLastActivities(): LengthAwarePaginator
     {
-        return ActivityLog::select([
+        return Activity_log::select([
             'id',
             'type',
             'title',
