@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Complaint;
 
 use App\DTOs\Services\Complaint\StoreComplaintDTO;
 use App\DTOs\Services\Complaint\UpdateComplaintDTO;
+use App\Enums\EnRoleType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\complaints\StoreComplaintRequest;
 use App\Http\Requests\complaints\UpdateComplaintRequest;
@@ -29,12 +30,16 @@ class ComplaintController extends Controller
 
     public function index()
     {
+        $stats = [];
+        $doctors = [];
         $this->authorize('viewAny', Complaint::class);
 
         $complaints = $this->complaintQueryService->getClinicComplaints(Auth::user());
-        $clinicId = $this->clincQueryService->getClinicByOwnereId(Auth::id())->id;
-        $stats = $this->comaplainStatisticsService->getStatistics($clinicId);
-        $doctors = $this->doctorQueryService->getDoctorsNames($clinicId);
+        if (Auth::user()->type == EnRoleType::CLINIC) {
+            $clinicId = $this->clincQueryService->getClinicByOwnereId(Auth::id())->id;
+            $stats = $this->comaplainStatisticsService->getStatistics($clinicId);
+            $doctors = $this->doctorQueryService->getDoctorsNames($clinicId);
+        }
 
         return view('complaints.index', compact('complaints', 'stats', 'doctors'));
     }

@@ -36,26 +36,26 @@
                             </td>
                             {{-- من --}}
                             <td class="px-5 py-4 font-medium text-gray-800"
-                                x-text="formatTime12Hours(schedule.startTime)">
+                                x-text="formatTime12Hours(schedule.start_time)">
                             </td>
                             {{-- إلى --}}
                             <td class="px-5 py-4 font-medium text-gray-800"
-                                x-text="formatTime12Hours(schedule.endTime)">
+                                x-text="formatTime12Hours(schedule.end_time)">
                             </td>
                             {{-- البريك --}}
                             <td class="px-5 py-4">
-                                <template x-if="schedule.startBreak && schedule.endBreak">
+                                <template x-if="schedule.start_break && schedule.end_break">
                                     <span class="text-gray-600"
-                                        x-text="`${formatTime12Hours(schedule.startBreak)} - ${formatTime12Hours(schedule.endBreak)}`">
+                                        x-text="`${formatTime12Hours(schedule.start_break)} - ${formatTime12Hours(schedule.end_break)}`">
                                     </span>
                                 </template>
-                                <template x-if="!schedule.startBreak || !schedule.endBreak">
+                                <template x-if="!schedule.start_break || !schedule.end_break">
                                     <span class="text-gray-300">—</span>
                                 </template>
                             </td>
                             {{-- مدة الكشف --}}
                             <td class="px-5 py-4">
-                                <span class="text-gray-800 font-medium" x-text="schedule.slotDuration"></span>
+                                <span class="text-gray-800 font-medium" x-text="schedule.slot_duration"></span>
 
                                 <span class="text-gray-400 text-xs">
                                     دقيقة

@@ -8,8 +8,8 @@ class HasScheduleConflictDTO
         public readonly string $startTime,
         public readonly string $endTime,
         public readonly int $slotDuration,
-        public readonly string $startBreak,
-        public readonly string $endBreak,
+        public readonly ?string $startBreak,
+        public readonly ?string $endBreak,
         public readonly bool $isAvailable,
         public readonly array $dayIds,
     ) {}

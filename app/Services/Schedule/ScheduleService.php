@@ -16,11 +16,10 @@ class ScheduleService
     public function add(StoreScheduleDTO $dto, int $clinicId): Schedule
     {
         return DB::transaction(function () use ($dto, $clinicId) {
-
             $schedule = Schedule::where('clinic_id', $clinicId)
                 ->where('doctor_id', $dto->doctorId)
                 ->lockForUpdate()
-                ->firstOrFail();
+                ->first();
 
             $ConflictDTO = new HasScheduleConflictDTO($dto->startTime,
                 $dto->endTime,
@@ -29,7 +28,7 @@ class ScheduleService
                 $dto->endBreak,
                 $dto->isAvailable,
                 $dto->dayIds);
-            if ($this->scheduleConfilctService->hasScheduleConflict($ConflictDTO, $schedule)) {
+            if ($schedule !=null && $this->scheduleConfilctService->hasScheduleConflict($ConflictDTO, $schedule)) {
                 throw new ScheduleConflictException('يوجد تداخل مع جدول يوم الأحد.');
             }
             $schedule = Schedule::create([
@@ -42,7 +41,7 @@ class ScheduleService
                 'doctor_id' => $dto->doctorId,
                 'clinic_id' => $clinicId,
             ]);
-            $schedule->days()->attach([$dto->dayIds]);
+            $schedule->days()->attach($dto->dayIds);
 
             return $schedule;
         }, 3);
