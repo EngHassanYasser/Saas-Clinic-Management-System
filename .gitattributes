@@ -13,3 +13,8 @@
 /node_modules/ linguist-vendored
 /storage/ linguist-vendored
 /bootstrap/cache/ linguist-vendored
+
+app/ linguist-vendored
+database/ linguist-vendored
+routes/ linguist-vendored
+config/ linguist-vendored
