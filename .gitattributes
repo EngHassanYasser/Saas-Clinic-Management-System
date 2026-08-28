@@ -13,7 +13,3 @@
 /node_modules/ linguist-vendored
 /storage/ linguist-vendored
 /bootstrap/cache/ linguist-vendored
-
-CHANGELOG.md export-ignore
-README.md export-ignore
-.github/workflows/browser-tests.yml export-ignore
