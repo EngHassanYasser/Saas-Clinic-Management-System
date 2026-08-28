@@ -1,10 +1,18 @@
 * text=auto eol=lf
 
 *.blade.php diff=html linguist-language=Blade
+*.php diff=php
 *.css diff=css
 *.html diff=html
+*.js diff=javascript
+*.ts diff=typescript
+*.json linguist-language=JSON
 *.md diff=markdown
-*.php diff=php
+
+/vendor/ linguist-vendored
+/node_modules/ linguist-vendored
+/storage/ linguist-vendored
+/bootstrap/cache/ linguist-vendored
 
 CHANGELOG.md export-ignore
 README.md export-ignore
